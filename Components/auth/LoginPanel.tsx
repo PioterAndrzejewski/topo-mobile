@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   View,
   Text,
   StyleSheet,
@@ -8,19 +7,29 @@ import {
   ViewStyle,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "@tanstack/react-query";
 
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
 
 import { styleGuide } from "../../styles/guide";
 import { HomeScreenNavigationProp } from "../../types/type";
+import { login } from "../../services/auth";
+import { saveJWT, setUserToStorage } from "../../services/store";
 
 export default function LoginPanel() {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-  const updateEmail = (newValue: string) => setEmail(newValue);
-  const updatePassword = (newValue: string) => setPassword(newValue);
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: () => login(email, password),
+    onSuccess: (data) => {
+      saveJWT(data.jwt);
+      setUserToStorage(data.user);
+      navigation.navigate("Main");
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -28,19 +37,22 @@ export default function LoginPanel() {
       <View style={styles.innerContainer}>
         <View>
           <CustomTextInput
-            label='e-mail address'
-            onChange={updateEmail}
+            label='Adres e-mail'
+            onChange={(val) => setEmail(val)}
             value={email}
           />
           <CustomTextInput
-            label='password'
-            onChange={updatePassword}
+            label='Hasło'
+            onChange={(val) => setPassword(val)}
             value={password}
             secure
           />
-          <Button label='Zaloguj' onClick={() => console.log("login")} />
-          <ActivityIndicator size='large' />
-          <Text style={styles.noAccount}>Don't have an account?</Text>
+          <Button
+            label='Zaloguj'
+            onClick={() => mutate()}
+            isLoading={isLoading}
+          />
+          <Text style={styles.noAccount}>Nie masz konta?</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Register")}
             hitSlop={20}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   View,
@@ -15,7 +15,6 @@ import { styleGuide } from "../../styles/guide";
 import { HomeScreenNavigationProp } from "../../types/type";
 import { Credentials } from "../../types/props";
 
-import AppLoading from "../common/AppLoading";
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
 

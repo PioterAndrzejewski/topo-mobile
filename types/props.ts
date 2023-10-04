@@ -16,12 +16,6 @@ export type CredentialsState = {
   passwordConfirmation: string;
 };
 
-export type ButtonProps = {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-};
-
 export type ChatBoxProps = {
   roomId: string;
 };

@@ -6,14 +6,22 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 import { styleGuide } from "../../styles/guide";
-import { ButtonProps } from "../../types/props";
+
+export type ButtonProps = {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  isLoading?: boolean;
+};
 
 export default function CustomTextInput({
   label,
   onClick,
   disabled,
+  isLoading,
 }: ButtonProps) {
   return (
     <TouchableOpacity
@@ -33,7 +41,11 @@ export default function CustomTextInput({
             : { ...styles.container }
         }
       >
-        <Text style={styles.label}>{label}</Text>
+        {isLoading ? (
+          <ActivityIndicator size='small' />
+        ) : (
+          <Text style={styles.label}>{label}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
