@@ -1,0 +1,109 @@
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useFonts } from "expo-font";
+
+import { VisionIcon, VisionLowIcon } from "./SvgIcons";
+import { styleGuide } from "../../styles/guide";
+import { CustomTextInputProps } from "../../types/props";
+
+export default function CustomTextInput({
+  label,
+  secure,
+  onChange,
+  value,
+  field,
+  error,
+  isTouched,
+}: CustomTextInputProps) {
+  const [inputFocused, setInputFocused] = useState(false);
+  const [hidden, setHidden] = useState<boolean | undefined>(secure);
+  const handlePress = () => setHidden((prevValue) => !prevValue);
+
+  const showPassword = () => (
+    <View style={styles.icon}>
+      <TouchableOpacity onPress={handlePress} hitSlop={20}>
+        {hidden ? <VisionLowIcon /> : <VisionIcon />}
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.label}>{label}</Text>
+        <View>
+          <TextInput
+            style={
+              error && isTouched
+                ? {
+                    ...styles.input,
+                    ...styles.inputError,
+                  }
+                : inputFocused
+                ? { ...styles.input, ...styles.inputFocused }
+                : styles.input
+            }
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
+            onChangeText={(value) => onChange(value, field)}
+            value={value}
+            editable
+            secureTextEntry={secure && hidden}
+          />
+          {error && isTouched && <Text style={styles.errorText}>{error}</Text>}
+          {secure && showPassword()}
+        </View>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  label: {
+    marginBottom: 4,
+    color: styleGuide.color.white,
+    ...styleGuide.text.label,
+  },
+  input: {
+    width: "100%",
+    height: 47,
+    paddingHorizontal: 20,
+    ...styleGuide.corner.sm,
+    ...styleGuide.text.title,
+    backgroundColor: styleGuide.color.white,
+  },
+  inputError: {
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: styleGuide.color.error,
+  },
+  inputFocused: {
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: styleGuide.color.blue["500"],
+  },
+  errorText: {
+    position: "absolute",
+    bottom: -24,
+    right: 0,
+    color: styleGuide.color.error,
+    ...styleGuide.text.caption,
+  },
+  icon: {
+    position: "absolute",
+    right: 10,
+    top: 15,
+  },
+});
