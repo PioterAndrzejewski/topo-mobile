@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   View,
@@ -9,129 +9,60 @@ import {
   ViewStyle,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "@tanstack/react-query";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-import { validate } from "../../utils/validate";
 import { styleGuide } from "../../styles/guide";
 import { HomeScreenNavigationProp } from "../../types/type";
-import { Credentials } from "../../types/props";
 
-import AppLoading from "../common/AppLoading";
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
+import { register } from "../../services/auth";
+import { saveJWT, setUserToStorage } from "../../services/store";
 
 export default function RegisterPanel() {
-  const [credentials, setCredentials] = useState({
-    email: "prefilled@email.com",
-    firstName: "prefilled name",
-    lastName: "prefilled surname",
-    password: "prefilled password",
-    passwordConfirmation: "prefilled password",
-  });
-  const [validation, setValidation] = useState({
-    email: {
-      isTouched: false,
-      error: "",
-    },
-    firstName: {
-      isTouched: false,
-      error: "",
-    },
-    lastName: {
-      isTouched: false,
-      error: "",
-    },
-    password: {
-      isTouched: false,
-      error: "",
-    },
-    passwordConfirmation: {
-      isTouched: false,
-      error: "",
-    },
-  });
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  const updateCredentials = (
-    newValue: string,
-    field: Credentials | undefined,
-  ) => {
-    let { validationError, clearPasswordError } = validate(
-      field,
-      newValue,
-      credentials,
-    );
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ["register"],
+    mutationFn: (data: RegisterData) =>
+      register(data.username, data.email, data.password),
+    onSuccess: (data) => {
+      saveJWT(data.jwt);
+      setUserToStorage(data.user);
+      navigation.navigate("Main");
+    },
+  });
 
-    setButtonDisabled(false);
-    setCredentials((prevValue) => {
-      const newCredentials = JSON.parse(JSON.stringify(prevValue));
-      if (field) {
-        newCredentials[field] = newValue;
-      }
-      return newCredentials;
-    });
-    setValidation((prevValidation) => {
-      const newValidation = JSON.parse(JSON.stringify(prevValidation));
-      newValidation[field!].isTouched = true;
-      if (clearPasswordError) {
-        newValidation.password.error = "";
-        newValidation.passwordConfirmation.error = "";
-      }
-      if (
-        validationError === "Passwords are not the same" &&
-        newValidation.password.isTouched &&
-        newValidation.passwordConfirmation.isTouched
-      ) {
-        newValidation.password.error = validationError;
-        newValidation.passwordConfirmation.error = validationError;
-        return newValidation;
-      } else if (validationError === "Passwords are not the same") {
-        newValidation.password.error = "";
-        newValidation.passwordConfirmation.error = "";
-        return newValidation;
-      }
-      newValidation[field!].error = validationError;
-      return newValidation;
-    });
+  const { control, handleSubmit } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmitHandler = (data: RegisterData) => {
+    mutate(data);
   };
 
   const inputs = [
     {
-      label: "e-mail address",
-      value: credentials.email,
+      label: "Adres e-mail",
       field: "email",
-      error: validation.email.error,
-      touched: validation.email.isTouched,
     },
     {
-      label: "first name",
-      value: credentials.firstName,
-      field: "firstName",
-      error: validation.firstName.error,
-      touched: validation.firstName.isTouched,
+      label: "Nazwa użytkownika",
+      field: "username",
     },
     {
-      label: "last name",
-      value: credentials.lastName,
-      field: "lastName",
-      error: validation.lastName.error,
-      touched: validation.lastName.isTouched,
-    },
-    {
-      label: "password",
-      value: credentials.password,
+      label: "Hasło",
       field: "password",
       others: { secure: true },
-      error: validation.password.error,
-      touched: validation.password.isTouched,
     },
     {
-      label: "password confirmation",
-      value: credentials.passwordConfirmation,
-      field: "passwordConfirmation",
+      label: "Powtórz hasło",
+      field: "confirmPassword",
       others: { secure: true },
-      error: validation.passwordConfirmation.error,
-      touched: validation.passwordConfirmation.isTouched,
     },
   ];
 
@@ -140,52 +71,61 @@ export default function RegisterPanel() {
       <ScrollView>
         <View style={styles.innerContainer}>
           {inputs.map((input) => (
-            <CustomTextInput
-              label={input.label}
-              onChange={updateCredentials}
-              value={input.value}
-              field={input.field as Credentials}
-              {...input.others}
-              error={input.error}
-              isTouched={input.touched}
-              key={input.label}
+            <Controller
+              key={input.field}
+              control={control}
+              name={input.field as keyof RegisterData}
+              rules={{ required: true }}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <CustomTextInput
+                  hookBlurHandler={onBlur}
+                  onChange={(value) => onChange(value)}
+                  value={value}
+                  label={input.label}
+                  error={error}
+                  {...input.others}
+                />
+              )}
             />
           ))}
-          <ActivityIndicator size='large' />
           <Button
-            label='Sign up'
-            onClick={() => console.log("register")}
-            disabled={buttonDisabled}
+            label='Zarejestruj'
+            onClick={handleSubmit(onSubmitHandler)}
+            disabled={isLoading}
+            isLoading={isLoading}
           />
         </View>
         <View style={styles.privacy}>
           <View style={styles.privacyRow}>
-            <Text style={styles.caption}>By signing up you agree with </Text>
+            <Text style={styles.caption}>Rejestrując się akceptujesz</Text>
           </View>
           <View style={styles.privacyRow}>
             <TouchableOpacity
               onPress={() => console.log("open terms")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Terms and Conditions</Text>
+              <Text style={styles.captionLink}>Regulamin</Text>
             </TouchableOpacity>
 
-            <Text style={styles.caption}> and </Text>
+            <Text style={styles.caption}> i </Text>
             <TouchableOpacity
               onPress={() => console.log("open privacy")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Privacy Policy.</Text>
+              <Text style={styles.captionLink}>Politykę Prywatności.</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.signUpContainer}>
-          <Text style={styles.hasAccount}>Already have an account?</Text>
+          <Text style={styles.hasAccount}>Masz już konto?</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Login")}
             hitSlop={20}
           >
-            <Text style={styles.signIn}>Log in</Text>
+            <Text style={styles.signIn}>Zaloguj</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -193,13 +133,35 @@ export default function RegisterPanel() {
   );
 }
 
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Wpisz poprawny adres e-mail")
+    .required("Wpisz adres e-mail"),
+  username: yup
+    .string()
+    .min(4, "Nazwa musi mieć 4 znaki")
+    .max(32, "Nazwa jest zbyt długa")
+    .required("Wpisz adres e-mail"),
+  password: yup
+    .string()
+    .min(6, "Hasło powinno mieć co najmniej 6 znaków")
+    .max(32, "Hasło jest zbyt długie")
+    .required("Wpisz hasło"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
+});
+
+export type RegisterData = yup.InferType<typeof schema>;
+
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
+    paddingTop: 50,
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.lime["300"],
+    backgroundColor: styleGuide.color.primary["200"],
   },
   innerContainer: {
     display: "flex",
@@ -218,7 +180,7 @@ const styles = StyleSheet.create({
   },
   captionLink: {
     textDecorationLine: "underline",
-    color: styleGuide.color.lime["500"],
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.caption,
   },
   hasAccount: {
@@ -231,7 +193,7 @@ const styles = StyleSheet.create({
   },
   signIn: {
     marginLeft: 12,
-    color: styleGuide.color.blue["500"],
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.body,
   },
   documentTitle: {

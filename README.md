@@ -1,5 +1,3 @@
-
-
 <!-- PROJECT LOGO -->
 
 ![image](https://github.com/PioterAndrzejewski/topo-viewer/assets/109315248/54628130-3565-4198-8726-596c680841bf)

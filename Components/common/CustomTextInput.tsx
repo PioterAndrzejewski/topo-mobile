@@ -5,13 +5,23 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
-import { useFonts } from "expo-font";
 
 import { VisionIcon, VisionLowIcon } from "./SvgIcons";
 import { styleGuide } from "../../styles/guide";
-import { CustomTextInputProps } from "../../types/props";
+import type { FieldError } from "react-hook-form";
+import type { RegisterData } from "../auth/RegisterPanel";
+
+export type CustomTextInputProps = {
+  label: string;
+  secure?: boolean;
+  onChange: (val: string) => void;
+  value: string | undefined;
+  field?: keyof RegisterData | undefined;
+  error?: FieldError;
+  onBlur?: any;
+  hookBlurHandler: any;
+};
 
 export default function CustomTextInput({
   label,
@@ -20,11 +30,17 @@ export default function CustomTextInput({
   value,
   field,
   error,
-  isTouched,
+  hookBlurHandler,
+  ...props
 }: CustomTextInputProps) {
   const [inputFocused, setInputFocused] = useState(false);
   const [hidden, setHidden] = useState<boolean | undefined>(secure);
   const handlePress = () => setHidden((prevValue) => !prevValue);
+
+  const handleBlur = () => {
+    setInputFocused(false);
+    hookBlurHandler();
+  };
 
   const showPassword = () => (
     <View style={styles.icon}>
@@ -34,30 +50,39 @@ export default function CustomTextInput({
     </View>
   );
 
+  const textInputStyles = () => {
+    if (error)
+      return {
+        ...styles.input,
+        ...styles.inputError,
+      };
+
+    if (inputFocused)
+      return {
+        ...styles.input,
+        ...styles.inputFocused,
+      };
+    return styles.input;
+  };
+
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.label}>{label}</Text>
         <View>
           <TextInput
-            style={
-              error && isTouched
-                ? {
-                    ...styles.input,
-                    ...styles.inputError,
-                  }
-                : inputFocused
-                ? { ...styles.input, ...styles.inputFocused }
-                : styles.input
-            }
+            style={textInputStyles()}
             onFocus={() => setInputFocused(true)}
-            onBlur={() => setInputFocused(false)}
-            onChangeText={(value) => onChange(value, field)}
+            onBlur={handleBlur}
             value={value}
             editable
             secureTextEntry={secure && hidden}
+            onChangeText={onChange}
+            {...props}
           />
-          {error && isTouched && <Text style={styles.errorText}>{error}</Text>}
+          {error?.message && (
+            <Text style={styles.errorText}>{error.message}</Text>
+          )}
           {secure && showPassword()}
         </View>
       </View>
