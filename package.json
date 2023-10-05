@@ -19,6 +19,7 @@
     "expo-font": "^11.4.0",
     "expo-secure-store": "^12.5.0",
     "expo-status-bar": "^1.6.0",
+    "qs": "^6.11.2",
     "react": "*",
     "react-hook-form": "^7.47.0",
     "react-native": "^0.72.3",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@tanstack/eslint-plugin-query": "^4.36.0",
+    "@types/qs": "^6.9.8",
     "@types/react": "^18.2.20",
     "@types/yup-locale-pl": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^6.3.0",

@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { styleGuide } from "../../styles/guide";
 import { HomeScreenNavigationProp } from "../../types/type";
@@ -19,29 +22,13 @@ import CustomTextInput from "../common/CustomTextInput";
 import { register } from "../../services/auth";
 import { saveJWT, setUserToStorage } from "../../services/store";
 
-export type Credentials =
-  | "email"
-  | "username"
-  | "password"
-  | "passwordConfirmation";
-
-export type CredentialsState = {
-  [Key in Credentials]: string;
-};
-
 export default function RegisterPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const [credentials, setCredentials] = useState<CredentialsState>({
-    email: "prefilled@email.com",
-    username: "prefilled name",
-    password: "prefilled password",
-    passwordConfirmation: "prefilled password",
-  });
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ["register", [credentials.email]],
-    mutationFn: () =>
-      register(credentials.username, credentials.email, credentials.password),
+    mutationKey: ["register"],
+    mutationFn: (data: RegisterData) =>
+      register(data.username, data.email, data.password),
     onSuccess: (data) => {
       saveJWT(data.jwt);
       setUserToStorage(data.user);
@@ -49,48 +36,33 @@ export default function RegisterPanel() {
     },
   });
 
-  const handleStateChange = (
-    value: string,
-    field: keyof typeof credentials | undefined,
-  ) =>
-    setCredentials((prev) => {
-      if (!field) return prev;
-      const newState = { ...prev };
-      newState[field] = value;
-      console.log(newState);
-      return newState;
-    });
+  const { control, handleSubmit } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmitHandler = (data: RegisterData) => {
+    mutate(data);
+  };
 
   const inputs = [
     {
       label: "Adres e-mail",
-      value: credentials.email,
       field: "email",
-      error: "",
-      touched: false,
     },
     {
       label: "Nazwa użytkownika",
-      value: credentials.username,
       field: "username",
-      error: "",
-      touched: false,
     },
     {
       label: "Hasło",
-      value: credentials.password,
       field: "password",
       others: { secure: true },
-      error: "",
-      touched: false,
     },
     {
       label: "Powtórz hasło",
-      value: credentials.passwordConfirmation,
-      field: "passwordConfirmation",
+      field: "confirmPassword",
       others: { secure: true },
-      error: "",
-      touched: false,
     },
   ];
 
@@ -99,21 +71,29 @@ export default function RegisterPanel() {
       <ScrollView>
         <View style={styles.innerContainer}>
           {inputs.map((input) => (
-            <CustomTextInput
-              label={input.label}
-              onChange={handleStateChange}
-              value={input.value}
-              field={input.field as Credentials}
-              {...input.others}
-              error={input.error}
-              isTouched={input.touched}
-              key={input.label}
+            <Controller
+              key={input.field}
+              control={control}
+              name={input.field as keyof RegisterData}
+              rules={{ required: true }}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <CustomTextInput
+                  hookBlurHandler={onBlur}
+                  onChange={(value) => onChange(value)}
+                  value={value}
+                  label={input.label}
+                  error={error}
+                  {...input.others}
+                />
+              )}
             />
           ))}
-          <ActivityIndicator size='large' />
           <Button
-            label='Sign up'
-            onClick={mutate}
+            label='Zarejestruj'
+            onClick={handleSubmit(onSubmitHandler)}
             disabled={isLoading}
             isLoading={isLoading}
           />
@@ -152,6 +132,28 @@ export default function RegisterPanel() {
     </View>
   );
 }
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Wpisz poprawny adres e-mail")
+    .required("Wpisz adres e-mail"),
+  username: yup
+    .string()
+    .min(4, "Nazwa musi mieć 4 znaki")
+    .max(32, "Nazwa jest zbyt długa")
+    .required("Wpisz adres e-mail"),
+  password: yup
+    .string()
+    .min(6, "Hasło powinno mieć co najmniej 6 znaków")
+    .max(32, "Hasło jest zbyt długie")
+    .required("Wpisz hasło"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
+});
+
+export type RegisterData = yup.InferType<typeof schema>;
 
 const styles = StyleSheet.create({
   container: {

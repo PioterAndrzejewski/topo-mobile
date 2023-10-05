@@ -9,15 +9,15 @@ import {
 
 import { VisionIcon, VisionLowIcon } from "./SvgIcons";
 import { styleGuide } from "../../styles/guide";
-import type { Credentials } from "../auth/RegisterPanel";
 import type { FieldError } from "react-hook-form";
+import type { RegisterData } from "../auth/RegisterPanel";
 
 export type CustomTextInputProps = {
   label: string;
   secure?: boolean;
-  onChange: (newValue: string, field?: Credentials | undefined) => void;
-  value: string;
-  field?: Credentials | undefined;
+  onChange: (val: string) => void;
+  value: string | undefined;
+  field?: keyof RegisterData | undefined;
   error?: FieldError;
   onBlur?: any;
   hookBlurHandler: any;

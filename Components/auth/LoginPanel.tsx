@@ -11,7 +11,6 @@ import { useMutation } from "@tanstack/react-query";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import yupLocalePL from "yup-locale-pl";
 
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
@@ -32,11 +31,11 @@ export default function LoginPanel() {
       navigation.navigate("Main");
     },
   });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "mikel@gg.pl",
+      password: "",
+    },
     mode: "onChange",
     resolver: yupResolver(schema),
   });
