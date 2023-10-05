@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiConfig } from '../Components/auth/apiConfig';
+import { apiConfig } from './apiConfig';
 
 import authService, { UserLoginData } from "./auth"
 

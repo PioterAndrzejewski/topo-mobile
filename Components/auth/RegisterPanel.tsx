@@ -9,128 +9,88 @@ import {
   ViewStyle,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "@tanstack/react-query";
 
-import { validate } from "../../utils/validate";
 import { styleGuide } from "../../styles/guide";
 import { HomeScreenNavigationProp } from "../../types/type";
-import { Credentials } from "../../types/props";
 
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
+import { register } from "../../services/auth";
+import { saveJWT, setUserToStorage } from "../../services/store";
+
+export type Credentials =
+  | "email"
+  | "username"
+  | "password"
+  | "passwordConfirmation";
+
+export type CredentialsState = {
+  [Key in Credentials]: string;
+};
 
 export default function RegisterPanel() {
-  const [credentials, setCredentials] = useState({
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [credentials, setCredentials] = useState<CredentialsState>({
     email: "prefilled@email.com",
-    firstName: "prefilled name",
-    lastName: "prefilled surname",
+    username: "prefilled name",
     password: "prefilled password",
     passwordConfirmation: "prefilled password",
   });
-  const [validation, setValidation] = useState({
-    email: {
-      isTouched: false,
-      error: "",
-    },
-    firstName: {
-      isTouched: false,
-      error: "",
-    },
-    lastName: {
-      isTouched: false,
-      error: "",
-    },
-    password: {
-      isTouched: false,
-      error: "",
-    },
-    passwordConfirmation: {
-      isTouched: false,
-      error: "",
+
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ["register", [credentials.email]],
+    mutationFn: () =>
+      register(credentials.username, credentials.email, credentials.password),
+    onSuccess: (data) => {
+      saveJWT(data.jwt);
+      setUserToStorage(data.user);
+      navigation.navigate("Main");
     },
   });
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  const updateCredentials = (
-    newValue: string,
-    field: Credentials | undefined,
-  ) => {
-    let { validationError, clearPasswordError } = validate(
-      field,
-      newValue,
-      credentials,
-    );
-
-    setButtonDisabled(false);
-    setCredentials((prevValue) => {
-      const newCredentials = JSON.parse(JSON.stringify(prevValue));
-      if (field) {
-        newCredentials[field] = newValue;
-      }
-      return newCredentials;
+  const handleStateChange = (
+    value: string,
+    field: keyof typeof credentials | undefined,
+  ) =>
+    setCredentials((prev) => {
+      if (!field) return prev;
+      const newState = { ...prev };
+      newState[field] = value;
+      console.log(newState);
+      return newState;
     });
-    setValidation((prevValidation) => {
-      const newValidation = JSON.parse(JSON.stringify(prevValidation));
-      newValidation[field!].isTouched = true;
-      if (clearPasswordError) {
-        newValidation.password.error = "";
-        newValidation.passwordConfirmation.error = "";
-      }
-      if (
-        validationError === "Passwords are not the same" &&
-        newValidation.password.isTouched &&
-        newValidation.passwordConfirmation.isTouched
-      ) {
-        newValidation.password.error = validationError;
-        newValidation.passwordConfirmation.error = validationError;
-        return newValidation;
-      } else if (validationError === "Passwords are not the same") {
-        newValidation.password.error = "";
-        newValidation.passwordConfirmation.error = "";
-        return newValidation;
-      }
-      newValidation[field!].error = validationError;
-      return newValidation;
-    });
-  };
 
   const inputs = [
     {
-      label: "e-mail address",
+      label: "Adres e-mail",
       value: credentials.email,
       field: "email",
-      error: validation.email.error,
-      touched: validation.email.isTouched,
+      error: "",
+      touched: false,
     },
     {
-      label: "first name",
-      value: credentials.firstName,
-      field: "firstName",
-      error: validation.firstName.error,
-      touched: validation.firstName.isTouched,
+      label: "Nazwa użytkownika",
+      value: credentials.username,
+      field: "username",
+      error: "",
+      touched: false,
     },
     {
-      label: "last name",
-      value: credentials.lastName,
-      field: "lastName",
-      error: validation.lastName.error,
-      touched: validation.lastName.isTouched,
-    },
-    {
-      label: "password",
+      label: "Hasło",
       value: credentials.password,
       field: "password",
       others: { secure: true },
-      error: validation.password.error,
-      touched: validation.password.isTouched,
+      error: "",
+      touched: false,
     },
     {
-      label: "password confirmation",
+      label: "Powtórz hasło",
       value: credentials.passwordConfirmation,
       field: "passwordConfirmation",
       others: { secure: true },
-      error: validation.passwordConfirmation.error,
-      touched: validation.passwordConfirmation.isTouched,
+      error: "",
+      touched: false,
     },
   ];
 
@@ -141,7 +101,7 @@ export default function RegisterPanel() {
           {inputs.map((input) => (
             <CustomTextInput
               label={input.label}
-              onChange={updateCredentials}
+              onChange={handleStateChange}
               value={input.value}
               field={input.field as Credentials}
               {...input.others}
@@ -153,38 +113,39 @@ export default function RegisterPanel() {
           <ActivityIndicator size='large' />
           <Button
             label='Sign up'
-            onClick={() => console.log("register")}
-            disabled={buttonDisabled}
+            onClick={mutate}
+            disabled={isLoading}
+            isLoading={isLoading}
           />
         </View>
         <View style={styles.privacy}>
           <View style={styles.privacyRow}>
-            <Text style={styles.caption}>By signing up you agree with </Text>
+            <Text style={styles.caption}>Rejestrując się akceptujesz</Text>
           </View>
           <View style={styles.privacyRow}>
             <TouchableOpacity
               onPress={() => console.log("open terms")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Terms and Conditions</Text>
+              <Text style={styles.captionLink}>Regulamin</Text>
             </TouchableOpacity>
 
-            <Text style={styles.caption}> and </Text>
+            <Text style={styles.caption}> i </Text>
             <TouchableOpacity
               onPress={() => console.log("open privacy")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Privacy Policy.</Text>
+              <Text style={styles.captionLink}>Politykę Prywatności.</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.signUpContainer}>
-          <Text style={styles.hasAccount}>Already have an account?</Text>
+          <Text style={styles.hasAccount}>Masz już konto?</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Login")}
             hitSlop={20}
           >
-            <Text style={styles.signIn}>Log in</Text>
+            <Text style={styles.signIn}>Zaloguj</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -194,11 +155,11 @@ export default function RegisterPanel() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
+    paddingTop: 50,
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.lime["300"],
+    backgroundColor: styleGuide.color.primary["200"],
   },
   innerContainer: {
     display: "flex",
@@ -217,7 +178,7 @@ const styles = StyleSheet.create({
   },
   captionLink: {
     textDecorationLine: "underline",
-    color: styleGuide.color.lime["500"],
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.caption,
   },
   hasAccount: {
@@ -230,7 +191,7 @@ const styles = StyleSheet.create({
   },
   signIn: {
     marginLeft: 12,
-    color: styleGuide.color.blue["500"],
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.body,
   },
   documentTitle: {

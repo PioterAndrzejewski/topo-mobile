@@ -17,7 +17,7 @@ export type ButtonProps = {
   isLoading?: boolean;
 };
 
-export default function CustomTextInput({
+export default function Button({
   label,
   onClick,
   disabled,

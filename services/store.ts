@@ -9,11 +9,8 @@ export async function saveToSecureStorage(key: string, value: string) {
 
 export async function getFromSecureStorage(key: string) {
   let result = await SecureStore.getItemAsync(key);
-  if (result) {
-    return result;
-  } else {
-    return null;
-  }
+  if (result) return result;
+  else return null;
 }
 
 export async function saveJWT(value: string) {

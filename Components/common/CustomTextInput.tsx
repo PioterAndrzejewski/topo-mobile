@@ -11,7 +11,17 @@ import { useFonts } from "expo-font";
 
 import { VisionIcon, VisionLowIcon } from "./SvgIcons";
 import { styleGuide } from "../../styles/guide";
-import { CustomTextInputProps } from "../../types/props";
+import type { Credentials } from "../auth/RegisterPanel";
+
+export type CustomTextInputProps = {
+  label: string;
+  secure?: boolean;
+  onChange: (newValue: string, field?: Credentials | undefined) => void;
+  value: string;
+  field?: Credentials | undefined;
+  error?: string;
+  isTouched?: boolean;
+};
 
 export default function CustomTextInput({
   label,

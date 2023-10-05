@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiConfig } from '../Components/auth/apiConfig';
+import { apiConfig } from './apiConfig';
 import { getFromSecureStorage } from './store';
 
 export type UserLoginData = {
@@ -40,6 +40,15 @@ export const login = async (email: string, password: string) => {
   const { data } = await axios.post<LoginData>(apiConfig.auth.login, {
     identifier: email,
     password: password,
+  });
+  return data;
+};
+
+export const register = async (username: string, email: string, password: string) => {
+  const { data } = await axios.post<LoginData>(apiConfig.auth.register, {
+    username,
+    email,
+    password,
   });
   return data;
 };

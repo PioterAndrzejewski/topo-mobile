@@ -52,13 +52,15 @@ export default function LoginPanel() {
             onClick={() => mutate()}
             isLoading={isLoading}
           />
-          <Text style={styles.noAccount}>Nie masz konta?</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Register")}
-            hitSlop={20}
-          >
-            <Text style={styles.signUp}>Sign up</Text>
-          </TouchableOpacity>
+          <View style={styles.registerContainer}>
+            <Text style={styles.noAccount}>Nie masz konta?</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Register")}
+              hitSlop={20}
+            >
+              <Text style={styles.signUp}>Zarejestruj</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -86,7 +88,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 20,
   },
-  signUpContainer: {
+  registerContainer: {
+    marginTop: 20,
     ...(styleGuide.center as ViewStyle),
   },
   noAccount: {
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
   },
   signUp: {
     marginLeft: 12,
-    color: styleGuide.color.primary["300"],
+    color: styleGuide.color.primary["500"],
     ...styleGuide.text.body,
   },
 });
