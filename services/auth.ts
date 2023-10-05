@@ -13,7 +13,7 @@ export type UserLoginData = {
   username: string;
 }
 
-export type LoginData = {
+export type LoggedUserData = {
   jwt: string;
   user: UserLoginData;
 }
@@ -37,7 +37,7 @@ instance.interceptors.request.use(
 );
 
 export const login = async (email: string, password: string) => {
-  const { data } = await axios.post<LoginData>(apiConfig.auth.login, {
+  const { data } = await axios.post<LoggedUserData>(apiConfig.auth.login, {
     identifier: email,
     password: password,
   });
@@ -45,7 +45,7 @@ export const login = async (email: string, password: string) => {
 };
 
 export const register = async (username: string, email: string, password: string) => {
-  const { data } = await axios.post<LoginData>(apiConfig.auth.register, {
+  const { data } = await axios.post<LoggedUserData>(apiConfig.auth.register, {
     username,
     email,
     password,

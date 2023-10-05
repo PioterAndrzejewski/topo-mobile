@@ -8,6 +8,10 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import yupLocalePL from "yup-locale-pl";
 
 import Button from "../common/Button";
 import CustomTextInput from "../common/CustomTextInput";
@@ -19,37 +23,71 @@ import { saveJWT, setUserToStorage } from "../../services/store";
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { mutate, isLoading } = useMutation({
     mutationKey: ["login"],
-    mutationFn: () => login(email, password),
+    mutationFn: (data: LoginData) => login(data.email, data.password),
     onSuccess: (data) => {
       saveJWT(data.jwt);
       setUserToStorage(data.user);
       navigation.navigate("Main");
     },
   });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmitHandler = (data: LoginData) => {
+    mutate(data);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Topo na wyciągnięcie ręki</Text>
       <View style={styles.innerContainer}>
         <View>
-          <CustomTextInput
-            label='Adres e-mail'
-            onChange={(val) => setEmail(val)}
-            value={email}
+          <Controller
+            control={control}
+            name='email'
+            rules={{ required: true }}
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
+              <CustomTextInput
+                hookBlurHandler={onBlur}
+                onChange={(value) => onChange(value)}
+                value={value}
+                label='Adres e-mail'
+                error={error}
+              />
+            )}
           />
-          <CustomTextInput
-            label='Hasło'
-            onChange={(val) => setPassword(val)}
-            value={password}
-            secure
+          <Controller
+            control={control}
+            name='password'
+            rules={{ required: true }}
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
+              <CustomTextInput
+                hookBlurHandler={onBlur}
+                onChange={(value) => onChange(value)}
+                value={value}
+                label='Hasło'
+                error={error}
+                secure
+              />
+            )}
           />
           <Button
             label='Zaloguj'
-            onClick={() => mutate()}
+            onClick={handleSubmit(onSubmitHandler)}
             isLoading={isLoading}
           />
           <View style={styles.registerContainer}>
@@ -66,6 +104,20 @@ export default function LoginPanel() {
     </View>
   );
 }
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Wpisz poprawny adres e-mail")
+    .required("Wpisz adres e-mail"),
+  password: yup
+    .string()
+    .min(6, "Hasło powinno mieć co najmniej 6 znaków")
+    .max(32, "Hasło jest zbyt długie")
+    .required("Wpisz hasło"),
+});
+
+type LoginData = yup.InferType<typeof schema>;
 
 const styles = StyleSheet.create({
   container: {
