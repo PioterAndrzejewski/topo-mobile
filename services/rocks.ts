@@ -115,6 +115,7 @@ export type AreaData = {
     updatedAt: string;
     Coordinates: Coordinates;
     Cover: Cover;
+    uuid: string;
   }
 }
 

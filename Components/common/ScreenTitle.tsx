@@ -1,16 +1,21 @@
-import React from "react";
+import type { FC } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { styleGuide } from "../../styles/guide";
-import { LoginTitleProps } from "../../types/props";
 
-export default function LoginTitle({ title }: LoginTitleProps) {
+type LoginTitleProps = {
+  title: string;
+};
+
+const LoginTitle: FC<LoginTitleProps> = ({ title }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{title}</Text>
     </View>
   );
-}
+};
+
+export default LoginTitle;
 
 const styles = StyleSheet.create({
   container: {
