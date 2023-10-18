@@ -34,7 +34,7 @@ export default function LoginPanel() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "mikel@gg.pl",
-      password: "",
+      password: "mikel1",
     },
     mode: "onChange",
     resolver: yupResolver(schema),

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { styleGuide } from "../styles/guide";
 import { getAreas } from "../services/rocks";
 import PrettyJson from "../Components/helpers/PrettyJson";
+import ScreenTitle from "../Components/common/ScreenTitle";
 
 export default function Areas() {
   const { data } = useUserProfile();
@@ -21,6 +22,7 @@ export default function Areas() {
 
   return (
     <ScrollView style={styles.container}>
+      <ScreenTitle title='Obszary' />
       <Text>no elo</Text>
       <Text>user: {data?.username}</Text>
       <Text>user: {data?.email}</Text>
