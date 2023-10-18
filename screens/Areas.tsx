@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, ScrollView } from "react-native";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { useQuery } from "@tanstack/react-query";
 
 import { styleGuide } from "../styles/guide";
 import { getAreas } from "../services/rocks";
+import PrettyJson from "../Components/helpers/PrettyJson";
 
-export default function Main() {
+export default function Areas() {
   const { data } = useUserProfile();
   const { data: areas } = useQuery({
     queryFn: getAreas,
@@ -19,11 +20,12 @@ export default function Main() {
   // }, [areas]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text>no elo</Text>
       <Text>user: {data?.username}</Text>
       <Text>user: {data?.email}</Text>
-    </View>
+      <PrettyJson json={areas} />
+    </ScrollView>
   );
 }
 
