@@ -32,7 +32,7 @@ export default function RegisterPanel() {
     onSuccess: (data) => {
       saveJWT(data.jwt);
       setUserToStorage(data.user);
-      navigation.navigate("Main");
+      navigation.navigate("Areas");
     },
   });
 
