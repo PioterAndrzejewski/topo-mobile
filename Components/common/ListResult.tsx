@@ -1,7 +1,8 @@
+import React, { useContext } from "react";
 import type { FC } from "react";
 
-import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, StyleSheet, TouchableHighlight } from "react-native";
+import { NavigationContext } from "@react-navigation/native";
 
 import { styleGuide } from "../../styles/guide";
 
@@ -14,12 +15,13 @@ type ListResultProps = {
 };
 
 const ListResult: FC<ListResultProps> = ({ linkTo, linkToId, label }) => {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigation = useContext(NavigationContext);
   return (
-    <TouchableHighlight onPress={navigation.navigate(linkTo, { id: linkToId })}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{label}</Text>
-      </View>
+    <TouchableHighlight
+      onPress={() => navigation?.navigate(linkTo, { id: linkToId })}
+      style={styles.container}
+    >
+      <Text style={styles.text}>{label}</Text>
     </TouchableHighlight>
   );
 };
@@ -28,11 +30,14 @@ export default ListResult;
 
 const styles = StyleSheet.create({
   container: {
-    width: "90%",
-    backgroundColor: styleGuide.color.primary["200"],
+    display: "flex",
+    border: "solid 1px black",
+    borderRadius: 12,
+    padding: 20,
+    backgroundColor: styleGuide.color.primary["100"],
   },
   text: {
-    ...styleGuide.text.heading["1"],
+    ...styleGuide.text.heading["2"],
     color: "#336383",
   },
 });
