@@ -9,6 +9,7 @@ export const apiConfig = {
     me: `${apiUrl}/api/users/me`
   },
   topo: {
-    areas: (qs: string) => `${apiUrl}/api/map-areas?${qs}`
+    areas: (qs: string) => `${apiUrl}/api/map-areas?${qs}`,
+    regions: (qs: string) => `${apiUrl}/api/map-regions?${qs}`
   }
 }

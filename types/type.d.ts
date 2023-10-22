@@ -7,7 +7,8 @@ export type HomeStackNavigatorParamList = {
   Register: undefined;
   Home: undefined;
   Areas: undefined;
-  Regions: {
+  ResultsList: {
+    currentItemType: number;
     id: string;
   };
 };
@@ -18,7 +19,7 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   Login,
   Register,
   Areas,
-  Regions
+  ResultsList
 >;
 
-export type Props = NativeStackScreenProps<HomeStackNavigatorParamList, 'Regions'>;
+export type Props = NativeStackScreenProps<HomeStackNavigatorParamList, 'ResultsList'>;

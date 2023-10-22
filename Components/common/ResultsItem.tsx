@@ -5,20 +5,27 @@ import { Text, StyleSheet, TouchableHighlight } from "react-native";
 import { NavigationContext } from "@react-navigation/native";
 
 import { styleGuide } from "../../styles/guide";
-
-import { HomeScreenNavigationProp } from "../../types/type";
+import { itemsTypes } from "../../services/rocks";
 
 type ListResultProps = {
-  linkTo: string;
+  currentType: number;
   linkToId: string;
   label: string;
 };
 
-const ListResult: FC<ListResultProps> = ({ linkTo, linkToId, label }) => {
+const ResultsItem: FC<ListResultProps> = ({ currentType, linkToId, label }) => {
   const navigation = useContext(NavigationContext);
+  console.log("w results item:");
+  console.log({ currentType, linkToId });
   return (
     <TouchableHighlight
-      onPress={() => navigation?.navigate(linkTo, { id: linkToId })}
+      onPress={() => {
+        console.log("wywoluje onpress");
+        navigation?.navigate("ResultsList", {
+          currentItemType: currentType + 1,
+          id: linkToId,
+        });
+      }}
       style={styles.container}
     >
       <Text style={styles.text}>{label}</Text>
@@ -26,7 +33,7 @@ const ListResult: FC<ListResultProps> = ({ linkTo, linkToId, label }) => {
   );
 };
 
-export default ListResult;
+export default ResultsItem;
 
 const styles = StyleSheet.create({
   container: {
