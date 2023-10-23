@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,55 +8,57 @@ import PrettyJson from "../Components/helpers/PrettyJson";
 import ResultsItem from "../Components/common/ResultsItem";
 
 import { Props } from "../types/type";
-import { getAreas, itemsTypes } from "../services/rocks";
 import { styleGuide } from "../styles/guide";
+import { useAreas } from "../hooks/useAreas";
+
+export type CurrentItem = {
+  name: string;
+  id: string;
+};
 
 export default function ResultsList({ route, navigation }: Props) {
-  const { data } = useQuery({
-    queryFn: () => getAreas(route.params.currentItemType, route.params.id),
-    queryKey: [itemsTypes[route.params.currentItemType], route.params.id],
-    refetchInterval: 1000 * 60 * 10,
-  });
+  const [stage, setStage] = useState(0);
+  const [currentItem, setCurrentItem] = useState<any>(null);
+  const [listToRender, setListToRender] = useState<any[]>([]);
+  const { areas, regions, sectors, rocks, isLoading } = useAreas();
+
   useEffect(() => {
-    console.log("________Rerender");
-    console.log("currentype: ", route.params.currentItemType);
-    console.log("id: ", route.params.id);
-    console.log("parent: ");
-    console.log(data?.parentId);
-  });
+    console.log(";w komponencie");
+    console.log(rocks);
+  }, [rocks]);
+
+  useEffect(() => {
+    if (stage === 0 && areas) return setListToRender(areas);
+    if (stage === 1 && regions) return setListToRender(regions);
+    if (stage === 2 && sectors) return setListToRender(sectors);
+    if (stage === 3 && rocks) return setListToRender(rocks);
+  }, [stage, areas, regions, sectors]);
+
+  const handleChange = (step: number, newItem: CurrentItem) => {
+    setStage((prevStage) => prevStage + step);
+    setCurrentItem(newItem);
+  };
+
   return (
     <View style={styles.container}>
-      <ScreenTitle
-        title={
-          route.params.currentItemType === 0
-            ? "Dostępne obszary"
-            : `${data?.currentName}`
-        }
-      />
-      {navigation &&
-        navigation.canGoBack() &&
-        route.params.currentItemType > 0 && (
-          <BackArrow
-            currentType={route.params.currentItemType}
-            previousId={data && data.parentId}
-          />
-        )}
+      <ScreenTitle title='obszar' />
+      {stage > 0 && <BackArrow />}
       <SafeAreaView>
         <ScrollView>
-          {data &&
-            Array.isArray(data.list) &&
-            data.list?.map((item) => (
+          {!isLoading &&
+            Array.isArray(listToRender) &&
+            listToRender.map((item) => (
               <ResultsItem
-                currentType={route.params.currentItemType}
-                linkToId={item.attributes.uuid}
-                label={item.attributes.Name}
-                key={item.attributes.Name}
+                id={item.uuid}
+                name={item.attributes.Name}
+                onChange={handleChange}
+                key={item.attributes.uuid}
               />
             ))}
         </ScrollView>
       </SafeAreaView>
       <ScrollView>
-        <PrettyJson json={data && data.all} />
+        <PrettyJson json={listToRender} />
       </ScrollView>
     </View>
   );

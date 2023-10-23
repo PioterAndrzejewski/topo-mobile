@@ -164,31 +164,21 @@ export type RegionsData = {
   meta: Meta;
 }
 
+export const getAreas = async () => {
+  const query = qs.stringify({
+    populate: [
+      'Coordinates',
+      'Cover',
+      'Cover.Photo'
+    ]
+  });
+  const { data } = await authService.get<AreasData>(apiConfig.topo.areas(query));
+  return data.data;
+}
 
-export const getAreas = async (currentyItemType: number, id?: string) => {
-  if (currentyItemType === 0) {
+
+export const getRegions = async () => {
     const query = qs.stringify({
-      populate: [
-        'Coordinates',
-        'Cover',
-        'Cover.Photo'
-      ]
-    });
-    const { data } = await authService.get<AreasData>(apiConfig.topo.areas(query));
-    return {
-      all: data,
-      list: data.data,
-      currentName: null,
-      parentId: null,
-    };
-  };
-  if (currentyItemType === 1) {
-    const query = qs.stringify({
-      filters: {
-        uuid: {
-          $eq: id
-        }
-      },
       populate: [
         'map_regions',
         'map_regions.Cover',
@@ -196,57 +186,32 @@ export const getAreas = async (currentyItemType: number, id?: string) => {
         'map_regions.parent'
       ]
     });
-    const { data } = await authService.get<AreasData>(apiConfig.topo.areas(query));
-    console.log(data.data[0].attributes.Name)
-    return {
-      all: data,
-      currentName: data.data[0].attributes.Name,
-      parentId: null,
-      list: data.data[0].attributes.map_regions.data}
+    const { data } = await authService.get<RegionsData>(apiConfig.topo.regions(query));
+    return data.data;
   };
-  if (currentyItemType === 2) {
+
+  export const getSectors = async () => {
     const query = qs.stringify({
-      filters: {
-        uuid: {
-          $eq: id
-        }
-      },
       populate: [
-        'parent',
         'map_sectors',
         'map_sectors.Cover',
         'map_sectors.Cover.Photo',
+        'map_sectors.parent'
+      ]
+    });
+    const { data } = await authService.get<RegionsData>(apiConfig.topo.sectors(query));
+    return data.data;
+};
 
-      ]
-    });
-    const { data } = await authService.get<RegionsData>(apiConfig.topo.regions(query));
-    return {
-      all: data,
-      list: data.data[0].attributes.map_sectors.data,
-      currentName: data.data[0].attributes.Name,
-      parentId: data.data[0].attributes.parent.data.attributes.uuid,
-    }
-  };
-  if (currentyItemType === 3) {
-    const query = qs.stringify({
-      filters: {
-        uuid: {
-          $eq: id
-        }
-      },
-      populate: [
-        'map_rocks',
-      ]
-    });
-    const { data } = await authService.get<RegionsData>(apiConfig.topo.regions(query));
-    return {
-      all: data,
-      parentId: data.data[0].attributes.parent.data.attributes.uuid,
-      currentName: data.data[0].attributes.Name,
-      list: data.data[0].attributes.map_sectors.data}
-  }
-  return {
-    parentId: null,
-    list: [],
-  }
+export const getRocks = async () => {
+  const query = qs.stringify({
+    populate: [
+      'rocks',
+      'rocks.Cover',
+      'rocks.Cover.Photo',
+      'rocks.parent'
+    ]
+  });
+  const { data } = await authService.get<AreasData>(apiConfig.topo.rocks(query));
+  return data.data;
 };

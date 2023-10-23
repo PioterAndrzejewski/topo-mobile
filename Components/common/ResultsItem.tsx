@@ -1,34 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 import type { FC } from "react";
 
 import { Text, StyleSheet, TouchableHighlight } from "react-native";
-import { NavigationContext } from "@react-navigation/native";
 
 import { styleGuide } from "../../styles/guide";
-import { itemsTypes } from "../../services/rocks";
+import type { CurrentItem } from "../../screens/ResultsList";
 
 type ListResultProps = {
-  currentType: number;
-  linkToId: string;
-  label: string;
+  id: string;
+  name: string;
+  onChange: (step: number, newItem: CurrentItem) => void;
 };
 
-const ResultsItem: FC<ListResultProps> = ({ currentType, linkToId, label }) => {
-  const navigation = useContext(NavigationContext);
-  console.log("w results item:");
-  console.log({ currentType, linkToId });
+const ResultsItem: FC<ListResultProps> = ({ id, name, onChange }) => {
   return (
     <TouchableHighlight
-      onPress={() => {
-        console.log("wywoluje onpress");
-        navigation?.navigate("ResultsList", {
-          currentItemType: currentType + 1,
-          id: linkToId,
-        });
-      }}
+      onPress={() => onChange(1, { id, name })}
       style={styles.container}
     >
-      <Text style={styles.text}>{label}</Text>
+      <Text style={styles.text}>{name}</Text>
     </TouchableHighlight>
   );
 };
@@ -38,7 +28,8 @@ export default ResultsItem;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    border: "solid 1px black",
+    borderWidth: 1,
+    borderColor: 'black',
     borderRadius: 12,
     padding: 20,
     backgroundColor: styleGuide.color.primary["100"],

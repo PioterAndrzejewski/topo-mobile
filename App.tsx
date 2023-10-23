@@ -7,7 +7,6 @@ import { useFonts } from "expo-font";
 
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
-import AreasScreen from "./screens/Areas";
 import ResultsList from "./screens/ResultsList";
 
 import AppLoading from "./Components/common/AppLoading";
@@ -38,11 +37,7 @@ export default function App() {
         >
           <Stack.Screen name='Login' component={LoginScreen} />
           <Stack.Screen name='Register' component={RegisterScreen} />
-          <Stack.Screen
-            name='ResultsList'
-            component={ResultsList}
-            initialParams={{ currentItemType: 0, id: "noId" }}
-          />
+          <Stack.Screen name='ResultsList' component={ResultsList} />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

@@ -5,22 +5,12 @@ import { NavigationContext } from "@react-navigation/native";
 
 import { HomeScreenNavigationProp } from "../../types/type";
 
-type BackArrowProps = {
-  currentType: number;
-  previousId?: string | null;
-};
+type BackArrowProps = {};
 
-const BackArrow: FC<BackArrowProps> = ({ currentType, previousId }) => {
+const BackArrow: FC<BackArrowProps> = () => {
   const navigation = useContext(NavigationContext);
   return (
-    <TouchableHighlight
-      onPress={() =>
-        navigation?.navigate("ResultsList", {
-          currentItemType: currentType - 1,
-          id: previousId ? previousId : null,
-        })
-      }
-    >
+    <TouchableHighlight onPress={() => null}>
       <Text>Go back</Text>
     </TouchableHighlight>
   );
