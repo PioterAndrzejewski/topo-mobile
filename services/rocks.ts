@@ -71,6 +71,10 @@ export type ImageFormat = {
   width: string;
 }
 
+export type Exhibition = 'north' | 'south' | 'east' | 'west' | 'trees';
+export type Formations = 'slab' | 'vertical' | 'overhang' | 'roof';
+export type Popularity = 'high' | 'medium' | 'low';
+
 export type Photo = {
   id: number;
   attributes: {
@@ -109,26 +113,12 @@ export type Meta = {
   }
 }
 
-export type Region = {
-  id: number;
-  attributes: {
-    Name: string;
-    createdAt: string;
-    publishedAt: string;
-    updatedAt: string;
-    uuid: string;
-    parent: {
-      data: AreaData
-    }
-  },
-}
-
 export type AreaData = {
   id: number;
   attributes: {
     Name: string;
     createdAt: string;
-    map_regions: {data: Region[]};
+    children: {data: RegionData[]};
     published_at: string;
     updatedAt: string;
     Coordinates: Coordinates;
@@ -147,7 +137,7 @@ export type RegionData = {
   attributes: {
     Name: string;
     createdAt: string;
-    map_sectors: {data: Region[]};
+    children: {data: SectorData[]};
     published_at: string;
     updatedAt: string;
     Coordinates: Coordinates;
@@ -164,9 +154,63 @@ export type RegionsData = {
   meta: Meta;
 }
 
+export type SectorData = {
+  id: number;
+  attributes: {
+    Name: string;
+    createdAt: string;
+    children: {data: RockData[]};
+    published_at: string;
+    updatedAt: string;
+    Coordinates: Coordinates;
+    Cover: Cover;
+    uuid: string;
+    parent: {
+      data: AreaData;
+    };
+  }
+}
+
+export type SectorsData = {
+  data: RegionData[];
+  meta: Meta;
+}
+
+export type RockData = {
+  id: number;
+  attributes: {
+    Name: string;
+    createdAt: string;
+    children: {data: RockData[]};
+    published_at: string;
+    created_at: string;
+    updatedAt: string;
+    walk_distance: number;
+    height: number;
+    exhibition: Exhibition;
+    formation: Formations;
+    popularity: Popularity;
+    climbing_restricted: boolean;
+    loose_rocks: boolean;
+    recommended: boolean;
+    Coordinates: Coordinates;
+    Cover: Cover;
+    uuid: string;
+    parent: {
+      data: AreaData;
+    };
+  }
+}
+
+export type RocksData = {
+  data: RockData[];
+  meta: Meta;
+}
+
 export const getAreas = async () => {
   const query = qs.stringify({
     populate: [
+      'uuid',
       'Coordinates',
       'Cover',
       'Cover.Photo'
@@ -180,10 +224,10 @@ export const getAreas = async () => {
 export const getRegions = async () => {
     const query = qs.stringify({
       populate: [
-        'map_regions',
-        'map_regions.Cover',
-        'map_regions.Cover.Photo',
-        'map_regions.parent'
+        'uuid',
+        'Cover',
+        'Cover.Photo',
+        'parent'
       ]
     });
     const { data } = await authService.get<RegionsData>(apiConfig.topo.regions(query));
@@ -193,10 +237,10 @@ export const getRegions = async () => {
   export const getSectors = async () => {
     const query = qs.stringify({
       populate: [
-        'map_sectors',
-        'map_sectors.Cover',
-        'map_sectors.Cover.Photo',
-        'map_sectors.parent'
+        'uuid',
+        'Cover',
+        'Cover.Photo',
+        'parent'
       ]
     });
     const { data } = await authService.get<RegionsData>(apiConfig.topo.sectors(query));
@@ -206,12 +250,12 @@ export const getRegions = async () => {
 export const getRocks = async () => {
   const query = qs.stringify({
     populate: [
-      'rocks',
-      'rocks.Cover',
-      'rocks.Cover.Photo',
-      'rocks.parent'
+      'uuid',
+      'Cover',
+      'Cover.Photo',
+      'parent'
     ]
   });
-  const { data } = await authService.get<AreasData>(apiConfig.topo.rocks(query));
+  const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
   return data.data;
 };

@@ -1,7 +1,12 @@
 import React from "react";
 import type { FC } from "react";
 
-import { Text, StyleSheet, TouchableHighlight } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
 
 import { styleGuide } from "../../styles/guide";
 import type { CurrentItem } from "../../screens/ResultsList";
@@ -14,12 +19,12 @@ type ListResultProps = {
 
 const ResultsItem: FC<ListResultProps> = ({ id, name, onChange }) => {
   return (
-    <TouchableHighlight
+    <TouchableOpacity
       onPress={() => onChange(1, { id, name })}
       style={styles.container}
     >
       <Text style={styles.text}>{name}</Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 
@@ -29,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderRadius: 12,
     padding: 20,
     backgroundColor: styleGuide.color.primary["100"],
