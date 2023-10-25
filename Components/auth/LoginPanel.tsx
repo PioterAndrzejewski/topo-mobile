@@ -28,7 +28,7 @@ export default function LoginPanel() {
     onSuccess: (data) => {
       saveJWT(data.jwt);
       setUserToStorage(data.user);
-      navigation.navigate("Areas");
+      navigation.navigate("ResultsList");
     },
   });
   const { control, handleSubmit } = useForm({

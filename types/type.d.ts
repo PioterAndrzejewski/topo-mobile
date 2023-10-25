@@ -6,7 +6,7 @@ export type HomeStackNavigatorParamList = {
   Login: undefined;
   Register: undefined;
   Home: undefined;
-  Areas: undefined;
+  ResultsList: undefined;
 };
 
 export type HomeScreenNavigationProp = NativeStackScreenProps<
@@ -14,7 +14,7 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   Home,
   Login,
   Register,
-  Areas
+  ResultsList
 >;
 
-export type Props = NativeStackScreenProps<HomeStackNavigatorParamList, Chat>;
+export type Props = NativeStackScreenProps<HomeStackNavigatorParamList, 'ResultsList'>;
