@@ -6,7 +6,6 @@ export type HomeStackNavigatorParamList = {
   Login: undefined;
   Register: undefined;
   Home: undefined;
-  ResultsList: undefined;
 };
 
 export type HomeScreenNavigationProp = NativeStackScreenProps<

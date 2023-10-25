@@ -1,14 +1,20 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
 
-import ScreenTitle from "../Components/common/ScreenTitle";
-import BackArrow from "../Components/common/BackArrow";
-import PrettyJson from "../Components/helpers/PrettyJson";
-import ResultsItem from "../Components/common/ResultsItem";
+import ScreenTitle from "../../Components/common/ScreenTitle";
+import BackArrow from "../../Components/common/BackArrow";
+import PrettyJson from "../../Components/helpers/PrettyJson";
+import ResultsItem from "../../Components/common/ResultsItem";
+import Map from "./Map";
 
-import { styleGuide } from "../styles/guide";
-import { useAreas } from "../hooks/useAreas";
-import { AreaData, RegionData, RockData, SectorData } from "../services/rocks";
+import { styleGuide } from "../../styles/guide";
+import { useAreas } from "../../hooks/useAreas";
+import {
+  AreaData,
+  RegionData,
+  RockData,
+  SectorData,
+} from "../../services/rocks";
 
 export type CurrentItem = {
   name: string;
@@ -87,9 +93,6 @@ export default function ResultsList() {
             })}
         </ScrollView>
       </SafeAreaView>
-      <ScrollView>
-        <PrettyJson json={listToRender} />
-      </ScrollView>
     </View>
   );
 }
