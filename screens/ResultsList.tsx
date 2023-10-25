@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 
 import ScreenTitle from "../Components/common/ScreenTitle";
 import BackArrow from "../Components/common/BackArrow";
 import PrettyJson from "../Components/helpers/PrettyJson";
 import ResultsItem from "../Components/common/ResultsItem";
 
-import { Props } from "../types/type";
 import { styleGuide } from "../styles/guide";
 import { useAreas } from "../hooks/useAreas";
+import { AreaData, RegionData, RockData, SectorData } from "../services/rocks";
 
 export type CurrentItem = {
   name: string;
@@ -21,7 +20,7 @@ const emptyCurrentObject = {
   name: "Wybierz obszar",
 };
 
-export default function ResultsList({ route, navigation }: Props) {
+export default function ResultsList() {
   const [stage, setStage] = useState(0);
   const [currentItem, setCurrentItem] =
     useState<CurrentItem>(emptyCurrentObject);
@@ -29,12 +28,6 @@ export default function ResultsList({ route, navigation }: Props) {
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
 
   useEffect(() => {
-    console.log("current item:");
-    console.log(currentItem);
-  }, [currentItem]);
-
-  useEffect(() => {
-    console.log(stage);
     if (stage === 0 && areas) return setListToRender(areas);
     if (stage === 1 && regions) return setListToRender(regions);
     if (stage === 2 && sectors) return setListToRender(sectors);
@@ -46,43 +39,36 @@ export default function ResultsList({ route, navigation }: Props) {
     setCurrentItem(newItem);
   };
 
+  const getCurrent = () => {
+    if (stage === 1)
+      return areas?.find((obj) => obj.attributes.uuid === currentItem.id);
+    if (stage === 2)
+      return regions?.find((obj) => obj.attributes.uuid === currentItem.id);
+    if (stage === 3)
+      return sectors?.find((obj) => obj.attributes.uuid === currentItem.id);
+    if (stage === 4)
+      return rocks?.find((obj) => obj.attributes.uuid === currentItem.id);
+  };
+
   const getParent = () => {
-    console.log(stage);
-    if (stage === 0 || stage === 1) return { id: null, name: "Wybierz obszar" };
-    if (stage === 2) {
-      const current = regions?.find(
-        (obj) => obj.attributes.uuid === currentItem.id,
-      );
-      return {
-        id: current?.attributes.parent.data.attributes.uuid || "",
-        name: current?.attributes.parent.data.attributes.Name || "",
-      };
-    }
-    if (stage === 3) {
-      console.log("no wywoluje dobry kejs");
-      const current = sectors?.find(
-        (obj) => obj.attributes.uuid === currentItem.id,
-      );
-      return {
-        id: current?.attributes.parent.data.attributes.uuid || "",
-        name: current?.attributes.parent.data.attributes.Name || "",
-      };
-    }
-    if (stage === 4) {
-      const current = rocks?.find(
-        (obj) => obj.attributes.uuid === currentItem.id,
-      );
-      return {
-        id: current?.attributes.parent.data.attributes.uuid || "",
-        name: current?.attributes.parent.data.attributes.Name || "",
-      };
-    }
-    return emptyCurrentObject;
+    if (stage === 0 || stage === 1) return emptyCurrentObject;
+    const current = getCurrent() as AreaData &
+      RegionData &
+      SectorData &
+      RockData;
+    if (!current || !current.attributes || !current.attributes.parent)
+      return emptyCurrentObject;
+    return {
+      id: current.attributes.parent
+        ? current?.attributes.parent!.data.attributes.uuid
+        : "",
+      name: current.attributes.parent.data.attributes.Name || "",
+    };
   };
 
   return (
     <View style={styles.container}>
-      <ScreenTitle title={currentItem.name} />
+      <ScreenTitle title={currentItem.name || "Wybierz obszar"} />
       {stage > 0 && <BackArrow onClick={() => handleChange(-1, getParent())} />}
       <SafeAreaView>
         <ScrollView>
