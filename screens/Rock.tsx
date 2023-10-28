@@ -1,34 +1,31 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
+import React, { useRef, useMemo, useCallback } from "react";
+import { StyleSheet, ScrollView, View, SafeAreaView, Text } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 
-import ResultsList from "../Components/home/ResultsList";
-import Map from "../Components/home/Map";
+import RockDrawing from "../Components/rock/RockDrawing";
 
 import { styleGuide } from "../styles/guide";
 
-export default function Home() {
+export default function Rock() {
   const bottomSheetRef = useRef<BottomSheet>(null);
+
   const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
+
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index);
   }, []);
   return (
     <View style={styles.container}>
-      <Map />
+      <RockDrawing url='pomidor' />
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
       >
-        <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
+        <View>
+          <Text>Jakieś rzeczy tu</Text>
+        </View>
       </BottomSheet>
     </View>
   );
@@ -37,6 +34,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: styleGuide.color.white,
+    paddingTop: 40,
     flex: 1,
   },
 });

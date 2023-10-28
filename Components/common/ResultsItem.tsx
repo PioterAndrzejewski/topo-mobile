@@ -1,12 +1,7 @@
 import React from "react";
 import type { FC } from "react";
 
-import {
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import { styleGuide } from "../../styles/guide";
 import type { CurrentItem } from "../../screens/ResultsList";
@@ -37,7 +32,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 12,
     padding: 20,
-    backgroundColor: styleGuide.color.primary["100"],
   },
   text: {
     ...styleGuide.text.heading["2"],

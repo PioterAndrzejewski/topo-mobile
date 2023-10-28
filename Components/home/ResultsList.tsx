@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import ScreenTitle from "../../Components/common/ScreenTitle";
 import BackArrow from "../../Components/common/BackArrow";
-import PrettyJson from "../../Components/helpers/PrettyJson";
 import ResultsItem from "../../Components/common/ResultsItem";
-import Map from "./Map";
 
+import { HomeScreenNavigationProp } from "../../types/type";
 import { styleGuide } from "../../styles/guide";
 import { useAreas } from "../../hooks/useAreas";
 import {
@@ -26,14 +26,20 @@ const emptyCurrentObject = {
   name: "Wybierz obszar",
 };
 
-export default function ResultsList() {
+type ResultsListProps = {
+  onScroll: () => void;
+};
+
+export default function ResultsList({ onScroll }: ResultsListProps) {
   const [stage, setStage] = useState(0);
   const [currentItem, setCurrentItem] =
     useState<CurrentItem>(emptyCurrentObject);
   const [listToRender, setListToRender] = useState<any[]>([]);
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   useEffect(() => {
+    console.log(stage);
     if (stage === 0 && areas) return setListToRender(areas);
     if (stage === 1 && regions) {
       const regionsToRender = regions.filter(
@@ -50,7 +56,6 @@ export default function ResultsList() {
       return setListToRender(sectorsToRender);
     }
     if (stage === 3 && rocks) {
-      console.log(rocks);
       const rocksToRender = rocks.filter(
         (rock) =>
           rock.attributes.parent.data.attributes.uuid === currentItem.id,
@@ -60,6 +65,8 @@ export default function ResultsList() {
   }, [stage, areas, regions, sectors]);
 
   const handleChange = (step: number, newItem: CurrentItem) => {
+    if (stage === 3) return navigation.navigate("Rock");
+    console.log(`stage: ${stage}, step: ${step}`);
     setStage((prevStage) => prevStage + step);
     setCurrentItem(newItem);
   };
@@ -71,8 +78,6 @@ export default function ResultsList() {
       return regions?.find((obj) => obj.attributes.uuid === currentItem.id);
     if (stage === 3)
       return sectors?.find((obj) => obj.attributes.uuid === currentItem.id);
-    if (stage === 4)
-      return rocks?.find((obj) => obj.attributes.uuid === currentItem.id);
   };
 
   const getParent = () => {
@@ -96,7 +101,7 @@ export default function ResultsList() {
       <ScreenTitle title={currentItem.name || "Wybierz obszar"} />
       {stage > 0 && <BackArrow onClick={() => handleChange(-1, getParent())} />}
       <SafeAreaView>
-        <ScrollView>
+        <ScrollView onScroll={onScroll}>
           {!isLoading &&
             Array.isArray(listToRender) &&
             listToRender.map((item) => {
@@ -121,6 +126,5 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.primary["200"],
   },
 });

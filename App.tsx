@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
 import Home from "./screens/Home";
+import Rock from "./screens/Rock";
 
 import AppLoading from "./Components/common/AppLoading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -41,6 +42,7 @@ export default function App() {
             <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Register' component={RegisterScreen} />
             <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='Rock' component={Rock} />
           </Stack.Navigator>
         </NavigationContainer>
       </QueryClientProvider>

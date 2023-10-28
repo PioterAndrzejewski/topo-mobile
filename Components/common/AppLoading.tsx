@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     marginTop: 20,
-    backgroundColor: styleGuide.color.lime["300"],
+    backgroundColor: styleGuide.color.white,
   },
 });

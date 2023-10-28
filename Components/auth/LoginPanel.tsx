@@ -124,10 +124,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.primary["200"],
   },
   title: {
-    color: styleGuide.color.white,
+    color: styleGuide.color.primary["500"],
     ...styleGuide.text.heading["2"],
   },
   innerContainer: {
@@ -144,12 +143,12 @@ const styles = StyleSheet.create({
     ...(styleGuide.center as ViewStyle),
   },
   noAccount: {
-    color: styleGuide.color.white,
+    color: styleGuide.color.primary["500"],
     ...styleGuide.text.body,
   },
   signUp: {
     marginLeft: 12,
-    color: styleGuide.color.primary["500"],
+    color: styleGuide.color.primary["700"],
     ...styleGuide.text.body,
   },
 });
