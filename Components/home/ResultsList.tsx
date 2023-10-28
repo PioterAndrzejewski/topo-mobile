@@ -35,9 +35,28 @@ export default function ResultsList() {
 
   useEffect(() => {
     if (stage === 0 && areas) return setListToRender(areas);
-    if (stage === 1 && regions) return setListToRender(regions);
-    if (stage === 2 && sectors) return setListToRender(sectors);
-    if (stage === 3 && rocks) return setListToRender(rocks);
+    if (stage === 1 && regions) {
+      const regionsToRender = regions.filter(
+        (region) =>
+          region.attributes.parent.data.attributes.uuid === currentItem.id,
+      );
+      return setListToRender(regionsToRender);
+    }
+    if (stage === 2 && sectors) {
+      const sectorsToRender = sectors.filter(
+        (sector) =>
+          sector.attributes.parent.data.attributes.uuid === currentItem.id,
+      );
+      return setListToRender(sectorsToRender);
+    }
+    if (stage === 3 && rocks) {
+      console.log(rocks);
+      const rocksToRender = rocks.filter(
+        (rock) =>
+          rock.attributes.parent.data.attributes.uuid === currentItem.id,
+      );
+      return setListToRender(rocksToRender);
+    }
   }, [stage, areas, regions, sectors]);
 
   const handleChange = (step: number, newItem: CurrentItem) => {
@@ -81,7 +100,6 @@ export default function ResultsList() {
           {!isLoading &&
             Array.isArray(listToRender) &&
             listToRender.map((item) => {
-              console.log(item);
               return (
                 <ResultsItem
                   id={item.attributes.uuid}
