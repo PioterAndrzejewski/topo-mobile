@@ -176,6 +176,22 @@ export type SectorsData = {
   meta: Meta;
 }
 
+export type Route = {
+  id: number;
+  attributes: {
+    Name: string;
+    display_name: string;
+    Type: "sport" | "trad" | "boulder";
+    anchor: "two_rings" | "chain_anchor" | "rescue_ring";
+    createdAt: string;
+    grade: keyof typeof grades;
+    path: 'string';
+    publishedAt: string;
+    updatedAt: string;
+    uuid: string;
+  }
+}
+
 export type RockData = {
   id: number;
   attributes: {
@@ -196,6 +212,8 @@ export type RockData = {
     Coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
+    image: {data: Photo};
+    routes: {data: Route[]}
     parent: {
       data: AreaData;
     };
@@ -258,4 +276,23 @@ export const getRocks = async () => {
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
   return data.data;
+};
+
+export const getRock = async (id: string) => {
+  const query = qs.stringify({
+    populate: [
+      'uuid',
+      'image',
+      'image.Photo',
+      'routes',
+      'parent'
+    ],
+    filters: {
+      uuid: {
+        $eq: id,
+      },
+    }
+  });
+  const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
+  return data.data[0];
 };

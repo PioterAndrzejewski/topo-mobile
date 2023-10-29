@@ -15,11 +15,7 @@ import {
   RockData,
   SectorData,
 } from "../../services/rocks";
-
-export type CurrentItem = {
-  name: string;
-  id: string | null;
-};
+import { CurrentResultsListItem } from "../../types/common";
 
 const emptyCurrentObject = {
   id: null,
@@ -33,7 +29,7 @@ type ResultsListProps = {
 export default function ResultsList({ onScroll }: ResultsListProps) {
   const [stage, setStage] = useState(0);
   const [currentItem, setCurrentItem] =
-    useState<CurrentItem>(emptyCurrentObject);
+    useState<CurrentResultsListItem>(emptyCurrentObject);
   const [listToRender, setListToRender] = useState<any[]>([]);
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -64,9 +60,7 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
     }
   }, [stage, areas, regions, sectors]);
 
-  const handleChange = (step: number, newItem: CurrentItem) => {
-    if (stage === 3) return navigation.navigate("Rock");
-    console.log(`stage: ${stage}, step: ${step}`);
+  const handleChange = (step: number, newItem: CurrentResultsListItem) => {
     setStage((prevStage) => prevStage + step);
     setCurrentItem(newItem);
   };
@@ -111,6 +105,7 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
                   name={item.attributes.Name}
                   onChange={handleChange}
                   key={item.attributes.uuid}
+                  isRock={stage === 3}
                 />
               );
             })}
