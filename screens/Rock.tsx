@@ -17,23 +17,24 @@ import {
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useAtom } from "jotai";
 
-import { HomeScreenNavigationProp } from "../types/type";
-
+import AppLoading from "../Components/common/AppLoading";
 import RockDrawing from "../Components/rock/RockDrawing";
 import Accordion from "../Components/common/Accordion";
 
 import { useRock } from "../hooks/useRock";
 import { styleGuide } from "../styles/guide";
-import AppLoading from "../Components/common/AppLoading";
+import { HomeScreenNavigationProp } from "../types/type";
+import { rockActiveRoute } from "../store/rock";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
-const Rock = ({ navigation, route }: Props) => {
-  const [activeRoute, setActiveRoute] = useState<null | string>(null);
+const Rock = ({ route }: Props) => {
+  const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { data } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -64,6 +65,7 @@ const Rock = ({ navigation, route }: Props) => {
           {data ? (
             data?.attributes?.routes.data.map((route, index) => (
               <AnimatedTouchableOpacity
+                key={route.attributes.uuid}
                 activeOpacity={0.9}
                 entering={FadeInRight.delay(50 * index)}
                 exiting={FadeOutLeft}
