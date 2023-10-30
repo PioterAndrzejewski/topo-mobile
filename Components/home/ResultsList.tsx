@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
+import { StyleSheet, ScrollView, View, SafeAreaView, Text } from "react-native";
 import { useAtom } from "jotai";
 
 import ScreenTitle from "../../Components/common/ScreenTitle";
@@ -14,11 +14,10 @@ import {
   SectorData,
 } from "../../services/rocks";
 import { CurrentResultsListItem } from "../../types/common";
+import { emptyCurrentObject } from "../../store/results";
 
 import { resultsStageAtom } from "../../store/results";
 import { resultsCurrentItemAtom } from "../../store/results";
-
-
 
 type ResultsListProps = {
   onScroll: () => void;
@@ -93,21 +92,25 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
         <BackArrow onClick={() => handleChange(-1, getParent())} />
       )}
       <SafeAreaView>
-        <ScrollView onScroll={onScroll}>
-          {!isLoading &&
-            Array.isArray(listToRender) &&
-            listToRender.map((item) => {
-              return (
-                <ResultsItem
-                  id={item.attributes.uuid}
-                  name={item.attributes.Name}
-                  onChange={handleChange}
-                  key={item.attributes.uuid}
-                  isRock={results === 3}
-                />
-              );
-            })}
-        </ScrollView>
+        {listToRender.length < 1 ? (
+          <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
+        ) : (
+          <ScrollView onScroll={onScroll}>
+            {!isLoading &&
+              Array.isArray(listToRender) &&
+              listToRender.map((item) => {
+                return (
+                  <ResultsItem
+                    id={item.attributes.uuid}
+                    name={item.attributes.Name}
+                    onChange={handleChange}
+                    key={item.attributes.uuid}
+                    isRock={results === 3}
+                  />
+                );
+              })}
+          </ScrollView>
+        )}
       </SafeAreaView>
     </View>
   );
