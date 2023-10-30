@@ -12,8 +12,6 @@ import ResultsList from "../Components/home/ResultsList";
 import Map from "../Components/home/Map";
 
 import { styleGuide } from "../styles/guide";
-import { useAreas } from "../hooks/useAreas";
-import { AreaData, RegionData, RockData, SectorData } from "../services/rocks";
 
 export default function Home() {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -30,7 +28,7 @@ export default function Home() {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
       >
-        <ResultsList />
+        <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
       </BottomSheet>
     </View>
   );
@@ -38,7 +36,7 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: styleGuide.color.primary["200"],
+    backgroundColor: styleGuide.color.white,
     flex: 1,
   },
 });

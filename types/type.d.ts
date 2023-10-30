@@ -2,10 +2,13 @@
 
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export type HomeStackNavigatorParamList = {
+export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   Home: undefined;
+  Rock: {
+    id: string;
+  };
 };
 
 export type HomeScreenNavigationProp = NativeStackScreenProps<
@@ -13,7 +16,5 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   Home,
   Login,
   Register,
-  ResultsList
+  Rock
 >;
-
-export type Props = NativeStackScreenProps<HomeStackNavigatorParamList, 'ResultsList'>;

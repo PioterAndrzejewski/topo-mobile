@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 70,
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.primary["200"],
   },
   header: {
     ...styleGuide.text.heading["1"],

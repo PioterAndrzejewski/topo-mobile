@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 4,
-    color: styleGuide.color.white,
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.label,
   },
   input: {

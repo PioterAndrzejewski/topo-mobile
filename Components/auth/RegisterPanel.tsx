@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
-    backgroundColor: styleGuide.color.primary["200"],
   },
   innerContainer: {
     display: "flex",
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
     ...(styleGuide.center as ViewStyle),
   },
   caption: {
-    color: styleGuide.color.white,
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.caption,
   },
   captionLink: {
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     ...styleGuide.text.caption,
   },
   hasAccount: {
-    color: styleGuide.color.white,
+    color: styleGuide.color.primary["900"],
     ...styleGuide.text.body,
   },
   signUpContainer: {
