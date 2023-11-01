@@ -173,7 +173,6 @@ export default RockDrawing;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: styleGuide.color.primary["100"],
   },
   font: {
     fontFamily: "Poppins",

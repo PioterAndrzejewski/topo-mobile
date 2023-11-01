@@ -107,7 +107,14 @@ const Rock = ({ route }: Props) => {
         <ScrollView style={styles.routesContainer}>
           {routeList ? (
             routeList.map((route, index) => (
-              <RouteInfo route={route} index={index} />
+              <RouteInfo
+                route={route}
+                index={index}
+                realIndex={data?.attributes?.routes.data.findIndex(
+                  (dataRoute) =>
+                    route.attributes.uuid === dataRoute.attributes.uuid,
+                )}
+              />
             ))
           ) : (
             <AppLoading />
@@ -162,6 +169,7 @@ const styles = StyleSheet.create({
   routesContainer: {
     display: "flex",
     paddingHorizontal: 16,
+    paddingTop: 24,
     flexDirection: "column",
     rowGap: 10,
   },

@@ -29,12 +29,14 @@ const AnimatedTouchableOpacity =
 type RockInfoProps = {
   route: Route;
   index: number;
+  realIndex?: number;
 };
 
-const RouteInfo = ({ route, index }: RockInfoProps) => {
+const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (activeRoute === route.attributes.uuid) return setActiveRoute(null);
     setActiveRoute(route.attributes.uuid);
   };
   return (
@@ -44,10 +46,16 @@ const RouteInfo = ({ route, index }: RockInfoProps) => {
       onPress={handlePress}
     >
       <Accordion
-        Title={<Text>{route.attributes.display_name}</Text>}
+        Title={
+          <Text>
+            {realIndex} - {route.attributes.display_name}
+          </Text>
+        }
         Content={
           route.attributes.uuid === activeRoute && (
             <View>
+              <Text>Bardzo wazne dane o drdoddze</Text>
+              <Text>Bardzo wazne dane o drdoddze</Text>
               <Text>Bardzo wazne dane o drdoddze</Text>
             </View>
           )
