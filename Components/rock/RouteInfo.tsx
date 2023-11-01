@@ -48,7 +48,7 @@ const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
       <Accordion
         Title={
           <Text>
-            {realIndex} - {route.attributes.display_name}
+            {realIndex! + 1} - {route.attributes.display_name}
           </Text>
         }
         Content={

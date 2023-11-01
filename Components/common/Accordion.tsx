@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 6,
     borderWidth: 1,
     borderTopWidth: 0,
-    backgroundColor: "#ddd",
+    backgroundColor: "#eee",
   },
   icon: {
     flex: 1,

@@ -66,7 +66,7 @@ const Rock = ({ route }: Props) => {
     );
   }, [activeRoute, data]);
 
-  const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
+  const snapPoints = useMemo(() => ["22%", "50%", "90%"], []);
 
   return (
     <View style={styles.container}>
@@ -174,3 +174,5 @@ const styles = StyleSheet.create({
     rowGap: 10,
   },
 });
+
+
