@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 
@@ -30,6 +30,7 @@ import { rockActiveRoute } from "../store/rock";
 import { ChevronLeftIcon } from "../Components/icons/ChevronLeft";
 import { ChevronRightIcon } from "../Components/icons/ChevronRight";
 import { styleGuide } from "../styles/guide";
+import RockDetails from "../Components/rock/RockDetails";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -56,7 +57,7 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const snapPoints = useMemo(() => ["10%", "30%", "60"], []);
+  const snapPoints = useMemo(() => ["10%", "80%"], []);
 
   return (
     <View style={styles.container}>
@@ -94,22 +95,25 @@ const Rock = ({ route }: Props) => {
         containerStyle={styles.bottomSheetContainer}
         style={styleGuide.bottomSheet}
       >
-        <ScrollView style={styles.routesContainer}>
+        <BottomSheetScrollView style={styles.routesContainer} scrollEnabled>
           {data?.attributes ? (
-            data?.attributes?.routes.data.map((route, index) => (
-              <RouteInfo
-                route={route}
-                index={index}
-                realIndex={data?.attributes?.routes.data.findIndex(
-                  (dataRoute) =>
-                    route.attributes.uuid === dataRoute.attributes.uuid,
-                )}
-              />
-            ))
+            <>
+              <RockDetails id={data?.attributes.uuid} />
+              {data?.attributes?.routes.data.map((route, index) => (
+                <RouteInfo
+                  route={route}
+                  index={index}
+                  realIndex={data?.attributes?.routes.data.findIndex(
+                    (dataRoute) =>
+                      route.attributes.uuid === dataRoute.attributes.uuid,
+                  )}
+                />
+              ))}
+            </>
           ) : (
             <AppLoading />
           )}
-        </ScrollView>
+        </BottomSheetScrollView>
       </BottomSheet>
     </View>
   );
