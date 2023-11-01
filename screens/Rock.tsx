@@ -38,10 +38,6 @@ const Rock = ({ route }: Props) => {
   const { data } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const onRoutePress = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (activeRoute === id) return setActiveRoute(null);

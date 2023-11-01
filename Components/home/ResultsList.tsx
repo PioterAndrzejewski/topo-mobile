@@ -30,7 +30,6 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
 
   useEffect(() => {
-    console.log(results);
     if (results === 0 && areas) return setListToRender(areas);
     if (results === 1 && regions) {
       const regionsToRender = regions.filter(

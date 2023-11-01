@@ -17,7 +17,6 @@ import Home from "./screens/Home";
 import Rock from "./screens/Rock";
 
 import AppLoading from "./Components/common/AppLoading";
-import { logAsyncStorage } from "./utils/useAsyncStorage";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
   .configure() // controls connection & communication settings
