@@ -7,5 +7,4 @@ export const useRock = (id: string) => {
     queryKey: ['areas'],
     refetchInterval: 1000 * 60 * 60 * 24,
   });
-
 };

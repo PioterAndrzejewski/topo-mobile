@@ -19,7 +19,12 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <Map />
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        style={styleGuide.bottomSheet}
+      >
         <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
       </BottomSheet>
     </View>

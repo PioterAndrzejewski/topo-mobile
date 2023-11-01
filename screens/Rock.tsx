@@ -20,16 +20,16 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 
 import AppLoading from "../Components/common/AppLoading";
-import RockDrawing from "../Components/rock/RockDrawing";
-import Accordion from "../Components/common/Accordion";
+import RockDrawing from "../Components/rock/drawing/RockDrawing";
+import ChangeRouteButton from "../Components/rock/drawing/ChangeRouteButton";
+import RouteInfo from "../Components/rock/RouteInfo";
 
 import { useRock } from "../hooks/useRock";
-import { styleGuide } from "../styles/guide";
 import { HomeScreenNavigationProp } from "../types/type";
 import { rockActiveRoute } from "../store/rock";
-
-const AnimatedTouchableOpacity =
-  Animated.createAnimatedComponent(TouchableOpacity);
+import { ChevronLeftIcon } from "../Components/icons/ChevronLeft";
+import { ChevronRightIcon } from "../Components/icons/ChevronRight";
+import { styleGuide } from "../styles/guide";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -38,13 +38,25 @@ const Rock = ({ route }: Props) => {
   const { data } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const onRoutePress = (id: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    if (activeRoute === id) return setActiveRoute(null);
-    setActiveRoute(id);
+  const handleRouteChange = (step: number) => {
+    if (!data) return;
+    if (activeRoute === null)
+      return setActiveRoute(data.attributes.routes.data[0].attributes.uuid);
+    const currentIndex = data?.attributes.routes.data.findIndex(
+      (route) => route.attributes.uuid === activeRoute,
+    );
+    const newIndex = currentIndex > -1 ? currentIndex + step : 0;
+    const routesNumber = data.attributes.routes.data.length;
+    if (newIndex === routesNumber)
+      return setActiveRoute(data.attributes.routes.data[0].attributes.uuid);
+    if (newIndex === -1)
+      return setActiveRoute(
+        data.attributes.routes.data[routesNumber - 1].attributes.uuid,
+      );
+    setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
+  const snapPoints = useMemo(() => ["10%", "30%", "60"], []);
 
   return (
     <View style={styles.container}>
@@ -55,27 +67,44 @@ const Rock = ({ route }: Props) => {
           activeId={activeRoute}
         />
       )}
-
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
-        <ScrollView>
-          {data ? (
+      <TouchableOpacity
+        style={styles.buttonContainerLeft}
+        activeOpacity={0.5}
+        onPress={() => handleRouteChange(-1)}
+      >
+        <ChangeRouteButton
+          Icon={<ChevronLeftIcon size={36} />}
+          style={styles.buttonLeft}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonContainerRight}
+        activeOpacity={0.5}
+        onPress={() => handleRouteChange(1)}
+      >
+        <ChangeRouteButton
+          Icon={<ChevronRightIcon size={36} />}
+          style={styles.buttonRight}
+        />
+      </TouchableOpacity>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={snapPoints}
+        containerStyle={styles.bottomSheetContainer}
+        style={styleGuide.bottomSheet}
+      >
+        <ScrollView style={styles.routesContainer}>
+          {data?.attributes ? (
             data?.attributes?.routes.data.map((route, index) => (
-              <AnimatedTouchableOpacity
-                key={route.attributes.uuid}
-                activeOpacity={0.9}
-                entering={FadeInRight.delay(50 * index)}
-                exiting={FadeOutLeft}
-                onPress={() => onRoutePress(route.attributes.uuid)}
-              >
-                <Accordion
-                  Title={<Text>{route.attributes.display_name}</Text>}
-                  Content={
-                    route.attributes.uuid === activeRoute && (
-                      <Text>Bardzo wazne dane o drdoddze</Text>
-                    )
-                  }
-                />
-              </AnimatedTouchableOpacity>
+              <RouteInfo
+                route={route}
+                index={index}
+                realIndex={data?.attributes?.routes.data.findIndex(
+                  (dataRoute) =>
+                    route.attributes.uuid === dataRoute.attributes.uuid,
+                )}
+              />
             ))
           ) : (
             <AppLoading />
@@ -93,5 +122,45 @@ const styles = StyleSheet.create({
     backgroundColor: styleGuide.color.white,
     paddingTop: 40,
     flex: 1,
+  },
+  buttonContainerLeft: {
+    zIndex: 3,
+    position: "absolute",
+  },
+  buttonLeft: {
+    padding: 5,
+    position: "absolute",
+    top: 250,
+    left: 10,
+    backgroundColor: "#fff",
+    opacity: 0.5,
+    borderRadius: 30,
+  },
+  buttonContainerRight: {
+    zIndex: 3,
+    position: "absolute",
+    right: 60,
+  },
+  buttonRight: {
+    padding: 5,
+    position: "absolute",
+    top: 250,
+    backgroundColor: "#fff",
+    opacity: 0.5,
+    borderRadius: 30,
+  },
+  bottomSheetContainer: {
+    zIndex: 4,
+    shadowOffset: { width: 0, height: -20 },
+    shadowRadius: 0,
+    shadowColor: "#000",
+    shadowOpacity: 0,
+  },
+  routesContainer: {
+    display: "flex",
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    flexDirection: "column",
+    rowGap: 10,
   },
 });
