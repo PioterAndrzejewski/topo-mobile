@@ -13,22 +13,18 @@ import {
   ImageSVG,
   useFont,
 } from "@shopify/react-native-skia";
-import { useAtom } from "jotai";
-import axios from "axios";
-import * as FileSystem from "expo-file-system";
-import { shareAsync } from "expo-sharing";
 
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 
-import BackArrow from "../common/BackArrow";
-import AppLoading from "../common/AppLoading";
+import BackArrow from "../../common/BackArrow";
+import AppLoading from "../../common/AppLoading";
 
-import { styleGuide } from "../../styles/guide";
+import { styleGuide } from "../../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
-import { Route } from "../../services/rocks";
+import { Route } from "../../../services/rocks";
 
 import { two_rings, chaing_anchor, rescue_ring } from "./Anchor";
-import { useImageFile } from "../../hooks/useImageFile";
+import { useImageFile } from "../../../hooks/useImageFile";
 
 const getRingsCoords = (path: string) => {
   const points = path.split(/[^0-9.]+/).filter((element) => element.length > 0);
@@ -60,7 +56,7 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
   const navigation = useNavigation();
   const zoomable = createRef<ReactNativeZoomableView>();
   const { width, height } = useWindowDimensions();
-  const font = useFont(require("../../assets/fonts/PoppinsBold.ttf"), 90);
+  const font = useFont(require("../../../assets/fonts/PoppinsBold.ttf"), 90);
   const image = useImageFile(imageUrl);
   const skImage = useImage(image);
 
@@ -71,9 +67,11 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
   };
 
   if (!font) return null;
+
   return (
     <View style={styles.container}>
       <BackArrow onClick={() => navigation.goBack()} />
+
       {!skImage?.width() && <AppLoading />}
       {skImage && skImage?.width() && (
         <ReactNativeZoomableView
