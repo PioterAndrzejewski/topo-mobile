@@ -210,7 +210,8 @@ export type RockData = {
     climbing_restricted: boolean;
     loose_rocks: boolean;
     recommended: boolean;
-    Coordinates: Coordinates;
+    coordinates: Coordinates;
+    parking_coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
     image: {data: Photo};
@@ -272,7 +273,7 @@ export const getRocks = async () => {
       'uuid',
       'Cover',
       'Cover.Photo',
-      'parent'
+      'parent',
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
@@ -286,7 +287,9 @@ export const getRock = async (id: string) => {
       'image',
       'image.Photo',
       'routes',
-      'parent'
+      'parent',
+      'coordinates',
+      'parking_coordinates'
     ],
     filters: {
       uuid: {
