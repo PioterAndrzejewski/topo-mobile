@@ -16,18 +16,10 @@ import { styleGuide } from "../styles/guide";
 export default function Home() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
   return (
     <View style={styles.container}>
       <Map />
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-      >
+      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
         <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
       </BottomSheet>
     </View>

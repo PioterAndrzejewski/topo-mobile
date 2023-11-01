@@ -1,6 +1,7 @@
 import { apiConfig } from './apiConfig';
 import qs from 'qs';
 import authService from "./auth"
+import { apiUrl } from './apiConfig';
 
 export const grades = {
   0: "I",
@@ -295,4 +296,9 @@ export const getRock = async (id: string) => {
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
   return data.data[0];
+};
+
+export const getImage = async (url: string) => {
+  const { data } = await authService.get<RocksData>(apiUrl + url);
+  return data;
 };

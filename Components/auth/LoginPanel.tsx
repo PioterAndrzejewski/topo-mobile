@@ -22,7 +22,7 @@ import { saveJWT, setUserToStorage } from "../../services/store";
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
     onSuccess: (data) => {
@@ -89,6 +89,12 @@ export default function LoginPanel() {
             onClick={handleSubmit(onSubmitHandler)}
             isLoading={isLoading}
           />
+          {isError && (
+            <Button
+              label='Uzywaj w trybie offline'
+              onClick={() => navigation.navigate("Home")}
+            />
+          )}
           <View style={styles.registerContainer}>
             <Text style={styles.noAccount}>Nie masz konta?</Text>
             <TouchableOpacity

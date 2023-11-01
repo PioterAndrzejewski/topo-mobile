@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, ScrollView, View, SafeAreaView, Text } from "react-native";
+import { useAtom } from "jotai";
 
 import ScreenTitle from "../../Components/common/ScreenTitle";
 import BackArrow from "../../Components/common/BackArrow";
 import ResultsItem from "../../Components/common/ResultsItem";
 
-import { HomeScreenNavigationProp } from "../../types/type";
-import { styleGuide } from "../../styles/guide";
 import { useAreas } from "../../hooks/useAreas";
 import {
   AreaData,
@@ -16,66 +14,62 @@ import {
   SectorData,
 } from "../../services/rocks";
 import { CurrentResultsListItem } from "../../types/common";
+import { emptyCurrentObject } from "../../store/results";
 
-const emptyCurrentObject = {
-  id: null,
-  name: "Wybierz obszar",
-};
+import { resultsStageAtom } from "../../store/results";
+import { resultsCurrentItemAtom } from "../../store/results";
 
 type ResultsListProps = {
   onScroll: () => void;
 };
 
 export default function ResultsList({ onScroll }: ResultsListProps) {
-  const [stage, setStage] = useState(0);
-  const [currentItem, setCurrentItem] =
-    useState<CurrentResultsListItem>(emptyCurrentObject);
+  const [results, setResults] = useAtom(resultsStageAtom);
+  const [currentItem, setCurrentItem] = useAtom(resultsCurrentItemAtom);
   const [listToRender, setListToRender] = useState<any[]>([]);
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
-  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   useEffect(() => {
-    console.log(stage);
-    if (stage === 0 && areas) return setListToRender(areas);
-    if (stage === 1 && regions) {
+    if (results === 0 && areas) return setListToRender(areas);
+    if (results === 1 && regions) {
       const regionsToRender = regions.filter(
         (region) =>
           region.attributes.parent.data.attributes.uuid === currentItem.id,
       );
       return setListToRender(regionsToRender);
     }
-    if (stage === 2 && sectors) {
+    if (results === 2 && sectors) {
       const sectorsToRender = sectors.filter(
         (sector) =>
           sector.attributes.parent.data.attributes.uuid === currentItem.id,
       );
       return setListToRender(sectorsToRender);
     }
-    if (stage === 3 && rocks) {
+    if (results === 3 && rocks) {
       const rocksToRender = rocks.filter(
         (rock) =>
           rock.attributes.parent.data.attributes.uuid === currentItem.id,
       );
       return setListToRender(rocksToRender);
     }
-  }, [stage, areas, regions, sectors]);
+  }, [results, areas, regions, sectors]);
 
   const handleChange = (step: number, newItem: CurrentResultsListItem) => {
-    setStage((prevStage) => prevStage + step);
+    setResults((prevStage) => prevStage + step);
     setCurrentItem(newItem);
   };
 
   const getCurrent = () => {
-    if (stage === 1)
+    if (results === 1)
       return areas?.find((obj) => obj.attributes.uuid === currentItem.id);
-    if (stage === 2)
+    if (results === 2)
       return regions?.find((obj) => obj.attributes.uuid === currentItem.id);
-    if (stage === 3)
+    if (results === 3)
       return sectors?.find((obj) => obj.attributes.uuid === currentItem.id);
   };
 
   const getParent = () => {
-    if (stage === 0 || stage === 1) return emptyCurrentObject;
+    if (results === 0 || results === 1) return emptyCurrentObject;
     const current = getCurrent() as AreaData &
       RegionData &
       SectorData &
@@ -93,23 +87,29 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
   return (
     <View style={styles.container}>
       <ScreenTitle title={currentItem.name || "Wybierz obszar"} />
-      {stage > 0 && <BackArrow onClick={() => handleChange(-1, getParent())} />}
+      {results > 0 && (
+        <BackArrow onClick={() => handleChange(-1, getParent())} />
+      )}
       <SafeAreaView>
-        <ScrollView onScroll={onScroll}>
-          {!isLoading &&
-            Array.isArray(listToRender) &&
-            listToRender.map((item) => {
-              return (
-                <ResultsItem
-                  id={item.attributes.uuid}
-                  name={item.attributes.Name}
-                  onChange={handleChange}
-                  key={item.attributes.uuid}
-                  isRock={stage === 3}
-                />
-              );
-            })}
-        </ScrollView>
+        {listToRender.length < 1 ? (
+          <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
+        ) : (
+          <ScrollView onScroll={onScroll}>
+            {!isLoading &&
+              Array.isArray(listToRender) &&
+              listToRender.map((item) => {
+                return (
+                  <ResultsItem
+                    id={item.attributes.uuid}
+                    name={item.attributes.Name}
+                    onChange={handleChange}
+                    key={item.attributes.uuid}
+                    isRock={results === 3}
+                  />
+                );
+              })}
+          </ScrollView>
+        )}
       </SafeAreaView>
     </View>
   );

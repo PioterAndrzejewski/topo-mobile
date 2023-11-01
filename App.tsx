@@ -1,10 +1,15 @@
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Reactotron from "reactotron-react-native";
 import { StyleSheet } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./types/type";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
@@ -12,12 +17,22 @@ import Home from "./screens/Home";
 import Rock from "./screens/Rock";
 
 import AppLoading from "./Components/common/AppLoading";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
+  .configure() // controls connection & communication settings
+  .useReactNative() // add all built-in react native plugins
+  .connect(); // let's connect!
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 2 } },
+  defaultOptions: {
+    queries: { retry: 2, cacheTime: 1000 * 60 * 60 * 24 * 30 * 12 },
+  },
+});
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
 });
 
 export default function App() {
@@ -32,7 +47,10 @@ export default function App() {
   }
   return (
     <GestureHandlerRootView style={styles.container}>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: asyncStoragePersister }}
+      >
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
@@ -49,7 +67,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </GestureHandlerRootView>
   );
 }

@@ -1,4 +1,5 @@
-import React, { FC, createRef } from "react";
+import React, { FC, createRef, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, View, useWindowDimensions, Platform } from "react-native";
 import {
   Canvas,
@@ -12,6 +13,10 @@ import {
   ImageSVG,
   useFont,
 } from "@shopify/react-native-skia";
+import { useAtom } from "jotai";
+import axios from "axios";
+import * as FileSystem from "expo-file-system";
+import { shareAsync } from "expo-sharing";
 
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 
@@ -20,10 +25,10 @@ import AppLoading from "../common/AppLoading";
 
 import { styleGuide } from "../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
-import { apiUrl } from "../../services/apiConfig";
 import { Route } from "../../services/rocks";
 
 import { two_rings, chaing_anchor, rescue_ring } from "./Anchor";
+import { useImageFile } from "../../hooks/useImageFile";
 
 const getRingsCoords = (path: string) => {
   const points = path.split(/[^0-9.]+/).filter((element) => element.length > 0);
@@ -55,10 +60,9 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
   const navigation = useNavigation();
   const zoomable = createRef<ReactNativeZoomableView>();
   const { width, height } = useWindowDimensions();
-  const image = useImage(apiUrl + imageUrl);
   const font = useFont(require("../../assets/fonts/PoppinsBold.ttf"), 90);
-
-  if (!font) return null;
+  const image = useImageFile(imageUrl);
+  const skImage = useImage(image);
 
   const getOpacity = (id: string) => {
     if (!activeId) return 0.7;
@@ -66,16 +70,17 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
     return 0.3;
   };
 
+  if (!font) return null;
   return (
     <View style={styles.container}>
       <BackArrow onClick={() => navigation.goBack()} />
-      {!image?.width() && <AppLoading />}
-      {image && image?.width() && (
+      {!skImage?.width() && <AppLoading />}
+      {skImage && skImage?.width() && (
         <ReactNativeZoomableView
           maxZoom={10}
           minZoom={0.05}
           zoomStep={0.5}
-          initialZoom={width / image?.width()}
+          initialZoom={width / skImage.width()}
           style={{
             padding: 10,
             position: "absolute",
@@ -83,24 +88,24 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
             height: height / 2,
           }}
           disablePanOnInitialZoom={false}
-          panBoundaryPadding={image.width() / 3}
+          panBoundaryPadding={skImage.width() / 3}
           ref={zoomable}
           doubleTapZoomToCenter={false}
           doubleTapDelay={0}
         >
           <Canvas
             style={{
-              width: image?.width(),
-              height: image?.height(),
+              width: skImage?.width(),
+              height: skImage?.height(),
             }}
           >
             <Image
-              image={image}
+              image={skImage}
               fit='contain'
               x={0}
               y={0}
-              width={image?.width() || width}
-              height={image?.height() || height}
+              width={skImage?.width() || width}
+              height={skImage?.height() || height}
             />
             {routes &&
               routes.map((route, index) => {
@@ -118,13 +123,13 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
                   >
                     <Path
                       path={route.attributes.path}
-                      strokeWidth={image.width() / 70}
+                      strokeWidth={skImage.width() / 70}
                       color='black'
                       style='stroke'
                       strokeCap='round'
                     >
                       <DashPathEffect
-                        intervals={[image.width() / 40, image.width() / 40]}
+                        intervals={[skImage.width() / 40, skImage.width() / 40]}
                       />
                     </Path>
                     <ImageSVG
