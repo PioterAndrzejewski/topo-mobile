@@ -31,9 +31,6 @@ import { ChevronLeftIcon } from "../Components/icons/ChevronLeft";
 import { ChevronRightIcon } from "../Components/icons/ChevronRight";
 import { styleGuide } from "../styles/guide";
 
-const AnimatedTouchableOpacity =
-  Animated.createAnimatedComponent(TouchableOpacity);
-
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
@@ -59,14 +56,7 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const routeList = useMemo(() => {
-    const copiedArray = data?.attributes?.routes.data.map((el) => el);
-    return copiedArray?.sort((route) =>
-      route.attributes.uuid === activeRoute ? -1 : 1,
-    );
-  }, [activeRoute, data]);
-
-  const snapPoints = useMemo(() => ["22%", "50%", "90%"], []);
+  const snapPoints = useMemo(() => ["10%", "30%", "60"], []);
 
   return (
     <View style={styles.container}>
@@ -99,14 +89,14 @@ const Rock = ({ route }: Props) => {
       </TouchableOpacity>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         containerStyle={styles.bottomSheetContainer}
         style={styleGuide.bottomSheet}
       >
         <ScrollView style={styles.routesContainer}>
-          {routeList ? (
-            routeList.map((route, index) => (
+          {data?.attributes ? (
+            data?.attributes?.routes.data.map((route, index) => (
               <RouteInfo
                 route={route}
                 index={index}
@@ -174,5 +164,3 @@ const styles = StyleSheet.create({
     rowGap: 10,
   },
 });
-
-
