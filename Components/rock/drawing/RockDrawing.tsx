@@ -77,7 +77,6 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onClick={() => navigation.goBack()} />
 
       {!skImage?.width() && <AppLoading />}
       {skImage && skImage?.width() && (
