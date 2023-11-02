@@ -58,7 +58,7 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const snapPoints = useMemo(() => ["10%", "30", "80%"], []);
+  const snapPoints = useMemo(() => ["10%", "30", "50%", "80%"], []);
 
   return (
     <View style={styles.container}>

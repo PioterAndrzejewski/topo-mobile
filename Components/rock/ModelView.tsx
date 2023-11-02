@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
-import { WebView } from "react-native-webview";
-import { StyleSheet } from "react-native";
+import { useEffect, useState, useRef } from "react";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
+import { LayoutAnimation, StyleSheet } from "react-native";
+import { useAtom } from "jotai";
 
 import { getFromSecureStorage } from "../../services/store";
+import { viewerUrl } from "../../services/apiConfig";
+import { rockActiveRoute } from "../../store/rock";
 
 type ModelViewProps = {
   id: string;
 };
 
 const ModelView = (props: ModelViewProps) => {
+  const webViewRef = useRef<WebView>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
+
+  useEffect(() => {
+    webViewRef.current?.postMessage(activeRoute || "null");
+  }, [activeRoute]);
 
   useEffect(() => {
     const getToken = async () => {
@@ -18,6 +27,12 @@ const ModelView = (props: ModelViewProps) => {
     };
     getToken();
   }, []);
+
+  const receiveMessage = (e: WebViewMessageEvent) => {
+    console.log(e.nativeEvent.data);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setActiveRoute(e.nativeEvent.data === "null" ? null : e.nativeEvent.data);
+  };
 
   const debugging = `
      console = new Object();
@@ -33,9 +48,10 @@ const ModelView = (props: ModelViewProps) => {
   return (
     token && (
       <WebView
+        ref={webViewRef}
         style={styles.container}
         source={{
-          uri: `http://localhost:3000?${props.id}}`,
+          uri: `${viewerUrl}/${props.id}`,
         }}
         injectedJavaScriptBeforeContentLoaded={`
         XMLHttpRequest.prototype.open = (function(open) {
@@ -48,6 +64,7 @@ const ModelView = (props: ModelViewProps) => {
         injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
         injectedJavaScriptForMainFrameOnly={false}
         injectedJavaScript={debugging}
+        onMessage={receiveMessage}
       />
     )
   );
