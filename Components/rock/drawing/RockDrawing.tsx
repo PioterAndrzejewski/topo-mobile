@@ -56,7 +56,6 @@ type RockDrawingProps = {
 };
 
 const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
-  const navigation = useNavigation();
   const zoomable = createRef<ReactNativeZoomableView>();
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { width, height } = useWindowDimensions();
@@ -68,7 +67,7 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
   const TouchablePath = withTouchableHandler(Path);
 
   const getOpacity = (id: string) => {
-    if (!activeId) return 0.7;
+    if (!activeId) return 0.85;
     if (id === activeId) return 1;
     return 0.3;
   };
@@ -132,7 +131,7 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
                   >
                     <TouchablePath
                       path={route.attributes.path}
-                      strokeWidth={skImage.width() / 70}
+                      strokeWidth={skImage.width() / 90}
                       color='black'
                       style='stroke'
                       strokeCap='round'

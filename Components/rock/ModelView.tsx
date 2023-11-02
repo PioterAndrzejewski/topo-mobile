@@ -14,17 +14,28 @@ const ModelView = (props: ModelViewProps) => {
   useEffect(() => {
     const getToken = async () => {
       const jwt = await getFromSecureStorage("jwt");
-      console.log(jwt);
       setToken(jwt);
     };
     getToken();
   }, []);
+
+  const debugging = `
+     console = new Object();
+     console.log = function(log) {
+       window.webViewBridge.send("console", log);
+     };
+     console.debug = console.log;
+     console.info = console.log;
+     console.warn = console.log;
+     console.error = console.log;
+     `;
+
   return (
     token && (
       <WebView
         style={styles.container}
         source={{
-          uri: `http://localhost:3000/${props.id}}`,
+          uri: `http://localhost:3000?${props.id}}`,
         }}
         injectedJavaScriptBeforeContentLoaded={`
         XMLHttpRequest.prototype.open = (function(open) {
@@ -36,6 +47,7 @@ const ModelView = (props: ModelViewProps) => {
       `}
         injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
         injectedJavaScriptForMainFrameOnly={false}
+        injectedJavaScript={debugging}
       />
     )
   );
