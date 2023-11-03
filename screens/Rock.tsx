@@ -21,20 +21,22 @@ import { useAtom } from "jotai";
 
 import AppLoading from "../Components/common/AppLoading";
 import RockDrawing from "../Components/rock/drawing/RockDrawing";
-import ChangeRouteButton from "../Components/rock/drawing/ChangeRouteButton";
+import Buttons from "../Components/rock/drawing/Buttons";
 import RouteInfo from "../Components/rock/RouteInfo";
+import Header from "../Components/rock/Header";
+import ModelView from "../Components/rock/ModelView";
 
 import { useRock } from "../hooks/useRock";
 import { HomeScreenNavigationProp } from "../types/type";
 import { rockActiveRoute } from "../store/rock";
-import { ChevronLeftIcon } from "../Components/icons/ChevronLeft";
-import { ChevronRightIcon } from "../Components/icons/ChevronRight";
 import { styleGuide } from "../styles/guide";
 import RockDetails from "../Components/rock/RockDetails";
+import { Route } from '../services/rocks';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
+  const [topoMode, setTopoMode] = useState<0 | 1>(0);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { data } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -57,40 +59,27 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const snapPoints = useMemo(() => ["10%", "80%"], []);
+  const snapPoints = useMemo(() => ["10%", "30", "50%", "80%"], []);
 
   return (
     <View style={styles.container}>
-      {data && (
+      <Header
+        onChange={setTopoMode}
+        name={data?.attributes?.Name}
+        mode={topoMode}
+      />
+      {data && topoMode === 0 && (
         <RockDrawing
           imageUrl={data?.attributes?.image?.data.attributes.url}
           routes={data?.attributes?.routes.data}
           activeId={activeRoute}
         />
       )}
-      <TouchableOpacity
-        style={styles.buttonContainerLeft}
-        activeOpacity={0.5}
-        onPress={() => handleRouteChange(-1)}
-      >
-        <ChangeRouteButton
-          Icon={<ChevronLeftIcon size={36} />}
-          style={styles.buttonLeft}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonContainerRight}
-        activeOpacity={0.5}
-        onPress={() => handleRouteChange(1)}
-      >
-        <ChangeRouteButton
-          Icon={<ChevronRightIcon size={36} />}
-          style={styles.buttonRight}
-        />
-      </TouchableOpacity>
+      {data && topoMode === 1 && <ModelView id={route.params.id} />}
+      {topoMode === 0 && <Buttons handleRouteChange={handleRouteChange} />}
       <BottomSheet
         ref={bottomSheetRef}
-        index={0}
+        index={1}
         snapPoints={snapPoints}
         containerStyle={styles.bottomSheetContainer}
         style={styleGuide.bottomSheet}
@@ -104,7 +93,7 @@ const Rock = ({ route }: Props) => {
                   route={route}
                   index={index}
                   realIndex={data?.attributes?.routes.data.findIndex(
-                    (dataRoute) =>
+                    (dataRoute: Route) =>
                       route.attributes.uuid === dataRoute.attributes.uuid,
                   )}
                 />
