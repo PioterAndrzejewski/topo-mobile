@@ -31,6 +31,7 @@ import { HomeScreenNavigationProp } from "../types/type";
 import { rockActiveRoute } from "../store/rock";
 import { styleGuide } from "../styles/guide";
 import RockDetails from "../Components/rock/RockDetails";
+import { Route } from '../services/rocks';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -92,7 +93,7 @@ const Rock = ({ route }: Props) => {
                   route={route}
                   index={index}
                   realIndex={data?.attributes?.routes.data.findIndex(
-                    (dataRoute) =>
+                    (dataRoute: Route) =>
                       route.attributes.uuid === dataRoute.attributes.uuid,
                   )}
                 />
