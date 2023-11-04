@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView, Text } from "react-native";
-import { useAtom } from "jotai";
+import { useAtom, useStore} from "jotai";
+import Animated from "react-native-reanimated";
 
 import ScreenTitle from "../../Components/common/ScreenTitle";
 import BackArrow from "../../Components/common/BackArrow";
@@ -14,10 +15,13 @@ import {
   SectorData,
 } from "../../services/rocks";
 import { CurrentResultsListItem } from "../../types/common";
-import { emptyCurrentObject } from "../../store/results";
 
-import { resultsStageAtom } from "../../store/results";
-import { resultsCurrentItemAtom } from "../../store/results";
+import {
+  resultsStageAtom,
+  resultsCurrentItemAtom,
+  listToRenderAtom,
+  emptyCurrentObject
+} from "../../store/results";
 
 type ResultsListProps = {
   onScroll: () => void;
@@ -26,7 +30,7 @@ type ResultsListProps = {
 export default function ResultsList({ onScroll }: ResultsListProps) {
   const [results, setResults] = useAtom(resultsStageAtom);
   const [currentItem, setCurrentItem] = useAtom(resultsCurrentItemAtom);
-  const [listToRender, setListToRender] = useState<any[]>([]);
+  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
   const { areas, regions, sectors, rocks, isLoading } = useAreas();
 
   useEffect(() => {
@@ -94,21 +98,19 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
         {listToRender.length < 1 ? (
           <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
         ) : (
-          <ScrollView onScroll={onScroll}>
-            {!isLoading &&
-              Array.isArray(listToRender) &&
-              listToRender.map((item) => {
-                return (
-                  <ResultsItem
-                    id={item.attributes.uuid}
-                    name={item.attributes.Name}
-                    onChange={handleChange}
-                    key={item.attributes.uuid}
-                    isRock={results === 3}
-                  />
-                );
-              })}
-          </ScrollView>
+          <Animated.FlatList
+            data={listToRender}
+            onScroll={onScroll}
+            renderItem={({ item }) => (
+              <ResultsItem
+                id={item.attributes.uuid}
+                name={item.attributes.Name}
+                onChange={handleChange}
+                key={item.attributes.uuid}
+                isRock={results === 3}
+              />
+            )}
+          />
         )}
       </SafeAreaView>
     </View>

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { StyleSheet, ScrollView, View, SafeAreaView } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { useAtom, Provider } from "jotai";
 
 import ResultsList from "../Components/home/ResultsList";
 import Map from "../Components/home/Map";
@@ -17,17 +18,19 @@ export default function Home() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
   return (
-    <View style={styles.container}>
-      <Map />
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        style={styleGuide.bottomSheet}
-      >
-        <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
-      </BottomSheet>
-    </View>
+    <Provider>
+      <View style={styles.container}>
+        <Map />
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          style={styleGuide.bottomSheet}
+        >
+          <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
+        </BottomSheet>
+      </View>
+    </Provider>
   );
 }
 
