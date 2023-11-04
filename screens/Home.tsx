@@ -16,7 +16,7 @@ import { styleGuide } from "../styles/guide";
 
 export default function Home() {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["10%", "50%", "90%"], []);
+  const snapPoints = useMemo(() => ["10%", "35%", "90%"], []);
   return (
     <Provider>
       <View style={styles.container}>

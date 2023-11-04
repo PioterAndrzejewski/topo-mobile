@@ -3,8 +3,8 @@ import { Coordinates } from '../services/rocks';
 
 export function calculateDistance(point1: Region, point2: Coordinates) {
   const R = 6371; // Earth's radius in kilometers
-  const lat1 = deg2rad(point1.latitude);
-  const lon1 = deg2rad(point1.longitude);
+  const lat1 = deg2rad(point1.latitude || 0);
+  const lon1 = deg2rad(point1.longitude );
   const lat2 = deg2rad(point2.latitude);
   const lon2 = deg2rad(point2.longitude);
   const dLat = lat2 - lat1;

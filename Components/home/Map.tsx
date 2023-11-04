@@ -1,77 +1,79 @@
-import React, { useState } from "react";
-import { Platform, Text } from "react-native";
-import MapView, {
+import React, { useEffect, useRef } from "react";
+import { Platform, Text, Dimensions } from "react-native";
+import {
   Marker,
   PROVIDER_GOOGLE,
   PROVIDER_DEFAULT,
   Region,
 } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
-import { useAtom } from "jotai";
-import Animated from "react-native-reanimated";
+import MapView from "react-native-map-clustering";
+import { useAtom, useSetAtom } from "jotai";
+import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 
-import {
-  resultsCurrentItemAtom,
-  resultsStageAtom,
-  listToRenderAtom,
-} from "../../store/results";
+import { regionAtom, mapAtom, zoomAtom } from "../../store/results";
 import { useAreas } from "../../hooks/useAreas";
-import { calculateDistance } from "../../utils/calculateDistance";
+import { getGeoJson } from "../../utils/getGeoJson";
 
 const getZoomFromRegion = (region: Region) => {
   return Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
 };
 
+const getBoundingBox = (region: Region): [number, number, number, number] => [
+  region.longitude - region.longitudeDelta, // westLng - min lng
+  region.latitude - region.latitudeDelta, // southLat - min lat
+  region.longitude + region.longitudeDelta, // eastLng - max lng
+  region.latitude + region.latitudeDelta, // northLat - max lat
+];
+
 export default function Map() {
-  const [region, setRegion] = useState<Region>({
-    latitude: 50.36305,
-    longitude: 19.83229,
-    latitudeDelta: 1.5,
-    longitudeDelta: 1.5,
-  });
-  const [zoom, setZoom] = useState<number>(18);
-  const [resultsStage, setResultsStage] = useAtom(resultsStageAtom);
-  const [currentItem, setCurrentItem] = useAtom(resultsCurrentItemAtom);
-  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
-  const { areas, regions, sectors, rocks, isLoading } = useAreas();
+  const [region, setRegion] = useAtom(regionAtom);
+  const [zoom, setZoom] = useAtom(zoomAtom);
+  const { width, height } = Dimensions.get("window");
+  const { rocks } = useAreas();
+
+  const mapRef = useRef(null);
+  const setMap = useSetAtom(mapAtom);
+
+  useEffect(() => {
+    setMap(mapRef);
+  }, [mapRef]);
 
   const onRegionChangeComplete = (newRegion: Region) => {
-    setZoom(getZoomFromRegion(newRegion));
     setRegion(newRegion);
-    setListToRender((list) => {
-      const listCopy = list.map((el) => el);
-      return listCopy.sort((a, b) => {
-        const distA = calculateDistance(newRegion, a.attributes.coordinates);
-        const distB = calculateDistance(newRegion, b.attributes.coordinates);
-        return distA - distB;
-      });
-    });
-    console.log(zoom);
-    if (zoom < 8) setResultsStage(0);
-    if (zoom >= 9) setResultsStage(1);
-    if (zoom >= 10) setResultsStage(2);
-    if (zoom >= 11) setResultsStage(3);
   };
+
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
+        showsMyLocationButton
+        showsCompass
         maxZoomLevel={18}
         showsUserLocation
+        showsBuildings={false}
         provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
         style={styles.map}
         region={region}
         onRegionChangeComplete={onRegionChangeComplete}
       >
-        {listToRender?.length > 0 &&
-          listToRender.map((item) => {
+        {rocks &&
+          rocks.length > 0 &&
+          rocks.map((item) => {
+            console.log(item);
             return (
               <Marker
+                key={item.id}
                 coordinate={{
-                  latitude: item.attributes.coordinates?.latitude || 0,
-                  longitude: item.attributes.coordinates?.longitude || 0,
+                  latitude: item.attributes.coordinates.latitude,
+                  longitude: item.attributes.coordinates.longitude,
                 }}
               >
-                <Animated.View style={styles.markerContainer}>
+                <Animated.View
+                  style={styles.markerContainer}
+                  entering={BounceIn}
+                  exiting={BounceOut}
+                >
                   <Text>{item.attributes.Name}</Text>
                 </Animated.View>
               </Marker>
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "100%",
+    height: "90%",
   },
   markerContainer: {
     flex: 1,

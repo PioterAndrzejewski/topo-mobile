@@ -1,13 +1,19 @@
 import { atom, createStore, useAtom } from 'jotai'
+import { Region } from 'react-native-maps';
+import { AreaData, RegionData, RockData, SectorData } from '../services/rocks';
+import MapView from 'react-native-maps';
 
-export const resultsStageAtom = atom<number>(0);
-export const emptyCurrentObject = {
-  id: null,
-  name: "Wybierz obszar",
-};
-type ResultsCurrentItem = {
-  id: null | string;
-  name: string;
-};
-export const resultsCurrentItemAtom = atom<ResultsCurrentItem>(emptyCurrentObject);
+const startRegion = {
+  latitude: 50.36305,
+  longitude: 19.83229,
+  latitudeDelta: 1.5,
+  longitudeDelta: 1.5,
+}
+
+export type Result = AreaData & RegionData & SectorData & RockData;
+
+export const resultsStageAtom = atom<number>(0)
 export const listToRenderAtom = atom<any[]>([]);
+export const regionAtom = atom<Region>(startRegion);
+export const mapAtom = atom<React.LegacyRef<MapView> >(null);
+export const zoomAtom = atom(8);

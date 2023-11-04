@@ -1,5 +1,6 @@
 import React from "react";
 import type { FC } from "react";
+import { useAtom, useAtomValue } from "jotai";
 
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -8,21 +9,38 @@ import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../types/type";
 import { CurrentResultsListItem } from "../../types/common";
 
+import {
+  resultsStageAtom,
+  listToRenderAtom,
+  regionAtom,
+  mapAtom,
+} from "../../store/results";
+import { getRegionForZoom } from "../../utils/getRegionForZoom";
+import { getZoomFromStage } from "../../utils/getZoomFromStage";
+
 type ListResultProps = {
   id: string;
   name: string;
-  onChange: (step: number, newItem: CurrentResultsListItem) => void;
-  isRock: boolean;
+  item: any;
 };
 
-const ResultsItem: FC<ListResultProps> = ({ id, isRock, name, onChange }) => {
+const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
+  const [resultsStage, setResultsStage] = useAtom(resultsStageAtom);
+  const [region, setRegion] = useAtom(regionAtom);
+  const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const handleChange = () => {
-    if (!isRock) return onChange(1, { id, name });
-    navigation.navigate("Rock", { id });
+  const handlePress = () => {
+    if (resultsStage === 3) return navigation.navigate("Rock", { id });
+    setResultsStage((prev) => prev + 1);
+    const newRegion = getRegionForZoom(
+      item.attributes.coordinates.latitude,
+      item.attributes.coordinates.longitude,
+      getZoomFromStage(resultsStage),
+    );
+    map?.current!.animateToRegion(newRegion);
   };
   return (
-    <TouchableOpacity onPress={handleChange} style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Text style={styles.text}>{name}</Text>
     </TouchableOpacity>
   );
