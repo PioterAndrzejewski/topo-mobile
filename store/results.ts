@@ -11,9 +11,10 @@ const startRegion = {
 }
 
 export type Result = AreaData & RegionData & SectorData & RockData;
+export type AreasList = AreaData[] | RegionData[] | SectorData[] | RockData[];
 
 export const resultsStageAtom = atom<number>(0)
-export const listToRenderAtom = atom<any[]>([]);
 export const regionAtom = atom<Region>(startRegion);
 export const mapAtom = atom<React.LegacyRef<MapView> >(null);
 export const zoomAtom = atom(8);
+export const listToRenderAtom = atom<AreasList>([]);

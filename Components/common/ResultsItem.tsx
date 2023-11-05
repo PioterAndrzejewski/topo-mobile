@@ -7,11 +7,9 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { styleGuide } from "../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../types/type";
-import { CurrentResultsListItem } from "../../types/common";
 
 import {
   resultsStageAtom,
-  listToRenderAtom,
   regionAtom,
   mapAtom,
 } from "../../store/results";

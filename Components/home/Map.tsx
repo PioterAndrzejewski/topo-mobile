@@ -11,25 +11,25 @@ import MapView from "react-native-map-clustering";
 import { useAtom, useSetAtom } from "jotai";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 
-import { regionAtom, mapAtom, zoomAtom } from "../../store/results";
+import {
+  regionAtom,
+  mapAtom,
+  zoomAtom,
+  listToRenderAtom,
+  resultsStageAtom,
+} from "../../store/results";
 import { useAreas } from "../../hooks/useAreas";
-import { getGeoJson } from "../../utils/getGeoJson";
+import { getStageFromZoom } from "../../utils/getZoomFromStage";
 
 const getZoomFromRegion = (region: Region) => {
   return Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
 };
 
-const getBoundingBox = (region: Region): [number, number, number, number] => [
-  region.longitude - region.longitudeDelta, // westLng - min lng
-  region.latitude - region.latitudeDelta, // southLat - min lat
-  region.longitude + region.longitudeDelta, // eastLng - max lng
-  region.latitude + region.latitudeDelta, // northLat - max lat
-];
-
 export default function Map() {
   const [region, setRegion] = useAtom(regionAtom);
   const [zoom, setZoom] = useAtom(zoomAtom);
-  const { width, height } = Dimensions.get("window");
+  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const [stage, setStage] = useAtom(resultsStageAtom);
   const { rocks } = useAreas();
 
   const mapRef = useRef(null);
@@ -40,8 +40,16 @@ export default function Map() {
   }, [mapRef]);
 
   const onRegionChangeComplete = (newRegion: Region) => {
+    console.log("wywolue to");
+    const newZoom = getZoomFromRegion(newRegion);
     setRegion(newRegion);
+    setZoom(getZoomFromRegion(newRegion));
+    setStage(getStageFromZoom(newZoom));
   };
+
+  useEffect(() => {
+    console.log(listToRender);
+  }, [listToRender]);
 
   return (
     <View style={styles.container}>
@@ -57,10 +65,9 @@ export default function Map() {
         region={region}
         onRegionChangeComplete={onRegionChangeComplete}
       >
-        {rocks &&
-          rocks.length > 0 &&
-          rocks.map((item) => {
-            console.log(item);
+        {listToRender &&
+          listToRender.length > 0 &&
+          listToRender.map((item) => {
             return (
               <Marker
                 key={item.id}
