@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Platform, Text, Dimensions } from "react-native";
 import {
   Marker,
@@ -8,7 +8,7 @@ import {
 } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 import MapView from "react-native-map-clustering";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 
 import {
@@ -17,21 +17,20 @@ import {
   zoomAtom,
   listToRenderAtom,
   resultsStageAtom,
+  startRegion,
 } from "../../store/results";
 import { useAreas } from "../../hooks/useAreas";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
+import useDebounce from "../../hooks/useDebounce";
 
-const getZoomFromRegion = (region: Region) => {
-  return Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
-};
+
 
 export default function Map() {
-  const [region, setRegion] = useAtom(regionAtom);
-  const [zoom, setZoom] = useAtom(zoomAtom);
-  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
-  const [stage, setStage] = useAtom(resultsStageAtom);
-  const { rocks } = useAreas();
+  const [region, setRegion] = useState<Region>(startRegion);
+  const setGlobalRegionState = useSetAtom(regionAtom);
+  useDebounce(() => setGlobalRegionState(region), 1000, [region]);
 
+  const listToRender = useAtomValue(listToRenderAtom);
   const mapRef = useRef(null);
   const setMap = useSetAtom(mapAtom);
 
@@ -40,16 +39,8 @@ export default function Map() {
   }, [mapRef]);
 
   const onRegionChangeComplete = (newRegion: Region) => {
-    console.log("wywolue to");
-    const newZoom = getZoomFromRegion(newRegion);
     setRegion(newRegion);
-    setZoom(getZoomFromRegion(newRegion));
-    setStage(getStageFromZoom(newZoom));
   };
-
-  useEffect(() => {
-    console.log(listToRender);
-  }, [listToRender]);
 
   return (
     <View style={styles.container}>
@@ -78,8 +69,6 @@ export default function Map() {
               >
                 <Animated.View
                   style={styles.markerContainer}
-                  entering={BounceIn}
-                  exiting={BounceOut}
                 >
                   <Text>{item.attributes.Name}</Text>
                 </Animated.View>

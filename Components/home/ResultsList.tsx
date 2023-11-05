@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -29,13 +29,18 @@ import {
 } from "../../store/results";
 import { calculateDistance } from "../../utils/calculateDistance";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { getStageFromZoom } from "../../utils/getZoomFromStage";
+import { getZoomFromRegion } from "../../utils/getZoomFromRegion";
 
 type ResultsListProps = {
   onScroll: () => void;
 };
 
 const sortAreas = (region: Region, areas: AreasList) => {
+  if (!areas || areas.length < 1) return [];
   const shallowCopy = [...areas];
+  console.log(areas);
+  console.log(shallowCopy);
   return shallowCopy.sort((a, b) => {
     return (
       calculateDistance(region, a.attributes.coordinates) -
@@ -46,11 +51,14 @@ const sortAreas = (region: Region, areas: AreasList) => {
 
 export default function ResultsList({ onScroll }: ResultsListProps) {
   const { areas, regions, sectors, rocks } = useAreas();
-  const zoom = useAtomValue(zoomAtom);
   const region = useAtomValue(regionAtom);
-  const [stage, setStage] = useAtom(resultsStageAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
   const [rocksOnly, setRocksOnly] = useState(false);
+
+  const stage = useMemo(() => {
+    const zoom = getZoomFromRegion(region);
+    return getStageFromZoom(zoom);
+  }, [region]);
 
   useEffect(() => {
     if (rocksOnly && rocks) return setListToRender(sortAreas(region, rocks));
@@ -60,7 +68,7 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
     if (stage === 2 && sectors)
       return setListToRender(sortAreas(region, sectors));
     if (stage === 3 && rocks) return setListToRender(sortAreas(region, rocks));
-  }, [region, rocksOnly]);
+  }, [region, rocksOnly, stage]);
 
   const handleRocksOnlyButton = () => {
     setRocksOnly((prev) => !prev);
