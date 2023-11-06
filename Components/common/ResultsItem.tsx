@@ -8,11 +8,7 @@ import { styleGuide } from "../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../types/type";
 
-import {
-  resultsStageAtom,
-  regionAtom,
-  mapAtom,
-} from "../../store/results";
+import { resultsStageAtom, regionAtom, mapAtom } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 
@@ -23,19 +19,11 @@ type ListResultProps = {
 };
 
 const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
-  const [resultsStage, setResultsStage] = useAtom(resultsStageAtom);
   const [region, setRegion] = useAtom(regionAtom);
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const handlePress = () => {
-    if (resultsStage === 3) return navigation.navigate("Rock", { id });
-    setResultsStage((prev) => prev + 1);
-    const newRegion = getRegionForZoom(
-      item.attributes.coordinates.latitude,
-      item.attributes.coordinates.longitude,
-      getZoomFromStage(resultsStage),
-    );
-    map?.current!.animateToRegion(newRegion);
+    console.log("rpessed");
   };
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>

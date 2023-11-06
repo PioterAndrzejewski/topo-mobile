@@ -23,14 +23,12 @@ import { useAreas } from "../../hooks/useAreas";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
 import useDebounce from "../../hooks/useDebounce";
 
-
-
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
   const setGlobalRegionState = useSetAtom(regionAtom);
   useDebounce(() => setGlobalRegionState(region), 1000, [region]);
 
-  const listToRender = useAtomValue(listToRenderAtom);
+  const { rocks } = useAreas();
   const mapRef = useRef(null);
   const setMap = useSetAtom(mapAtom);
 
@@ -56,9 +54,9 @@ export default function Map() {
         region={region}
         onRegionChangeComplete={onRegionChangeComplete}
       >
-        {listToRender &&
-          listToRender.length > 0 &&
-          listToRender.map((item) => {
+        {rocks &&
+          rocks.length > 0 &&
+          rocks.map((item) => {
             return (
               <Marker
                 key={item.id}
@@ -67,9 +65,7 @@ export default function Map() {
                   longitude: item.attributes.coordinates.longitude,
                 }}
               >
-                <Animated.View
-                  style={styles.markerContainer}
-                >
+                <Animated.View style={styles.markerContainer}>
                   <Text>{item.attributes.Name}</Text>
                 </Animated.View>
               </Marker>
