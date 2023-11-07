@@ -26,7 +26,7 @@ import useDebounce from "../../hooks/useDebounce";
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
   const setGlobalRegionState = useSetAtom(regionAtom);
-  useDebounce(() => setGlobalRegionState(region), 1000, [region]);
+  useDebounce(() => setGlobalRegionState(region), 800, [region]);
 
   const { rocks } = useAreas();
   const mapRef = useRef(null);

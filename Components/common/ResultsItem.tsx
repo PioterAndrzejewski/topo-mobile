@@ -11,20 +11,32 @@ import { HomeScreenNavigationProp } from "../../types/type";
 import { resultsStageAtom, regionAtom, mapAtom } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
+import { AreaData } from "../../services/rocks";
 
 type ListResultProps = {
   id: string;
   name: string;
   item: any;
+  isRock?: boolean;
+  animateTo: (item: AreaData, stage: number) => void;
+  itemStage: number;
 };
 
-const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
-  const [region, setRegion] = useAtom(regionAtom);
+const ResultsItem: FC<ListResultProps> = ({
+  id,
+  name,
+  item,
+  animateTo,
+  itemStage,
+  isRock,
+}) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const handlePress = () => {
-    console.log("rpessed");
+    animateTo(item, isRock ? itemStage - 1 : itemStage);
   };
+
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Text style={styles.text}>{name}</Text>

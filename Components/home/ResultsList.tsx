@@ -99,7 +99,7 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
       item.attributes.coordinates.longitude,
       getZoomFromStage(stage),
     );
-    map?.current!.animateToRegion(newRegion);
+    if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
   return (
@@ -142,6 +142,9 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
                 name={item.attributes.Name}
                 key={item.attributes.uuid}
                 item={item}
+                isRock={rocksOnly || stage === 3}
+                animateTo={animateTo}
+                itemStage={stage + 1}
               />
             )}
           />
