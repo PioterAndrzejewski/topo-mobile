@@ -1,9 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { StyleSheet, ScrollView, View, SafeAreaView, Text } from "react-native";
-import { useAtom } from "jotai";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  SafeAreaView,
+  Text,
+  Button,
+} from "react-native";
+import { useAtom, useAtomValue, useStore } from "jotai";
+import Animated from "react-native-reanimated";
+import { Region } from "react-native-maps";
 
-import ScreenTitle from "../../Components/common/ScreenTitle";
-import BackArrow from "../../Components/common/BackArrow";
 import ResultsItem from "../../Components/common/ResultsItem";
 
 import { useAreas } from "../../hooks/useAreas";
@@ -13,102 +20,134 @@ import {
   RockData,
   SectorData,
 } from "../../services/rocks";
-import { CurrentResultsListItem } from "../../types/common";
-import { emptyCurrentObject } from "../../store/results";
-
-import { resultsStageAtom } from "../../store/results";
-import { resultsCurrentItemAtom } from "../../store/results";
+import {
+  regionAtom,
+  resultsStageAtom,
+  zoomAtom,
+  AreasList,
+  listToRenderAtom,
+} from "../../store/results";
+import { calculateDistance } from "../../utils/calculateDistance";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { getStageFromZoom } from "../../utils/getZoomFromStage";
+import { getZoomFromRegion } from "../../utils/getZoomFromRegion";
+import { getRegionForZoom } from "../../utils/getRegionForZoom";
+import { getZoomFromStage } from "../../utils/getZoomFromStage";
+import { mapAtom } from "../../store/results";
 
 type ResultsListProps = {
   onScroll: () => void;
 };
 
+const sortAreas = (region: Region, areas: AreasList) => {
+  if (!areas || areas.length < 1) return [];
+  const shallowCopy = [...areas];
+  return shallowCopy.sort((a, b) => {
+    return (
+      calculateDistance(region, a.attributes.coordinates) -
+      calculateDistance(region, b.attributes.coordinates)
+    );
+  });
+};
+
 export default function ResultsList({ onScroll }: ResultsListProps) {
-  const [results, setResults] = useAtom(resultsStageAtom);
-  const [currentItem, setCurrentItem] = useAtom(resultsCurrentItemAtom);
-  const [listToRender, setListToRender] = useState<any[]>([]);
-  const { areas, regions, sectors, rocks, isLoading } = useAreas();
+  const { areas, regions, sectors, rocks } = useAreas();
+  const region = useAtomValue(regionAtom);
+  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const [rocksOnly, setRocksOnly] = useState(false);
+  const [locationArray, setLocationArray] = useState<AreaData[]>([]);
+  const map = useAtomValue(mapAtom);
+
+  const stage = useMemo(() => {
+    const zoom = getZoomFromRegion(region);
+    return getStageFromZoom(zoom);
+  }, [region]);
 
   useEffect(() => {
-    if (results === 0 && areas) return setListToRender(areas);
-    if (results === 1 && regions) {
-      const regionsToRender = regions.filter(
-        (region) =>
-          region.attributes.parent.data.attributes.uuid === currentItem.id,
-      );
-      return setListToRender(regionsToRender);
+    const locationArray = [];
+    if (stage >= 0 && areas) {
+      locationArray.push(sortAreas(region, areas)[0]);
     }
-    if (results === 2 && sectors) {
-      const sectorsToRender = sectors.filter(
-        (sector) =>
-          sector.attributes.parent.data.attributes.uuid === currentItem.id,
-      );
-      return setListToRender(sectorsToRender);
+    if (stage >= 1 && regions) {
+      locationArray.push(sortAreas(region, regions)[0]);
     }
-    if (results === 3 && rocks) {
-      const rocksToRender = rocks.filter(
-        (rock) =>
-          rock.attributes.parent.data.attributes.uuid === currentItem.id,
-      );
-      return setListToRender(rocksToRender);
+    if (stage >= 2 && sectors) {
+      locationArray.push(sortAreas(region, sectors)[0]);
     }
-  }, [results, areas, regions, sectors]);
+    setLocationArray(locationArray);
 
-  const handleChange = (step: number, newItem: CurrentResultsListItem) => {
-    setResults((prevStage) => prevStage + step);
-    setCurrentItem(newItem);
+    if (rocksOnly && rocks) {
+      return setListToRender(sortAreas(region, rocks));
+    }
+    if (stage === 0 && areas) {
+      return setListToRender(sortAreas(region, areas));
+    }
+    if (stage === 1 && regions)
+      return setListToRender(sortAreas(region, regions));
+    if (stage === 2 && sectors)
+      return setListToRender(sortAreas(region, sectors));
+    if (stage === 3 && rocks) return setListToRender(sortAreas(region, rocks));
+  }, [region, rocksOnly]);
+
+  const handleRocksOnlyButton = () => {
+    setRocksOnly((prev) => !prev);
   };
 
-  const getCurrent = () => {
-    if (results === 1)
-      return areas?.find((obj) => obj.attributes.uuid === currentItem.id);
-    if (results === 2)
-      return regions?.find((obj) => obj.attributes.uuid === currentItem.id);
-    if (results === 3)
-      return sectors?.find((obj) => obj.attributes.uuid === currentItem.id);
-  };
-
-  const getParent = () => {
-    if (results === 0 || results === 1) return emptyCurrentObject;
-    const current = getCurrent() as AreaData &
-      RegionData &
-      SectorData &
-      RockData;
-    if (!current || !current.attributes || !current.attributes.parent)
-      return emptyCurrentObject;
-    return {
-      id: current.attributes.parent
-        ? current?.attributes.parent!.data.attributes.uuid
-        : "",
-      name: current.attributes.parent.data.attributes.Name || "",
-    };
+  const animateTo = (item: AreaData, stage: number) => {
+    const newRegion = getRegionForZoom(
+      item.attributes.coordinates.latitude,
+      item.attributes.coordinates.longitude,
+      getZoomFromStage(stage),
+    );
+    if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
   return (
     <View style={styles.container}>
-      <ScreenTitle title={currentItem.name || "Wybierz obszar"} />
-      {results > 0 && (
-        <BackArrow onClick={() => handleChange(-1, getParent())} />
-      )}
+      <View style={{ flexDirection: "row", paddingHorizontal: 12 }}>
+        {locationArray.map((item, index) => (
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => animateTo(item, index)}
+          >
+            {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
+            <Text>{item.attributes.Name}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.controls}>
+        <TouchableOpacity
+          onPress={handleRocksOnlyButton}
+          style={
+            rocksOnly
+              ? { ...styles.buttonContainer, ...styles.buttonContainerActive }
+              : {
+                  ...styles.buttonContainer,
+                }
+          }
+        >
+          <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
+        </TouchableOpacity>
+      </View>
       <SafeAreaView>
         {listToRender.length < 1 ? (
           <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
         ) : (
-          <ScrollView onScroll={onScroll}>
-            {!isLoading &&
-              Array.isArray(listToRender) &&
-              listToRender.map((item) => {
-                return (
-                  <ResultsItem
-                    id={item.attributes.uuid}
-                    name={item.attributes.Name}
-                    onChange={handleChange}
-                    key={item.attributes.uuid}
-                    isRock={results === 3}
-                  />
-                );
-              })}
-          </ScrollView>
+          <Animated.FlatList
+            data={listToRender}
+            onScroll={onScroll}
+            renderItem={({ item }) => (
+              <ResultsItem
+                id={item.attributes.uuid}
+                name={item.attributes.Name}
+                key={item.attributes.uuid}
+                item={item}
+                isRock={rocksOnly || stage === 3}
+                animateTo={animateTo}
+                itemStage={stage + 1}
+              />
+            )}
+          />
         )}
       </SafeAreaView>
     </View>
@@ -117,9 +156,24 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 24,
+    paddingTop: 2,
     width: "100%",
     height: "100%",
     paddingHorizontal: 20,
+  },
+  controls: {
+    marginBottom: 14,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  buttonContainer: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  buttonContainerActive: {
+    borderWidth: 2,
   },
 });

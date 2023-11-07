@@ -31,7 +31,7 @@ import { HomeScreenNavigationProp } from "../types/type";
 import { rockActiveRoute } from "../store/rock";
 import { styleGuide } from "../styles/guide";
 import RockDetails from "../Components/rock/RockDetails";
-import { Route } from '../services/rocks';
+import { Route } from "../services/rocks";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -59,7 +59,7 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  const snapPoints = useMemo(() => ["10%", "30", "50%", "80%"], []);
+  const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
 
   return (
     <View style={styles.container}>

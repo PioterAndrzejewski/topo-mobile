@@ -29,7 +29,6 @@ const ModelView = (props: ModelViewProps) => {
   }, []);
 
   const receiveMessage = (e: WebViewMessageEvent) => {
-    console.log(e.nativeEvent.data);
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveRoute(e.nativeEvent.data === "null" ? null : e.nativeEvent.data);
   };

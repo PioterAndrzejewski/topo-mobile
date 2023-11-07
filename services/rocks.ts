@@ -50,7 +50,7 @@ export const itemsTypes: ItemsTypes = {
 export type Coordinates = {
   id: number;
   latitude: number;
-  longtitude: number;
+  longitude: number;
 }
 
 export type ImageFormats = {
@@ -122,7 +122,7 @@ export type AreaData = {
     children: {data: RegionData[]};
     published_at: string;
     updatedAt: string;
-    Coordinates: Coordinates;
+    coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
   }
@@ -141,7 +141,7 @@ export type RegionData = {
     children: {data: SectorData[]};
     published_at: string;
     updatedAt: string;
-    Coordinates: Coordinates;
+    coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
     parent: {
@@ -163,7 +163,7 @@ export type SectorData = {
     children: {data: RockData[]};
     published_at: string;
     updatedAt: string;
-    Coordinates: Coordinates;
+    coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
     parent: {
@@ -231,7 +231,7 @@ export const getAreas = async () => {
   const query = qs.stringify({
     populate: [
       'uuid',
-      'Coordinates',
+      'coordinates',
       'Cover',
       'Cover.Photo'
     ]
@@ -247,7 +247,8 @@ export const getRegions = async () => {
         'uuid',
         'Cover',
         'Cover.Photo',
-        'parent'
+        'parent',
+        'coordinates',
       ]
     });
     const { data } = await authService.get<RegionsData>(apiConfig.topo.regions(query));
@@ -260,7 +261,8 @@ export const getRegions = async () => {
         'uuid',
         'Cover',
         'Cover.Photo',
-        'parent'
+        'parent',
+        'coordinates',
       ]
     });
     const { data } = await authService.get<RegionsData>(apiConfig.topo.sectors(query));
@@ -274,6 +276,7 @@ export const getRocks = async () => {
       'Cover',
       'Cover.Photo',
       'parent',
+      'coordinates',
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));

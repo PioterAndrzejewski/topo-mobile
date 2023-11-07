@@ -1,28 +1,44 @@
 import React from "react";
 import type { FC } from "react";
+import { useAtom, useAtomValue } from "jotai";
 
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import { styleGuide } from "../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../types/type";
-import { CurrentResultsListItem } from "../../types/common";
+
+import { resultsStageAtom, regionAtom, mapAtom } from "../../store/results";
+import { getRegionForZoom } from "../../utils/getRegionForZoom";
+import { getZoomFromStage } from "../../utils/getZoomFromStage";
+import { AreaData } from "../../services/rocks";
 
 type ListResultProps = {
   id: string;
   name: string;
-  onChange: (step: number, newItem: CurrentResultsListItem) => void;
-  isRock: boolean;
+  item: any;
+  isRock?: boolean;
+  animateTo: (item: AreaData, stage: number) => void;
+  itemStage: number;
 };
 
-const ResultsItem: FC<ListResultProps> = ({ id, isRock, name, onChange }) => {
+const ResultsItem: FC<ListResultProps> = ({
+  id,
+  name,
+  item,
+  animateTo,
+  itemStage,
+  isRock,
+}) => {
+  const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const handleChange = () => {
-    if (!isRock) return onChange(1, { id, name });
-    navigation.navigate("Rock", { id });
+
+  const handlePress = () => {
+    animateTo(item, isRock ? itemStage - 1 : itemStage);
   };
+
   return (
-    <TouchableOpacity onPress={handleChange} style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Text style={styles.text}>{name}</Text>
     </TouchableOpacity>
   );
