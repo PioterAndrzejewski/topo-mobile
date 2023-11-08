@@ -17,3 +17,4 @@ export const regionAtom = atom<Region>(startRegion);
 export const mapAtom = atom<React.RefObject<MapView> | null >(null);
 export const zoomAtom = atom(8);
 export const listToRenderAtom = atom<AreasList>([]);
+export const selectedRockAtom = atom<string | null>(null)

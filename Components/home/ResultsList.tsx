@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -10,6 +16,8 @@ import {
 import { useAtom, useAtomValue, useStore } from "jotai";
 import Animated from "react-native-reanimated";
 import { Region } from "react-native-maps";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import ResultsItem from "../../Components/common/ResultsItem";
 
@@ -23,16 +31,13 @@ import {
   listToRenderAtom,
 } from "../../store/results";
 import { calculateDistance } from "../../utils/calculateDistance";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
 import { getZoomFromRegion } from "../../utils/getZoomFromRegion";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
-import { mapAtom } from "../../store/results";
+import { mapAtom, selectedRockAtom } from "../../store/results";
 
-type ResultsListProps = {
-  onScroll: () => void;
-};
+type ResultsListProps = {};
 
 const sortAreas = (region: Region, areas: RegionData[]) => {
   if (!areas || areas.length < 1) return [];
@@ -45,13 +50,16 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
   });
 };
 
-export default function ResultsList({ onScroll }: ResultsListProps) {
+export default function ResultsList({}: ResultsListProps) {
   const { areas, regions, sectors, rocks } = useAreas();
   const region = useAtomValue(regionAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
   const [rocksOnly, setRocksOnly] = useState(false);
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const map = useAtomValue(mapAtom);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const stage = useMemo(() => {
     const zoom = getZoomFromRegion(region);
@@ -112,6 +120,13 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
       );
   }, [region, rocksOnly]);
 
+  useEffect(() => {
+    if (selectedRock) {
+      bottomSheetRef.current?.collapse();
+      bottomSheetModalRef.current?.present();
+    }
+  }, [selectedRock]);
+
   const handleRocksOnlyButton = () => {
     setRocksOnly((prev) => !prev);
   };
@@ -125,55 +140,70 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
     if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
+  const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
+  const snapPoints = useMemo(() => ["10%", "35%", "90%"], []);
+
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: "row", paddingHorizontal: 12 }}>
-        {locationArray.map((item, index) => (
+    <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", paddingHorizontal: 12 }}>
+          {locationArray.map((item, index) => (
+            <TouchableOpacity
+              style={{ flexDirection: "row" }}
+              onPress={() => animateTo(item, index)}
+            >
+              {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
+              <Text>{item.attributes.Name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <View style={styles.controls}>
           <TouchableOpacity
-            style={{ flexDirection: "row" }}
-            onPress={() => animateTo(item, index)}
+            onPress={handleRocksOnlyButton}
+            style={
+              rocksOnly
+                ? { ...styles.buttonContainer, ...styles.buttonContainerActive }
+                : {
+                    ...styles.buttonContainer,
+                  }
+            }
           >
-            {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
-            <Text>{item.attributes.Name}</Text>
+            <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
           </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.controls}>
-        <TouchableOpacity
-          onPress={handleRocksOnlyButton}
-          style={
-            rocksOnly
-              ? { ...styles.buttonContainer, ...styles.buttonContainerActive }
-              : {
-                  ...styles.buttonContainer,
-                }
-          }
+        </View>
+        <SafeAreaView>
+          {listToRender.length < 1 ? (
+            <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
+          ) : (
+            <Animated.FlatList
+              data={listToRender}
+              renderItem={({ item }) => (
+                <ResultsItem
+                  id={item.attributes.uuid}
+                  name={item.attributes.Name}
+                  key={item.attributes.uuid}
+                  item={item}
+                  isRock={rocksOnly || stage === 3}
+                  animateTo={animateTo}
+                  itemStage={stage + 1}
+                />
+              )}
+            />
+          )}
+        </SafeAreaView>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={1}
+          snapPoints={bottomSheetSnapPoints}
+          onDismiss={() => setSelectedRock(null)}
         >
-          <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
-        </TouchableOpacity>
+          <View>
+            <Text>Awesome 🎉</Text>
+            <Text>Selected rock: {selectedRock}</Text>
+          </View>
+        </BottomSheetModal>
       </View>
-      <SafeAreaView>
-        {listToRender.length < 1 ? (
-          <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
-        ) : (
-          <Animated.FlatList
-            data={listToRender}
-            onScroll={onScroll}
-            renderItem={({ item }) => (
-              <ResultsItem
-                id={item.attributes.uuid}
-                name={item.attributes.Name}
-                key={item.attributes.uuid}
-                item={item}
-                isRock={rocksOnly || stage === 3}
-                animateTo={animateTo}
-                itemStage={stage + 1}
-              />
-            )}
-          />
-        )}
-      </SafeAreaView>
-    </View>
+    </BottomSheet>
   );
 }
 

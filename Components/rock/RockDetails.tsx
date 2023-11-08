@@ -21,7 +21,7 @@ const RockDetails = (props: RockDetailsProps) => {
     if (!data?.attributes) return;
     showLocation({
       latitude: data.attributes.coordinates.latitude,
-      longitude: data.attributes.coordinates.longtitude,
+      longitude: data.attributes.coordinates.longitude,
     });
   };
 
@@ -29,7 +29,7 @@ const RockDetails = (props: RockDetailsProps) => {
     if (!data?.attributes) return;
     showLocation({
       latitude: data.attributes.parking_coordinates.latitude,
-      longitude: data.attributes.parking_coordinates.longtitude,
+      longitude: data.attributes.parking_coordinates.longitude,
     });
   };
 

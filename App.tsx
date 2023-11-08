@@ -17,6 +17,7 @@ import Home from "./screens/Home";
 import Rock from "./screens/Rock";
 
 import AppLoading from "./Components/common/AppLoading";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
   .configure() // controls connection & communication settings
@@ -52,20 +53,22 @@ export default function App() {
         persistOptions={{ persister: asyncStoragePersister }}
       >
         <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name='Login' component={LoginScreen} />
-            <Stack.Screen name='Register' component={RegisterScreen} />
-            <Stack.Screen name='Home' component={Home} />
-            <Stack.Screen
-              name='Rock'
-              component={Rock}
-              initialParams={{ id: "yes yes" }}
-            />
-          </Stack.Navigator>
+          <BottomSheetModalProvider>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name='Login' component={LoginScreen} />
+              <Stack.Screen name='Register' component={RegisterScreen} />
+              <Stack.Screen name='Home' component={Home} />
+              <Stack.Screen
+                name='Rock'
+                component={Rock}
+                initialParams={{ id: "yes yes" }}
+              />
+            </Stack.Navigator>
+          </BottomSheetModalProvider>
         </NavigationContainer>
       </PersistQueryClientProvider>
     </GestureHandlerRootView>

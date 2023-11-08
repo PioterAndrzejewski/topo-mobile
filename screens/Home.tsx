@@ -15,28 +15,12 @@ import Map from "../Components/home/Map";
 import { styleGuide } from "../styles/guide";
 
 export default function Home() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["10%", "35%", "90%"], []);
   return (
     <Provider>
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
         <Map />
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={1}
-          snapPoints={snapPoints}
-          style={styleGuide.bottomSheet}
-        >
-          <ResultsList onScroll={() => bottomSheetRef.current?.expand()} />
-        </BottomSheet>
+        <ResultsList />
       </View>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: styleGuide.color.white,
-    flex: 1,
-  },
-});
