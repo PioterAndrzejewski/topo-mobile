@@ -65,28 +65,56 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
 
   useEffect(() => {
     const locationArray = [];
-    if (stage >= 0 && areas) {
+    if (stage >= 1 && regions) {
       locationArray.push(sortAreas(region, areas)[0]);
     }
-    if (stage >= 1 && regions) {
+    if (stage >= 2 && sectors) {
       locationArray.push(sortAreas(region, regions)[0]);
     }
-    if (stage >= 2 && sectors) {
+    if (stage >= 3 && rocks) {
       locationArray.push(sortAreas(region, sectors)[0]);
     }
     setLocationArray(locationArray);
 
     if (rocksOnly && rocks) {
-      return setListToRender(sortAreas(region, rocks));
+      console.log(
+        sortAreas(region, rocks)[0].attributes.parent.data.attributes.uuid,
+      );
+      return setListToRender(
+        sortAreas(region, rocks).filter(
+          (rock) =>
+            rock.attributes.parent.data.attributes.uuid ===
+            locationArray[locationArray.length - 1].attributes.uuid,
+        ),
+      );
     }
     if (stage === 0 && areas) {
       return setListToRender(sortAreas(region, areas));
     }
     if (stage === 1 && regions)
-      return setListToRender(sortAreas(region, regions));
+      return setListToRender(
+        sortAreas(region, regions).filter(
+          (rock) =>
+            rock.attributes.parent.data.attributes.uuid ===
+            locationArray[locationArray.length - 1].attributes.uuid,
+        ),
+      );
     if (stage === 2 && sectors)
-      return setListToRender(sortAreas(region, sectors));
-    if (stage === 3 && rocks) return setListToRender(sortAreas(region, rocks));
+      return setListToRender(
+        sortAreas(region, sectors).filter(
+          (rock) =>
+            rock.attributes.parent.data.attributes.uuid ===
+            locationArray[locationArray.length - 1].attributes.uuid,
+        ),
+      );
+    if (stage === 3 && rocks)
+      return setListToRender(
+        sortAreas(region, rocks).filter(
+          (rock) =>
+            rock.attributes.parent.data.attributes.uuid ===
+            locationArray[locationArray.length - 1].attributes.uuid,
+        ),
+      );
   }, [region, rocksOnly]);
 
   const handleRocksOnlyButton = () => {
