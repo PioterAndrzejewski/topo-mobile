@@ -125,6 +125,9 @@ export type AreaData = {
     coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
+    parent: {
+      data: AreaData;
+    };
   }
 }
 
@@ -138,7 +141,7 @@ export type RegionData = {
   attributes: {
     Name: string;
     createdAt: string;
-    children: {data: SectorData[]};
+    children: {data: RegionData[]};
     published_at: string;
     updatedAt: string;
     coordinates: Coordinates;
@@ -155,27 +158,6 @@ export type RegionsData = {
   meta: Meta;
 }
 
-export type SectorData = {
-  id: number;
-  attributes: {
-    Name: string;
-    createdAt: string;
-    children: {data: RockData[]};
-    published_at: string;
-    updatedAt: string;
-    coordinates: Coordinates;
-    Cover: Cover;
-    uuid: string;
-    parent: {
-      data: AreaData;
-    };
-  }
-}
-
-export type SectorsData = {
-  data: RegionData[];
-  meta: Meta;
-}
 
 export type Route = {
   id: number;
@@ -236,7 +218,7 @@ export const getAreas = async () => {
       'Cover.Photo'
     ]
   });
-  const { data } = await authService.get<AreasData>(apiConfig.topo.areas(query));
+  const { data } = await authService.get<RegionsData>(apiConfig.topo.areas(query));
   return data.data;
 }
 

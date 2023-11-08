@@ -14,12 +14,7 @@ import { Region } from "react-native-maps";
 import ResultsItem from "../../Components/common/ResultsItem";
 
 import { useAreas } from "../../hooks/useAreas";
-import {
-  AreaData,
-  RegionData,
-  RockData,
-  SectorData,
-} from "../../services/rocks";
+import { AreaData, RegionData } from "../../services/rocks";
 import {
   regionAtom,
   resultsStageAtom,
@@ -39,7 +34,7 @@ type ResultsListProps = {
   onScroll: () => void;
 };
 
-const sortAreas = (region: Region, areas: AreasList) => {
+const sortAreas = (region: Region, areas: RegionData[]) => {
   if (!areas || areas.length < 1) return [];
   const shallowCopy = [...areas];
   return shallowCopy.sort((a, b) => {
@@ -55,7 +50,7 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
   const region = useAtomValue(regionAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
   const [rocksOnly, setRocksOnly] = useState(false);
-  const [locationArray, setLocationArray] = useState<AreaData[]>([]);
+  const [locationArray, setLocationArray] = useState<AreasList>([]);
   const map = useAtomValue(mapAtom);
 
   const stage = useMemo(() => {
@@ -64,14 +59,14 @@ export default function ResultsList({ onScroll }: ResultsListProps) {
   }, [region]);
 
   useEffect(() => {
-    const locationArray = [];
-    if (stage >= 1 && regions) {
+    const locationArray: AreasList = [];
+    if (stage >= 1 && areas) {
       locationArray.push(sortAreas(region, areas)[0]);
     }
-    if (stage >= 2 && sectors) {
+    if (stage >= 2 && regions) {
       locationArray.push(sortAreas(region, regions)[0]);
     }
-    if (stage >= 3 && rocks) {
+    if (stage >= 3 && sectors) {
       locationArray.push(sortAreas(region, sectors)[0]);
     }
     setLocationArray(locationArray);

@@ -1,6 +1,6 @@
 import { atom, createStore, useAtom } from 'jotai'
 import { Region } from 'react-native-maps';
-import { AreaData, RegionData, RockData, SectorData } from '../services/rocks';
+import { AreaData, RegionData } from '../services/rocks';
 import MapView from 'react-native-maps';
 
 export const startRegion = {
@@ -10,8 +10,7 @@ export const startRegion = {
   longitudeDelta: 1.5,
 }
 
-export type Result = AreaData & RegionData & SectorData & RockData;
-export type AreasList = AreaData[] | RegionData[] | SectorData[] | RockData[];
+export type AreasList = RegionData[];
 
 export const resultsStageAtom = atom<number>(0)
 export const regionAtom = atom<Region>(startRegion);
