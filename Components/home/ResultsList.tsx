@@ -18,6 +18,7 @@ import Animated from "react-native-reanimated";
 import { Region } from "react-native-maps";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 import ResultsItem from "../../Components/common/ResultsItem";
 
@@ -36,12 +37,13 @@ import { getZoomFromRegion } from "../../utils/getZoomFromRegion";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { mapAtom, selectedRockAtom } from "../../store/results";
-
-type ResultsListProps = {};
+import { HomeScreenNavigationProp } from "../../types/type";
 
 const sortAreas = (region: Region, areas: RegionData[]) => {
-  if (!areas || areas.length < 1) return [];
+  if (!areas || areas.length < 1 || !Array.isArray(areas)) return [];
   const shallowCopy = [...areas];
+  if (!shallowCopy || !Array.isArray(shallowCopy) || shallowCopy?.length < 1)
+    return [];
   return shallowCopy.sort((a, b) => {
     return (
       calculateDistance(region, a.attributes.coordinates) -
@@ -50,7 +52,8 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
   });
 };
 
-export default function ResultsList({}: ResultsListProps) {
+export default function ResultsList() {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const { areas, regions, sectors, rocks } = useAreas();
   const region = useAtomValue(regionAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
@@ -124,8 +127,19 @@ export default function ResultsList({}: ResultsListProps) {
     if (selectedRock) {
       bottomSheetRef.current?.collapse();
       bottomSheetModalRef.current?.present();
+      return;
+    }
+    if (!selectedRock) {
+      bottomSheetModalRef.current?.dismiss();
     }
   }, [selectedRock]);
+
+  const handleOpenRock = () => {
+    navigation.navigate("Rock", {
+      id: selectedRock,
+    });
+    setSelectedRock(null);
+  };
 
   const handleRocksOnlyButton = () => {
     setRocksOnly((prev) => !prev);
@@ -153,7 +167,7 @@ export default function ResultsList({}: ResultsListProps) {
               onPress={() => animateTo(item, index)}
             >
               {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
-              <Text>{item.attributes.Name}</Text>
+              <Text>{item?.attributes?.Name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -200,6 +214,9 @@ export default function ResultsList({}: ResultsListProps) {
           <View>
             <Text>Awesome 🎉</Text>
             <Text>Selected rock: {selectedRock}</Text>
+            <TouchableOpacity onPress={handleOpenRock}>
+              <Text>Otwórz skałoplan</Text>
+            </TouchableOpacity>
           </View>
         </BottomSheetModal>
       </View>
