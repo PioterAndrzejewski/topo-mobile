@@ -12,10 +12,10 @@ type BackArrowProps = {
 const BackArrow: FC<BackArrowProps> = ({ onClick }) => {
   return (
     <TouchableOpacity onPress={onClick} hitSlop={{
-      top: 10,
-      left: 10,
-      bottom: 10,
-      right: 10,
+      top: 20,
+      left: 20,
+      bottom: 20,
+      right: 20,
     }}>
       <ArrowLeft size={40}/>
     </TouchableOpacity>

@@ -1,6 +1,6 @@
 import React from "react";
 import type { FC } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -8,7 +8,12 @@ import { styleGuide } from "../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../types/type";
 
-import { resultsStageAtom, regionAtom, mapAtom } from "../../store/results";
+import {
+  resultsStageAtom,
+  regionAtom,
+  mapAtom,
+  selectedRockAtom,
+} from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { AreaData } from "../../services/rocks";
@@ -32,9 +37,11 @@ const ResultsItem: FC<ListResultProps> = ({
 }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const setSelectedRock = useSetAtom(selectedRockAtom);
 
   const handlePress = () => {
     animateTo(item, isRock ? itemStage - 1 : itemStage);
+    if (isRock) setSelectedRock(id);
   };
 
   return (

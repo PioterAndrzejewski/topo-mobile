@@ -9,6 +9,7 @@ import {
 import { StyleSheet, View } from "react-native";
 import MapView from "react-native-map-clustering";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { default as NativeMap } from "react-native-maps";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 
 import {
@@ -22,14 +23,18 @@ import {
 import { useAreas } from "../../hooks/useAreas";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
 import useDebounce from "../../hooks/useDebounce";
+import { selectedRockAtom } from "../../store/results";
+import { getRegionForZoom } from "../../utils/getRegionForZoom";
+import { getZoomFromStage } from "../../utils/getZoomFromStage";
 
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
   const setGlobalRegionState = useSetAtom(regionAtom);
-  useDebounce(() => setGlobalRegionState(region), 800, [region]);
+  const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
+  useDebounce(() => setGlobalRegionState(region), 200, [region]);
 
   const { rocks } = useAreas();
-  const mapRef = useRef(null);
+  const mapRef = useRef<NativeMap>(null);
   const setMap = useSetAtom(mapAtom);
 
   useEffect(() => {
@@ -63,6 +68,17 @@ export default function Map() {
                 coordinate={{
                   latitude: item.attributes.coordinates.latitude,
                   longitude: item.attributes.coordinates.longitude,
+                }}
+                onPress={() => {
+                  setSelectedRock(item.attributes.uuid);
+                  const newRegion = getRegionForZoom(
+                    item.attributes.coordinates.latitude,
+                    item.attributes.coordinates.longitude,
+                    getZoomFromStage(3),
+                  );
+                  if (mapRef && mapRef.current) {
+                    mapRef.current.animateToRegion(newRegion);
+                  }
                 }}
               >
                 <Animated.View style={styles.markerContainer}>
