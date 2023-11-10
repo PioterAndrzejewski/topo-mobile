@@ -155,7 +155,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
-  const snapPoints = useMemo(() => ["10%", "35%", "90%"], []);
+  const snapPoints = useMemo(() => ["9%", "35%", "85%"], []);
 
   return (
     <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
