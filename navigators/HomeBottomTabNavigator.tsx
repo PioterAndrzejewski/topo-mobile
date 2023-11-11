@@ -1,9 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
+import { View } from "react-native";
 
 import MapScreen from "../screens/MapScreen";
 import SearchScreen from "../screens/SearchScreen";
 import FavouritesScreen from "../screens/FavouritesScreen";
+import FilterBar from "../Components/Search/FilterBar";
 
 import { MapIcon } from "../Components/icons/Map";
 import { SearchIcon } from "../Components/icons/Search";
@@ -46,19 +48,23 @@ const renderIcon = ({
 
 const HomeBottomTabNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, size }) => renderIcon({ focused, size, route }),
-        headerShown: false,
-        tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
-        tabBarActiveBackgroundColor: "#eeeeee13",
-      })}
-    >
-      <Tab.Screen name='Map' component={MapScreen} />
-      <Tab.Screen name='Search' component={SearchScreen} />
-      <Tab.Screen name='Favourites' component={FavouritesScreen} />
-    </Tab.Navigator>
+    <View style={{ flex: 1 }}>
+      <FilterBar />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, size }) =>
+            renderIcon({ focused, size, route }),
+          headerShown: false,
+          tabBarHideOnKeyboard: true,
+          tabBarShowLabel: false,
+          tabBarActiveBackgroundColor: "#eeeeee13",
+        })}
+      >
+        <Tab.Screen name='Map' component={MapScreen} />
+        <Tab.Screen name='Search' component={SearchScreen} />
+        <Tab.Screen name='Favourites' component={FavouritesScreen} />
+      </Tab.Navigator>
+    </View>
   );
 };
 

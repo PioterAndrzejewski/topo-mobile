@@ -22,7 +22,7 @@ import {
 } from "../../store/results";
 import { useAreas } from "../../hooks/useAreas";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
-import useDebounce from "../../hooks/useDebounce";
+import { useDebounce } from "../../hooks/useDebounce";
 import { selectedRockAtom } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";

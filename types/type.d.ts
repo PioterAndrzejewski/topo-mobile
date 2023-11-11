@@ -20,6 +20,7 @@ export type BottomTabParamList = {
 export type HomeScreenNavigationProp = NativeStackScreenProps<
   HomeStackNavigationParamList,
   HomeNavigator,
+  BottomTabParamList,
   Login,
   Register,
   Rock

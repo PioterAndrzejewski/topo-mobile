@@ -14,7 +14,7 @@ import {
   Button,
 } from "react-native";
 import { useAtom, useAtomValue, useStore } from "jotai";
-import Animated from "react-native-reanimated";
+import Animated, { JumpingTransition } from "react-native-reanimated";
 import { Region } from "react-native-maps";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -83,13 +83,9 @@ export default function ResultsList() {
     setLocationArray(locationArray);
 
     if (rocksOnly && rocks) {
-      return setListToRender(
-        sortAreas(region, rocks).filter(
-          (rock) =>
-            rock.attributes.parent.data.attributes.uuid ===
-            locationArray[locationArray.length - 1].attributes.uuid,
-        ),
-      );
+      console.log(stage);
+      const sortedAreas = sortAreas(region, rocks);
+      return setListToRender(sortedAreas);
     }
     if (stage === 0 && areas) {
       return setListToRender(sortAreas(region, areas));
@@ -190,7 +186,7 @@ export default function ResultsList() {
             <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
           ) : (
             <Animated.FlatList
-              data={listToRender}
+              data={listToRender.slice(0, 10)}
               renderItem={({ item }) => (
                 <ResultsItem
                   id={item.attributes.uuid}
@@ -203,6 +199,12 @@ export default function ResultsList() {
                 />
               )}
             />
+          )}
+          {listToRender.length > 2 && (
+            <Text>
+              Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
+              wyszukać w innym obszarze.{" "}
+            </Text>
           )}
         </SafeAreaView>
         <BottomSheetModal

@@ -10,7 +10,6 @@ export default function MapScreen() {
   return (
     <Provider>
       <View style={{ flex: 1 }}>
-        <FilterBar />
         <Map />
         <ResultsList />
       </View>

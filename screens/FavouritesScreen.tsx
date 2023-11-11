@@ -8,7 +8,6 @@ export default function SearchScreen() {
   return (
     <Provider>
       <View style={{ flex: 1 }}>
-        <FilterBar />
         <Text>Fejworitys</Text>
       </View>
     </Provider>

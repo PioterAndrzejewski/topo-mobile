@@ -5,12 +5,19 @@ import Animated from "react-native-reanimated";
 import ResultsList from "../Components/home/ResultsList";
 import Map from "../Components/home/Map";
 import FilterBar from "../Components/Search/FilterBar";
+import { useAtomValue } from "jotai";
+import { searchTextAtom } from "../store/search";
 
 export default function SearchScreen() {
   const [resultsMode, setResultsMode] = useState<"rocks" | "areas">("rocks");
+  const searchText = useAtomValue(searchTextAtom);
+
+  useEffect(() => {
+    console.log(searchText);
+  }, [searchText]);
+
   return (
     <View style={{ flex: 1 }}>
-      <FilterBar />
       <Animated.FlatList
         data={[1, 2, 3, 4, 5]}
         renderItem={({ item }) => <View style={styles.listElement} />}
