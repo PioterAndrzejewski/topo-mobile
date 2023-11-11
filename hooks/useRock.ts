@@ -6,5 +6,6 @@ export const useRock = (id: string) => {
     queryFn: () => getRock(id),
     queryKey: ['areas'],
     refetchInterval: 1000 * 60 * 60 * 24,
+    cacheTime: Infinity,
   });
 };

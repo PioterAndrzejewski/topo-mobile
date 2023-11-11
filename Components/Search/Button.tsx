@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 
-import { styleGuide } from "../../../styles/guide";
+import { styleGuide } from "../../styles/guide";
 
 type ButtonProps = {
   handlePress: (option: "rocks" | "areas") => void;

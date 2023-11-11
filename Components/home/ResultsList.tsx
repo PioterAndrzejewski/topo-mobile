@@ -83,9 +83,6 @@ export default function ResultsList() {
     setLocationArray(locationArray);
 
     if (rocksOnly && rocks) {
-      console.log(
-        sortAreas(region, rocks)[0].attributes.parent.data.attributes.uuid,
-      );
       return setListToRender(
         sortAreas(region, rocks).filter(
           (rock) =>
@@ -113,14 +110,17 @@ export default function ResultsList() {
             locationArray[locationArray.length - 1].attributes.uuid,
         ),
       );
-    if (stage === 3 && rocks)
+    if (stage === 3 && rocks) {
+      const sortedAreas = sortAreas(region, rocks);
+      if (locationArray.length < 1) return setListToRender(sortedAreas);
       return setListToRender(
-        sortAreas(region, rocks).filter(
+        sortedAreas.filter(
           (rock) =>
             rock.attributes.parent.data.attributes.uuid ===
             locationArray[locationArray.length - 1].attributes.uuid,
         ),
       );
+    }
   }, [region, rocksOnly]);
 
   useEffect(() => {

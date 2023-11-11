@@ -7,18 +7,22 @@ export const useAreas = () => {
   const { data: areas, isLoading: areasLoading } = useQuery({
     queryFn: () => getAreas(),
     queryKey: ['areas'],
+    cacheTime: Infinity,
   });
   const { data: regions, isLoading: regionsLoading } = useQuery({
     queryFn: () => getRegions(),
     queryKey: ['regions'],
+    cacheTime: Infinity,
   });
   const { data: sectors, isLoading: sectorsLoading } = useQuery({
     queryFn: () => getSectors(),
     queryKey: ['sectors'],
+    cacheTime: Infinity,
   });
   const { data: rocks, isLoading: rocksLoading } = useQuery({
     queryFn: () => getRocks(),
     queryKey: ['rocks'],
+    cacheTime: Infinity,
   });
 
   useEffect(()=>{

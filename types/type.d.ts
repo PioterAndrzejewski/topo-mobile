@@ -5,15 +5,21 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
-  Home: undefined;
+  HomeNavigator: undefined;
   Rock: {
     id: string;
   };
 };
 
+export type BottomTabParamList = {
+  Map: undefined;
+  Search: undefined;
+  Favourites: undefined;
+};
+
 export type HomeScreenNavigationProp = NativeStackScreenProps<
   HomeStackNavigationParamList,
-  Home,
+  HomeNavigator,
   Login,
   Register,
   Rock

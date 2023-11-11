@@ -13,8 +13,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
-import Home from "./screens/Home";
+import Home from "./screens/MapScreen";
 import Rock from "./screens/Rock";
+import HomeBottomTabNavigator from "./navigators/HomeBottomTabNavigator";
 
 import AppLoading from "./Components/common/AppLoading";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -61,7 +62,10 @@ export default function App() {
             >
               <Stack.Screen name='Login' component={LoginScreen} />
               <Stack.Screen name='Register' component={RegisterScreen} />
-              <Stack.Screen name='Home' component={Home} />
+              <Stack.Screen
+                name='HomeNavigator'
+                component={HomeBottomTabNavigator}
+              />
               <Stack.Screen
                 name='Rock'
                 component={Rock}

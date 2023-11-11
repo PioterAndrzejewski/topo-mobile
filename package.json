@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.3.1",
     "@openspacelabs/react-native-zoomable-view": "^2.1.5",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@shopify/react-native-skia": "0.1.196",
