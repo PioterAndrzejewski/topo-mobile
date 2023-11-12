@@ -13,10 +13,10 @@ import { searchTextAtom } from "../store/search";
 import { useAreas } from "../hooks/useAreas";
 
 import { Coordinates, RegionData, RockData, Route } from "../services/rocks";
-import ResultsItem from "../Components/common/ResultsItem";
+import ResultsItem from "../components/common/ResultsItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { RouteWithParent } from "../Components/Search/ResultsItemRock";
-import ResultsItemRock from "../Components/Search/ResultsItemRock";
+import { RouteWithParent } from "../components/search/ResultsItemRock";
+import ResultsItemRock from "../components/search/ResultsItemRock";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -105,7 +105,7 @@ export default function SearchScreen() {
         {foundRoutes.length > 0 && routesExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRoutes}
+            data={foundRoutes.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItemRock
                 name={item.attributes.display_name}
@@ -130,7 +130,7 @@ export default function SearchScreen() {
         {foundRocks.length > 0 && rocksExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRocks}
+            data={foundRocks.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItem
                 name={item.attributes.Name}
@@ -142,6 +142,9 @@ export default function SearchScreen() {
               />
             )}
           />
+        )}
+        {foundRocks.length > 8 && (
+          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
         )}
       </View>
 
@@ -156,7 +159,7 @@ export default function SearchScreen() {
         )}
         {foundSectors.length > 0 && sectorsExpanded && (
           <Animated.FlatList
-            data={foundSectors}
+            data={foundSectors.slice(0, 8)}
             scrollEnabled={false}
             renderItem={({ item }) => (
               <ResultsItem
@@ -168,6 +171,9 @@ export default function SearchScreen() {
               />
             )}
           />
+        )}
+        {foundRocks.length > 8 && (
+          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
         )}
       </View>
 
@@ -183,7 +189,7 @@ export default function SearchScreen() {
         {foundRegions.length > 0 && regionsExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRegions}
+            data={foundRegions.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItem
                 name={item.attributes.Name}
@@ -196,6 +202,9 @@ export default function SearchScreen() {
           />
         )}
       </View>
+      {foundRocks.length > 8 && (
+        <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+      )}
       <View style={styles.dummy} />
     </ScrollView>
   );

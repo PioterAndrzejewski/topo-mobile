@@ -20,7 +20,7 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-import ResultsItem from "../../Components/common/ResultsItem";
+import ResultsItem from "../common/ResultsItem";
 
 import { useAreas } from "../../hooks/useAreas";
 import { AreaData, RegionData } from "../../services/rocks";

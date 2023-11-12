@@ -2,9 +2,9 @@ import React from "react";
 import { View } from "react-native";
 import { Provider } from "jotai";
 
-import ResultsList from "../Components/home/ResultsList";
-import Map from "../Components/home/Map";
-import FilterBar from "../Components/Search/FilterBar";
+import ResultsList from "../components/home/ResultsList";
+import Map from "../components/home/Map";
+import FilterBar from "../components/search/FilterBar";
 
 export default function MapScreen() {
   return (

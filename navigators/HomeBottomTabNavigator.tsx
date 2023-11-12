@@ -5,11 +5,11 @@ import { View } from "react-native";
 import MapScreen from "../screens/MapScreen";
 import SearchScreen from "../screens/SearchScreen";
 import FavouritesScreen from "../screens/FavouritesScreen";
-import FilterBar from "../Components/Search/FilterBar";
+import FilterBar from "../components/search/FilterBar";
 
-import { MapIcon } from "../Components/icons/Map";
-import { SearchIcon } from "../Components/icons/Search";
-import { HeartIcon } from "../Components/icons/Heart";
+import { MapIcon } from "../components/icons/Map";
+import { SearchIcon } from "../components/icons/Search";
+import { HeartIcon } from "../components/icons/Heart";
 
 import { BottomTabParamList } from "../types/type";
 

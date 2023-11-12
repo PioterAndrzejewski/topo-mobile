@@ -19,18 +19,18 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 
-import AppLoading from "../Components/common/AppLoading";
-import RockDrawing from "../Components/rock/drawing/RockDrawing";
-import Buttons from "../Components/rock/drawing/Buttons";
-import RouteInfo from "../Components/rock/RouteInfo";
-import Header from "../Components/rock/Header";
-import ModelView from "../Components/rock/ModelView";
+import AppLoading from "../components/common/AppLoading";
+import RockDrawing from "../components/rock/drawing/RockDrawing";
+import Buttons from "../components/rock/drawing/Buttons";
+import RouteInfo from "../components/rock/RouteInfo";
+import Header from "../components/rock/Header";
+import ModelView from "../components/rock/ModelView";
 
 import { useRock } from "../hooks/useRock";
 import { HomeScreenNavigationProp } from "../types/type";
 import { rockActiveRoute } from "../store/rock";
 import { styleGuide } from "../styles/guide";
-import RockDetails from "../Components/rock/RockDetails";
+import RockDetails from "../components/rock/RockDetails";
 import { Route } from "../services/rocks";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
