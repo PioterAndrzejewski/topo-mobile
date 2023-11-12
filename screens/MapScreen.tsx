@@ -8,11 +8,9 @@ import FilterBar from "../Components/Search/FilterBar";
 
 export default function MapScreen() {
   return (
-    <Provider>
-      <View style={{ flex: 1 }}>
-        <Map />
-        <ResultsList />
-      </View>
-    </Provider>
+    <View style={{ flex: 1 }}>
+      <Map />
+      <ResultsList />
+    </View>
   );
 }

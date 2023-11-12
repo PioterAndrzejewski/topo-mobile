@@ -23,7 +23,6 @@ type ListResultProps = {
   name: string;
   item: any;
   isRock?: boolean;
-  animateTo: (item: AreaData, stage: number) => void;
   itemStage: number;
 };
 
@@ -31,13 +30,27 @@ const ResultsItem: FC<ListResultProps> = ({
   id,
   name,
   item,
-  animateTo,
   itemStage,
   isRock,
 }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
+
+  const animateTo = (item: AreaData, stage: number) => {
+    navigation.navigate("Map");
+    const newRegion = getRegionForZoom(
+      item.attributes.coordinates.latitude,
+      item.attributes.coordinates.longitude,
+      getZoomFromStage(stage),
+    );
+    setTimeout(() => {
+      if (map && map.current) {
+        map.current.animateToRegion(newRegion);
+      }
+      if (isRock) setSelectedRock(item.attributes.uuid);
+    });
+  };
 
   const handlePress = () => {
     animateTo(item, isRock ? itemStage - 1 : itemStage);
@@ -56,13 +69,14 @@ export default ResultsItem;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    borderWidth: 1,
+    marginBottom: 8,
+    borderWidth: 0.4,
     borderColor: "black",
     borderRadius: 12,
-    padding: 20,
+    padding: 8,
   },
   text: {
-    ...styleGuide.text.heading["2"],
+    ...styleGuide.text.body,
     color: "#336383",
   },
 });

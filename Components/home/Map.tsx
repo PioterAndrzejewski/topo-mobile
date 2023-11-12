@@ -45,6 +45,10 @@ export default function Map() {
     setRegion(newRegion);
   };
 
+  useEffect(() => {
+    console.log("mapa się renderuje");
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView

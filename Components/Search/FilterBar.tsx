@@ -14,7 +14,11 @@ const FilterBar = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [inputValue, setInputValue] = useState<string>("");
   const setGlobalTextSearchState = useSetAtom(searchTextAtom);
-  useDebounce(() => setGlobalTextSearchState(inputValue), 500, [inputValue]);
+  useDebounce(
+    () => setGlobalTextSearchState(inputValue.trim().replace("  ", " ")),
+    500,
+    [inputValue],
+  );
 
   const handleChange = () => {
     navigation.navigate("Search");

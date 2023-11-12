@@ -83,7 +83,6 @@ export default function ResultsList() {
     setLocationArray(locationArray);
 
     if (rocksOnly && rocks) {
-      console.log(stage);
       const sortedAreas = sortAreas(region, rocks);
       return setListToRender(sortedAreas);
     }
@@ -93,17 +92,17 @@ export default function ResultsList() {
     if (stage === 1 && regions)
       return setListToRender(
         sortAreas(region, regions).filter(
-          (rock) =>
-            rock.attributes.parent.data.attributes.uuid ===
-            locationArray[locationArray.length - 1].attributes.uuid,
+          (region) =>
+            region?.attributes?.parent?.data?.attributes?.uuid ===
+            locationArray[locationArray.length - 1]?.attributes?.uuid,
         ),
       );
     if (stage === 2 && sectors)
       return setListToRender(
         sortAreas(region, sectors).filter(
-          (rock) =>
-            rock.attributes.parent.data.attributes.uuid ===
-            locationArray[locationArray.length - 1].attributes.uuid,
+          (sector) =>
+            sector?.attributes?.parent?.data?.attributes?.uuid ===
+            locationArray[locationArray.length - 1]?.attributes?.uuid,
         ),
       );
     if (stage === 3 && rocks) {
@@ -112,14 +111,16 @@ export default function ResultsList() {
       return setListToRender(
         sortedAreas.filter(
           (rock) =>
-            rock.attributes.parent.data.attributes.uuid ===
-            locationArray[locationArray.length - 1].attributes.uuid,
+            rock?.attributes?.parent?.data?.attributes?.uuid ===
+            locationArray[locationArray.length - 1]?.attributes?.uuid,
         ),
       );
     }
   }, [region, rocksOnly]);
 
   useEffect(() => {
+    console.log("zmienilo sie");
+    console.log(selectedRock);
     if (selectedRock) {
       bottomSheetRef.current?.collapse();
       bottomSheetModalRef.current?.present();
@@ -151,7 +152,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
-  const snapPoints = useMemo(() => ["9%", "35%", "85%"], []);
+  const snapPoints = useMemo(() => ["10%", "35%", "100%"], []);
 
   return (
     <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
