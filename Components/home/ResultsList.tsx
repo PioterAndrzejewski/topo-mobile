@@ -1,43 +1,26 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  SafeAreaView,
-  Text,
-  Button,
-} from "react-native";
-import { useAtom, useAtomValue, useStore } from "jotai";
-import Animated, { JumpingTransition } from "react-native-reanimated";
+import React, { useEffect, useState, useMemo, useRef } from "react";
+import { StyleSheet, View, Text } from "react-native";
+import { useAtom, useAtomValue } from "jotai";
 import { Region } from "react-native-maps";
-import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
 
 import ResultsItem from "../common/ResultsItem";
 
 import { useAreas } from "../../hooks/useAreas";
 import { AreaData, RegionData } from "../../services/rocks";
-import {
-  regionAtom,
-  resultsStageAtom,
-  zoomAtom,
-  AreasList,
-  listToRenderAtom,
-} from "../../store/results";
+import { regionAtom, AreasList, listToRenderAtom } from "../../store/results";
 import { calculateDistance } from "../../utils/calculateDistance";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
 import { getZoomFromRegion } from "../../utils/getZoomFromRegion";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { mapAtom, selectedRockAtom } from "../../store/results";
-import { HomeScreenNavigationProp } from "../../types/type";
+import RockInfoExpanded from "./RockInfoExpanded";
+import { rocksOnlyAtom } from "../../store/settings";
 
 const sortAreas = (region: Region, areas: RegionData[]) => {
   if (!areas || areas.length < 1 || !Array.isArray(areas)) return [];
@@ -53,15 +36,14 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
 };
 
 export default function ResultsList() {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
   const { areas, regions, sectors, rocks } = useAreas();
-  const region = useAtomValue(regionAtom);
-  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
-  const [rocksOnly, setRocksOnly] = useState(false);
+  const [rocksOnly, setRocksOnly] = useAtom(rocksOnlyAtom);
   const [locationArray, setLocationArray] = useState<AreasList>([]);
+  const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
+  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const stage = useMemo(() => {
@@ -129,13 +111,6 @@ export default function ResultsList() {
     }
   }, [selectedRock]);
 
-  const handleOpenRock = () => {
-    navigation.navigate("Rock", {
-      id: selectedRock,
-    });
-    setSelectedRock(null);
-  };
-
   const handleRocksOnlyButton = () => {
     setRocksOnly((prev) => !prev);
   };
@@ -153,9 +128,9 @@ export default function ResultsList() {
   const snapPoints = useMemo(() => ["10%", "35%", "100%"], []);
 
   return (
-    <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", paddingHorizontal: 12 }}>
+    <>
+      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+        <View style={styles.location}>
           {locationArray.map((item, index) => (
             <TouchableOpacity
               style={{ flexDirection: "row" }}
@@ -166,61 +141,62 @@ export default function ResultsList() {
             </TouchableOpacity>
           ))}
         </View>
-        <View style={styles.controls}>
-          <TouchableOpacity
-            onPress={handleRocksOnlyButton}
-            style={
-              rocksOnly
-                ? { ...styles.buttonContainer, ...styles.buttonContainerActive }
-                : {
-                    ...styles.buttonContainer,
-                  }
-            }
-          >
-            <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
-          </TouchableOpacity>
-        </View>
-        <SafeAreaView>
-          {listToRender.length < 1 ? (
-            <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
-          ) : (
-            <Animated.FlatList
-              data={listToRender.slice(0, 10)}
-              renderItem={({ item }) => (
-                <ResultsItem
-                  id={item.attributes.uuid}
-                  name={item.attributes.Name}
-                  key={item.attributes.uuid}
-                  item={item}
-                  isRock={rocksOnly || stage === 3}
-                  itemStage={stage + 1}
-                />
-              )}
-            />
-          )}
-          {listToRender.length > 2 && (
-            <Text>
-              Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
-              wyszukać w innym obszarze.{" "}
-            </Text>
-          )}
-        </SafeAreaView>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={1}
-          snapPoints={bottomSheetSnapPoints}
-          onDismiss={() => setSelectedRock(null)}
-        >
-          <View>
-            <Text>Awesome 🎉</Text>
-            <Text>Selected rock: {selectedRock}</Text>
-            <TouchableOpacity onPress={handleOpenRock}>
-              <Text>Otwórz skałoplan</Text>
-            </TouchableOpacity>
+        <BottomSheetScrollView>
+          <View style={styles.container}>
+            <View style={styles.controls}>
+              <TouchableOpacity
+                onPress={handleRocksOnlyButton}
+                style={
+                  rocksOnly
+                    ? {
+                        ...styles.buttonContainer,
+                        ...styles.buttonContainerActive,
+                      }
+                    : {
+                        ...styles.buttonContainer,
+                      }
+                }
+              >
+                <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {listToRender.length < 1 ? (
+              <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
+            ) : (
+              listToRender
+                .slice(0, 10)
+                .map((item) => (
+                  <ResultsItem
+                    id={item.attributes.uuid}
+                    name={item.attributes.Name}
+                    key={item.attributes.uuid}
+                    item={item}
+                    isRock={rocksOnly || stage === 3}
+                    isSector={stage === 2 && !rocksOnly}
+                    itemStage={stage + 1}
+                  />
+                ))
+            )}
+
+            {listToRender.length > 2 && (
+              <Text>
+                Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
+                wyszukać w innym obszarze.
+              </Text>
+            )}
           </View>
-        </BottomSheetModal>
-      </View>
-    </BottomSheet>
+        </BottomSheetScrollView>
+      </BottomSheet>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={bottomSheetSnapPoints}
+        onDismiss={() => setSelectedRock(null)}
+      >
+        <RockInfoExpanded />
+      </BottomSheetModal>
+    </>
   );
 }
 
@@ -229,7 +205,11 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     width: "100%",
     height: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
+  },
+  location: {
+    flexDirection: "row",
+    paddingHorizontal: 12,
   },
   controls: {
     marginBottom: 14,
