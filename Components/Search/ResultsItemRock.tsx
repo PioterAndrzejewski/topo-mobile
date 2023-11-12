@@ -46,12 +46,12 @@ const ResultsItemRock: FC<ListResultProps> = ({
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
 
-  const animateTo = (item: RouteWithParent, stage: number) => {
+  const animateTo = (item: RouteWithParent) => {
     navigation.navigate("Map");
     const newRegion = getRegionForZoom(
       item?.parent?.coordinates?.latitude,
       item?.parent?.coordinates?.longitude,
-      3,
+      getZoomFromStage(3),
     );
     setTimeout(() => {
       if (map && map.current) {
@@ -62,7 +62,7 @@ const ResultsItemRock: FC<ListResultProps> = ({
   };
 
   const handlePress = () => {
-    animateTo(item, isRock ? itemStage - 1 : itemStage);
+    animateTo(item);
     if (isRock) setSelectedRock(id);
   };
 
