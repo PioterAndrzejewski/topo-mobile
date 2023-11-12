@@ -32,6 +32,8 @@ export const grades = {
   25: "VI.7+",
   26: "VI.8",
 }
+
+export type gradeOptions = keyof typeof grades;
 const possibleItemsTypes = ['areas', 'regions', 'sectors', 'rocks', 'routes'];
 
 export type ItemsTypes = {
@@ -259,6 +261,7 @@ export const getRocks = async () => {
       'Cover.Photo',
       'parent',
       'coordinates',
+      'routes',
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));

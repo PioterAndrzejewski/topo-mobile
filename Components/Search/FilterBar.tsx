@@ -15,7 +15,10 @@ const FilterBar = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const setGlobalTextSearchState = useSetAtom(searchTextAtom);
   useDebounce(
-    () => setGlobalTextSearchState(inputValue.trim().replace("  ", " ")),
+    () =>
+      setGlobalTextSearchState(
+        inputValue.trim().replace("  ", " ").toLowerCase(),
+      ),
     500,
     [inputValue],
   );

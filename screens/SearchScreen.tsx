@@ -1,59 +1,125 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, LayoutAnimation } from "react-native";
-import Animated, { Layout } from "react-native-reanimated";
+import {
+  View,
+  Text,
+  StyleSheet,
+  LayoutAnimation,
+  ScrollView,
+} from "react-native";
+import Animated from "react-native-reanimated";
 
-import ResultsList from "../Components/home/ResultsList";
-import Map from "../Components/home/Map";
-import FilterBar from "../Components/Search/FilterBar";
 import { useAtomValue } from "jotai";
 import { searchTextAtom } from "../store/search";
 import { useAreas } from "../hooks/useAreas";
 
-import { RegionData, RockData } from "../services/rocks";
+import { Coordinates, RegionData, RockData, Route } from "../services/rocks";
 import ResultsItem from "../Components/common/ResultsItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { RouteWithParent } from "../Components/Search/ResultsItemRock";
+import ResultsItemRock from "../Components/Search/ResultsItemRock";
+
+const searchForRoutes = (rocks: RockData[], searchText: string) => {
+  let routesFound: RouteWithParent[] = [];
+  console.log(searchText);
+  rocks.forEach((rock) => {
+    const routesInRock = rock.attributes.routes.data.filter((route) => {
+      console.log(rock);
+      return route.attributes.display_name.toLowerCase().includes(searchText);
+    });
+    const routesInRockWithParent: RouteWithParent[] = routesInRock.map(
+      (route) => ({
+        ...route,
+        parent: {
+          name: rock.attributes.Name,
+          coordinates: rock.attributes.coordinates,
+        },
+      }),
+    );
+    routesFound = [...routesFound, ...routesInRockWithParent];
+  });
+  return routesFound;
+};
 
 export default function SearchScreen() {
   const { areas, regions, sectors, rocks } = useAreas();
+  const [foundRoutes, setFoundRoutes] = useState<RouteWithParent[]>([]);
   const [foundRegions, setFoundRegions] = useState<RegionData[]>([]);
   const [foundSectors, setFoundSectors] = useState<RegionData[]>([]);
   const [foundRocks, setFoundRocks] = useState<RockData[]>([]);
+  const [routesExpanded, setRoutesExpanded] = useState(true);
   const [rocksExpanded, setRocksExpanded] = useState(true);
   const [sectorsExpanded, setSectorsExpanded] = useState(true);
   const [regionsExpanded, setRegionsExpanded] = useState(true);
   const searchText = useAtomValue(searchTextAtom);
 
   useEffect(() => {
+    if (searchText.length < 1) return;
     setFoundRegions(
       regions?.filter((region) =>
-        region.attributes.Name.includes(searchText),
+        region.attributes.Name.toLowerCase().includes(searchText),
       ) || [],
     );
     setFoundSectors(
       sectors?.filter((sector) =>
-        sector.attributes.Name.includes(searchText),
+        sector.attributes.Name.toLowerCase().includes(searchText),
       ) || [],
     );
     setFoundRocks(
       rocks?.filter((rock) =>
-        rock.attributes.Name.toLowerCase().includes(searchText.toLowerCase()),
+        rock.attributes.Name.toLowerCase().includes(searchText),
       ) || [],
     );
+    if (rocks) setFoundRoutes(searchForRoutes(rocks, searchText));
   }, [searchText, areas, regions, sectors, rocks]);
 
-  const handleExpansion = (section: "rocks" | "sectors" | "regions") => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  const handleExpansion = (
+    section: "routes" | "rocks" | "sectors" | "regions",
+  ) => {
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 200,
+    });
+    if (section === "routes") setRoutesExpanded((prev) => !prev);
     if (section === "rocks") setRocksExpanded((prev) => !prev);
     if (section === "sectors") setSectorsExpanded((prev) => !prev);
     if (section === "regions") setRegionsExpanded((prev) => !prev);
   };
 
-  if (searchText.trim() === "") {
-    return <Text>Czego szukasz?</Text>;
+  if (searchText === "") {
+    return (
+      <View style={styles.container}>
+        <Text>Czego szukasz?</Text>
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <View style={styles.resultsContainer}>
+        <TouchableOpacity onPress={() => handleExpansion("routes")}>
+          <View style={styles.titleContainer}>
+            <Text>Drogi</Text>
+          </View>
+        </TouchableOpacity>
+        {foundRoutes.length < 1 && <Text>Brak dróg dla szukanej frazy</Text>}
+        {foundRoutes.length > 0 && routesExpanded && (
+          <Animated.FlatList
+            scrollEnabled={false}
+            data={foundRoutes}
+            renderItem={({ item }) => (
+              <ResultsItemRock
+                name={item.attributes.display_name}
+                item={item}
+                itemStage={3}
+                isRock
+                id={item.attributes.uuid}
+                key={item.attributes.uuid}
+              />
+            )}
+          />
+        )}
+      </View>
+
       <View style={styles.resultsContainer}>
         <TouchableOpacity onPress={() => handleExpansion("rocks")}>
           <View style={styles.titleContainer}>
@@ -63,6 +129,7 @@ export default function SearchScreen() {
         {foundRocks.length < 1 && <Text>Brak skał dla szukanej frazy</Text>}
         {foundRocks.length > 0 && rocksExpanded && (
           <Animated.FlatList
+            scrollEnabled={false}
             data={foundRocks}
             renderItem={({ item }) => (
               <ResultsItem
@@ -90,6 +157,7 @@ export default function SearchScreen() {
         {foundSectors.length > 0 && sectorsExpanded && (
           <Animated.FlatList
             data={foundSectors}
+            scrollEnabled={false}
             renderItem={({ item }) => (
               <ResultsItem
                 name={item.attributes.Name}
@@ -114,6 +182,7 @@ export default function SearchScreen() {
         )}
         {foundRegions.length > 0 && regionsExpanded && (
           <Animated.FlatList
+            scrollEnabled={false}
             data={foundRegions}
             renderItem={({ item }) => (
               <ResultsItem
@@ -127,7 +196,8 @@ export default function SearchScreen() {
           />
         )}
       </View>
-    </View>
+      <View style={styles.dummy} />
+    </ScrollView>
   );
 }
 
@@ -153,5 +223,9 @@ const styles = StyleSheet.create({
   },
   listElement: {
     borderWidth: 1,
+  },
+  dummy: {
+    height: 50,
+    backgroundColor: "#fff",
   },
 });

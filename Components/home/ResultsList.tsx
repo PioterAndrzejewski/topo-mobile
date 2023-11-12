@@ -119,8 +119,6 @@ export default function ResultsList() {
   }, [region, rocksOnly]);
 
   useEffect(() => {
-    console.log("zmienilo sie");
-    console.log(selectedRock);
     if (selectedRock) {
       bottomSheetRef.current?.collapse();
       bottomSheetModalRef.current?.present();
@@ -195,7 +193,6 @@ export default function ResultsList() {
                   key={item.attributes.uuid}
                   item={item}
                   isRock={rocksOnly || stage === 3}
-                  animateTo={animateTo}
                   itemStage={stage + 1}
                 />
               )}
