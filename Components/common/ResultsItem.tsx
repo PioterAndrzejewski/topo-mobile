@@ -1,28 +1,29 @@
-import React from "react";
-import type { FC } from "react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import React, { useMemo, FC } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
-
-import { styleGuide } from "../../styles/guide";
-import { useNavigation } from "@react-navigation/native";
-import { HomeScreenNavigationProp } from "../../types/type";
+import RouteStructure from "./RouteStructure";
 
 import {
-  resultsStageAtom,
-  regionAtom,
   mapAtom,
   selectedRockAtom,
 } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { AreaData } from "../../services/rocks";
+import { useAreas } from "../../hooks/useAreas";
+import { getRoutesFromRock } from "../../utils/getRoutesFromRock";
+import { getRoutesFromSector } from "../../utils/getRoutesFromSector";
+import { styleGuide } from "../../styles/guide";
+import { useNavigation } from "@react-navigation/native";
+import { HomeScreenNavigationProp } from "../../types/type";
 
 type ListResultProps = {
   id: string;
   name: string;
   item: any;
   isRock?: boolean;
+  isSector?: boolean;
   itemStage: number;
 };
 
@@ -32,7 +33,9 @@ const ResultsItem: FC<ListResultProps> = ({
   item,
   itemStage,
   isRock,
+  isSector,
 }) => {
+  const { rocks } = useAreas();
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
@@ -57,9 +60,15 @@ const ResultsItem: FC<ListResultProps> = ({
     if (isRock) setSelectedRock(id);
   };
 
+  const routes = useMemo(() => {
+    if (isRock) return getRoutesFromRock(item);
+    if (isSector && rocks) return getRoutesFromSector(item, rocks);
+  }, [id]);
+
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Text style={styles.text}>{name}</Text>
+      {(isRock || isSector) && routes && <RouteStructure routes={routes} />}
     </TouchableOpacity>
   );
 };
@@ -69,14 +78,15 @@ export default ResultsItem;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    marginBottom: 8,
+    rowGap: 47,
+    marginBottom: 12,
     borderWidth: 0.4,
     borderColor: "black",
     borderRadius: 12,
-    padding: 8,
+    padding: 12,
   },
   text: {
-    ...styleGuide.text.body,
+    ...styleGuide.text.heading["3"],
     color: "#336383",
   },
 });

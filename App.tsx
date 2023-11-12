@@ -17,7 +17,7 @@ import Home from "./screens/MapScreen";
 import Rock from "./screens/Rock";
 import HomeBottomTabNavigator from "./navigators/HomeBottomTabNavigator";
 
-import AppLoading from "./Components/common/AppLoading";
+import AppLoading from "./components/common/AppLoading";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from

@@ -13,17 +13,16 @@ import { searchTextAtom } from "../store/search";
 import { useAreas } from "../hooks/useAreas";
 
 import { Coordinates, RegionData, RockData, Route } from "../services/rocks";
-import ResultsItem from "../Components/common/ResultsItem";
+import ResultsItem from "../components/common/ResultsItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { RouteWithParent } from "../Components/Search/ResultsItemRock";
-import ResultsItemRock from "../Components/Search/ResultsItemRock";
+import { RouteWithParent } from "../components/search/ResultsItemRock";
+import ResultsItemRock from "../components/search/ResultsItemRock";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
   console.log(searchText);
   rocks.forEach((rock) => {
     const routesInRock = rock.attributes.routes.data.filter((route) => {
-      console.log(rock);
       return route.attributes.display_name.toLowerCase().includes(searchText);
     });
     const routesInRockWithParent: RouteWithParent[] = routesInRock.map(
@@ -85,7 +84,7 @@ export default function SearchScreen() {
     if (section === "regions") setRegionsExpanded((prev) => !prev);
   };
 
-  if (searchText === "") {
+  if (searchText === "" || !searchText) {
     return (
       <View style={styles.container}>
         <Text>Czego szukasz?</Text>
@@ -98,14 +97,14 @@ export default function SearchScreen() {
       <View style={styles.resultsContainer}>
         <TouchableOpacity onPress={() => handleExpansion("routes")}>
           <View style={styles.titleContainer}>
-            <Text>Drogi</Text>
+            <Text>Drogi - {foundRoutes.length}</Text>
           </View>
         </TouchableOpacity>
         {foundRoutes.length < 1 && <Text>Brak dróg dla szukanej frazy</Text>}
         {foundRoutes.length > 0 && routesExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRoutes}
+            data={foundRoutes.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItemRock
                 name={item.attributes.display_name}
@@ -123,14 +122,14 @@ export default function SearchScreen() {
       <View style={styles.resultsContainer}>
         <TouchableOpacity onPress={() => handleExpansion("rocks")}>
           <View style={styles.titleContainer}>
-            <Text>Skały</Text>
+            <Text>Skały - {foundRocks.length}</Text>
           </View>
         </TouchableOpacity>
         {foundRocks.length < 1 && <Text>Brak skał dla szukanej frazy</Text>}
         {foundRocks.length > 0 && rocksExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRocks}
+            data={foundRocks.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItem
                 name={item.attributes.Name}
@@ -143,12 +142,15 @@ export default function SearchScreen() {
             )}
           />
         )}
+        {foundRocks.length > 8 && (
+          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+        )}
       </View>
 
       <View style={styles.resultsContainer}>
         <TouchableOpacity onPress={() => handleExpansion("sectors")}>
           <View style={styles.titleContainer}>
-            <Text>Sektory</Text>
+            <Text>Sektory - {foundSectors.length}</Text>
           </View>
         </TouchableOpacity>
         {foundSectors.length < 1 && (
@@ -156,7 +158,7 @@ export default function SearchScreen() {
         )}
         {foundSectors.length > 0 && sectorsExpanded && (
           <Animated.FlatList
-            data={foundSectors}
+            data={foundSectors.slice(0, 8)}
             scrollEnabled={false}
             renderItem={({ item }) => (
               <ResultsItem
@@ -165,16 +167,20 @@ export default function SearchScreen() {
                 itemStage={2}
                 id={item.attributes.uuid}
                 key={item.attributes.uuid}
+                isSector
               />
             )}
           />
+        )}
+        {foundRocks.length > 8 && (
+          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
         )}
       </View>
 
       <View style={styles.resultsContainer}>
         <TouchableOpacity onPress={() => handleExpansion("regions")}>
           <View style={styles.titleContainer}>
-            <Text>Regiony</Text>
+            <Text>Regiony - {foundRegions.length}</Text>
           </View>
         </TouchableOpacity>
         {foundRegions.length < 1 && (
@@ -183,7 +189,7 @@ export default function SearchScreen() {
         {foundRegions.length > 0 && regionsExpanded && (
           <Animated.FlatList
             scrollEnabled={false}
-            data={foundRegions}
+            data={foundRegions.slice(0, 8)}
             renderItem={({ item }) => (
               <ResultsItem
                 name={item.attributes.Name}
@@ -196,6 +202,9 @@ export default function SearchScreen() {
           />
         )}
       </View>
+      {foundRocks.length > 8 && (
+        <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+      )}
       <View style={styles.dummy} />
     </ScrollView>
   );
