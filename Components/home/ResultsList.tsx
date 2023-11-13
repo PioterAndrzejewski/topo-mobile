@@ -135,6 +135,7 @@ export default function ResultsList() {
             <TouchableOpacity
               style={{ flexDirection: "row" }}
               onPress={() => animateTo(item, index)}
+              key={item.attributes.uuid}
             >
               {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
               <Text>{item?.attributes?.Name}</Text>
