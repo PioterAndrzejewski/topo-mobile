@@ -125,7 +125,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
-  const snapPoints = useMemo(() => ["10%", "35%", "100%"], []);
+  const snapPoints = useMemo(() => ["10%", "35%", "97%"], []);
 
   return (
     <>
@@ -143,24 +143,6 @@ export default function ResultsList() {
         </View>
         <BottomSheetScrollView>
           <View style={styles.container}>
-            <View style={styles.controls}>
-              <TouchableOpacity
-                onPress={handleRocksOnlyButton}
-                style={
-                  rocksOnly
-                    ? {
-                        ...styles.buttonContainer,
-                        ...styles.buttonContainerActive,
-                      }
-                    : {
-                        ...styles.buttonContainer,
-                      }
-                }
-              >
-                <Text>Tylko skały {rocksOnly ? "x" : " "}</Text>
-              </TouchableOpacity>
-            </View>
-
             {listToRender.length < 1 ? (
               <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
             ) : (
@@ -202,7 +184,7 @@ export default function ResultsList() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 2,
+    paddingTop: 20,
     width: "100%",
     height: "100%",
     paddingHorizontal: 12,

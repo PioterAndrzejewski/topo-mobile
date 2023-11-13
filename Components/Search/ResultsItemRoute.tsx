@@ -24,6 +24,7 @@ export type RouteWithParent = Route & {
   parent: {
     name: string;
     coordinates: Coordinates;
+    id: string;
   };
 };
 
@@ -35,7 +36,7 @@ type ListResultProps = {
   itemStage: number;
 };
 
-const ResultsItemRock: FC<ListResultProps> = ({
+const ResultsItemRoute: FC<ListResultProps> = ({
   id,
   name,
   item,
@@ -57,7 +58,7 @@ const ResultsItemRock: FC<ListResultProps> = ({
       if (map && map.current) {
         map.current.animateToRegion(newRegion);
       }
-      if (isRock) setSelectedRock(item.attributes.uuid);
+      if (isRock) setSelectedRock(item.parent.id);
     });
   };
 
@@ -81,14 +82,14 @@ const ResultsItemRock: FC<ListResultProps> = ({
   );
 };
 
-export default ResultsItemRock;
+export default ResultsItemRoute;
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
     marginBottom: 8,
-    borderWidth: 0.4,
+    borderWidth: 1,
     borderColor: "black",
     borderRadius: 12,
     padding: 8,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   },
   gradeContainer: {
     flexBasis: 44,
-    borderRightWidth: 0.4,
+    borderRightWidth: 1,
   },
   grade: {
     ...styleGuide.text.heading["3"],

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -64,6 +64,7 @@ export default FilterBar;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     paddingTop: 60,
     paddingBottom: 10,
     paddingHorizontal: 12,

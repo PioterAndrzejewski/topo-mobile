@@ -4,10 +4,7 @@ import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import RouteStructure from "./RouteStructure";
 
-import {
-  mapAtom,
-  selectedRockAtom,
-} from "../../store/results";
+import { mapAtom, selectedRockAtom } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { AreaData } from "../../services/rocks";
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
     display: "flex",
     rowGap: 47,
     marginBottom: 12,
-    borderWidth: 0.4,
+    borderWidth: 1,
     borderColor: "black",
     borderRadius: 12,
     padding: 12,

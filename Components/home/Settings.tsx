@@ -1,11 +1,15 @@
-import { View, Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, Switch } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useAtom } from "jotai";
+
+import { rocksOnlyAtom } from "../../store/settings";
 
 type SettingsProps = {
   onClose: () => void;
 };
 
 const Settings = ({ onClose }: SettingsProps) => {
+  const [rocksOnly, setRocksOnly] = useAtom(rocksOnlyAtom);
   return (
     <View style={styles.container}>
       <View style={styles.closeButtonWrapper}>
@@ -17,8 +21,19 @@ const Settings = ({ onClose }: SettingsProps) => {
           <Text>x</Text>
         </TouchableOpacity>
       </View>
-
-      <Text>No jest modal</Text>
+      <ScrollView>
+        <View style={styles.settingRow}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#767577" }}
+            thumbColor={rocksOnly ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor='#3e3e3e'
+            onValueChange={() => setRocksOnly((prev) => !prev)}
+            value={rocksOnly}
+            style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+          />
+          <Text>Wyświetlaj tylko skały na liście pod mapą</Text>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -27,7 +42,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    paddingVertical: 35,
+    paddingHorizontal: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -63,17 +79,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  inputContainer: {
-    backgroundColor: "#cde",
-    flexGrow: 1,
-  },
-  input: {
-    height: 40,
-    borderColor: "#000",
-    borderWidth: 1,
-    padding: 6,
-    justifyContent: "center",
-    borderRadius: 16,
+  settingRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
