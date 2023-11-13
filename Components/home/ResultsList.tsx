@@ -37,6 +37,7 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
+  const [isInit, setIsInit] = useState(false);
   const [rocksOnly, setRocksOnly] = useAtom(rocksOnlyAtom);
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
@@ -52,6 +53,11 @@ export default function ResultsList() {
   }, [region]);
 
   useEffect(() => {
+    if (!isInit) {
+      setLocationArray([]);
+      setListToRender(areas as AreasList);
+      setIsInit(true);
+    }
     const locationArray: AreasList = [];
     if (stage >= 1 && areas) {
       locationArray.push(sortAreas(region, areas)[0]);
@@ -110,10 +116,6 @@ export default function ResultsList() {
       bottomSheetModalRef.current?.dismiss();
     }
   }, [selectedRock]);
-
-  const handleRocksOnlyButton = () => {
-    setRocksOnly((prev) => !prev);
-  };
 
   const animateTo = (item: AreaData, stage: number) => {
     const newRegion = getRegionForZoom(
