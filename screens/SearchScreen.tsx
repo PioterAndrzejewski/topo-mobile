@@ -15,8 +15,8 @@ import { useAreas } from "../hooks/useAreas";
 import { Coordinates, RegionData, RockData, Route } from "../services/rocks";
 import ResultsItem from "../components/common/ResultsItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { RouteWithParent } from "../components/search/ResultsItemRock";
-import ResultsItemRock from "../components/search/ResultsItemRock";
+import { RouteWithParent } from "../components/search/ResultsItemRoute";
+import ResultsItemRock from "../components/search/ResultsItemRoute";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -31,6 +31,7 @@ const searchForRoutes = (rocks: RockData[], searchText: string) => {
         parent: {
           name: rock.attributes.Name,
           coordinates: rock.attributes.coordinates,
+          id: rock.attributes.uuid,
         },
       }),
     );

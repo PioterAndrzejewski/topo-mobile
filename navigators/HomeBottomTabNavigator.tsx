@@ -5,7 +5,7 @@ import { View } from "react-native";
 import MapScreen from "../screens/MapScreen";
 import SearchScreen from "../screens/SearchScreen";
 import FavouritesScreen from "../screens/FavouritesScreen";
-import FilterBar from "../components/search/FilterBar";
+import FilterBar from "../components/home/FilterBar";
 
 import { MapIcon } from "../components/icons/Map";
 import { SearchIcon } from "../components/icons/Search";
