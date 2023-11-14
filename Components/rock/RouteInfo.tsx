@@ -22,10 +22,13 @@ import { useAtom } from "jotai";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import Accordion from "../common/Accordion";
-import { Route } from "../../services/rocks";
+import { Route, createRating } from "../../services/rocks";
 import { rockActiveRoute } from "../../store/rock";
 import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
+import { useMutation } from "@tanstack/react-query";
+import { getUserProfile } from '../../services/profile';
+import { useUserProfile } from '../../hooks/useUserProfile';
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -42,16 +45,27 @@ const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
+  const [rating, setRating] = useState(3);
+  const {data: userData} = useUserProfile();
+
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (activeRoute === route.attributes.uuid) return setActiveRoute(null);
     setActiveRoute(route.attributes.uuid);
   };
-  const [rating, setRating] = useState(3);
+
+  const { mutate: sendRouteRatingMutation, isLoading } = useMutation({
+    mutationFn: () => createRating(selectedRouteToRate!.id, rating, userData?.id),
+    onSuccess: (data) => console.log(data),
+  });
 
   const handleRateRoute = (route: Route) => {
     setSelectedRouteToRate(route);
     bottomSheetModalRef.current?.present();
+  };
+
+  const sendRouteRating = () => {
+    sendRouteRatingMutation();
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
@@ -112,9 +126,11 @@ const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
             </TouchableOpacity>
           ))}
         </View>
-        <View style={styles.starsButton}>
-          <Text>Oceń</Text>
-        </View>
+        <TouchableOpacity onPress={sendRouteRating}>
+          <View style={styles.starsButton}>
+            <Text>Oceń</Text>
+          </View>
+        </TouchableOpacity>
       </BottomSheetModal>
     </>
   );

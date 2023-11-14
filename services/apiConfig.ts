@@ -15,5 +15,9 @@ export const apiConfig = {
     regions: (qs: string) => `${apiUrl}/api/map-regions?${qs}`,
     sectors: (qs: string) => `${apiUrl}/api/map-sectors?${qs}`,
     rocks: (qs: string) => `${apiUrl}/api/rocks?${qs}`
+  },
+  ratings: {
+    create: `${apiUrl}/api/ratings`,
+    get: (qs: string) => `${apiUrl}/api/ratings?${qs}`,
   }
 }

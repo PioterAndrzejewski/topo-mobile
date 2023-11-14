@@ -293,3 +293,19 @@ export const getImage = async (url: string) => {
   const { data } = await authService.get<RocksData>(apiUrl + url);
   return data;
 };
+
+export const createRating = async (routeId: number, rating: number, author: string | undefined) => {
+  const body = {
+      data: {
+        score: rating,
+        user: {
+          connect: [author]
+        },
+        route: {
+          connect: [routeId]
+        }
+      }
+  }
+  const { data } = await authService.post(apiConfig.ratings.create, JSON.stringify(body));
+  return data;
+};
