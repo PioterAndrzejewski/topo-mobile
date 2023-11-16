@@ -38,8 +38,12 @@ type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 const Rock = ({ route }: Props) => {
   const [topoMode, setTopoMode] = useState<0 | 1>(0);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
-  const { data } = useRock(route.params.id);
+  const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const handleRouteChange = (step: number) => {
     if (!data) return;
@@ -96,6 +100,7 @@ const Rock = ({ route }: Props) => {
                     (dataRoute: Route) =>
                       route.attributes.uuid === dataRoute.attributes.uuid,
                   )}
+                  rockRefetch={refetch}
                 />
               ))}
             </>

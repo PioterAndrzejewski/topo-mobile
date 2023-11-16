@@ -8,21 +8,41 @@ export const useAreas = () => {
     queryFn: () => getAreas(),
     queryKey: ['areas'],
     cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: Infinity
   });
   const { data: regions, isLoading: regionsLoading } = useQuery({
     queryFn: () => getRegions(),
     queryKey: ['regions'],
     cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: Infinity
   });
   const { data: sectors, isLoading: sectorsLoading } = useQuery({
     queryFn: () => getSectors(),
     queryKey: ['sectors'],
     cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: Infinity
   });
   const { data: rocks, isLoading: rocksLoading } = useQuery({
     queryFn: () => getRocks(),
     queryKey: ['rocks'],
-    cacheTime: Infinity,
+    // cacheTime: Infinity,
+    // staleTime: 1000 * 60 * 60 * 24 * 30,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // refetchOnWindowFocus: false,
+    // refetchInterval: Infinity
   });
 
   useEffect(()=>{

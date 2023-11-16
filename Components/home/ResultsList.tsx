@@ -147,7 +147,7 @@ export default function ResultsList() {
         </View>
         <BottomSheetScrollView>
           <View style={styles.container}>
-            {listToRender.length < 1 ? (
+            {!Array.isArray(listToRender) || listToRender.length < 1 ? (
               <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
             ) : (
               listToRender
@@ -165,7 +165,7 @@ export default function ResultsList() {
                 ))
             )}
 
-            {listToRender.length > 2 && (
+            {Array.isArray(listToRender) && listToRender.length > 2 && (
               <Text>
                 Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
                 wyszukać w innym obszarze.

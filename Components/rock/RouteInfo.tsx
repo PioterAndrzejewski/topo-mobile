@@ -27,8 +27,8 @@ import { rockActiveRoute } from "../../store/rock";
 import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
 import { useMutation } from "@tanstack/react-query";
-import { getUserProfile } from '../../services/profile';
-import { useUserProfile } from '../../hooks/useUserProfile';
+import { getUserProfile } from "../../services/profile";
+import { useUserProfile } from "../../hooks/useUserProfile";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -37,16 +37,17 @@ type RockInfoProps = {
   route: Route;
   index: number;
   realIndex?: number;
+  rockRefetch: () => void;
 };
 
-const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
+const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
   const [rating, setRating] = useState(3);
-  const {data: userData} = useUserProfile();
+  const { data: userData } = useUserProfile();
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -55,8 +56,12 @@ const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
   };
 
   const { mutate: sendRouteRatingMutation, isLoading } = useMutation({
-    mutationFn: () => createRating(selectedRouteToRate!.id, rating, userData?.id),
-    onSuccess: (data) => console.log(data),
+    mutationFn: () =>
+      createRating(selectedRouteToRate!.id, rating, userData?.id),
+    onSuccess: (data) => {
+      console.log(data);
+      rockRefetch();
+    },
   });
 
   const handleRateRoute = (route: Route) => {
@@ -88,7 +93,13 @@ const RouteInfo = ({ route, index, realIndex }: RockInfoProps) => {
                   <Text>{getMeaningfulGrade(route.attributes.grade)}</Text>
                 </View>
               </View>
-              <View style={styles.icon} />
+              <View>
+                <Text>
+                  {isNaN(route.attributes.averageScore)
+                    ? "brak ocen"
+                    : route.attributes.averageScore}
+                </Text>
+              </View>
             </View>
           }
           Content={
