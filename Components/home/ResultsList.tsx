@@ -38,10 +38,10 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
   const [isInit, setIsInit] = useState(false);
-  const [rocksOnly, setRocksOnly] = useAtom(rocksOnlyAtom);
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const rocksOnly = useAtomValue(rocksOnlyAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -133,20 +133,21 @@ export default function ResultsList() {
     <>
       <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
         <View style={styles.location}>
-          {locationArray.map((item, index) => (
-            <TouchableOpacity
-              style={{ flexDirection: "row" }}
-              onPress={() => animateTo(item, index)}
-              key={item.attributes.uuid}
-            >
-              {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
-              <Text>{item?.attributes?.Name}</Text>
-            </TouchableOpacity>
-          ))}
+          {locationArray?.length > 0 &&
+            locationArray.map((item, index) => (
+              <TouchableOpacity
+                style={{ flexDirection: "row" }}
+                onPress={() => animateTo(item, index)}
+                key={item?.attributes?.uuid}
+              >
+                {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
+                <Text>{item?.attributes?.Name}</Text>
+              </TouchableOpacity>
+            ))}
         </View>
         <BottomSheetScrollView>
           <View style={styles.container}>
-            {listToRender.length < 1 ? (
+            {!Array.isArray(listToRender) || listToRender.length < 1 ? (
               <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
             ) : (
               listToRender
@@ -164,7 +165,7 @@ export default function ResultsList() {
                 ))
             )}
 
-            {listToRender.length > 2 && (
+            {Array.isArray(listToRender) && listToRender.length > 2 && (
               <Text>
                 Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
                 wyszukać w innym obszarze.

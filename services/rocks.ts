@@ -160,6 +160,11 @@ export type RegionsData = {
   meta: Meta;
 }
 
+export type UsersRatingSanitized = {
+  id: number;
+  score: number;
+  uuid: string;
+}
 
 export type Route = {
   id: number;
@@ -174,6 +179,8 @@ export type Route = {
     publishedAt: string;
     updatedAt: string;
     uuid: string;
+    averageScore: number;
+    usersRating: UsersRatingSanitized;
   }
 }
 
@@ -277,7 +284,8 @@ export const getRock = async (id: string) => {
       'routes',
       'parent',
       'coordinates',
-      'parking_coordinates'
+      'parking_coordinates',
+      'ratings'
     ],
     filters: {
       uuid: {
@@ -291,5 +299,21 @@ export const getRock = async (id: string) => {
 
 export const getImage = async (url: string) => {
   const { data } = await authService.get<RocksData>(apiUrl + url);
+  return data;
+};
+
+export const createRating = async (routeId: number, rating: number, author: string | undefined) => {
+  const body = {
+      data: {
+        score: rating,
+        user: {
+          connect: [author]
+        },
+        route: {
+          connect: [routeId]
+        }
+      }
+  }
+  const { data } = await authService.post(apiConfig.ratings.create, JSON.stringify(body));
   return data;
 };
