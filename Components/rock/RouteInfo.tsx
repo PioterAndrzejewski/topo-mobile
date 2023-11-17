@@ -22,12 +22,11 @@ import { useAtom } from "jotai";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 import Accordion from "../common/Accordion";
-import { Route, createRating } from "../../services/rocks";
+import { Route, createRating, updateRating } from "../../services/rocks";
 import { rockActiveRoute } from "../../store/rock";
 import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
 import { useMutation } from "@tanstack/react-query";
-import { getUserProfile } from "../../services/profile";
 import { useUserProfile } from "../../hooks/useUserProfile";
 
 const AnimatedTouchableOpacity =
@@ -42,12 +41,19 @@ type RockInfoProps = {
 
 const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
   const [rating, setRating] = useState(3);
   const { data: userData } = useUserProfile();
+
+  useEffect(() => {
+    if (route.attributes.usersRating) {
+      setRating(route.attributes.usersRating.score);
+    }
+  }, [route]);
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -59,18 +65,40 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     mutationFn: () =>
       createRating(selectedRouteToRate!.id, rating, userData?.id),
     onSuccess: (data) => {
-      console.log(data);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShowSuccess(true);
       rockRefetch();
+      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
     },
   });
+
+  const { mutate: updateRouteRatingMutation } = useMutation({
+    mutationFn: () => updateRating(route.attributes.usersRating.id, rating),
+    onSuccess: (data) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShowSuccess(true);
+      rockRefetch();
+      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
+    },
+  });
+
+  const handleSendRateButton = () => {
+    if (!route.attributes.usersRating) sendRouteRatingMutation();
+    if (
+      route.attributes.usersRating &&
+      rating !== route.attributes.usersRating.score
+    )
+      updateRouteRatingMutation();
+  };
 
   const handleRateRoute = (route: Route) => {
     setSelectedRouteToRate(route);
     bottomSheetModalRef.current?.present();
   };
 
-  const sendRouteRating = () => {
-    sendRouteRatingMutation();
+  const dismissBottomSheet = () => {
+    setShowSuccess(false);
+    setSelectedRouteToRate(null);
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
@@ -112,7 +140,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                 </View>
                 <TouchableOpacity onPress={() => handleRateRoute(route)}>
                   <View>
-                    <Text>Oceń drogę</Text>
+                    <Text>
+                      {route.attributes.usersRating
+                        ? `Twoja ocena: ${route.attributes.usersRating.score}`
+                        : "Oceń drogę"}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -124,24 +156,34 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
-        onDismiss={() => setSelectedRouteToRate(null)}
+        onDismiss={dismissBottomSheet}
         enableDismissOnClose
         style={styles.modalContainer}
       >
-        <Text>Twoja ocena dla drogi</Text>
-        <Text>{selectedRouteToRate?.attributes.display_name}</Text>
-        <View style={styles.starContainer}>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <TouchableOpacity onPress={() => setRating(item)}>
-              <View style={item <= rating ? styles.starFilled : styles.star} />
+        {showSuccess ? (
+          <Text>Sukces!</Text>
+        ) : (
+          <>
+            <Text>Twoja ocena dla drogi</Text>
+            <Text>{selectedRouteToRate?.attributes.display_name}</Text>
+            <View style={styles.starContainer}>
+              {[1, 2, 3, 4, 5].map((item) => (
+                <TouchableOpacity onPress={() => setRating(item)}>
+                  <View
+                    style={item <= rating ? styles.starFilled : styles.star}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TouchableOpacity onPress={handleSendRateButton}>
+              <View style={styles.starsButton}>
+                <Text>
+                  {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
+                </Text>
+              </View>
             </TouchableOpacity>
-          ))}
-        </View>
-        <TouchableOpacity onPress={sendRouteRating}>
-          <View style={styles.starsButton}>
-            <Text>Oceń</Text>
-          </View>
-        </TouchableOpacity>
+          </>
+        )}
       </BottomSheetModal>
     </>
   );
