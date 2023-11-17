@@ -18,6 +18,7 @@ export const apiConfig = {
   },
   ratings: {
     create: `${apiUrl}/api/ratings`,
+    update: (id: number) => `${apiUrl}/api/ratings/${id}`,
     get: (qs: string) => `${apiUrl}/api/ratings?${qs}`,
   }
 }

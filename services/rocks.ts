@@ -317,3 +317,13 @@ export const createRating = async (routeId: number, rating: number, author: stri
   const { data } = await authService.post(apiConfig.ratings.create, JSON.stringify(body));
   return data;
 };
+
+export const updateRating = async (ratingToUpdate: number, rating: number ) => {
+  const body = {
+      data: {
+        score: rating,
+      }
+  }
+  const { data } = await authService.put(apiConfig.ratings.update(ratingToUpdate), JSON.stringify(body));
+  return data;
+};
