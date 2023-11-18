@@ -20,5 +20,10 @@ export const apiConfig = {
     create: `${apiUrl}/api/ratings`,
     update: (id: number) => `${apiUrl}/api/ratings/${id}`,
     get: (qs: string) => `${apiUrl}/api/ratings?${qs}`,
+  },
+  comments: {
+    create: `${apiUrl}/api/comments`,
+    update: (id: number) => `${apiUrl}/api/comments/${id}`,
+    get: (qs: string) => `${apiUrl}/api/comments?${qs}`,
   }
 }

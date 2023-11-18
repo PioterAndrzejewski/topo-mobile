@@ -327,3 +327,19 @@ export const updateRating = async (ratingToUpdate: number, rating: number ) => {
   const { data } = await authService.put(apiConfig.ratings.update(ratingToUpdate), JSON.stringify(body));
   return data;
 };
+
+export const createComment = async (routeId: number, comment: string, author: string | undefined) => {
+  const body = {
+      data: {
+        comment,
+        user: {
+          connect: [author]
+        },
+        route: {
+          connect: [routeId]
+        }
+      }
+  }
+  const { data } = await authService.post(apiConfig.comments.create, JSON.stringify(body));
+  return data;
+};

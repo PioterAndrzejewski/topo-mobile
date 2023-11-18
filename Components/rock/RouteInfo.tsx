@@ -1,28 +1,26 @@
-import React, {
-  useRef,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { useRef, useMemo, useState } from "react";
 import {
   View,
   Text,
   LayoutAnimation,
   TouchableOpacity,
-  Easing,
   StyleSheet,
+  TextInput,
 } from "react-native";
-import Animated, {
-  FadeInRight,
-  FadeOutLeft,
-  Layout,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAtom } from "jotai";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { ScrollView } from "react-native-gesture-handler";
 
 import Accordion from "../common/Accordion";
-import { Route, createRating, updateRating } from "../../services/rocks";
+import Backdrop from "../common/Backdrop";
+
+import {
+  Route,
+  createRating,
+  updateRating,
+  createComment,
+} from "../../services/rocks";
 import { rockActiveRoute } from "../../store/rock";
 import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
@@ -41,12 +39,14 @@ type RockInfoProps = {
 
 const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
   const [rating, setRating] = useState(3);
+  const [comment, setComment] = useState("");
   const { data: userData } = useUserProfile();
 
   const handlePress = () => {
@@ -58,7 +58,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const { mutate: sendRouteRatingMutation, isLoading } = useMutation({
     mutationFn: () =>
       createRating(selectedRouteToRate!.id, rating, userData?.id),
-    onSuccess: (data) => {
+    onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setShowSuccess(true);
       rockRefetch();
@@ -76,14 +76,16 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     },
   });
 
-  const handleSendRateButton = () => {
-    if (!route.attributes.usersRating) sendRouteRatingMutation();
-    if (
-      route.attributes.usersRating &&
-      rating !== route.attributes.usersRating.score
-    )
-      updateRouteRatingMutation();
-  };
+  const { mutate: sendCommentMutation } = useMutation({
+    mutationFn: () =>
+      createComment(selectedRouteToRate!.id, comment, userData?.id),
+    onSuccess: () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShowSuccess(true);
+      rockRefetch();
+      setTimeout(() => commentsBottomSheetModalRef.current?.dismiss(), 2000);
+    },
+  });
 
   const handleRateRoute = (route: Route) => {
     setSelectedRouteToRate(route);
@@ -95,12 +97,32 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     bottomSheetModalRef.current?.present();
   };
 
+  const handleSendRateButton = () => {
+    if (!route.attributes.usersRating) sendRouteRatingMutation();
+    if (
+      route.attributes.usersRating &&
+      rating !== route.attributes.usersRating.score
+    )
+      updateRouteRatingMutation();
+  };
+
+  const handleCommentRoute = (route: Route) => {
+    setSelectedRouteToRate(route);
+    commentsBottomSheetModalRef.current?.present();
+  };
+
+  const handleSendCommentButton = () => {
+    if (comment.length > 5) sendCommentMutation();
+  };
+
   const dismissBottomSheet = () => {
     setShowSuccess(false);
     setSelectedRouteToRate(null);
+    setComment("");
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
+  const commentsSnapPoints = useMemo(() => ["40%", "85%"], []);
   return (
     <>
       <AnimatedTouchableOpacity
@@ -137,13 +159,18 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                   <Text>Bardzo wazne dane o drdoddze</Text>
                   <Text>Bardzo wazne dane o drdoddze</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleRateRoute(route)}>
-                  <Text>
-                    {route.attributes.usersRating
-                      ? `Twoja ocena: ${route.attributes.usersRating.score}`
-                      : "Oceń drogę"}
-                  </Text>
-                </TouchableOpacity>
+                <View style={styles.detailsButtons}>
+                  <TouchableOpacity onPress={() => handleRateRoute(route)}>
+                    <Text>
+                      {route.attributes.usersRating
+                        ? `Twoja ocena: ${route.attributes.usersRating.score}`
+                        : "Oceń drogę"}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleCommentRoute(route)}>
+                    <Text>Komentarze</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )
           }
@@ -173,13 +200,49 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
               ))}
             </View>
             <TouchableOpacity onPress={handleSendRateButton}>
-              <View style={styles.starsButton}>
+              <View style={styles.sendCommentButton}>
                 <Text>
                   {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
                 </Text>
               </View>
             </TouchableOpacity>
           </>
+        )}
+      </BottomSheetModal>
+      <BottomSheetModal
+        ref={commentsBottomSheetModalRef}
+        index={0}
+        snapPoints={commentsSnapPoints}
+        onDismiss={dismissBottomSheet}
+        enableDismissOnClose
+        style={styles.modalCommentsContainer}
+        backdropComponent={Backdrop}
+      >
+        {showSuccess ? (
+          <Text>Sukces!</Text>
+        ) : (
+          <ScrollView style={styles.commentsContainer}>
+            <Text>
+              Komentarze dla drogi:{" "}
+              {selectedRouteToRate?.attributes.display_name}
+            </Text>
+            <Text>Twój komentarz:</Text>
+            <TextInput
+              style={styles.commentInput}
+              defaultValue={comment}
+              onChangeText={(text) => setComment(text)}
+              multiline
+              numberOfLines={2}
+              underlineColorAndroid='transparent'
+            />
+            <TouchableOpacity onPress={handleSendCommentButton}>
+              <View style={styles.sendCommentButton}>
+                <Text>
+                  {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         )}
       </BottomSheetModal>
     </>
@@ -219,6 +282,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  detailsButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignSelf: "stretch",
+  },
   ratingContainer: {},
   modalContainer: {
     flex: 1,
@@ -257,6 +325,41 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalCommentsContainer: {
+    width: "100%",
+    flex: 1,
+    alignContent: "stretch",
+    justifyContent: "center",
+    alignItems: "stretch",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.45,
+    shadowRadius: 12,
+    elevation: 6,
+    zIndex: 6,
+    paddingHorizontal: 12,
+  },
+  commentsContainer: {
+    backgroundColor: "red",
+    width: "100%",
+    flex: 1,
+    elevation: 5,
+    paddingHorizontal: 12,
+  },
+  commentInput: {
+    minHeight: 56,
+    lineHeight: 16,
+    padding: 12,
+    borderWidth: 0.4,
+    borderRadius: 12,
+  },
+  sendCommentButton: {
+    backgroundColor: "green",
+    alignSelf: "flex-end",
   },
 });
 
