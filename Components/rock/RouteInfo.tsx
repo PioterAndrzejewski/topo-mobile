@@ -49,12 +49,6 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const [rating, setRating] = useState(3);
   const { data: userData } = useUserProfile();
 
-  useEffect(() => {
-    if (route.attributes.usersRating) {
-      setRating(route.attributes.usersRating.score);
-    }
-  }, [route]);
-
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (activeRoute === route.attributes.uuid) return setActiveRoute(null);
@@ -93,6 +87,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
 
   const handleRateRoute = (route: Route) => {
     setSelectedRouteToRate(route);
+    if (route.attributes.usersRating) {
+      setRating(route.attributes.usersRating.score);
+    } else {
+      setRating(4);
+    }
     bottomSheetModalRef.current?.present();
   };
 
@@ -139,13 +138,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                   <Text>Bardzo wazne dane o drdoddze</Text>
                 </View>
                 <TouchableOpacity onPress={() => handleRateRoute(route)}>
-                  <View>
-                    <Text>
-                      {route.attributes.usersRating
-                        ? `Twoja ocena: ${route.attributes.usersRating.score}`
-                        : "Oceń drogę"}
-                    </Text>
-                  </View>
+                  <Text>
+                    {route.attributes.usersRating
+                      ? `Twoja ocena: ${route.attributes.usersRating.score}`
+                      : "Oceń drogę"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )
