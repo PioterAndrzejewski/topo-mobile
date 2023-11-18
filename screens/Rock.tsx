@@ -41,10 +41,6 @@ const Rock = ({ route }: Props) => {
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const handleRouteChange = (step: number) => {
     if (!data) return;
     if (activeRoute === null)

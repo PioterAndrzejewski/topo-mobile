@@ -37,70 +37,63 @@ const sortAreas = (region: Region, areas: RegionData[]) => {
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
-  const [isInit, setIsInit] = useState(false);
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const [stage, setStage] = useState(0);
   const rocksOnly = useAtomValue(rocksOnlyAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const stage = useMemo(() => {
-    const zoom = getZoomFromRegion(region);
-    return getStageFromZoom(zoom);
-  }, [region]);
-
   useEffect(() => {
-    if (!isInit) {
-      setLocationArray([]);
-      setListToRender(areas as AreasList);
-      setIsInit(true);
-    }
-    const locationArray: AreasList = [];
+    const zoom = getZoomFromRegion(region);
+    const stage = getStageFromZoom(zoom);
+    setStage(stage);
+    const newLocationArray: AreasList = [];
     if (stage >= 1 && areas) {
-      locationArray.push(sortAreas(region, areas)[0]);
+      newLocationArray.push(sortAreas(region, areas)[0]);
     }
     if (stage >= 2 && regions) {
-      locationArray.push(sortAreas(region, regions)[0]);
+      newLocationArray.push(sortAreas(region, regions)[0]);
     }
     if (stage >= 3 && sectors) {
-      locationArray.push(sortAreas(region, sectors)[0]);
+      newLocationArray.push(sortAreas(region, sectors)[0]);
     }
-    setLocationArray(locationArray);
+    setLocationArray(newLocationArray);
 
     if (rocksOnly && rocks) {
       const sortedAreas = sortAreas(region, rocks);
-      return setListToRender(sortedAreas);
+      setListToRender(sortedAreas);
     }
+
     if (stage === 0 && areas) {
-      return setListToRender(sortAreas(region, areas));
+      setListToRender(areas);
     }
-    if (stage === 1 && regions)
-      return setListToRender(
-        sortAreas(region, regions).filter(
-          (region) =>
-            region?.attributes?.parent?.data?.attributes?.uuid ===
-            locationArray[locationArray.length - 1]?.attributes?.uuid,
-        ),
+    if (stage === 1 && regions) {
+      const regionsFiltered = regions.filter(
+        (region) =>
+          region?.attributes?.parent?.data?.attributes?.uuid ===
+          newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
       );
-    if (stage === 2 && sectors)
-      return setListToRender(
-        sortAreas(region, sectors).filter(
+      setListToRender(regionsFiltered);
+    }
+    if (stage === 2 && sectors) {
+      setListToRender(
+        sectors.filter(
           (sector) =>
             sector?.attributes?.parent?.data?.attributes?.uuid ===
-            locationArray[locationArray.length - 1]?.attributes?.uuid,
+            newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
         ),
       );
+    }
     if (stage === 3 && rocks) {
-      const sortedAreas = sortAreas(region, rocks);
-      if (locationArray.length < 1) return setListToRender(sortedAreas);
-      return setListToRender(
-        sortedAreas.filter(
+      setListToRender(
+        rocks.filter(
           (rock) =>
             rock?.attributes?.parent?.data?.attributes?.uuid ===
-            locationArray[locationArray.length - 1]?.attributes?.uuid,
+            newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
         ),
       );
     }
@@ -138,7 +131,7 @@ export default function ResultsList() {
               <TouchableOpacity
                 style={{ flexDirection: "row" }}
                 onPress={() => animateTo(item, index)}
-                key={item?.attributes?.uuid}
+                key={item?.attributes?.Name}
               >
                 {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
                 <Text>{item?.attributes?.Name}</Text>
@@ -147,28 +140,26 @@ export default function ResultsList() {
         </View>
         <BottomSheetScrollView>
           <View style={styles.container}>
-            {!Array.isArray(listToRender) || listToRender.length < 1 ? (
-              <Text>Brakuje wyników. Musisz je pobrać w trybie offline!</Text>
-            ) : (
+            {Array.isArray(listToRender) &&
+              listToRender.length >= 1 &&
               listToRender
                 .slice(0, 10)
                 .map((item) => (
                   <ResultsItem
                     id={item.attributes.uuid}
                     name={item.attributes.Name}
-                    key={item.attributes.uuid}
+                    key={item.attributes.Name}
                     item={item}
                     isRock={rocksOnly || stage === 3}
                     isSector={stage === 2 && !rocksOnly}
                     itemStage={stage + 1}
                   />
-                ))
-            )}
+                ))}
 
             {Array.isArray(listToRender) && listToRender.length > 2 && (
               <Text>
                 Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
-                wyszukać w innym obszarze.
+                wyszukać w innym obszarze.
               </Text>
             )}
           </View>

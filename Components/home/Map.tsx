@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Platform, Text, Dimensions } from "react-native";
+import { Platform, Text } from "react-native";
 import {
   Marker,
   PROVIDER_GOOGLE,
@@ -8,20 +8,12 @@ import {
 } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 import MapView from "react-native-map-clustering";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { default as NativeMap } from "react-native-maps";
-import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
-import {
-  regionAtom,
-  mapAtom,
-  zoomAtom,
-  listToRenderAtom,
-  resultsStageAtom,
-  startRegion,
-} from "../../store/results";
+import { regionAtom, mapAtom, startRegion } from "../../store/results";
 import { useAreas } from "../../hooks/useAreas";
-import { getStageFromZoom } from "../../utils/getZoomFromStage";
 import { useDebounce } from "../../hooks/useDebounce";
 import { selectedRockAtom } from "../../store/results";
 import { getRegionForZoom } from "../../utils/getRegionForZoom";
@@ -30,7 +22,7 @@ import { getZoomFromStage } from "../../utils/getZoomFromStage";
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
   const setGlobalRegionState = useSetAtom(regionAtom);
-  const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
+  const setSelectedRock = useSetAtom(selectedRockAtom);
   useDebounce(() => setGlobalRegionState(region), 200, [region]);
 
   const { rocks } = useAreas();
