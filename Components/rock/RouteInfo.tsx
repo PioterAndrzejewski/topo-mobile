@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAtom } from "jotai";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { ScrollView } from "react-native-gesture-handler";
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import Accordion from "../common/Accordion";
 import Backdrop from "../common/Backdrop";
@@ -20,6 +19,7 @@ import {
   createRating,
   updateRating,
   createComment,
+  updateComment,
 } from "../../services/rocks";
 import { rockActiveRoute } from "../../store/rock";
 import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
@@ -47,6 +47,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   );
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
+  const [editingComment, setEditingComment] = useState(false);
   const { data: userData } = useUserProfile();
 
   const handlePress = () => {
@@ -81,9 +82,20 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
       createComment(selectedRouteToRate!.id, comment, userData?.id),
     onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setEditingComment(false);
       setShowSuccess(true);
       rockRefetch();
       setTimeout(() => commentsBottomSheetModalRef.current?.dismiss(), 2000);
+    },
+  });
+
+  const { mutate: updateCommentMutation } = useMutation({
+    mutationFn: () => updateComment(route.attributes.usersComment?.id, comment),
+    onSuccess: (data) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setShowSuccess(true);
+      rockRefetch();
+      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
     },
   });
 
@@ -107,11 +119,19 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   };
 
   const handleCommentRoute = (route: Route) => {
+    if (route.attributes.usersComment)
+      setComment(route.attributes.usersComment.comment);
     setSelectedRouteToRate(route);
     commentsBottomSheetModalRef.current?.present();
   };
 
   const handleSendCommentButton = () => {
+    if (route.attributes.usersComment && editingComment && comment.length > 5) {
+      console.log(" to jest ten kesj");
+      return updateCommentMutation();
+    }
+    if (route.attributes.usersComment && !editingComment)
+      return setEditingComment(true);
     if (comment.length > 5) sendCommentMutation();
   };
 
@@ -119,10 +139,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     setShowSuccess(false);
     setSelectedRouteToRate(null);
     setComment("");
+    setEditingComment(false);
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
-  const commentsSnapPoints = useMemo(() => ["40%", "85%"], []);
+  const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
     <>
       <AnimatedTouchableOpacity
@@ -200,7 +221,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
               ))}
             </View>
             <TouchableOpacity onPress={handleSendRateButton}>
-              <View style={styles.sendCommentButton}>
+              <View style={styles.sendRatingButton}>
                 <Text>
                   {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
                 </Text>
@@ -221,28 +242,52 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
         {showSuccess ? (
           <Text>Sukces!</Text>
         ) : (
-          <ScrollView style={styles.commentsContainer}>
+          <BottomSheetScrollView style={styles.commentsContainer}>
             <Text>
-              Komentarze dla drogi:{" "}
+              Komentarze dla drogi:
               {selectedRouteToRate?.attributes.display_name}
             </Text>
             <Text>Twój komentarz:</Text>
-            <TextInput
-              style={styles.commentInput}
-              defaultValue={comment}
-              onChangeText={(text) => setComment(text)}
-              multiline
-              numberOfLines={2}
-              underlineColorAndroid='transparent'
-            />
+            {route.attributes.usersComment && !editingComment ? (
+              <View>
+                <Text>{route.attributes.usersComment.comment}</Text>
+              </View>
+            ) : (
+              <TextInput
+                style={styles.commentInput}
+                defaultValue={comment}
+                onChangeText={(text) => setComment(text)}
+                multiline
+                numberOfLines={2}
+                underlineColorAndroid='transparent'
+              />
+            )}
             <TouchableOpacity onPress={handleSendCommentButton}>
               <View style={styles.sendCommentButton}>
                 <Text>
-                  {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
+                  {route.attributes.usersComment && !editingComment
+                    ? "Edytuj komentarz"
+                    : "Zapisz"}
                 </Text>
               </View>
             </TouchableOpacity>
-          </ScrollView>
+            {Array.isArray(route.attributes.comments) &&
+            route.attributes.comments.length >= 1 ? (
+              route.attributes.comments.slice(0, 10).map((comment) => (
+                <View>
+                  <Text>
+                    {comment.updatedAt} - {comment.user} - {comment.comment}
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <Text>
+                {route.attributes.usersComment
+                  ? "Brak innych komentarzy dla tej drogi"
+                  : "Brak komentarzy dla tej drogi."}
+              </Text>
+            )}
+          </BottomSheetScrollView>
         )}
       </BottomSheetModal>
     </>
@@ -344,7 +389,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   commentsContainer: {
-    backgroundColor: "red",
     width: "100%",
     flex: 1,
     elevation: 5,
@@ -354,11 +398,16 @@ const styles = StyleSheet.create({
     minHeight: 56,
     lineHeight: 16,
     padding: 12,
-    borderWidth: 0.4,
+    borderWidth: 1,
     borderRadius: 12,
+    paddingBottom: 32,
+  },
+  sendRatingButton: {
+    marginRight: 16,
+    alignSelf: "flex-end",
   },
   sendCommentButton: {
-    backgroundColor: "green",
+    marginRight: 16,
     alignSelf: "flex-end",
   },
 });

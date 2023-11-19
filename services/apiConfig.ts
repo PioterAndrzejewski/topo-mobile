@@ -23,7 +23,7 @@ export const apiConfig = {
   },
   comments: {
     create: `${apiUrl}/api/comments`,
-    update: (id: number) => `${apiUrl}/api/comments/${id}`,
+    update: (id: number | undefined) => `${apiUrl}/api/comments/${id}`,
     get: (qs: string) => `${apiUrl}/api/comments?${qs}`,
   }
 }

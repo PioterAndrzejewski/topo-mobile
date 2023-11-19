@@ -46,7 +46,6 @@ export const itemsTypes: ItemsTypes = {
   2: possibleItemsTypes[2],
   3: possibleItemsTypes[3],
   4: possibleItemsTypes[4],
-
 }
 
 export type Coordinates = {
@@ -166,22 +165,43 @@ export type UsersRatingSanitized = {
   uuid: string;
 }
 
+export type Comment = {
+  comment: string;
+  createdAt: string;
+  id: number;
+  publishedAt: string;
+  route: RouteInner;
+  updatedAt: string;
+  user: string;
+  uuid: string;
+}
+
+export type CommentSanitized = {
+  comment: string;
+  id: number;
+  uuid: string;
+}
+
+export type RouteInner = {
+  Name: string;
+  display_name: string;
+  Type: "sport" | "trad" | "boulder";
+  anchor: "two_rings" | "chain_anchor" | "rescue_ring";
+  createdAt: string;
+  grade: keyof typeof grades;
+  path: 'string';
+  publishedAt: string;
+  updatedAt: string;
+  uuid: string;
+  averageScore: number;
+  usersRating: UsersRatingSanitized;
+  comments: Comment[];
+  usersComment: null | CommentSanitized;
+}
+
 export type Route = {
   id: number;
-  attributes: {
-    Name: string;
-    display_name: string;
-    Type: "sport" | "trad" | "boulder";
-    anchor: "two_rings" | "chain_anchor" | "rescue_ring";
-    createdAt: string;
-    grade: keyof typeof grades;
-    path: 'string';
-    publishedAt: string;
-    updatedAt: string;
-    uuid: string;
-    averageScore: number;
-    usersRating: UsersRatingSanitized;
-  }
+  attributes: RouteInner
 }
 
 export type RockData = {
@@ -341,5 +361,15 @@ export const createComment = async (routeId: number, comment: string, author: st
       }
   }
   const { data } = await authService.post(apiConfig.comments.create, JSON.stringify(body));
+  return data;
+};
+
+export const updateComment = async (commentToUpdate: number | undefined, comment: string ) => {
+  const body = {
+      data: {
+        comment,
+      }
+  }
+  const { data } = await authService.put(apiConfig.comments.update(commentToUpdate), JSON.stringify(body));
   return data;
 };
