@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Alert,
 } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAtom } from "jotai";
@@ -26,6 +27,7 @@ import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
 import { useMutation } from "@tanstack/react-query";
 import { useUserProfile } from "../../hooks/useUserProfile";
+import { AxiosError } from "axios";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -87,6 +89,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
       rockRefetch();
       setTimeout(() => commentsBottomSheetModalRef.current?.dismiss(), 2000);
     },
+    onError: (err: AxiosError) => {
+      if (err?.response?.status === 406) {
+        Alert.alert("Ten komentarz nie spełnia standardów społeczności");
+      }
+    },
   });
 
   const { mutate: updateCommentMutation } = useMutation({
@@ -96,6 +103,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
       setShowSuccess(true);
       rockRefetch();
       setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
+    },
+    onError: (err: AxiosError) => {
+      if (err?.response?.status === 406) {
+        Alert.alert("Ten komentarz nie spełnia standardów społeczności");
+      }
     },
   });
 
@@ -127,7 +139,6 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
 
   const handleSendCommentButton = () => {
     if (route.attributes.usersComment && editingComment && comment.length > 5) {
-      console.log(" to jest ten kesj");
       return updateCommentMutation();
     }
     if (route.attributes.usersComment && !editingComment)
