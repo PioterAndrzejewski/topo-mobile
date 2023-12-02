@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     zIndex: 4,
+    backgroundColor: "#fffa",
+    paddingVertical: 10,
   },
   headerWrapper: {
     display: "flex",

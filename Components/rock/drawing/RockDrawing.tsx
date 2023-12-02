@@ -1,8 +1,6 @@
 import React, { FC, createRef, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, View, useWindowDimensions, Platform } from "react-native";
 import {
-  Canvas,
   useImage,
   Image,
   DashPathEffect,
@@ -25,34 +23,11 @@ import { Route } from "../../../services/rocks";
 import { two_rings, chaing_anchor, rescue_ring } from "./Anchor";
 import { useImageFile } from "../../../hooks/useImageFile";
 import { rockActiveRoute } from "../../../store/rock";
+import { getRingsCoords } from "../../../utils/getRingsCoords";
+import { getRingsToOmit } from "../../../utils/getRingsToOmit";
+import { getRouteColor } from "../../../utils/getRouteColor";
 
-const getRingsCoords = (path: string) => {
-  const points = path.split(/[^0-9.]+/).filter((element) => element.length > 0);
-  const result = [];
-
-  for (let i = 0; i < points.length; i += 2) {
-    const x = parseFloat(points[i]);
-    const y = parseFloat(points[i + 1]);
-
-    if (!isNaN(x) && !isNaN(y)) {
-      result.push({ x, y });
-    }
-  }
-
-  const start = result[0];
-  const anchor = result.slice(-1)[0];
-  const rings = result.slice(1, result.length - 1);
-
-  return { start, anchor, rings };
-};
-
-const getRingsToOmit = (ringsToOmit: string) => {
-  if (!ringsToOmit) return [];
-  return ringsToOmit
-    .replace(" ", "")
-    .split(",")
-    .map((el) => Number(el));
-};
+const CANVAS_BOUNDARY = 40;
 
 type RockDrawingProps = {
   imageUrl: string;
@@ -70,9 +45,12 @@ const RockDrawing: FC<RockDrawingProps> = ({
   const zoomable = createRef<ReactNativeZoomableView>();
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { width, height } = useWindowDimensions();
-  const font = useFont(require("../../../assets/fonts/PoppinsBold.ttf"), 90);
   const image = useImageFile(imageUrl);
   const skImage = useImage(image);
+  const font = useFont(
+    require("../../../assets/fonts/PoppinsBold.ttf"),
+    skImage ? skImage.width() / 30 : 70,
+  );
 
   const TouchableCircle = withTouchableHandler(Circle);
   const TouchablePath = withTouchableHandler(Path);
@@ -81,6 +59,23 @@ const RockDrawing: FC<RockDrawingProps> = ({
     if (!activeId) return 0.85;
     if (id === activeId) return 1;
     return 0.3;
+  };
+
+  const getInboundY = (y: number, offset: number, isText: boolean) => {
+    if (!skImage) return 0;
+    if (y + offset > skImage.height() - CANVAS_BOUNDARY)
+      return isText
+        ? skImage.height() - CANVAS_BOUNDARY + 20
+        : skImage.height() - CANVAS_BOUNDARY;
+    return y + offset;
+  };
+
+  const getInboundX = (x: number, offset: number) => {
+    if (!skImage) return 0;
+    if (x + offset > skImage.width() - CANVAS_BOUNDARY)
+      return skImage.width() - CANVAS_BOUNDARY;
+    if (x + offset < CANVAS_BOUNDARY) return CANVAS_BOUNDARY;
+    return x + offset;
   };
 
   if (!font) return null;
@@ -146,7 +141,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
                     <TouchablePath
                       path={route.attributes.path}
                       strokeWidth={skImage.width() / 180}
-                      color='black'
+                      color={getRouteColor(route.attributes.grade)}
                       style='stroke'
                       strokeCap='round'
                       touchablePath={touchablePath!}
@@ -186,9 +181,9 @@ const RockDrawing: FC<RockDrawingProps> = ({
                             key={JSON.stringify(ring)}
                             cx={ring.x}
                             cy={ring.y}
-                            r={20}
+                            r={skImage?.width() / 100}
                             style='stroke'
-                            color='red'
+                            color='#000'
                             opacity={isOmmited ? 0 : 1}
                             strokeWidth={4}
                             touchablePath={touchableCirclePath}
@@ -202,9 +197,17 @@ const RockDrawing: FC<RockDrawingProps> = ({
                           />
                         );
                       })}
+                    <Circle
+                      cx={getInboundX(points.start.x, -10)}
+                      cy={getInboundY(points.start.y, 68, false)}
+                      r={skImage.width() / 30}
+                      style='fill'
+                      color='#767676f8f'
+                      opacity={0.3}
+                    />
                     <Text
-                      x={points.start.x}
-                      y={points.start.y + 140}
+                      x={getInboundX(points.start.x, -30)}
+                      y={getInboundY(points.start.y, 100, true)}
                       text={(index + 1).toString()}
                       font={font}
                       color='#fff'

@@ -41,22 +41,12 @@ const Rock = ({ route }: Props) => {
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const handleRouteChange = (step: number) => {
+  const handleImageChange = (step: number) => {
     if (!data) return;
-    if (activeRoute === null)
-      return setActiveRoute(data.attributes.routes.data[0].attributes.uuid);
-    const currentIndex = data?.attributes.routes.data.findIndex(
-      (route) => route.attributes.uuid === activeRoute,
-    );
-    const newIndex = currentIndex > -1 ? currentIndex + step : 0;
-    const routesNumber = data.attributes.routes.data.length;
-    if (newIndex === routesNumber)
-      return setActiveRoute(data.attributes.routes.data[0].attributes.uuid);
-    if (newIndex === -1)
-      return setActiveRoute(
-        data.attributes.routes.data[routesNumber - 1].attributes.uuid,
-      );
-    setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
+    let newIndex = activeImage + step;
+    if (newIndex < 0) newIndex = data.attributes.image.data.length - 1;
+    if (newIndex === data.attributes.image.data.length) newIndex = 0;
+    setActiveImage(newIndex);
   };
 
   const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
@@ -77,7 +67,7 @@ const Rock = ({ route }: Props) => {
           activeImage={activeImage}
         />
       )}
-      <Buttons handleRouteChange={handleRouteChange} />
+      <Buttons handleRouteChange={handleImageChange} />
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
