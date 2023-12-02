@@ -18,7 +18,7 @@ import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { AreaData } from "../../services/rocks";
 import { Coordinates, Route } from "../../services/rocks";
-import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
+import { getMeaningfulGrade } from "../../utils/language/getMeaningfulGrade";
 
 export type RouteWithParent = Route & {
   parent: {

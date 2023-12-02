@@ -182,14 +182,17 @@ export type CommentSanitized = {
   uuid: string;
 }
 
+export type Anchor = "two_rings" | "chain_anchor" | "rescue_ring" | "none";
+export type RouteType = "sport" | "trad" | "boulder";
+
 export type RouteInner = {
   Name: string;
   display_name: string;
-  Type: "sport" | "trad" | "boulder";
-  anchor: "two_rings" | "chain_anchor" | "rescue_ring";
+  Type: RouteType;
+  anchor: Anchor;
   createdAt: string;
   grade: keyof typeof grades;
-  path: 'string';
+  path: string;
   publishedAt: string;
   updatedAt: string;
   uuid: string;
@@ -197,6 +200,10 @@ export type RouteInner = {
   usersRating: UsersRatingSanitized;
   comments: Comment[];
   usersComment: null | CommentSanitized;
+  author: string,
+  first_ascent_autor: string;
+  rings_number: number;
+  description: string;
 }
 
 export type Route = {

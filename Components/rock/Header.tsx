@@ -6,19 +6,10 @@ import { useNavigation } from "@react-navigation/native";
 import { styleGuide } from "../../styles/guide";
 
 type HeaderProps = {
-  onChange: (newMode: 0 | 1) => void;
   name?: string;
-  mode: 0 | 1;
 };
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
-  const { mode, onChange } = props;
-
-  const handlePress = (changeTo: 0 | 1) => {
-    if (!onChange) return;
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    props.onChange(changeTo);
-  };
 
   return (
     <View style={styles.container}>
@@ -30,38 +21,6 @@ const Header = (props: HeaderProps) => {
           <Text style={styles.heading}>{props.name}</Text>
         </View>
       </View>
-
-      <View style={styles.buttonWrapper}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => handlePress(0)}>
-            <View
-              style={
-                mode === 0
-                  ? {
-                      ...styles.button,
-                      ...styles.buttonActive,
-                    }
-                  : styles.button
-              }
-            >
-              <Text>2d</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handlePress(1)}
-            style={
-              mode === 1
-                ? {
-                    ...styles.button,
-                    ...styles.buttonActive,
-                  }
-                : styles.button
-            }
-          >
-            <Text>3d</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </View>
   );
 };
@@ -70,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     position: "absolute",
-    top: 50,
+    top: 60,
     zIndex: 4,
   },
   headerWrapper: {
