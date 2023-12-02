@@ -36,7 +36,6 @@ import { Route } from "../services/rocks";
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
-  const [topoMode, setTopoMode] = useState<0 | 1>(0);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -63,20 +62,15 @@ const Rock = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        onChange={setTopoMode}
-        name={data?.attributes?.Name}
-        mode={topoMode}
-      />
-      {data && topoMode === 0 && (
+      <Header name={data?.attributes?.Name} />
+      {data && (
         <RockDrawing
           imageUrl={data?.attributes?.image?.data.attributes.url}
           routes={data?.attributes?.routes.data}
           activeId={activeRoute}
         />
       )}
-      {data && topoMode === 1 && <ModelView id={route.params.id} />}
-      {topoMode === 0 && <Buttons handleRouteChange={handleRouteChange} />}
+      <Buttons handleRouteChange={handleRouteChange} />
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
