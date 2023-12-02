@@ -200,7 +200,10 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                     <Text>{route.attributes.description}</Text>
                   )}
                   {route.attributes.author && (
-                    <Text>Autor: {route.attributes.author}</Text>
+                    <Text>
+                      Autor: {route.attributes.author},{" "}
+                      {route.attributes.author_date}
+                    </Text>
                   )}
                   {route.attributes.first_ascent_autor && (
                     <Text>
@@ -442,3 +445,6 @@ const styles = StyleSheet.create({
 });
 
 export default RouteInfo;
+
+
+

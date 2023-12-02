@@ -37,6 +37,7 @@ type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
+  const [activeImage, setActiveImage] = useState(0);
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -58,15 +59,24 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
 
   return (
     <View style={styles.container}>
-      <Header name={data?.attributes?.Name} />
-      {data && (
+      <Header
+        name={data?.attributes?.Name}
+        numberOfImages={data?.attributes?.image.data.length}
+        onCirclePress={setActiveImage}
+        activeImage={activeImage}
+      />
+      {data && data.attributes && (
         <RockDrawing
-          imageUrl={data?.attributes?.image?.data.attributes.url}
-          routes={data?.attributes?.routes.data}
+          imageUrl={data.attributes.image?.data[activeImage].attributes.url}
+          routes={data.attributes.routes.data}
           activeId={activeRoute}
         />
       )}
