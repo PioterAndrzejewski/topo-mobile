@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { View, Text, StyleSheet, LayoutAnimation } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -7,9 +8,19 @@ import { styleGuide } from "../../styles/guide";
 
 type HeaderProps = {
   name?: string;
+  numberOfImages?: number;
+  activeImage: number;
+  onCirclePress: (index: number) => void;
 };
+
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
+  const imagesArray = useMemo(() => {
+    if (!props.numberOfImages || props.numberOfImages < 1) return null;
+    return Array.from({ length: props.numberOfImages! }, (_, i) => ({
+      index: i,
+    }));
+  }, [props.numberOfImages]);
 
   return (
     <View style={styles.container}>
@@ -21,7 +32,43 @@ const Header = (props: HeaderProps) => {
           <Text style={styles.heading}>{props.name}</Text>
         </View>
       </View>
+      {props.numberOfImages && props.numberOfImages > 1 && (
+        <View style={styles.circlesContainer}>
+          {imagesArray?.map((_, i) => (
+            <ImageCircle
+              active={i === props.activeImage}
+              index={i}
+              onPress={props.onCirclePress}
+            />
+          ))}
+        </View>
+      )}
     </View>
+  );
+};
+
+const ImageCircle = ({
+  active,
+  index,
+  onPress,
+}: {
+  active: boolean;
+  index: number;
+  onPress: (i: number) => void;
+}) => {
+  const handlePress = () => onPress(index);
+  if (active)
+    return (
+      <View style={$imageCircleOffset(active)}>
+        <View style={$imageCircle(active)} />
+      </View>
+    );
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <View style={$imageCircleOffset(active)}>
+        <View style={$imageCircle(active)} />
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -31,6 +78,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 60,
     zIndex: 4,
+    backgroundColor: "#fffa",
+    paddingVertical: 10,
   },
   headerWrapper: {
     display: "flex",
@@ -67,6 +116,28 @@ const styles = StyleSheet.create({
   buttonActive: {
     backgroundColor: "#fff",
   },
+  circlesContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+  },
+});
+
+const $imageCircle = (active: boolean) => ({
+  width: 12,
+  height: 12,
+  backgroundColor: active ? "#000" : "#777",
+  borderRadius: 20,
+  borderWidth: 1,
+});
+
+const $imageCircleOffset = (active: boolean) => ({
+  padding: 4,
+  borderColor: "#000",
+  borderRadius: 20,
+  borderWidth: active ? 1 : 0,
 });
 
 export default Header;

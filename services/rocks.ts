@@ -204,6 +204,9 @@ export type RouteInner = {
   first_ascent_autor: string;
   rings_number: number;
   description: string;
+  author_date: number;
+  image_index: number;
+  path_omit_rings: string;
 }
 
 export type Route = {
@@ -232,7 +235,7 @@ export type RockData = {
     parking_coordinates: Coordinates;
     Cover: Cover;
     uuid: string;
-    image: {data: Photo};
+    image: {data: Photo[]};
     routes: {data: Route[]}
     parent: {
       data: AreaData;

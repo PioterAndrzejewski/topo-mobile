@@ -20,7 +20,6 @@ import ResultsItemRock from "../components/search/ResultsItemRoute";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
-  console.log(searchText);
   rocks.forEach((rock) => {
     const routesInRock = rock.attributes.routes.data.filter((route) => {
       return route.attributes.display_name.toLowerCase().includes(searchText);
