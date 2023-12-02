@@ -23,11 +23,13 @@ import {
   updateComment,
 } from "../../services/rocks";
 import { rockActiveRoute } from "../../store/rock";
-import { getMeaningfulGrade } from "../../utils/getMeaningfulGrade";
+import { getMeaningfulGrade } from "../../utils/language/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
 import { useMutation } from "@tanstack/react-query";
 import { useUserProfile } from "../../hooks/useUserProfile";
 import { AxiosError } from "axios";
+import { getRingsConjugation } from "../../utils/language/getRingsConjugation";
+import { getAnchorName } from "../../utils/language/getAnchorName";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -51,6 +53,8 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
   const { data: userData } = useUserProfile();
+
+  console.log(route);
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -187,9 +191,23 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
             route.attributes.uuid === activeRoute && (
               <View style={styles.detailsContainer}>
                 <View>
-                  <Text>Bardzo wazne dane o drdoddze</Text>
-                  <Text>Bardzo wazne dane o drdoddze</Text>
-                  <Text>Bardzo wazne dane o drdoddze</Text>
+                  <Text>
+                    {route.attributes.rings_number}{" "}
+                    {getRingsConjugation(route.attributes.rings_number)}
+                  </Text>
+                  <Text>{getAnchorName(route.attributes.anchor)}</Text>
+                  {route.attributes.description && (
+                    <Text>{route.attributes.description}</Text>
+                  )}
+                  {route.attributes.author && (
+                    <Text>Autor: {route.attributes.author}</Text>
+                  )}
+                  {route.attributes.first_ascent_autor && (
+                    <Text>
+                      1. przejście:
+                      {route.attributes.first_ascent_autor}
+                    </Text>
+                  )}
                 </View>
                 <View style={styles.detailsButtons}>
                   <TouchableOpacity onPress={() => handleRateRoute(route)}>
