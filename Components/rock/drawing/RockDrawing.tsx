@@ -18,11 +18,8 @@ import Touchable, { withTouchableHandler } from "react-native-skia-gesture";
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 import { useAtom } from "jotai";
 
-import BackArrow from "../../common/BackArrow";
 import AppLoading from "../../common/AppLoading";
 
-import { styleGuide } from "../../../styles/guide";
-import { useNavigation } from "@react-navigation/native";
 import { Route } from "../../../services/rocks";
 
 import { two_rings, chaing_anchor, rescue_ring } from "./Anchor";
@@ -49,13 +46,27 @@ const getRingsCoords = (path: string) => {
   return { start, anchor, rings };
 };
 
+const getRingsToOmit = (ringsToOmit: string) => {
+  if (!ringsToOmit) return [];
+  return ringsToOmit
+    .replace(" ", "")
+    .split(",")
+    .map((el) => Number(el));
+};
+
 type RockDrawingProps = {
   imageUrl: string;
   routes: Route[];
   activeId: string | null;
+  activeImage: number;
 };
 
-const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
+const RockDrawing: FC<RockDrawingProps> = ({
+  imageUrl,
+  routes,
+  activeId,
+  activeImage,
+}) => {
   const zoomable = createRef<ReactNativeZoomableView>();
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { width, height } = useWindowDimensions();
@@ -76,7 +87,6 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
 
   return (
     <View style={styles.container}>
-
       {!skImage?.width() && <AppLoading />}
       {skImage && skImage?.width() && (
         <ReactNativeZoomableView
@@ -112,7 +122,11 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
             />
             {routes &&
               routes.map((route, index) => {
+                if (route.attributes.image_index !== activeImage) return;
                 const points = getRingsCoords(route.attributes.path);
+                const ringsToOmit = getRingsToOmit(
+                  route.attributes.path_omit_rings,
+                );
                 const anchor = () => {
                   if (route.attributes.anchor === "two_rings") return two_rings;
                   if (route.attributes.anchor === "rescue_ring")
@@ -131,7 +145,7 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
                   >
                     <TouchablePath
                       path={route.attributes.path}
-                      strokeWidth={skImage.width() / 90}
+                      strokeWidth={skImage.width() / 180}
                       color='black'
                       style='stroke'
                       strokeCap='round'
@@ -145,34 +159,38 @@ const RockDrawing: FC<RockDrawingProps> = ({ imageUrl, routes, activeId }) => {
                       }
                     >
                       <DashPathEffect
-                        intervals={[skImage.width() / 40, skImage.width() / 40]}
+                        intervals={[skImage.width() / 80, skImage.width() / 80]}
                       />
                     </TouchablePath>
                     <ImageSVG
                       svg={anchor()}
-                      x={points.anchor.x}
-                      y={points.anchor.y}
+                      x={points.anchor.x - 20}
+                      y={points.anchor.y - 20}
                       width={20}
                       height={20}
-                      strokeWidth={10}
+                      strokeWidth={1}
                       opacity={0.5}
                     />
                     {points.rings &&
-                      points.rings.map((ring) => {
+                      points.rings.map((ring, index) => {
                         const touchableCirclePath = Skia.Path.Make().addCircle(
                           ring.x,
                           ring.y,
-                          50,
+                          20,
+                        );
+                        const isOmmited = ringsToOmit.find(
+                          (ring) => ring === index,
                         );
                         return (
                           <TouchableCircle
                             key={JSON.stringify(ring)}
                             cx={ring.x}
                             cy={ring.y}
-                            r={30}
+                            r={20}
                             style='stroke'
                             color='red'
-                            strokeWidth={10}
+                            opacity={isOmmited ? 0 : 1}
+                            strokeWidth={4}
                             touchablePath={touchableCirclePath}
                             onStart={() =>
                               setActiveRoute(

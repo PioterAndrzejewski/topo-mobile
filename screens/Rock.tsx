@@ -59,10 +59,6 @@ const Rock = ({ route }: Props) => {
     setActiveRoute(data.attributes.routes.data[newIndex].attributes.uuid);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
 
   return (
@@ -78,6 +74,7 @@ const Rock = ({ route }: Props) => {
           imageUrl={data.attributes.image?.data[activeImage].attributes.url}
           routes={data.attributes.routes.data}
           activeId={activeRoute}
+          activeImage={activeImage}
         />
       )}
       <Buttons handleRouteChange={handleRouteChange} />

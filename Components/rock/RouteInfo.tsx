@@ -54,8 +54,6 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const [editingComment, setEditingComment] = useState(false);
   const { data: userData } = useUserProfile();
 
-  console.log(route);
-
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (activeRoute === route.attributes.uuid) return setActiveRoute(null);
@@ -445,6 +443,3 @@ const styles = StyleSheet.create({
 });
 
 export default RouteInfo;
-
-
-

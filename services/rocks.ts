@@ -205,6 +205,8 @@ export type RouteInner = {
   rings_number: number;
   description: string;
   author_date: number;
+  image_index: number;
+  path_omit_rings: string;
 }
 
 export type Route = {
