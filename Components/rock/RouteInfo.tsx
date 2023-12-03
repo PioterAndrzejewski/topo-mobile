@@ -244,10 +244,10 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                       {route.attributes.author_date}
                     </Text>
                   )}
-                  {route.attributes.first_ascent_autor && (
+                  {route.attributes.first_ascent_author && (
                     <Text>
                       1. przejście:
-                      {route.attributes.first_ascent_autor}
+                      {route.attributes.first_ascent_author}
                     </Text>
                   )}
                 </View>
