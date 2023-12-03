@@ -8,9 +8,10 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { useAtom } from "jotai";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import Toast from "react-native-toast-message";
 
 import Accordion from "../common/Accordion";
 import Backdrop from "../common/Backdrop";
@@ -44,7 +45,6 @@ type RockInfoProps = {
 const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
@@ -65,9 +65,18 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
       createRating(selectedRouteToRate!.id, rating, userData?.id),
     onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShowSuccess(true);
       rockRefetch();
-      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
+      Toast.show({
+        type: "success",
+        text2: "Ocena została zapisana",
+      });
+      setTimeout(() => dismissBottomSheet(), 200);
+    },
+    onError: () => {
+      Toast.show({
+        type: "error",
+        text2: "Coś poszło nie tak",
+      });
     },
   });
 
@@ -75,9 +84,18 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     mutationFn: () => updateRating(route.attributes.usersRating.id, rating),
     onSuccess: (data) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShowSuccess(true);
+      Toast.show({
+        type: "success",
+        text2: "Ocena została zaktualizowana",
+      });
       rockRefetch();
-      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
+      setTimeout(() => dismissBottomSheet(), 200);
+    },
+    onError: () => {
+      Toast.show({
+        type: "error",
+        text2: "Coś poszło nie tak",
+      });
     },
   });
 
@@ -87,13 +105,24 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setEditingComment(false);
-      setShowSuccess(true);
+      Toast.show({
+        type: "success",
+        text2: "Komentarz został zapisany",
+      });
       rockRefetch();
-      setTimeout(() => commentsBottomSheetModalRef.current?.dismiss(), 2000);
+      setTimeout(() => dismissBottomSheet(), 200);
     },
     onError: (err: AxiosError) => {
       if (err?.response?.status === 406) {
-        Alert.alert("Ten komentarz nie spełnia standardów społeczności");
+        Toast.show({
+          type: "error",
+          text2: "Ten komentarz nie spełnia standardów społeczności",
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text2: "Coś poszło nie tak",
+        });
       }
     },
   });
@@ -102,13 +131,24 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     mutationFn: () => updateComment(route.attributes.usersComment?.id, comment),
     onSuccess: (data) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setShowSuccess(true);
       rockRefetch();
-      setTimeout(() => bottomSheetModalRef.current?.dismiss(), 2000);
+      Toast.show({
+        type: "success",
+        text2: "Komentarz został zaktualizowany",
+      });
+      setTimeout(() => dismissBottomSheet(), 200);
     },
     onError: (err: AxiosError) => {
       if (err?.response?.status === 406) {
-        Alert.alert("Ten komentarz nie spełnia standardów społeczności");
+        Toast.show({
+          type: "success",
+          text2: "Ten komentarz nie spełnia standardów społeczności",
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text2: "Coś poszło nie tak",
+        });
       }
     },
   });
@@ -149,10 +189,11 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   };
 
   const dismissBottomSheet = () => {
-    setShowSuccess(false);
     setSelectedRouteToRate(null);
     setComment("");
     setEditingComment(false);
+    bottomSheetModalRef.current?.dismiss();
+    commentsBottomSheetModalRef.current?.dismiss();
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
@@ -235,30 +276,22 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
         enableDismissOnClose
         style={styles.modalContainer}
       >
-        {showSuccess ? (
-          <Text>Sukces!</Text>
-        ) : (
-          <>
-            <Text>Twoja ocena dla drogi</Text>
-            <Text>{selectedRouteToRate?.attributes.display_name}</Text>
-            <View style={styles.starContainer}>
-              {[1, 2, 3, 4, 5].map((item) => (
-                <TouchableOpacity onPress={() => setRating(item)}>
-                  <View
-                    style={item <= rating ? styles.starFilled : styles.star}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-            <TouchableOpacity onPress={handleSendRateButton}>
-              <View style={styles.sendRatingButton}>
-                <Text>
-                  {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
-                </Text>
-              </View>
+        <Text>Twoja ocena dla drogi</Text>
+        <Text>{selectedRouteToRate?.attributes.display_name}</Text>
+        <View style={styles.starContainer}>
+          {[1, 2, 3, 4, 5].map((item) => (
+            <TouchableOpacity onPress={() => setRating(item)}>
+              <View style={item <= rating ? styles.starFilled : styles.star} />
             </TouchableOpacity>
-          </>
-        )}
+          ))}
+        </View>
+        <TouchableOpacity onPress={handleSendRateButton}>
+          <View style={styles.sendRatingButton}>
+            <Text>
+              {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </BottomSheetModal>
       <BottomSheetModal
         ref={commentsBottomSheetModalRef}
@@ -269,56 +302,52 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
         style={styles.modalCommentsContainer}
         backdropComponent={Backdrop}
       >
-        {showSuccess ? (
-          <Text>Sukces!</Text>
-        ) : (
-          <BottomSheetScrollView style={styles.commentsContainer}>
-            <Text>
-              Komentarze dla drogi:
-              {selectedRouteToRate?.attributes.display_name}
-            </Text>
-            <Text>Twój komentarz:</Text>
-            {route.attributes.usersComment && !editingComment ? (
+        <BottomSheetScrollView style={styles.commentsContainer}>
+          <Text>
+            Komentarze dla drogi:
+            {selectedRouteToRate?.attributes.display_name}
+          </Text>
+          <Text>Twój komentarz:</Text>
+          {route.attributes.usersComment && !editingComment ? (
+            <View>
+              <Text>{route.attributes.usersComment.comment}</Text>
+            </View>
+          ) : (
+            <TextInput
+              style={styles.commentInput}
+              defaultValue={comment}
+              onChangeText={(text) => setComment(text)}
+              multiline
+              numberOfLines={2}
+              underlineColorAndroid='transparent'
+            />
+          )}
+          <TouchableOpacity onPress={handleSendCommentButton}>
+            <View style={styles.sendCommentButton}>
+              <Text>
+                {route.attributes.usersComment && !editingComment
+                  ? "Edytuj komentarz"
+                  : "Zapisz"}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          {Array.isArray(route.attributes.comments) &&
+          route.attributes.comments.length >= 1 ? (
+            route.attributes.comments.slice(0, 10).map((comment) => (
               <View>
-                <Text>{route.attributes.usersComment.comment}</Text>
-              </View>
-            ) : (
-              <TextInput
-                style={styles.commentInput}
-                defaultValue={comment}
-                onChangeText={(text) => setComment(text)}
-                multiline
-                numberOfLines={2}
-                underlineColorAndroid='transparent'
-              />
-            )}
-            <TouchableOpacity onPress={handleSendCommentButton}>
-              <View style={styles.sendCommentButton}>
                 <Text>
-                  {route.attributes.usersComment && !editingComment
-                    ? "Edytuj komentarz"
-                    : "Zapisz"}
+                  {comment.updatedAt} - {comment.user} - {comment.comment}
                 </Text>
               </View>
-            </TouchableOpacity>
-            {Array.isArray(route.attributes.comments) &&
-            route.attributes.comments.length >= 1 ? (
-              route.attributes.comments.slice(0, 10).map((comment) => (
-                <View>
-                  <Text>
-                    {comment.updatedAt} - {comment.user} - {comment.comment}
-                  </Text>
-                </View>
-              ))
-            ) : (
-              <Text>
-                {route.attributes.usersComment
-                  ? "Brak innych komentarzy dla tej drogi"
-                  : "Brak komentarzy dla tej drogi."}
-              </Text>
-            )}
-          </BottomSheetScrollView>
-        )}
+            ))
+          ) : (
+            <Text>
+              {route.attributes.usersComment
+                ? "Brak innych komentarzy dla tej drogi"
+                : "Brak komentarzy dla tej drogi."}
+            </Text>
+          )}
+        </BottomSheetScrollView>
       </BottomSheetModal>
     </>
   );

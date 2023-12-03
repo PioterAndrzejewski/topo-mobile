@@ -10,10 +10,10 @@ import { useFonts } from "expo-font";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 
 import LoginScreen from "./screens/Login";
 import RegisterScreen from "./screens/Register";
-import Home from "./screens/MapScreen";
 import Rock from "./screens/Rock";
 import HomeBottomTabNavigator from "./navigators/HomeBottomTabNavigator";
 
@@ -48,34 +48,37 @@ export default function App() {
     return <AppLoading />;
   }
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister: asyncStoragePersister }}
-      >
-        <NavigationContainer>
-          <BottomSheetModalProvider>
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-              }}
-            >
-              <Stack.Screen name='Login' component={LoginScreen} />
-              <Stack.Screen name='Register' component={RegisterScreen} />
-              <Stack.Screen
-                name='HomeNavigator'
-                component={HomeBottomTabNavigator}
-              />
-              <Stack.Screen
-                name='Rock'
-                component={Rock}
-                initialParams={{ id: "yes yes" }}
-              />
-            </Stack.Navigator>
-          </BottomSheetModalProvider>
-        </NavigationContainer>
-      </PersistQueryClientProvider>
-    </GestureHandlerRootView>
+    <>
+      <GestureHandlerRootView style={styles.container}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
+          <NavigationContainer>
+            <BottomSheetModalProvider>
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name='Login' component={LoginScreen} />
+                <Stack.Screen name='Register' component={RegisterScreen} />
+                <Stack.Screen
+                  name='HomeNavigator'
+                  component={HomeBottomTabNavigator}
+                />
+                <Stack.Screen
+                  name='Rock'
+                  component={Rock}
+                  initialParams={{ id: "yes yes" }}
+                />
+              </Stack.Navigator>
+            </BottomSheetModalProvider>
+          </NavigationContainer>
+        </PersistQueryClientProvider>
+      </GestureHandlerRootView>
+      <Toast topOffset={60}/>
+    </>
   );
 }
 
