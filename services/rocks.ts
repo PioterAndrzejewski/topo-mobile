@@ -207,6 +207,7 @@ export type RouteInner = {
   author_date: number;
   image_index: number;
   path_omit_rings: string;
+  coordinates: Coordinates;
 }
 
 export type Route = {

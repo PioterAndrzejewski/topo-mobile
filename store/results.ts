@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { atom, createStore, useAtom } from 'jotai'
 import { Region } from 'react-native-maps';
-import { AreaData, RegionData } from '../services/rocks';
+import { AreaData, RegionData, RockData } from '../services/rocks';
 import MapView from 'react-native-maps';
 
 export const startRegion = {
@@ -17,5 +17,5 @@ export const resultsStageAtom = atom<number>(0)
 export const regionAtom = atom<Region>(startRegion);
 export const mapAtom = atom<RefObject<MapView> | null >(null);
 export const zoomAtom = atom(8);
-export const listToRenderAtom = atom<AreasList>([]);
+export const listToRenderAtom = atom<RockData[]>([]);
 export const selectedRockAtom = atom<string | null>(null)

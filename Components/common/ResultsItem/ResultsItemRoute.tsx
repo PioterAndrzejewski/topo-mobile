@@ -4,21 +4,21 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { styleGuide } from "../../styles/guide";
+import { styleGuide } from "../../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
-import { HomeScreenNavigationProp } from "../../types/type";
+import { HomeScreenNavigationProp } from "../../../types/type";
 
 import {
   resultsStageAtom,
   regionAtom,
   mapAtom,
   selectedRockAtom,
-} from "../../store/results";
-import { getRegionForZoom } from "../../utils/getRegionForZoom";
-import { getZoomFromStage } from "../../utils/getZoomFromStage";
-import { AreaData } from "../../services/rocks";
-import { Coordinates, Route } from "../../services/rocks";
-import { getMeaningfulGrade } from "../../utils/language/getMeaningfulGrade";
+} from "../../../store/results";
+import { getRegionForZoom } from "../../../utils/getRegionForZoom";
+import { getZoomFromStage } from "../../../utils/getZoomFromStage";
+import { AreaData } from "../../../services/rocks";
+import { Coordinates, Route } from "../../../services/rocks";
+import { getMeaningfulGrade } from "../../../utils/language/getMeaningfulGrade";
 
 export type RouteWithParent = Route & {
   parent: {

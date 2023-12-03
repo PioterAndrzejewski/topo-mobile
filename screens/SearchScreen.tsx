@@ -7,16 +7,18 @@ import {
   ScrollView,
 } from "react-native";
 import Animated from "react-native-reanimated";
-
 import { useAtomValue } from "jotai";
+
+import RockResultsItem from "../components/common/ResultsItem/RockResultsItem";
+import ResultsItemRoute from "../components/common/ResultsItem/ResultsItemRoute";
+import ResultsItem from "../components/common/ResultsItem/ResultsItem";
+
+import { RegionData, RockData } from "../services/rocks";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { RouteWithParent } from "../components/common/ResultsItem/ResultsItemRoute";
+
 import { searchTextAtom } from "../store/search";
 import { useAreas } from "../hooks/useAreas";
-
-import { Coordinates, RegionData, RockData, Route } from "../services/rocks";
-import ResultsItem from "../components/common/ResultsItem";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { RouteWithParent } from "../components/search/ResultsItemRoute";
-import ResultsItemRock from "../components/search/ResultsItemRoute";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -42,22 +44,15 @@ const searchForRoutes = (rocks: RockData[], searchText: string) => {
 export default function SearchScreen() {
   const { areas, regions, sectors, rocks } = useAreas();
   const [foundRoutes, setFoundRoutes] = useState<RouteWithParent[]>([]);
-  const [foundRegions, setFoundRegions] = useState<RegionData[]>([]);
   const [foundSectors, setFoundSectors] = useState<RegionData[]>([]);
   const [foundRocks, setFoundRocks] = useState<RockData[]>([]);
   const [routesExpanded, setRoutesExpanded] = useState(true);
   const [rocksExpanded, setRocksExpanded] = useState(true);
   const [sectorsExpanded, setSectorsExpanded] = useState(true);
-  const [regionsExpanded, setRegionsExpanded] = useState(true);
   const searchText = useAtomValue(searchTextAtom);
 
   useEffect(() => {
     if (searchText.length < 1) return;
-    setFoundRegions(
-      regions?.filter((region) =>
-        region.attributes.Name.toLowerCase().includes(searchText),
-      ) || [],
-    );
     setFoundSectors(
       sectors?.filter((sector) =>
         sector.attributes.Name.toLowerCase().includes(searchText),
@@ -81,7 +76,6 @@ export default function SearchScreen() {
     if (section === "routes") setRoutesExpanded((prev) => !prev);
     if (section === "rocks") setRocksExpanded((prev) => !prev);
     if (section === "sectors") setSectorsExpanded((prev) => !prev);
-    if (section === "regions") setRegionsExpanded((prev) => !prev);
   };
 
   if (searchText === "" || !searchText) {
@@ -106,7 +100,7 @@ export default function SearchScreen() {
             scrollEnabled={false}
             data={foundRoutes.slice(0, 8)}
             renderItem={({ item }) => (
-              <ResultsItemRock
+              <ResultsItemRoute
                 name={item.attributes.display_name}
                 item={item}
                 itemStage={3}
@@ -131,11 +125,9 @@ export default function SearchScreen() {
             scrollEnabled={false}
             data={foundRocks.slice(0, 8)}
             renderItem={({ item }) => (
-              <ResultsItem
+              <RockResultsItem
                 name={item.attributes.Name}
                 item={item}
-                itemStage={3}
-                isRock
                 id={item.attributes.uuid}
                 key={item.attributes.uuid}
               />
@@ -164,10 +156,8 @@ export default function SearchScreen() {
               <ResultsItem
                 name={item.attributes.Name}
                 item={item}
-                itemStage={2}
                 id={item.attributes.uuid}
                 key={item.attributes.uuid}
-                isSector
               />
             )}
           />
@@ -177,31 +167,6 @@ export default function SearchScreen() {
         )}
       </View>
 
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("regions")}>
-          <View style={styles.titleContainer}>
-            <Text>Regiony - {foundRegions.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundRegions.length < 1 && (
-          <Text>Brak regionów dla szukanej frazy</Text>
-        )}
-        {foundRegions.length > 0 && regionsExpanded && (
-          <Animated.FlatList
-            scrollEnabled={false}
-            data={foundRegions.slice(0, 8)}
-            renderItem={({ item }) => (
-              <ResultsItem
-                name={item.attributes.Name}
-                item={item}
-                itemStage={1}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-      </View>
       {foundRocks.length > 8 && (
         <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
       )}

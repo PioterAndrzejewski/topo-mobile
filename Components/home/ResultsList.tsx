@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { useAtom, useAtomValue } from "jotai";
-import { Region } from "react-native-maps";
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import ResultsItem from "../common/ResultsItem";
+import ResultsItem from "../common/ResultsItem/RockResultsItem";
 
 import { useAreas } from "../../hooks/useAreas";
-import { AreaData, RegionData } from "../../services/rocks";
+import { AreaData, RockData } from "../../services/rocks";
 import { regionAtom, AreasList, listToRenderAtom } from "../../store/results";
 import { calculateDistance } from "../../utils/calculateDistance";
 import { getStageFromZoom } from "../../utils/getZoomFromStage";
@@ -20,28 +19,14 @@ import { getRegionForZoom } from "../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../utils/getZoomFromStage";
 import { mapAtom, selectedRockAtom } from "../../store/results";
 import RockInfoExpanded from "./RockInfoExpanded";
-import { rocksOnlyAtom } from "../../store/settings";
-
-const sortAreas = (region: Region, areas: RegionData[]) => {
-  if (!areas || areas.length < 1 || !Array.isArray(areas)) return [];
-  const shallowCopy = [...areas];
-  if (!shallowCopy || !Array.isArray(shallowCopy) || shallowCopy?.length < 1)
-    return [];
-  return shallowCopy.sort((a, b) => {
-    return (
-      calculateDistance(region, a.attributes.coordinates) -
-      calculateDistance(region, b.attributes.coordinates)
-    );
-  });
-};
+import { sortAreas } from "../../utils/sortAreas";
+import { sortRocks } from "../../utils/sortRocks";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
-  const [stage, setStage] = useState(0);
-  const rocksOnly = useAtomValue(rocksOnlyAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -50,7 +35,6 @@ export default function ResultsList() {
   useEffect(() => {
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
-    setStage(stage);
     const newLocationArray: AreasList = [];
     if (stage >= 1 && areas) {
       newLocationArray.push(sortAreas(region, areas)[0]);
@@ -63,41 +47,11 @@ export default function ResultsList() {
     }
     setLocationArray(newLocationArray);
 
-    if (rocksOnly && rocks) {
-      const sortedAreas = sortAreas(region, rocks);
-      setListToRender(sortedAreas);
+    if (rocks) {
+      const sortedRocks = sortRocks(region, rocks);
+      setListToRender(sortedRocks);
     }
-
-    if (stage === 0 && areas) {
-      setListToRender(areas);
-    }
-    if (stage === 1 && regions) {
-      const regionsFiltered = regions.filter(
-        (region) =>
-          region?.attributes?.parent?.data?.attributes?.uuid ===
-          newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
-      );
-      setListToRender(regionsFiltered);
-    }
-    if (stage === 2 && sectors) {
-      setListToRender(
-        sectors.filter(
-          (sector) =>
-            sector?.attributes?.parent?.data?.attributes?.uuid ===
-            newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
-        ),
-      );
-    }
-    if (stage === 3 && rocks) {
-      setListToRender(
-        rocks.filter(
-          (rock) =>
-            rock?.attributes?.parent?.data?.attributes?.uuid ===
-            newLocationArray[newLocationArray.length - 1]?.attributes?.uuid,
-        ),
-      );
-    }
-  }, [region, rocksOnly]);
+  }, [region]);
 
   useEffect(() => {
     if (selectedRock) {
@@ -120,7 +74,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
-  const snapPoints = useMemo(() => ["10%", "35%", "97%"], []);
+  const snapPoints = useMemo(() => ["12%", "45%", "97%"], []);
 
   return (
     <>
@@ -150,9 +104,6 @@ export default function ResultsList() {
                     name={item.attributes.Name}
                     key={item.attributes.Name}
                     item={item}
-                    isRock={rocksOnly || stage === 3}
-                    isSector={stage === 2 && !rocksOnly}
-                    itemStage={stage + 1}
                   />
                 ))}
 
@@ -186,21 +137,9 @@ const styles = StyleSheet.create({
   },
   location: {
     flexDirection: "row",
+    paddingTop: 12,
+    paddingBottom: 12,
     paddingHorizontal: 12,
-  },
-  controls: {
-    marginBottom: 14,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  buttonContainer: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
-  buttonContainerActive: {
-    borderWidth: 2,
+    minHeight: 60,
   },
 });
