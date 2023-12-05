@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Alert,
 } from "react-native";
 import Animated from "react-native-reanimated";
 import { useAtom } from "jotai";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import Toast from "react-native-toast-message";
+import Modal from "react-native-modal";
 
 import Accordion from "../common/Accordion";
 import Backdrop from "../common/Backdrop";
@@ -31,6 +31,9 @@ import { useUserProfile } from "../../hooks/useUserProfile";
 import { AxiosError } from "axios";
 import { getRingsConjugation } from "../../utils/language/getRingsConjugation";
 import { getAnchorName } from "../../utils/language/getAnchorName";
+import { HeartIcon } from "../icons/Heart";
+import { useFavoriteRoute } from "../../hooks/useFavoriteRoute";
+import FavoritesModal from "./details/FavoritesModal";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -52,7 +55,10 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
+  const [favoritesModalOpened, setFavoritesModalOpened] = useState(false);
   const { data: userData } = useUserProfile();
+  const { favoriteType, removeFromFavorites, setAsFavorite } =
+    useFavoriteRoute(route);
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -196,6 +202,19 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     commentsBottomSheetModalRef.current?.dismiss();
   };
 
+  const heartColor = useMemo(() => {
+    switch (favoriteType) {
+      case "project":
+        return "#bbb545";
+      case "other":
+        return "#4fd6ff";
+      case "done":
+        return "#45bb50";
+      default:
+        return undefined;
+    }
+  }, [favoriteType]);
+
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
@@ -217,12 +236,17 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                   <Text>{getMeaningfulGrade(route.attributes.grade)}</Text>
                 </View>
               </View>
-              <View>
-                <Text>
-                  {isNaN(route.attributes.averageScore)
-                    ? "brak ocen"
-                    : route.attributes.averageScore}
-                </Text>
+              <View style={styles.ratingContainer}>
+                <View>
+                  <Text>
+                    {isNaN(route.attributes.averageScore)
+                      ? "brak ocen"
+                      : route.attributes.averageScore}
+                  </Text>
+                </View>
+                <TouchableOpacity onPress={() => setFavoritesModalOpened(true)}>
+                  <HeartIcon fill={heartColor} />
+                </TouchableOpacity>
               </View>
             </View>
           }
@@ -280,7 +304,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
         <Text>{selectedRouteToRate?.attributes.display_name}</Text>
         <View style={styles.starContainer}>
           {[1, 2, 3, 4, 5].map((item) => (
-            <TouchableOpacity onPress={() => setRating(item)}>
+            <TouchableOpacity onPress={() => setRating(item)} key={item}>
               <View style={item <= rating ? styles.starFilled : styles.star} />
             </TouchableOpacity>
           ))}
@@ -334,7 +358,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
           {Array.isArray(route.attributes.comments) &&
           route.attributes.comments.length >= 1 ? (
             route.attributes.comments.slice(0, 10).map((comment) => (
-              <View>
+              <View key={comment.id}>
                 <Text>
                   {comment.updatedAt} - {comment.user} - {comment.comment}
                 </Text>
@@ -349,6 +373,19 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
           )}
         </BottomSheetScrollView>
       </BottomSheetModal>
+      <Modal
+        isVisible={favoritesModalOpened}
+        backdropColor={"rgba(0, 0, 0, 0.8)"}
+        onBackdropPress={() => setFavoritesModalOpened(false)}
+      >
+        <FavoritesModal
+          route={route}
+          favoriteType={favoriteType}
+          onHide={() => setFavoritesModalOpened(false)}
+          setAsFavorite={setAsFavorite}
+          removeFromFavorites={removeFromFavorites}
+        />
+      </Modal>
     </>
   );
 };
@@ -391,7 +428,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignSelf: "stretch",
   },
-  ratingContainer: {},
+  ratingContainer: {
+    marginRight: 6,
+    width: 60,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",

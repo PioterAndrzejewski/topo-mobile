@@ -39,6 +39,7 @@ const Header = (props: HeaderProps) => {
               active={i === props.activeImage}
               index={i}
               onPress={props.onCirclePress}
+              key={i}
             />
           ))}
         </View>

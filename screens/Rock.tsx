@@ -81,6 +81,7 @@ const Rock = ({ route }: Props) => {
               <RockDetails id={data?.attributes.uuid} />
               {data?.attributes?.routes.data.map((route, index) => (
                 <RouteInfo
+                  key={route.attributes.uuid}
                   route={route}
                   index={index}
                   realIndex={data?.attributes?.routes.data.findIndex(
