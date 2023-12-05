@@ -119,7 +119,8 @@ export const styleGuide = {
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-
     elevation: 24,
+    border: 1,
+    borderColor: "#000",
   },
 };

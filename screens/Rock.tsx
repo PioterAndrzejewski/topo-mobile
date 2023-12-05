@@ -136,11 +136,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   bottomSheetContainer: {
-    zIndex: 4,
+    zIndex: 24,
     shadowOffset: { width: 0, height: -20 },
     shadowRadius: 0,
     shadowColor: "#000",
     shadowOpacity: 0,
+    elevation: 24,
   },
   routesContainer: {
     display: "flex",
