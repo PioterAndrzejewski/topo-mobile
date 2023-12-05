@@ -201,7 +201,7 @@ export type RouteInner = {
   comments: Comment[];
   usersComment: null | CommentSanitized;
   author: string,
-  first_ascent_autor: string;
+  first_ascent_author: string;
   rings_number: number;
   description: string;
   author_date: number;
