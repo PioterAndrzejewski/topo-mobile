@@ -34,6 +34,7 @@ import { getAnchorName } from "../../utils/language/getAnchorName";
 import { HeartIcon } from "../icons/Heart";
 import { useFavoriteRoute } from "../../hooks/useFavoriteRoute";
 import FavoritesModal from "./details/FavoritesModal";
+import { getFavoriteColor } from "../../utils/getFavoriteColor";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -202,19 +203,6 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     commentsBottomSheetModalRef.current?.dismiss();
   };
 
-  const heartColor = useMemo(() => {
-    switch (favoriteType) {
-      case "project":
-        return "#bbb545";
-      case "other":
-        return "#4fd6ff";
-      case "done":
-        return "#45bb50";
-      default:
-        return undefined;
-    }
-  }, [favoriteType]);
-
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
@@ -245,7 +233,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
                   </Text>
                 </View>
                 <TouchableOpacity onPress={() => setFavoritesModalOpened(true)}>
-                  <HeartIcon fill={heartColor} />
+                  <HeartIcon fill={getFavoriteColor(favoriteType)} />
                 </TouchableOpacity>
               </View>
             </View>

@@ -15,6 +15,7 @@ export type ButtonProps = {
   onClick: () => void;
   disabled?: boolean;
   isLoading?: boolean;
+  containerStyles?: ViewStyle;
 };
 
 export default function Button({
@@ -22,6 +23,7 @@ export default function Button({
   onClick,
   disabled,
   isLoading,
+  containerStyles,
 }: ButtonProps) {
   return (
     <TouchableOpacity
@@ -38,7 +40,7 @@ export default function Button({
                 ...styles.container,
                 ...styles.disabled,
               }
-            : { ...styles.container }
+            : { ...styles.container, ...containerStyles }
         }
       >
         {isLoading ? (

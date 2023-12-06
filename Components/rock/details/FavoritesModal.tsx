@@ -8,6 +8,7 @@ import Button from "../../common/Button";
 import { Route } from "../../../services/rocks";
 import { useFavoriteRoute } from "../../../hooks/useFavoriteRoute";
 import { FavoriteType } from "../../../services/storeAsync";
+import { getFavoriteColor } from "../../../utils/getFavoriteColor";
 
 const FavoritesModal = ({
   route,
@@ -22,49 +23,45 @@ const FavoritesModal = ({
   setAsFavorite: (val: FavoriteType) => void;
   removeFromFavorites: () => void;
 }) => {
-  const [value, setValue] = useState<FavoriteType>("project");
-  const handleClick = () => {
-    if (!favoriteType) {
-      setAsFavorite(value);
-      onHide();
-    }
-    if (favoriteType) {
-      removeFromFavorites();
-      onHide();
-    }
+  const handleAdd = (value: FavoriteType) => {
+    setAsFavorite(value);
+    onHide();
+  };
+
+  const handleRemove = () => {
+    removeFromFavorites();
+    onHide();
   };
 
   return (
     <View style={favoritesModalStyles.container}>
       {favoriteType ? (
         <>
-          <Text>Usuwasz drogę z ulubionych</Text>
           <Text>{route.attributes.display_name}</Text>
-          <Text>z ulubionych</Text>
-          <Button label='Usuń z listy' onClick={handleClick} />
+          <Text>Usuwasz z ulubionych</Text>
+          <Button label='Usuń z listy' onClick={handleRemove} />
         </>
       ) : (
         <>
-          <Text>Dodaj drogę</Text>
           <Text>{route.attributes.display_name}</Text>
-          <Text>do listy:</Text>
-          <RNPickerSelect
-            value={value}
-            onValueChange={(val) => setValue(val)}
-            doneText='Wybierz'
-            pickerProps={{
-              accessibilityLabel: "Dodaj do listy",
-            }}
-            items={[
-              { label: "Projekt", value: "project" },
-              { label: "Zrobione", value: "done" },
-              { label: "Inne", value: "other" },
-            ]}
-            placeholder={{
-              label: "Wybierz:",
-            }}
-          />
-          <Button label='Dodaj' onClick={handleClick} />
+          <Text>Dodaj do listy:</Text>
+          <View style={favoritesModalStyles.buttons}>
+            <Button
+              label='Zrobione'
+              onClick={() => handleAdd("done")}
+              containerStyles={{ backgroundColor: getFavoriteColor("done") }}
+            />
+            <Button
+              label='Projekt'
+              onClick={() => handleAdd("project")}
+              containerStyles={{ backgroundColor: getFavoriteColor("project") }}
+            />
+            <Button
+              label='Inne'
+              onClick={() => handleAdd("other")}
+              containerStyles={{ backgroundColor: getFavoriteColor("other") }}
+            />
+          </View>
         </>
       )}
     </View>
@@ -76,6 +73,10 @@ const favoritesModalStyles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 12,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 
