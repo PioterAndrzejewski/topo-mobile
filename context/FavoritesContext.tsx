@@ -11,7 +11,9 @@ import {
   getAllFavoriteRocks,
   FavoriteType,
   saveRouteToFavorites,
-  removeRouteFromFavorites,
+  removeSavedRouteFromFavorites,
+  saveRockToFavorites,
+  removeRockFromFavorites,
 } from "../services/storeAsync";
 import { RouteWithFavoriteAndParent } from "../services/storeAsync";
 import { RockData, Route } from "../services/rocks";
@@ -28,12 +30,15 @@ type FavoritesContextValue = {
   favoriteRocks: RockData[] | undefined;
   refreshFavoritesList: () => void;
   checkRouteInFavorites: (uuid: string) => FavoriteType | null;
-  setAsFavorite: (
+  checkRockInFavorites: (uuid: string) => boolean;
+  setRouteAsFavorite: (
     route: Route,
     favoriteType: FavoriteType,
     parent: RoutesParent,
   ) => void;
-  removeFromFavorites: (route: Route) => void;
+  setRockAsFavorite: (rock: RockData) => void;
+  removeRouteFromFavorites: (route: Route) => void;
+  removeRockFromFavorite: (uuid: string) => void;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue>({
@@ -45,8 +50,11 @@ const FavoritesContext = createContext<FavoritesContextValue>({
   favoriteRocks: [],
   refreshFavoritesList: () => undefined,
   checkRouteInFavorites: () => null,
-  setAsFavorite: () => undefined,
-  removeFromFavorites: () => undefined,
+  setRouteAsFavorite: () => undefined,
+  setRockAsFavorite: () => undefined,
+  removeRouteFromFavorites: () => undefined,
+  removeRockFromFavorite: () => undefined,
+  checkRockInFavorites: () => false,
 });
 
 const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
@@ -75,13 +83,10 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
     refreshFavoritesList();
   }, []);
 
-  useEffect(() => {
-    console.log(favoriteRoutes);
-  }, [favoriteRoutes]);
 
   const refreshFavoritesList = () => {
     getRoutesAsync();
-    getRocksAsync;
+    getRocksAsync();
   };
 
   const checkRouteInFavorites = (uuid: string) => {
@@ -97,7 +102,7 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
     return routeFound;
   };
 
-  const setAsFavorite = async (
+  const setRouteAsFavorite = async (
     route: Route,
     favoriteType: FavoriteType,
     parent: RoutesParent,
@@ -106,8 +111,29 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
     refreshFavoritesList();
   };
 
-  const removeFromFavorites = async (route: Route) => {
-    await removeRouteFromFavorites(route);
+  const removeRouteFromFavorites = async (route: Route) => {
+    await removeSavedRouteFromFavorites(route);
+    refreshFavoritesList();
+  };
+
+  const checkRockInFavorites = (uuid: string) => {
+    if (favoriteRocks) {
+      const foundRock = favoriteRocks.find(
+        (rock) => rock.attributes.uuid === uuid,
+      );
+      return !!foundRock;
+    }
+    return false;
+  };
+
+  const setRockAsFavorite = async (rock: RockData) => {
+    console.log("wywoluje rock z ", rock);
+    await saveRockToFavorites(rock);
+    refreshFavoritesList();
+  };
+
+  const removeRockFromFavorite = async (uuid: string) => {
+    await removeRockFromFavorites(uuid);
     refreshFavoritesList();
   };
 
@@ -118,8 +144,11 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
         favoriteRocks,
         refreshFavoritesList,
         checkRouteInFavorites,
-        setAsFavorite,
-        removeFromFavorites,
+        setRouteAsFavorite,
+        removeRouteFromFavorites,
+        checkRockInFavorites,
+        setRockAsFavorite,
+        removeRockFromFavorite,
       }}
     >
       {children}

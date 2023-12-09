@@ -13,6 +13,9 @@ import { getRegionForZoom } from "../../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../../utils/getZoomFromStage";
 import { Coordinates, Route } from "../../../services/rocks";
 import { getMeaningfulGrade } from "../../../utils/language/getMeaningfulGrade";
+import { HeartIcon } from "../../icons/Heart";
+import { useFavoriteContext } from "../../../context/FavoritesContext";
+import { getFavoriteColor } from "../../../utils/getFavoriteColor";
 
 export type RoutesParent = {
   name: string;
@@ -40,6 +43,12 @@ const ResultsItemRoute: FC<ListResultProps> = ({
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
+  const {
+    checkRouteInFavorites,
+    removeRouteFromFavorites,
+    setRouteAsFavorite,
+  } = useFavoriteContext();
+  const isFavorite = checkRouteInFavorites(id);
 
   const animateTo = (item: RouteWithParent) => {
     navigation.navigate("Map");
@@ -61,6 +70,10 @@ const ResultsItemRoute: FC<ListResultProps> = ({
     if (isRock) setSelectedRock(id);
   };
 
+  const handleHeartPress = () => {
+    if (isFavorite) removeRouteFromFavorites(item);
+  };
+
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.gradeContainer}>
@@ -72,6 +85,15 @@ const ResultsItemRoute: FC<ListResultProps> = ({
         <Text style={styles.text}>{name}</Text>
         <Text style={styles.text}>Skała: {item.parent.name}</Text>
       </View>
+      {isFavorite && (
+        <TouchableOpacity
+          style={styles.heartContainer}
+          onPress={handleHeartPress}
+          hitSlop={12}
+        >
+          <HeartIcon size={24} fill={getFavoriteColor(isFavorite)} />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 };
@@ -103,4 +125,5 @@ const styles = StyleSheet.create({
     ...styleGuide.text.body,
     color: "#336383",
   },
+  heartContainer: { flex: 1, flexDirection: "row", justifyContent: "flex-end" },
 });

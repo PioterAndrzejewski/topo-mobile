@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import Button from "../../common/Button";
@@ -6,27 +5,27 @@ import Button from "../../common/Button";
 import { Route } from "../../../services/rocks";
 import { FavoriteType } from "../../../services/storeAsync";
 import { getFavoriteColor } from "../../../utils/getFavoriteColor";
+import { useFavoriteContext } from "../../../context/FavoritesContext";
 
 const FavoritesModal = ({
   route,
   onHide,
   favoriteType,
   setAsFavorite,
-  removeFromFavorites,
 }: {
   route: Route;
   onHide: () => void;
   favoriteType: FavoriteType | null;
   setAsFavorite: (val: FavoriteType) => void;
-  removeFromFavorites: (route: Route) => void;
 }) => {
+  const { removeRouteFromFavorites } = useFavoriteContext();
   const handleAdd = (value: FavoriteType) => {
     setAsFavorite(value);
     onHide();
   };
 
   const handleRemove = () => {
-    removeFromFavorites(route);
+    removeRouteFromFavorites(route);
     onHide();
   };
 

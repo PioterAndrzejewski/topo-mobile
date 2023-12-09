@@ -21,6 +21,7 @@ import { mapAtom, selectedRockAtom } from "../../store/results";
 import RockInfoExpanded from "./RockInfoExpanded";
 import { sortAreas } from "../../utils/sortAreas";
 import { sortRocks } from "../../utils/sortRocks";
+import { styleGuide } from "../../styles/guide";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
@@ -74,11 +75,16 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
-  const snapPoints = useMemo(() => ["12%", "45%", "97%"], []);
+  const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
 
   return (
     <>
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        style={styles.bottomSheet}
+      >
         <View style={styles.location}>
           {locationArray?.length > 0 &&
             locationArray.map((item, index) => (
@@ -121,6 +127,7 @@ export default function ResultsList() {
         index={1}
         snapPoints={bottomSheetSnapPoints}
         onDismiss={() => setSelectedRock(null)}
+        style={styles.bottomSheet}
       >
         <RockInfoExpanded />
       </BottomSheetModal>
@@ -129,6 +136,9 @@ export default function ResultsList() {
 }
 
 const styles = StyleSheet.create({
+  bottomSheet: {
+    ...styleGuide.bottomSheet,
+  },
   container: {
     paddingTop: 20,
     width: "100%",

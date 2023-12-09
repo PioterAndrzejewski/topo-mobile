@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
+import { View, StyleSheet } from "react-native";
 
 import Switcher from "../components/common/Switcher";
+import RockFavorites from "../components/favorites/RockFavorites";
 import RouteFavorites from "../components/favorites/RouteFavorites";
 
 import { SwitcherOption } from "../components/common/Switcher";
@@ -22,11 +22,12 @@ export default function SearchScreen() {
   const [mode, setMode] = useState<string>("routes");
 
   const renderFavorites = useMemo(() => {
+    console.log("zmieniam mode");
     switch (mode) {
       case "routes":
         return <RouteFavorites />;
       case "rocks":
-        return <Text>No skały tu</Text>;
+        return <RockFavorites />;
     }
   }, [mode]);
 

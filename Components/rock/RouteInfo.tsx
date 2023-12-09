@@ -67,8 +67,11 @@ const RouteInfo = ({
   const [editingComment, setEditingComment] = useState(false);
   const [favoritesModalOpened, setFavoritesModalOpened] = useState(false);
   const { data: userData } = useUserProfile();
-  const { checkRouteInFavorites, setAsFavorite, removeFromFavorites } =
-    useFavoriteContext();
+  const {
+    checkRouteInFavorites,
+    setRouteAsFavorite,
+    removeRouteFromFavorites,
+  } = useFavoriteContext();
   const favoriteType = checkRouteInFavorites(route.attributes.uuid);
 
   const handlePress = () => {
@@ -214,7 +217,7 @@ const RouteInfo = ({
   };
 
   const handleAddToFavorites = (favoriteType: FavoriteType) => {
-    setAsFavorite(route, favoriteType, parent);
+    setRouteAsFavorite(route, favoriteType, parent);
   };
 
   const snapPoints = useMemo(() => ["40%"], []);
@@ -385,7 +388,6 @@ const RouteInfo = ({
           favoriteType={favoriteType}
           onHide={() => setFavoritesModalOpened(false)}
           setAsFavorite={handleAddToFavorites}
-          removeFromFavorites={removeFromFavorites}
         />
       </Modal>
     </>

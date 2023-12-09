@@ -38,7 +38,7 @@ export const saveRouteToFavorites = async (route: Route, favoriteType: FavoriteT
   }
 }
 
-export const removeRouteFromFavorites = async (route: Route) => {
+export const removeSavedRouteFromFavorites = async (route: Route) => {
   try {
     const favRoutesString = await AsyncStorage.getItem(storage.favorites.routes);
     if (!favRoutesString) {
