@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Button from "../../common/Button";
 
 import { Route } from "../../../services/rocks";
-import { useFavoriteRoute } from "../../../hooks/useFavoriteRoute";
 import { FavoriteType } from "../../../services/storeAsync";
 import { getFavoriteColor } from "../../../utils/getFavoriteColor";
 
@@ -21,7 +18,7 @@ const FavoritesModal = ({
   onHide: () => void;
   favoriteType: FavoriteType | null;
   setAsFavorite: (val: FavoriteType) => void;
-  removeFromFavorites: () => void;
+  removeFromFavorites: (route: Route) => void;
 }) => {
   const handleAdd = (value: FavoriteType) => {
     setAsFavorite(value);
@@ -29,7 +26,7 @@ const FavoritesModal = ({
   };
 
   const handleRemove = () => {
-    removeFromFavorites();
+    removeFromFavorites(route);
     onHide();
   };
 
@@ -77,6 +74,7 @@ const favoritesModalStyles = StyleSheet.create({
   buttons: {
     flexDirection: "row",
     justifyContent: "space-between",
+    dlex: 1,
   },
 });
 

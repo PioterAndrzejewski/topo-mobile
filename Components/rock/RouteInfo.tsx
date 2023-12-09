@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { useAtom } from "jotai";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { useRoute } from "@react-navigation/native";
 import { AxiosError } from "axios";
 import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
@@ -34,10 +33,10 @@ import { useUserProfile } from "../../hooks/useUserProfile";
 import { getRingsConjugation } from "../../utils/language/getRingsConjugation";
 import { getAnchorName } from "../../utils/language/getAnchorName";
 import { HeartIcon } from "../icons/Heart";
-import { useFavoriteRoute } from "../../hooks/useFavoriteRoute";
 import { getFavoriteColor } from "../../utils/getFavoriteColor";
 import { RoutesParent } from "../common/ResultsItem/ResultsItemRoute";
-import { FavoriteType } from '../../services/storeAsync';
+import { FavoriteType } from "../../services/storeAsync";
+import { useFavoriteContext } from "../../context/FavoritesContext";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -68,8 +67,9 @@ const RouteInfo = ({
   const [editingComment, setEditingComment] = useState(false);
   const [favoritesModalOpened, setFavoritesModalOpened] = useState(false);
   const { data: userData } = useUserProfile();
-  const { favoriteType, removeFromFavorites, setAsFavorite } =
-    useFavoriteRoute(route);
+  const { checkRouteInFavorites, setAsFavorite, removeFromFavorites } =
+    useFavoriteContext();
+  const favoriteType = checkRouteInFavorites(route.attributes.uuid);
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -158,7 +158,7 @@ const RouteInfo = ({
     onError: (err: AxiosError) => {
       if (err?.response?.status === 406) {
         Toast.show({
-          type: "success",
+          type: "error",
           text2: "Ten komentarz nie spełnia standardów społeczności",
         });
       } else {
@@ -214,8 +214,8 @@ const RouteInfo = ({
   };
 
   const handleAddToFavorites = (favoriteType: FavoriteType) => {
-    setAsFavorite(favoriteType, parent)
-  }
+    setAsFavorite(route, favoriteType, parent);
+  };
 
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);

@@ -1,20 +1,35 @@
-import { View, StyleSheet, Text, ViewStyle } from "react-native";
+import { useMemo } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ViewStyle,
+  useWindowDimensions,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { FavoriteType } from "../../services/storeAsync";
-import { getFavoriteColor } from "../../utils/getFavoriteColor";
 
-type SwitcherOption = {
+export type SwitcherOption<T> = {
   label: string;
-  value: FavoriteType;
+  value: T;
 };
 
-type SwitcherProps = {
-  options: SwitcherOption[];
-  active: FavoriteType;
-  onPress: (value: FavoriteType) => void;
+export type SwitcherProps<T> = {
+  options: SwitcherOption<T>[];
+  active: string;
+  onPress: (value: T) => void;
+  containerStyles?: ViewStyle;
+  badgeColor?: string;
 };
 
-const Switcher = ({ options, onPress, active }: SwitcherProps) => {
+const Switcher = <T extends string>({
+  options,
+  onPress,
+  active,
+  containerStyles,
+  badgeColor,
+}: SwitcherProps<T>) => {
+  const { width } = useWindowDimensions();
+  const optionWidth = useMemo(() => (width - 60) / options.length, [options]);
   return (
     <View style={styles.container}>
       {options.map((option) => {
@@ -26,10 +41,11 @@ const Switcher = ({ options, onPress, active }: SwitcherProps) => {
             style={
               isActive
                 ? {
-                    ...styles.option,
-                    ...$activeOption(getFavoriteColor(option.value)),
+                    ...$option(optionWidth),
+                    ...$activeOption(badgeColor),
+                    ...containerStyles,
                   }
-                : styles.option
+                : { ...$option(optionWidth), ...containerStyles }
             }
           >
             <Text>{option.label}</Text>
@@ -47,20 +63,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 40,
     backgroundColor: "#e8e8e8",
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 6,
-  },
-  option: {
-    paddingHorizontal: 30,
-    paddingTop: 8,
-    paddingBottom: 4,
   },
 });
 
-const $activeOption = (color: string | undefined) => ({
+const $option = (width: number): ViewStyle => ({
+  flexDirection: "row",
+  justifyContent: "center",
+  paddingHorizontal: 6,
+  paddingTop: 8,
+  paddingBottom: 4,
+  width,
+});
+
+const $activeOption = (color: string | undefined): ViewStyle => ({
   backgroundColor: "#fff",
   borderRadius: 40,
-  borderBottomWidth: 4,
+  borderBottomWidth: color ? 4 : 0,
   borderBottomColor: color,
 });
 

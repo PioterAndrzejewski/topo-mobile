@@ -41,6 +41,7 @@ export default function App() {
   if (!fontLoaded) {
     return <AppLoading />;
   }
+  
   return (
     <>
       <GestureHandlerRootView style={styles.container}>

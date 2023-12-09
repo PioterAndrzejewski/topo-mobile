@@ -1,65 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 
 import Switcher from "../components/common/Switcher";
-import ResultsItemRoute from "../components/common/ResultsItem/ResultsItemRoute";
+import RouteFavorites from "../components/favorites/RouteFavorites";
 
-import { FavoriteType } from "../services/storeAsync";
-import { useAreas } from "../hooks/useAreas";
-import { useFavoriteContext } from "../context/FavoritesContext";
+import { SwitcherOption } from "../components/common/Switcher";
 
-const options: { value: FavoriteType; label: string }[] = [
+const options: SwitcherOption<"routes" | "rocks">[] = [
   {
-    value: "done",
-    label: "zrobione",
+    value: "routes",
+    label: "drogi",
   },
   {
-    value: "project",
-    label: "projekt",
-  },
-  {
-    value: "other",
-    label: "inne",
+    value: "rocks",
+    label: "skały",
   },
 ];
 
 export default function SearchScreen() {
-  const [section, setSection] = useState<FavoriteType>("done");
-  const { rocks } = useAreas();
-  const { favoriteRoutes } = useFavoriteContext();
+  const [mode, setMode] = useState<string>("routes");
+
+  const renderFavorites = useMemo(() => {
+    switch (mode) {
+      case "routes":
+        return <RouteFavorites />;
+      case "rocks":
+        return <Text>No skały tu</Text>;
+    }
+  }, [mode]);
 
   return (
     <View style={styles.container}>
-      <Switcher onPress={setSection} active={section} options={options} />
-      {favoriteRoutes && favoriteRoutes[`${section}`].length > 0 && (
-        <Animated.FlatList
-          data={favoriteRoutes[`${section}`]}
-          renderItem={({ item }) => {
-            console.log(item);
-            // return (
-            //   <ResultsItemRoute
-            //     name={item.attributes.display_name}
-            //     item={item}
-            //     itemStage={3}
-            //     isRock
-            //     id={item.attributes.uuid}
-            //     key={item.attributes.uuid}
-            //   />
-            // );
-            return (
-              <ResultsItemRoute
-                name={item.attributes.display_name}
-                item={item}
-                itemStage={3}
-                isRock
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            );
-          }}
-        />
-      )}
+      <Switcher onPress={setMode} active={mode} options={options} />
+      {renderFavorites}
     </View>
   );
 }
