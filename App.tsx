@@ -19,6 +19,7 @@ import HomeBottomTabNavigator from "./navigators/HomeBottomTabNavigator";
 
 import AppLoading from "./components/common/AppLoading";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { FavoritesContextProvider } from "./context/FavoritesContext";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
   .configure() // controls connection & communication settings
@@ -56,28 +57,30 @@ export default function App() {
         >
           <NavigationContainer>
             <BottomSheetModalProvider>
-              <Stack.Navigator
-                screenOptions={{
-                  headerShown: false,
-                }}
-              >
-                <Stack.Screen name='Login' component={LoginScreen} />
-                <Stack.Screen name='Register' component={RegisterScreen} />
-                <Stack.Screen
-                  name='HomeNavigator'
-                  component={HomeBottomTabNavigator}
-                />
-                <Stack.Screen
-                  name='Rock'
-                  component={Rock}
-                  initialParams={{ id: "yes yes" }}
-                />
-              </Stack.Navigator>
+              <FavoritesContextProvider>
+                <Stack.Navigator
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                >
+                  <Stack.Screen name='Login' component={LoginScreen} />
+                  <Stack.Screen name='Register' component={RegisterScreen} />
+                  <Stack.Screen
+                    name='HomeNavigator'
+                    component={HomeBottomTabNavigator}
+                  />
+                  <Stack.Screen
+                    name='Rock'
+                    component={Rock}
+                    initialParams={{ id: "yes yes" }}
+                  />
+                </Stack.Navigator>
+              </FavoritesContextProvider>
             </BottomSheetModalProvider>
           </NavigationContainer>
         </PersistQueryClientProvider>
       </GestureHandlerRootView>
-      <Toast topOffset={60}/>
+      <Toast topOffset={60} />
     </>
   );
 }

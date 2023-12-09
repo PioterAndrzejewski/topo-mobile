@@ -7,14 +7,17 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-import Animated from "react-native-reanimated";
 import { useAtom } from "jotai";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useRoute } from "@react-navigation/native";
+import { AxiosError } from "axios";
+import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import Modal from "react-native-modal";
 
 import Accordion from "../common/Accordion";
 import Backdrop from "../common/Backdrop";
+import FavoritesModal from "./details/FavoritesModal";
 
 import {
   Route,
@@ -28,13 +31,13 @@ import { getMeaningfulGrade } from "../../utils/language/getMeaningfulGrade";
 import { styleGuide } from "../../styles/guide";
 import { useMutation } from "@tanstack/react-query";
 import { useUserProfile } from "../../hooks/useUserProfile";
-import { AxiosError } from "axios";
 import { getRingsConjugation } from "../../utils/language/getRingsConjugation";
 import { getAnchorName } from "../../utils/language/getAnchorName";
 import { HeartIcon } from "../icons/Heart";
 import { useFavoriteRoute } from "../../hooks/useFavoriteRoute";
-import FavoritesModal from "./details/FavoritesModal";
 import { getFavoriteColor } from "../../utils/getFavoriteColor";
+import { RoutesParent } from "../common/ResultsItem/ResultsItemRoute";
+import { FavoriteType } from '../../services/storeAsync';
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -44,9 +47,16 @@ type RockInfoProps = {
   index: number;
   realIndex?: number;
   rockRefetch: () => void;
+  parent: RoutesParent;
 };
 
-const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
+const RouteInfo = ({
+  route,
+  index,
+  realIndex,
+  rockRefetch,
+  parent,
+}: RockInfoProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
@@ -202,6 +212,10 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
     bottomSheetModalRef.current?.dismiss();
     commentsBottomSheetModalRef.current?.dismiss();
   };
+
+  const handleAddToFavorites = (favoriteType: FavoriteType) => {
+    setAsFavorite(favoriteType, parent)
+  }
 
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);
@@ -370,7 +384,7 @@ const RouteInfo = ({ route, index, realIndex, rockRefetch }: RockInfoProps) => {
           route={route}
           favoriteType={favoriteType}
           onHide={() => setFavoritesModalOpened(false)}
-          setAsFavorite={setAsFavorite}
+          setAsFavorite={handleAddToFavorites}
           removeFromFavorites={removeFromFavorites}
         />
       </Modal>

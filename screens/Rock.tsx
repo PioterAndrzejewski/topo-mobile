@@ -32,6 +32,7 @@ import { rockActiveRoute } from "../store/rock";
 import { styleGuide } from "../styles/guide";
 import RockDetails from "../components/rock/RockDetails";
 import { Route } from "../services/rocks";
+import { RoutesParent } from "../components/common/ResultsItem/ResultsItemRoute";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -48,6 +49,18 @@ const Rock = ({ route }: Props) => {
     if (newIndex === data.attributes.image.data.length) newIndex = 0;
     setActiveImage(newIndex);
   };
+
+  const parent: RoutesParent = useMemo(() => {
+    return {
+      name: data?.attributes?.Name || "",
+      coordinates: data?.attributes?.coordinates || {
+        id: 0,
+        latitude: 0,
+        longitude: 0,
+      },
+      id: data?.attributes?.uuid || "",
+    };
+  }, [data]);
 
   const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
 
@@ -89,6 +102,7 @@ const Rock = ({ route }: Props) => {
                       route.attributes.uuid === dataRoute.attributes.uuid,
                   )}
                   rockRefetch={refetch}
+                  parent={parent}
                 />
               ))}
             </>

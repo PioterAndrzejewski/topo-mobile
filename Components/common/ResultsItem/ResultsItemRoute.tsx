@@ -8,25 +8,19 @@ import { styleGuide } from "../../../styles/guide";
 import { useNavigation } from "@react-navigation/native";
 import { HomeScreenNavigationProp } from "../../../types/type";
 
-import {
-  resultsStageAtom,
-  regionAtom,
-  mapAtom,
-  selectedRockAtom,
-} from "../../../store/results";
+import { mapAtom, selectedRockAtom } from "../../../store/results";
 import { getRegionForZoom } from "../../../utils/getRegionForZoom";
 import { getZoomFromStage } from "../../../utils/getZoomFromStage";
-import { AreaData } from "../../../services/rocks";
 import { Coordinates, Route } from "../../../services/rocks";
 import { getMeaningfulGrade } from "../../../utils/language/getMeaningfulGrade";
 
-export type RouteWithParent = Route & {
-  parent: {
-    name: string;
-    coordinates: Coordinates;
-    id: string;
-  };
+export type RoutesParent = {
+  name: string;
+  coordinates: Coordinates;
+  id: string;
 };
+
+export type RouteWithParent = Route & { parent: RoutesParent };
 
 type ListResultProps = {
   id: string;

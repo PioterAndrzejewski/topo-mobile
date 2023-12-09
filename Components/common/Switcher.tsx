@@ -21,6 +21,7 @@ const Switcher = ({ options, onPress, active }: SwitcherProps) => {
         const isActive = option.value === active;
         return (
           <TouchableOpacity
+            key={option.value}
             onPress={() => onPress(option.value)}
             style={
               isActive

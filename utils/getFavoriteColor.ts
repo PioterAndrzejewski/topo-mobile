@@ -1,6 +1,6 @@
 import { FavoriteType } from '../services/storeAsync';
 
-export const getFavoriteColor = (favoriteType: FavoriteType) => {
+export const getFavoriteColor = (favoriteType: FavoriteType | null) => {
   switch (favoriteType) {
     case "project":
       return "#bbb545";

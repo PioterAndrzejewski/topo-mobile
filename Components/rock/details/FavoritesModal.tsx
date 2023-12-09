@@ -19,7 +19,7 @@ const FavoritesModal = ({
 }: {
   route: Route;
   onHide: () => void;
-  favoriteType: FavoriteType;
+  favoriteType: FavoriteType | null;
   setAsFavorite: (val: FavoriteType) => void;
   removeFromFavorites: () => void;
 }) => {
