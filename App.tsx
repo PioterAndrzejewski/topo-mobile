@@ -1,6 +1,6 @@
-import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Reactotron from "reactotron-react-native";
+import Toast from "react-native-toast-message";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient } from "@tanstack/react-query";
@@ -8,13 +8,12 @@ import { useFonts } from "expo-font";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
-
-import RootNavigator from "./navigators/RootNavigator";
-
-import AppLoading from "./components/common/AppLoading";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { FavoritesContextProvider } from "./context/FavoritesContext";
+
+import RootNavigator from "src/navigators/RootNavigator";
+import AppLoading from "src/components/common/AppLoading";
+
+import { FavoritesContextProvider } from "src/context/FavoritesContext";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
   .configure() // controls connection & communication settings
@@ -33,15 +32,15 @@ const asyncStoragePersister = createAsyncStoragePersister({
 
 export default function App() {
   const [fontLoaded] = useFonts({
-    PoppinsBold: require("./assets/fonts/PoppinsBold.ttf"),
-    PoppinsMedium: require("./assets/fonts/PoppinsMedium.ttf"),
-    PoppinsRegular: require("./assets/fonts/PoppinsRegular.ttf"),
+    PoppinsBold: require("src/assets/fonts/PoppinsBold.ttf"),
+    PoppinsMedium: require("src/assets/fonts/PoppinsMedium.ttf"),
+    PoppinsRegular: require("src/assets/fonts/PoppinsRegular.ttf"),
   });
 
   if (!fontLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <>
       <GestureHandlerRootView style={styles.container}>
