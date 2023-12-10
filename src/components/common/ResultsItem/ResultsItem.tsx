@@ -1,14 +1,14 @@
-import { FC } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { FC } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { mapAtom, selectedRockAtom } from "src/store/results";
-import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { AreaData } from "src/services/rocks";
+import { mapAtom, selectedRockAtom } from "src/store/results";
 import { styleGuide } from "src/styles/guide";
 import { HomeScreenNavigationProp } from "src/types/type";
+import { getRegionForZoom } from "src/utils/getRegionForZoom";
+import { getZoomFromStage } from "src/utils/getZoomFromStage";
 
 type ListResultProps = {
   id: string;

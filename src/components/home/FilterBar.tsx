@@ -1,16 +1,15 @@
-import { useState, useCallback } from "react";
-import { View, TextInput, StyleSheet } from "react-native";
-import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { useSetAtom } from "jotai";
+import { useCallback, useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Modal from "react-native-modal";
 
 import Settings from "src/components/home/Settings";
 
-import { HomeScreenNavigationProp } from "src/types/type";
-
 import { useDebounce } from "src/hooks/useDebounce";
 import { searchTextAtom } from "src/store/search";
+import { HomeScreenNavigationProp } from "src/types/type";
 
 const FilterBar = () => {
   const [settingsVisible, setSettingsVisible] = useState(false);

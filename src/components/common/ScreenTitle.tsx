@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { styleGuide } from "src/styles/guide";
 

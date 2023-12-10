@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import Switcher from "src/components/common/Switcher";
 import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
+import Switcher from "src/components/common/Switcher";
 
-import { FavoriteType } from "src/services/storeAsync";
-import { useAreas } from "src/hooks/useAreas";
-import { useFavoriteContext } from "src/context/FavoritesContext";
-import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { SwitcherOption } from "src/components/common/Switcher";
+import { useFavoriteContext } from "src/context/FavoritesContext";
+import { useAreas } from "src/hooks/useAreas";
+import { FavoriteType } from "src/services/storeAsync";
+import { getFavoriteColor } from "src/utils/getFavoriteColor";
 
 const options: SwitcherOption<"done" | "project" | "other">[] = [
   {

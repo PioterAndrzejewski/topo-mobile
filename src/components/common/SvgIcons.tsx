@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-import Svg, { G, Path, Circle, Mask } from "react-native-svg";
+import Svg, { Circle, G, Mask, Path } from "react-native-svg";
 
 export const PhoneIcon = () => (
   <Svg width='44' height='44' viewBox='0 0 44 44' fill='none'>

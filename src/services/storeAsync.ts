@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 
-import { RockData, Route } from 'src/services/rocks';
 import { RoutesParent } from 'src/components/common/ResultsItem/ResultsItemRoute';
+import { RockData, Route } from 'src/services/rocks';
 
 const storage = {
   favorites: {

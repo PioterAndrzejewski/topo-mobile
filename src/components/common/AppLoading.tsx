@@ -1,4 +1,4 @@
-import { ActivityIndicator, View, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import { styleGuide } from "src/styles/guide";
 

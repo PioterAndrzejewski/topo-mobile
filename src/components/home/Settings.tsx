@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Switch } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useAtom } from "jotai";
+import { StyleSheet, Switch, Text, View } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import { rocksOnlyAtom } from "src/store/settings";
 

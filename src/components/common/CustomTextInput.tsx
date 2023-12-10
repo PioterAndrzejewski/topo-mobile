@@ -1,16 +1,16 @@
 import { useState } from "react";
+import type { FieldError } from "react-hook-form";
 import {
   StyleSheet,
-  View,
-  TextInput,
   Text,
+  TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
-import type { FieldError } from "react-hook-form";
 
+import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
 import { styleGuide } from "src/styles/guide";
-import type { RegisterData } from "src/components/auth/RegisterPanel";
 
 export type CustomTextInputProps = {
   label: string;

@@ -1,11 +1,11 @@
 import {
+  ActivityIndicator,
   StyleSheet,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
-import { ActivityIndicator } from "react-native";
 
 import { styleGuide } from "src/styles/guide";
 

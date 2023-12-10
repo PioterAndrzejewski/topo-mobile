@@ -1,24 +1,27 @@
+import { useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { Platform, Text } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import MapView from "react-native-map-clustering";
 import {
   Marker,
-  PROVIDER_GOOGLE,
+  default as NativeMap,
   PROVIDER_DEFAULT,
+  PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import { StyleSheet, View } from "react-native";
-import MapView from "react-native-map-clustering";
-import { useSetAtom } from "jotai";
-import { default as NativeMap } from "react-native-maps";
 import Animated from "react-native-reanimated";
 
-import { regionAtom, mapAtom, startRegion } from "src/store/results";
 import { useAreas } from "src/hooks/useAreas";
 import { useDebounce } from "src/hooks/useDebounce";
-import { selectedRockAtom } from "src/store/results";
+import { RockData } from "src/services/rocks";
+import {
+  mapAtom,
+  regionAtom,
+  selectedRockAtom,
+  startRegion,
+} from "src/store/results";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { RockData } from "src/services/rocks";
 
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);

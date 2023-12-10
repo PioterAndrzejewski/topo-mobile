@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import HomeBottomTabNavigator from "src/navigators/HomeBottomTabNavigator";
 import LoginScreen from "src/screens/Login";
 import RegisterScreen from "src/screens/Register";
-import HomeBottomTabNavigator from "src/navigators/HomeBottomTabNavigator";
 import Rock from "src/screens/Rock";
 
 import { RootStackParamList } from "src/types/type";

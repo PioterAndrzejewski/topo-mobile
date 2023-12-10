@@ -2,14 +2,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { View } from "react-native";
 
+import FilterBar from "src/components/home/FilterBar";
+import FavouritesScreen from "src/screens/FavouritesScreen";
 import MapScreen from "src/screens/MapScreen";
 import SearchScreen from "src/screens/SearchScreen";
-import FavouritesScreen from "src/screens/FavouritesScreen";
-import FilterBar from "src/components/home/FilterBar";
 
+import { HeartIcon } from "src/components/icons/Heart";
 import { MapIcon } from "src/components/icons/Map";
 import { SearchIcon } from "src/components/icons/Search";
-import { HeartIcon } from "src/components/icons/Heart";
 
 import { BottomTabParamList } from "src/types/type";
 

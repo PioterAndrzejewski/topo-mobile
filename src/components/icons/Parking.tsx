@@ -1,4 +1,4 @@
-import { Svg, Path, Circle, G, Defs, ClipPath } from "react-native-svg";
+import { Path, Svg } from "react-native-svg";
 
 type Props = {
   size?: number;

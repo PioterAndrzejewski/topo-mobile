@@ -1,30 +1,30 @@
+import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
+import {
+  Circle,
+  DashPathEffect,
+  Group,
+  Image,
+  ImageSVG,
+  Path,
+  Skia,
+  Text,
+  useFont,
+  useImage,
+} from "@shopify/react-native-skia";
+import { useAtom } from "jotai";
 import { FC, createRef } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
-import {
-  useImage,
-  Image,
-  DashPathEffect,
-  Circle,
-  Path,
-  Group,
-  Text,
-  ImageSVG,
-  useFont,
-  Skia,
-} from "@shopify/react-native-skia";
 import Touchable, { withTouchableHandler } from "react-native-skia-gesture";
-import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
-import { useAtom } from "jotai";
 
 import AppLoading from "src/components/common/AppLoading";
 
-import { Route } from "src/services/rocks";
-import { two_rings, chaing_anchor, rescue_ring } from "./Anchor";
 import { useImageFile } from "src/hooks/useImageFile";
+import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
 import { getRingsCoords } from "src/utils/getRingsCoords";
 import { getRingsToOmit } from "src/utils/getRingsToOmit";
 import { getRouteColor } from "src/utils/getRouteColor";
+import { chaing_anchor, rescue_ring, two_rings } from "./Anchor";
 
 const CANVAS_BOUNDARY = 40;
 
