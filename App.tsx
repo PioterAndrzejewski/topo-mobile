@@ -15,10 +15,10 @@ import AppLoading from "src/components/common/AppLoading";
 
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 
-Reactotron.setAsyncStorageHandler!(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
-  .configure() // controls connection & communication settings
-  .useReactNative() // add all built-in react native plugins
-  .connect(); // let's coennect!
+Reactotron.setAsyncStorageHandler!(AsyncStorage)
+  .configure()
+  .useReactNative()
+  .connect();
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -7,6 +7,8 @@ import Rock from "src/screens/Rock";
 
 import { RootStackParamList } from "src/types/type";
 
+
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => (
@@ -21,7 +23,7 @@ const RootNavigator = () => (
     <Stack.Screen
       name='Rock'
       component={Rock}
-      initialParams={{ id: "yes yes" }}
+      initialParams={{ id: "none" }}
     />
   </Stack.Navigator>
 );

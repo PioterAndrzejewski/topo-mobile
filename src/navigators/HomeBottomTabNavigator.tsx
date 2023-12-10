@@ -10,7 +10,6 @@ import SearchScreen from "src/screens/SearchScreen";
 import { HeartIcon } from "src/components/icons/Heart";
 import { MapIcon } from "src/components/icons/Map";
 import { SearchIcon } from "src/components/icons/Search";
-
 import { BottomTabParamList } from "src/types/type";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
