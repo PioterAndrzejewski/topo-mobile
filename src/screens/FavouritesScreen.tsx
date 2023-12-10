@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { View, StyleSheet } from "react-native";
+import { useMemo, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 import Switcher from "src/components/common/Switcher";
 import RockFavorites from "src/components/favorites/RockFavorites";

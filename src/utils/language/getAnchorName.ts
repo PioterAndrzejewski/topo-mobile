@@ -1,4 +1,4 @@
-import { Anchor } from 'src/services/rocks'
+import { Anchor } from 'src/services/rocks';
 
 export const getAnchorName = (anchor: Anchor) => {
   switch (anchor) {

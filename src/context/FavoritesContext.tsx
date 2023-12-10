@@ -1,24 +1,24 @@
 import {
-  createContext,
   ReactNode,
-  useContext,
-  useState,
-  useEffect,
+  createContext,
   useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
+import { RockData, Route } from "src/services/rocks";
 import {
-  getAllFavoriteRoutes,
-  getAllFavoriteRocks,
   FavoriteType,
-  saveRouteToFavorites,
+  RouteWithFavoriteAndParent,
+  getAllFavoriteRocks,
+  getAllFavoriteRoutes,
+  removeRockFromFavorites,
   removeSavedRouteFromFavorites,
   saveRockToFavorites,
-  removeRockFromFavorites,
+  saveRouteToFavorites,
 } from "src/services/storeAsync";
-import { RouteWithFavoriteAndParent } from "src/services/storeAsync";
-import { RockData, Route } from "src/services/rocks";
 
 type RoutesFiltered = {
   project: RouteWithFavoriteAndParent[];

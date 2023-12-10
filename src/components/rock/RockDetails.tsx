@@ -1,13 +1,13 @@
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
 import AppLoading from "src/components/common/AppLoading";
 import Height from "src/components/rock/details/Height";
 
-import { useRock } from "src/hooks/useRock";
-import { Pin } from "src/components/icons/Pin";
 import { Parking } from "src/components/icons/Parking";
+import { Pin } from "src/components/icons/Pin";
+import { useRock } from "src/hooks/useRock";
 import { styleGuide } from "src/styles/guide";
 
 type RockDetailsProps = {

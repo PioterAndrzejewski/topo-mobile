@@ -1,24 +1,24 @@
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   LayoutAnimation,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import Animated from "react-native-reanimated";
-import { useAtomValue } from "jotai";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
-import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
-import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
 import ResultsItem from "src/components/common/ResultsItem/ResultsItem";
+import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
+import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 
-import { RegionData, RockData } from "src/services/rocks";
 import { RouteWithParent } from "src/components/common/ResultsItem/ResultsItemRoute";
+import { RegionData, RockData } from "src/services/rocks";
 
-import { searchTextAtom } from "src/store/search";
 import { useAreas } from "src/hooks/useAreas";
+import { searchTextAtom } from "src/store/search";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];

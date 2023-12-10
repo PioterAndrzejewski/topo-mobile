@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getAreas, getRegions, getSectors, getRocks } from 'src/services/rocks';
+import { useEffect, useState } from 'react';
+import { getAreas, getRegions, getRocks, getSectors } from 'src/services/rocks';
 
 export const useAreas = () => {
   const [isLoading, setIsLoading] = useState(true);

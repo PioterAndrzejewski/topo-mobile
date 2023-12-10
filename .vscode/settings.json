@@ -1,0 +1,10 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "eslint.workingDirectories": [
+
+  ],
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true
+}

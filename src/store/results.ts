@@ -1,7 +1,6 @@
+import { atom } from 'jotai';
 import { RefObject } from 'react';
-import { atom } from 'jotai'
-import { Region } from 'react-native-maps';
-import MapView from 'react-native-maps';
+import MapView, { Region } from 'react-native-maps';
 
 import { RegionData, RockData } from 'src/services/rocks';
 

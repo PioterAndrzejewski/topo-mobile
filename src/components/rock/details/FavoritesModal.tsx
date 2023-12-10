@@ -1,11 +1,11 @@
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import Button from "src/components/common/Button";
 
+import { useFavoriteContext } from "src/context/FavoritesContext";
 import { Route } from "src/services/rocks";
 import { FavoriteType } from "src/services/storeAsync";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
-import { useFavoriteContext } from "src/context/FavoritesContext";
 
 const FavoritesModal = ({
   route,

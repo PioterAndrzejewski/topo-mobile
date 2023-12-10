@@ -1,19 +1,19 @@
-import { useRef, useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  LayoutAnimation,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import { useAtom } from "jotai";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useAtom } from "jotai";
+import { useMemo, useRef, useState } from "react";
+import {
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Modal from "react-native-modal";
 import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
-import Modal from "react-native-modal";
-import { useMutation } from "@tanstack/react-query";
 
 import Accordion from "src/components/common/Accordion";
 import Backdrop from "src/components/common/Backdrop";
@@ -21,22 +21,22 @@ import FavoritesModal from "src/components/rock/details/FavoritesModal";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { HeartIcon } from "src/components/icons/Heart";
+import { useFavoriteContext } from "src/context/FavoritesContext";
+import { useUserProfile } from "src/hooks/useUserProfile";
 import {
   Route,
-  createRating,
-  updateRating,
   createComment,
+  createRating,
   updateComment,
+  updateRating,
 } from "src/services/rocks";
-import { rockActiveRoute } from "src/store/rock";
-import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
-import { styleGuide } from "src/styles/guide";
-import { useUserProfile } from "src/hooks/useUserProfile";
-import { getRingsConjugation } from "src/utils/language/getRingsConjugation";
-import { getAnchorName } from "src/utils/language/getAnchorName";
-import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { FavoriteType } from "src/services/storeAsync";
-import { useFavoriteContext } from "src/context/FavoritesContext";
+import { rockActiveRoute } from "src/store/rock";
+import { styleGuide } from "src/styles/guide";
+import { getFavoriteColor } from "src/utils/getFavoriteColor";
+import { getAnchorName } from "src/utils/language/getAnchorName";
+import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
+import { getRingsConjugation } from "src/utils/language/getRingsConjugation";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);

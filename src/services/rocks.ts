@@ -1,8 +1,7 @@
 import qs from 'qs';
 
-import authService from "src/services/auth"
-import { apiConfig } from 'src/services/apiConfig';
-import { apiUrl } from 'src/services/apiConfig';
+import { apiConfig, apiUrl } from 'src/services/apiConfig';
+import authService from "src/services/auth";
 
 export const grades = {
   0: "I",

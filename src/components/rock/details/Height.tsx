@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type HeightProps = {
   height: number;
@@ -14,9 +14,9 @@ const Height = (props: HeightProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     height: 40,
     width: 40,
     borderWidth: 1,

@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle, View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 
 type ChangeRouteButtonProps = {
   Icon: JSX.Element;

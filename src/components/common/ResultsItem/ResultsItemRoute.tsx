@@ -1,20 +1,18 @@
-import type { FC } from "react";
-import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useAtomValue, useSetAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
+import { useAtomValue, useSetAtom } from "jotai";
+import type { FC } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { styleGuide } from "src/styles/guide";
-
-import { HomeScreenNavigationProp } from "src/types/type";
-
-import { mapAtom, selectedRockAtom } from "src/store/results";
-import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { Coordinates, Route } from "src/services/rocks";
-import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
+import { Coordinates, Route } from "src/services/rocks";
+import { mapAtom, selectedRockAtom } from "src/store/results";
+import { styleGuide } from "src/styles/guide";
+import { HomeScreenNavigationProp } from "src/types/type";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
+import { getRegionForZoom } from "src/utils/getRegionForZoom";
+import { getZoomFromStage } from "src/utils/getZoomFromStage";
+import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
 
 export type RoutesParent = {
   name: string;

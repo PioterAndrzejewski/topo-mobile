@@ -1,20 +1,20 @@
-import { useMemo, FC } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
-import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FC, useMemo } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import RouteStructure from "src/components/common/RouteStructure";
 
-import { mapAtom, selectedRockAtom } from "src/store/results";
-import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { RockData } from "src/services/rocks";
-import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
+import { mapAtom, selectedRockAtom } from "src/store/results";
 import { styleGuide } from "src/styles/guide";
+import { getRegionForZoom } from "src/utils/getRegionForZoom";
+import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
+import { getZoomFromStage } from "src/utils/getZoomFromStage";
 
-import { HomeScreenNavigationProp } from "src/types/type";
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
+import { HomeScreenNavigationProp } from "src/types/type";
 
 type ListResultProps = {
   id: string;

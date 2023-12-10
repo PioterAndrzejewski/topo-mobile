@@ -1,15 +1,15 @@
-import { useMemo } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
+import { useAtom } from "jotai";
+import { useMemo } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import RouteStructure from "../common/RouteStructure";
 
-import { HomeScreenNavigationProp } from "src/types/type";
 import { useAreas } from "src/hooks/useAreas";
-import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
-import { selectedRockAtom } from "src/store/results";
 import { RockData } from "src/services/rocks";
+import { selectedRockAtom } from "src/store/results";
+import { HomeScreenNavigationProp } from "src/types/type";
+import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 
 const RockInfoExpanded = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();

@@ -1,10 +1,10 @@
-import { useEffect, useState, useMemo, useRef } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { useAtom, useAtomValue } from "jotai";
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+import { useAtom, useAtomValue } from "jotai";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -12,15 +12,19 @@ import RockInfoExpanded from "src/components/home/RockInfoExpanded";
 
 import { useAreas } from "src/hooks/useAreas";
 import { AreaData } from "src/services/rocks";
-import { regionAtom, AreasList, listToRenderAtom } from "src/store/results";
-import { getStageFromZoom } from "src/utils/getZoomFromStage";
-import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
+import {
+  AreasList,
+  listToRenderAtom,
+  mapAtom,
+  regionAtom,
+  selectedRockAtom,
+} from "src/store/results";
+import { styleGuide } from "src/styles/guide";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { mapAtom, selectedRockAtom } from "src/store/results";
+import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
+import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
-import { styleGuide } from "src/styles/guide";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();

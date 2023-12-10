@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import {
-  View,
   StyleSheet,
   Text,
+  View,
   ViewStyle,
   useWindowDimensions,
 } from "react-native";

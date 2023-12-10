@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
-import ResultsList from "src/components/home/ResultsList";
 import Map from "src/components/home/Map";
+import ResultsList from "src/components/home/ResultsList";
 
 export default function MapScreen() {
   return (
