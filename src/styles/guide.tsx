@@ -58,23 +58,21 @@ export const styleGuide = {
     },
   },
   text: {
-    heading: {
-      "1": {
-        fontFamily: "PoppinsBold",
-        fontSize: 32,
-      },
-      "2": {
-        fontFamily: "PoppinsBold",
-        fontSize: 22,
-      },
-      "3": {
-        fontFamily: "PoppinsMedium",
-        fontSize: 15,
-      },
-      "4": {
-        fontFamily: "PoppinsBold",
-        fontSize: 14,
-      },
+    h1: {
+      fontFamily: "PoppinsBold",
+      fontSize: 32,
+    },
+    h2: {
+      fontFamily: "PoppinsBold",
+      fontSize: 22,
+    },
+    h3: {
+      fontFamily: "PoppinsMedium",
+      fontSize: 15,
+    },
+    h4: {
+      fontFamily: "PoppinsBold",
+      fontSize: 14,
     },
     button: {
       fontFamily: "PoppinsRegular",

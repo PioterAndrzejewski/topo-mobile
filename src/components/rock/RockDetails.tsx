@@ -3,19 +3,19 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
 import AppLoading from "src/components/common/AppLoading";
-import Height from "src/components/rock/details/Height";
 
 import { Parking } from "src/components/icons/Parking";
-import { Pin } from "src/components/icons/Pin";
 import { useRock } from "src/hooks/useRock";
 import { styleGuide } from "src/styles/guide";
+import { Location } from "../icons/Location";
+import InformationRow from "./details/InformationRow";
 
 type RockDetailsProps = {
   id: string;
 };
 
 const RockDetails = (props: RockDetailsProps) => {
-  const { data } = useRock(props.id);
+  const { data, isSuccess } = useRock(props.id);
 
   const handleMapOpen = () => {
     if (!data?.attributes) return;
@@ -33,29 +33,21 @@ const RockDetails = (props: RockDetailsProps) => {
     });
   };
 
-  const detailIcons = [
-    {
-      walkDistance: 5,
-    },
-  ];
-
   if (!data) return <AppLoading />;
 
   return (
     <View>
       <View style={styles.row}>
-        <Text style={styles.heading}>{data.attributes.Name}</Text>
+        <Text style={styles.heading}>{data?.attributes?.Name}</Text>
         <View style={styles.divider} />
         <TouchableOpacity onPress={handleMapOpen}>
-          <Pin size={36} />
+          <Location size={36} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleParkingOpen}>
-          <Parking size={24} />
+          <Parking size={36} />
         </TouchableOpacity>
       </View>
-      <View style={styles.row}>
-        <Height height={data.attributes.height} />
-      </View>
+      {data?.attributes && <InformationRow rock={data} />}
     </View>
   );
 };
@@ -64,9 +56,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  heading: {
-    ...styleGuide.text.heading[3],
-  },
   row: {
     display: "flex",
     flexDirection: "row",
@@ -74,6 +63,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: 20,
     gap: 10,
+  },
+  heading: {
+    ...styleGuide.text.h3,
   },
   divider: {
     flexGrow: 1,

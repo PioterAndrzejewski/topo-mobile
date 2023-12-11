@@ -10,6 +10,7 @@ import { RockData } from "src/services/rocks";
 import { selectedRockAtom } from "src/store/results";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
+import InformationRow from "../rock/details/InformationRow";
 
 const RockInfoExpanded = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -34,6 +35,7 @@ const RockInfoExpanded = () => {
   return (
     <View style={styles.container}>
       <Text>{rock?.attributes.Name}</Text>
+      {rock && <InformationRow rock={rock} />}
       {routes && <RouteStructure routes={routes} />}
       <TouchableOpacity onPress={handleOpenRock}>
         <Text>Otwórz skałoplan</Text>
