@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   documentTitle: {
     marginBottom: 30,
-    ...styleGuide.text.heading["3"],
+    ...styleGuide.text.h3,
   },
   documentBody: {
     ...styleGuide.text.body,

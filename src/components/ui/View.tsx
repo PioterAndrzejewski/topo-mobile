@@ -8,4 +8,6 @@ export type ViewProps = Object.Merge<
   BoxProps<Theme>,
   { children: ReactNode; testID?: string }
 >;
-export const View = createBox<Theme>();
+const View = createBox<Theme>();
+
+export default View;

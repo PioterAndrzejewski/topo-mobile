@@ -11,11 +11,13 @@ const palette = {
 
   black: '#0B0B0B',
   white: '#F0F2F3',
+  white50:'#ffffff6bF3',
 };
 
 const theme = createTheme({
   colors: {
     mainBackground: palette.white,
+    mainBackgroundFaded: palette.white50,
     cardPrimaryBackground: palette.purplePrimary,
   },
   spacing: {

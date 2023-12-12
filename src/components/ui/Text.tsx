@@ -4,7 +4,7 @@ import { styleGuide } from "src/styles/guide";
 type TextProps = {
   variant?: keyof typeof styleGuide.text;
   additionalStyles?: TextStyle;
-  children: string;
+  children?: string;
 };
 
 const Text = ({ variant = "body", additionalStyles, children }: TextProps) => (

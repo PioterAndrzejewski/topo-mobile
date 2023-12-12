@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import RouteStructure from "../common/RouteStructure";
+import Text from "../ui/Text";
 
 import { useAreas } from "src/hooks/useAreas";
 import { RockData } from "src/services/rocks";
@@ -34,7 +35,7 @@ const RockInfoExpanded = () => {
 
   return (
     <View style={styles.container}>
-      <Text>{rock?.attributes.Name}</Text>
+      <Text variant='h4'>{rock?.attributes.Name}</Text>
       {rock && <InformationRow rock={rock} />}
       {routes && <RouteStructure routes={routes} />}
       <TouchableOpacity onPress={handleOpenRock}>

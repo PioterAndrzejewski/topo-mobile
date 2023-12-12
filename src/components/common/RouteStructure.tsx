@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
+
+import View from "../ui/View";
 
 import { styleGuide } from "src/styles/guide";
 
@@ -16,23 +18,23 @@ type RouteStructureProps = {
 const RouteStructure = ({ routes }: RouteStructureProps) => {
   return (
     <View style={styles.container}>
-      <View style={styles.section}>
+      <View style={styles.section} backgroundColor='mainBackground'>
         <Text style={styles.text}>III - V+</Text>
         <View style={styles.divider} />
         <Text style={styles.text}>{routes?.toV}</Text>
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.section} backgroundColor='mainBackground'>
         <Text style={styles.text}>VI - VI.2+</Text>
         <View style={styles.divider} />
         <Text style={styles.text}>{routes.toVI2}</Text>
       </View>
-      <View style={styles.section}>
+      <View style={styles.section} backgroundColor='mainBackground'>
         <Text style={styles.text}>VI.3 - VI.4+</Text>
         <View style={styles.divider} />
         <Text style={styles.text}>{routes.toVI4}</Text>
       </View>
-      <View style={styles.section}>
+      <View style={styles.section} backgroundColor='mainBackground'>
         <Text style={styles.text}>VI.5 - VI.8</Text>
         <View style={styles.divider} />
         <Text style={styles.text}>{routes.toVI8}</Text>

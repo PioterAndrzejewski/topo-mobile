@@ -1,13 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
 import { FC, useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 
 import RouteStructure from "src/components/common/RouteStructure";
+import InformationRow from "src/components/rock/details/InformationRow";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
+import { useImageFile } from "src/hooks/useImageFile";
 import { RockData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { styleGuide } from "src/styles/guide";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
@@ -29,7 +32,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const { checkRockInFavorites, setRockAsFavorite, removeRockFromFavorite } =
     useFavoriteContext();
   const isFavorite = checkRockInFavorites(item.attributes.uuid);
-
+  const image = useImageFile(item.attributes.cover.Photo.data.attributes.url);
   const animateTo = (item: RockData, stage: number) => {
     navigation.navigate("Map");
     const newRegion = getRegionForZoom(
@@ -65,13 +68,30 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.text}>{name}</Text>
-        <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
-          <HeartIcon size={24} fill={isFavorite ? "#f00" : "#fff"} />
-        </TouchableOpacity>
-      </View>
-      {routes && <RouteStructure routes={routes} />}
+      <ImageBackground
+        source={{
+          uri: image || "",
+        }}
+        resizeMode='cover'
+        style={styles.background}
+      >
+        <View p='m' gap='m'>
+          <View style={styles.row}>
+            <Text variant='h2'>{name}</Text>
+            <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
+              <HeartIcon size={32} fill={isFavorite ? "#f00" : "#fff"} />
+            </TouchableOpacity>
+          </View>
+          {item && <InformationRow rock={item} />}
+          {routes && <RouteStructure routes={routes} />}
+          <View alignSelf='flex-end'>
+            <Text
+              variant='h3'
+              additionalStyles={styles.author}
+            >{`Autor: ${item.attributes.cover.Author}`}</Text>
+          </View>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -81,19 +101,20 @@ export default RockResultsItem;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    rowGap: 47,
+    rowGap: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 12,
-    padding: 12,
+  },
+  background: {
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  text: {
-    ...styleGuide.text.heading["3"],
-    color: "#336383",
+  author: {
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
   },
 });

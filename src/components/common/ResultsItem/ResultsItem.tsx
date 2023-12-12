@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   text: {
-    ...styleGuide.text.heading["3"],
+    ...styleGuide.text.h3,
     color: "#336383",
   },
 });

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: styleGuide.color.primary["500"],
-    ...styleGuide.text.heading["2"],
+    ...styleGuide.text.h2,
   },
   innerContainer: {
     marginTop: 36,
