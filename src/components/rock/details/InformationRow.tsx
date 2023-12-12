@@ -1,30 +1,47 @@
-import { StyleSheet, View } from "react-native";
+import { ReactNode } from "react";
 
 import Height from "src/components/rock/details/Height";
+import View from "src/components/ui/View";
 
 import { RockData } from "src/services/rocks";
 
 type InformationRowProps = {
   rock: RockData;
+  inCard?: boolean;
 };
 
-const InformationRow = ({ rock }: InformationRowProps) => {
+const InformationRow = ({ rock, inCard }: InformationRowProps) => {
   return (
-    <View style={styles.row}>
-      <Height height={rock.attributes.height} />
+    <View
+      flexDirection='row'
+      alignItems='center'
+      justifyContent='flex-end'
+      gap='m'
+      flexWrap='wrap'
+    >
+      {inCard ? (
+        <RenderWrapper>
+          <Height height={rock.attributes.height} />
+        </RenderWrapper>
+      ) : (
+        <Height height={rock.attributes.height} />
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  row: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    marginBottom: 20,
-    gap: 10,
-  },
-});
+const RenderWrapper = ({ children }: { children: ReactNode }) => (
+  <View
+    borderRadius={12}
+    backgroundColor='mainBackgroundFaded'
+    p='s'
+    paddingTop='m'
+    shadowOffset={{ width: 0, height: 5 }}
+    shadowRadius={4}
+    shadowOpacity={0.5}
+  >
+    {children}
+  </View>
+);
 
 export default InformationRow;

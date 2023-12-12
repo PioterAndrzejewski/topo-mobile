@@ -1,8 +1,5 @@
-import { StyleSheet, Text } from "react-native";
-
+import Text from "../ui/Text";
 import View from "../ui/View";
-
-import { styleGuide } from "src/styles/guide";
 
 type Routes = {
   toV: number;
@@ -16,55 +13,31 @@ type RouteStructureProps = {
 };
 
 const RouteStructure = ({ routes }: RouteStructureProps) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.section} backgroundColor='mainBackground'>
-        <Text style={styles.text}>III - V+</Text>
-        <View style={styles.divider} />
-        <Text style={styles.text}>{routes?.toV}</Text>
-      </View>
+  const renderSection = (range: string, number: number) => (
+    <View
+      alignItems='center'
+      paddingVertical='s'
+      paddingHorizontal='s'
+      backgroundColor='mainBackgroundFaded'
+      borderRadius={12}
+      shadowOffset={{ width: 0, height: 5 }}
+      shadowRadius={4}
+      shadowOpacity={0.5}
+    >
+      <Text variant='caption'>{range}</Text>
+      <View width='100%' height={1} backgroundColor='backgroundBlack' />
+      <Text variant='caption'>{number.toString()}</Text>
+    </View>
+  );
 
-      <View style={styles.section} backgroundColor='mainBackground'>
-        <Text style={styles.text}>VI - VI.2+</Text>
-        <View style={styles.divider} />
-        <Text style={styles.text}>{routes.toVI2}</Text>
-      </View>
-      <View style={styles.section} backgroundColor='mainBackground'>
-        <Text style={styles.text}>VI.3 - VI.4+</Text>
-        <View style={styles.divider} />
-        <Text style={styles.text}>{routes.toVI4}</Text>
-      </View>
-      <View style={styles.section} backgroundColor='mainBackground'>
-        <Text style={styles.text}>VI.5 - VI.8</Text>
-        <View style={styles.divider} />
-        <Text style={styles.text}>{routes.toVI8}</Text>
-      </View>
+  return (
+    <View flexDirection='row' justifyContent='space-between'>
+      {renderSection("III - V+", routes?.toV)}
+      {renderSection("VI - VI.2+", routes?.toVI2)}
+      {renderSection("VI.3 - VI.4+", routes?.toVI4)}
+      {renderSection("VI.5 - VI.8", routes?.toVI8)}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  section: {
-    alignItems: "center",
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    borderWidth: 0.5,
-    borderRadius: 12,
-  },
-  divider: {
-    width: "100%",
-    height: 1,
-    backgroundColor: "#000",
-  },
-  text: {
-    ...styleGuide.text.caption,
-    color: "#336383",
-  },
-});
 
 export default RouteStructure;

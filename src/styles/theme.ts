@@ -9,16 +9,29 @@ const palette = {
   greenPrimary: '#0ECD9D',
   greenDark: '#0A906E',
 
+  blue: "#336383",
+
+  red: "rgba(200, 28, 28, 1)",
+  red25: "rgba(173, 16, 16, 0.75)",
+
   black: '#0B0B0B',
+  black24: "rgba(0, 0, 0, 0.253)",
   white: '#F0F2F3',
-  white50:'#ffffff6bF3',
+  white80:'rgba(255, 255, 255, 0.8)',
 };
 
 const theme = createTheme({
   colors: {
     mainBackground: palette.white,
-    mainBackgroundFaded: palette.white50,
+    mainBackgroundFaded: palette.white80,
+    backgroundBlack: palette.black,
+
+    secondary: palette.blue,
+
     cardPrimaryBackground: palette.purplePrimary,
+    imageOverlay: palette.black24,
+
+    favoriteRed: palette.red,
   },
   spacing: {
     '2xs': 4,
