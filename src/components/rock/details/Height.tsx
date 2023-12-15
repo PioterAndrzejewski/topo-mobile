@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { HeightIcon } from "src/components/icons/Height";
 
-import Text from "src/components/ui/Text";
+import Text from 'src/components/ui/Text';
 
 type HeightProps = {
   height: number;

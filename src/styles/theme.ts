@@ -15,7 +15,7 @@ const palette = {
   red25: "rgba(173, 16, 16, 0.75)",
 
   black: '#0B0B0B',
-  black24: "rgba(0, 0, 0, 0.253)",
+  black24: "rgba(0, 0, 0, 0)",
   white: '#F0F2F3',
   white80:'rgba(255, 255, 255, 0.8)',
 };

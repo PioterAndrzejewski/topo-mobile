@@ -91,9 +91,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 variant='h2'
                 additionalStyles={{
                   color: "white",
-                  textShadowColor: "rgba(0, 0, 0, 0.75)",
-                  textShadowOffset: { width: -1, height: 1 },
-                  textShadowRadius: 10,
+                  textShadowColor: "rgba(0, 0, 0, 0.85)",
+                  textShadowOffset: { width: 2, height: 1 },
+                  textShadowRadius: 16,
                 }}
               >
                 {name}
@@ -118,7 +118,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
               shadowRadius={4}
               shadowOpacity={0.5}
             >
-              <Text variant='caption'>{`Autor: ${item.attributes.cover.Author}`}</Text>
+              <Text variant='caption'>{`zdj: ${item.attributes.cover.Author}`}</Text>
             </View>
           </View>
         </ImageBackground>

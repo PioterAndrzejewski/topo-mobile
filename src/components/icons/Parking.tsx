@@ -5,7 +5,7 @@ type Props = {
   color?: string;
 };
 
-export const Parking = ({ size = 20, color }: Props): JSX.Element => {
+export const ParkingIcon = ({ size = 20, color }: Props): JSX.Element => {
   const colorToUse = color || "#000";
 
   return (
