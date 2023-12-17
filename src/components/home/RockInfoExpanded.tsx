@@ -26,8 +26,6 @@ const RockInfoExpanded = () => {
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
-  const image = useImageFile(rock?.attributes.cover.Photo.data.attributes.url);
-
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const handleOpenRock = () => {
@@ -38,39 +36,32 @@ const RockInfoExpanded = () => {
   };
 
   return (
-    <View flex={1} height={"100%"}>
-      <View
-        paddingHorizontal='m'
-        flexDirection='row'
-        justifyContent='space-between'
-        alignItems='center'
-      >
-        <Text variant='h2'>{rock?.attributes.Name}</Text>
-        <TouchableOpacity onPress={handleOpenRock}>
-          <Text>Otwórz skałoplan</Text>
-        </TouchableOpacity>
-      </View>
-      {rock && <InformationRow rock={rock} />}
-      {routes && <RouteStructure routes={routes} />}
-      <ImageBackground
-        source={{
-          uri: image || "",
-        }}
-        resizeMode='cover'
-        style={{
-          height: 200,
-        }}
-      >
-        <OverlayCardView
-          alignSelf='flex-end'
-          position='absolute'
-          bottom={20}
-          right={20}
+      <View flex={1} height={"100%"} paddingHorizontal='m'>
+        <View
+          flexDirection='row'
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom='l'
         >
-          <Text variant='caption'>{`zdj: ${rock?.attributes.cover.Author}`}</Text>
-        </OverlayCardView>
-      </ImageBackground>
-    </View>
+          <Text
+            variant='h2'
+            additionalStyles={{
+              color: "white",
+              textShadowColor: "rgba(0, 0, 0, 0.85)",
+              textShadowOffset: { width: 2, height: 1 },
+              textShadowRadius: 6,
+              paddingRight: 8,
+            }}
+          >
+            {rock?.attributes.Name}
+          </Text>
+          <TouchableOpacity onPress={handleOpenRock}>
+            <Text variant='h4'>Otwórz skałoplan</Text>
+          </TouchableOpacity>
+        </View>
+        {rock && <InformationRow rock={rock} />}
+        {routes && <RouteStructure routes={routes} />}
+      </View>
   );
 };
 

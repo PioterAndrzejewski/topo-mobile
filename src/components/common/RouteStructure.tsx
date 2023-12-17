@@ -15,11 +15,11 @@ type RouteStructureProps = {
 
 const RouteStructure = ({ routes }: RouteStructureProps) => {
   const renderSection = (range: string, number: number) => (
-    <OverlayCardView alignItems='center'>
+    <View alignItems='center' borderWidth={1} p='xs' borderRadius={12}>
       <Text variant='caption'>{range}</Text>
       <View width='100%' height={1} backgroundColor='backgroundBlack' />
       <Text variant='caption'>{number.toString()}</Text>
-    </OverlayCardView>
+    </View>
   );
 
   return (

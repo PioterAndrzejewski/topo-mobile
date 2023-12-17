@@ -27,19 +27,19 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
     <View
       flexDirection='row'
       alignItems='center'
-      justifyContent='space-around'
+      justifyContent='space-between'
       gap='s'
       flexWrap='wrap'
       marginBottom='xl'
     >
       {rock.attributes.climbing_restricted && renderInWrapper(<Prohibited />)}
+      {renderInWrapper(<Parking distance={rock.attributes.walk_distance} />)}
       {rock.attributes.family_friendly && renderInWrapper(<FamilyFriendly />)}
-      {rock.attributes.loose_rocks && renderInWrapper(<LooseRocks />)}
-      {rock.attributes.recommended && renderInWrapper(<Recommended />)}
       {renderInWrapper(<Formation formation={rock.attributes.formation} />)}
       {renderInWrapper(<Exposition exposition={rock.attributes.exhibition} />)}
       {renderInWrapper(<Height height={rock.attributes.height} />)}
-      {renderInWrapper(<Parking distance={rock.attributes.walk_distance} />)}
+      {rock.attributes.loose_rocks && renderInWrapper(<LooseRocks />)}
+      {rock.attributes.recommended && renderInWrapper(<Recommended />)}
     </View>
   );
 };

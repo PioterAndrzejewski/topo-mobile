@@ -39,7 +39,6 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
         width='6'
         height='20'
         rx='0,5'
-        fill='#D9D9D9'
         stroke='black'
         stroke-width='0,5'
       />

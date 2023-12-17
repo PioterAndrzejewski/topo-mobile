@@ -1,13 +1,13 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
 import AppLoading from "src/components/common/AppLoading";
+import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { ParkingIcon } from "src/components/icons/Parking";
 import { useRock } from "src/hooks/useRock";
-import { styleGuide } from "src/styles/guide";
 import { Location } from "../icons/Location";
 import InformationRow from "./details/InformationRow";
 
@@ -39,7 +39,7 @@ const RockDetails = (props: RockDetailsProps) => {
   return (
     <View>
       <View style={styles.row}>
-        <Text style={styles.heading}>{data?.attributes?.Name}</Text>
+        <Text variant='h3'>{data?.attributes?.Name}</Text>
         <View style={styles.divider} />
         <TouchableOpacity onPress={handleMapOpen}>
           <Location size={36} />
@@ -64,9 +64,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: 20,
     gap: 10,
-  },
-  heading: {
-    ...styleGuide.text.h3,
   },
   divider: {
     flexGrow: 1,

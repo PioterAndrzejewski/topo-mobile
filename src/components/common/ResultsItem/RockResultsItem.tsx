@@ -4,8 +4,6 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { FC, useMemo } from "react";
 import { ImageBackground, TouchableOpacity } from "react-native";
 
-import RouteStructure from "src/components/common/RouteStructure";
-import InformationRow from "src/components/rock/details/InformationRow";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -15,7 +13,6 @@ import { RockData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
 import { Theme } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 
 import { HeartIcon } from "src/components/icons/Heart";
@@ -59,7 +56,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
 
   const routes = useMemo(() => {
     if (!item) return;
-    return getRoutesFromRock(item);
+    return item.attributes.routes.data.length;
   }, [id]);
 
   const handleHeartPress = () => {
@@ -87,7 +84,8 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
           imageStyle={{ borderRadius: 24 }}
         >
           <View
-            p='m'
+            paddingHorizontal='m'
+            paddingVertical='xl'
             gap='m'
             backgroundColor='imageOverlay'
             borderRadius={24}
@@ -115,8 +113,12 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 />
               </TouchableOpacity>
             </View>
-            {item && <InformationRow rock={item} inCard />}
-            {routes && <RouteStructure routes={routes} />}
+            <OverlayCardView alignSelf='flex-start'>
+              <Text variant='caption'>{`Liczba dróg: ${routes?.toString() || ''}`}</Text>
+            </OverlayCardView>
+            <OverlayCardView alignSelf='flex-start'>
+              <Text variant='caption'>{`zdj: ${item.attributes.cover.Author}`}</Text>
+            </OverlayCardView>
           </View>
         </ImageBackground>
       </View>
