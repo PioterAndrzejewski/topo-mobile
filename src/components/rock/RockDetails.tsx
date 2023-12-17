@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
 import AppLoading from "src/components/common/AppLoading";
+import View from "../ui/View";
 
-import { Parking } from "src/components/icons/Parking";
+import { ParkingIcon } from "src/components/icons/Parking";
 import { useRock } from "src/hooks/useRock";
 import { styleGuide } from "src/styles/guide";
 import { Location } from "../icons/Location";
@@ -44,7 +45,7 @@ const RockDetails = (props: RockDetailsProps) => {
           <Location size={36} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleParkingOpen}>
-          <Parking size={36} />
+          <ParkingIcon size={36} />
         </TouchableOpacity>
       </View>
       {data?.attributes && <InformationRow rock={data} />}

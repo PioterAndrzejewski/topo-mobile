@@ -130,7 +130,7 @@ export default function ResultsList() {
         index={1}
         snapPoints={bottomSheetSnapPoints}
         onDismiss={() => setSelectedRock(null)}
-        style={styles.bottomSheet}
+        style={styleGuide.bottomSheet}
       >
         <RockInfoExpanded />
       </BottomSheetModal>

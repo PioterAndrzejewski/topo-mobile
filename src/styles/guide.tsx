@@ -91,7 +91,7 @@ export const styleGuide = {
     },
     caption: {
       fontFamily: "PoppinsRegular",
-      fontSize: 13,
+      fontSize: 11,
       lineHeight: 20,
     },
     body: {

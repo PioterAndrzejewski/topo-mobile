@@ -1,3 +1,4 @@
+import OverlayCardView from "../ui/OverlayCardView";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -14,20 +15,11 @@ type RouteStructureProps = {
 
 const RouteStructure = ({ routes }: RouteStructureProps) => {
   const renderSection = (range: string, number: number) => (
-    <View
-      alignItems='center'
-      paddingVertical='s'
-      paddingHorizontal='s'
-      backgroundColor='mainBackgroundFaded'
-      borderRadius={12}
-      shadowOffset={{ width: 0, height: 5 }}
-      shadowRadius={4}
-      shadowOpacity={0.5}
-    >
+    <OverlayCardView alignItems='center'>
       <Text variant='caption'>{range}</Text>
       <View width='100%' height={1} backgroundColor='backgroundBlack' />
       <Text variant='caption'>{number.toString()}</Text>
-    </View>
+    </OverlayCardView>
   );
 
   return (

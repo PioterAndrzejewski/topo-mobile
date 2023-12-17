@@ -6,6 +6,7 @@ import { ImageBackground, TouchableOpacity } from "react-native";
 
 import RouteStructure from "src/components/common/RouteStructure";
 import InformationRow from "src/components/rock/details/InformationRow";
+import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
@@ -85,7 +86,13 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
           resizeMode='cover'
           imageStyle={{ borderRadius: 24 }}
         >
-          <View p='m' gap='m' backgroundColor='imageOverlay' borderRadius={24}>
+          <View
+            p='m'
+            gap='m'
+            backgroundColor='imageOverlay'
+            borderRadius={24}
+            borderWidth={0.3}
+          >
             <View flexDirection='row' justifyContent='space-between'>
               <Text
                 variant='h2'
@@ -93,7 +100,8 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                   color: "white",
                   textShadowColor: "rgba(0, 0, 0, 0.85)",
                   textShadowOffset: { width: 2, height: 1 },
-                  textShadowRadius: 16,
+                  textShadowRadius: 6,
+                  paddingRight: 8,
                 }}
               >
                 {name}
@@ -107,19 +115,8 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 />
               </TouchableOpacity>
             </View>
-            {item && <InformationRow rock={item} inCard/>}
+            {item && <InformationRow rock={item} inCard />}
             {routes && <RouteStructure routes={routes} />}
-            <View
-              alignSelf='flex-end'
-              backgroundColor='mainBackgroundFaded'
-              padding='s'
-              borderRadius={6}
-              shadowOffset={{ width: 0, height: 5 }}
-              shadowRadius={4}
-              shadowOpacity={0.5}
-            >
-              <Text variant='caption'>{`zdj: ${item.attributes.cover.Author}`}</Text>
-            </View>
           </View>
         </ImageBackground>
       </View>

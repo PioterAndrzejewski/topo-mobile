@@ -9,13 +9,13 @@ const palette = {
   greenPrimary: '#0ECD9D',
   greenDark: '#0A906E',
 
-  blue: "#336383",
+  blue: '#336383',
 
-  red: "rgba(200, 28, 28, 1)",
-  red25: "rgba(173, 16, 16, 0.75)",
+  red: 'rgba(200, 28, 28, 1)',
+  red25: 'rgba(173, 16, 16, 0.75)',
 
   black: '#0B0B0B',
-  black24: "rgba(0, 0, 0, 0)",
+  black24: 'rgba(0, 0, 0, 0)',
   white: '#F0F2F3',
   white80:'rgba(255, 255, 255, 0.8)',
 };
@@ -35,11 +35,11 @@ const theme = createTheme({
   },
   spacing: {
     '2xs': 4,
-    xs: 6,
-    s: 8,
-    m: 16,
-    l: 24,
-    xl: 40,
+    'xs': 6,
+    's': 8,
+    'm': 16,
+    'l': 24,
+    'xl': 40,
     '2xl': 48,
   },
   textVariants: {

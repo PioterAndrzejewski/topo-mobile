@@ -51,13 +51,13 @@ export default function App() {
           persistOptions={{ persister: asyncStoragePersister }}
         >
           <NavigationContainer>
-            <BottomSheetModalProvider>
-              <FavoritesContextProvider>
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+              <BottomSheetModalProvider>
+                <FavoritesContextProvider>
                   <RootNavigator />
-                </ThemeProvider>
-              </FavoritesContextProvider>
-            </BottomSheetModalProvider>
+                </FavoritesContextProvider>
+              </BottomSheetModalProvider>
+            </ThemeProvider>
           </NavigationContainer>
         </PersistQueryClientProvider>
       </GestureHandlerRootView>
