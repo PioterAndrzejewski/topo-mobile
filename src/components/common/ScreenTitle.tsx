@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    ...styleGuide.text.heading["1"],
+    ...styleGuide.text.h1,
     color: "#336383",
   },
 });

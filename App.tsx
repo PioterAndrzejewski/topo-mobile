@@ -1,17 +1,19 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Reactotron from "reactotron-react-native";
-import Toast from "react-native-toast-message";
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { QueryClient } from "@tanstack/react-query";
-import { useFonts } from "expo-font";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
+import { ThemeProvider } from "@shopify/restyle";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { useFonts } from "expo-font";
+import { StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import Reactotron from "reactotron-react-native";
 
-import RootNavigator from "src/navigators/RootNavigator";
 import AppLoading from "src/components/common/AppLoading";
+import RootNavigator from "src/navigators/RootNavigator";
+import theme from "src/styles/theme";
 
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 
@@ -49,11 +51,13 @@ export default function App() {
           persistOptions={{ persister: asyncStoragePersister }}
         >
           <NavigationContainer>
-            <BottomSheetModalProvider>
-              <FavoritesContextProvider>
-                <RootNavigator />
-              </FavoritesContextProvider>
-            </BottomSheetModalProvider>
+            <ThemeProvider theme={theme}>
+              <BottomSheetModalProvider>
+                <FavoritesContextProvider>
+                  <RootNavigator />
+                </FavoritesContextProvider>
+              </BottomSheetModalProvider>
+            </ThemeProvider>
           </NavigationContainer>
         </PersistQueryClientProvider>
       </GestureHandlerRootView>

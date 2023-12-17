@@ -1,8 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, TouchableOpacity } from "react-native";
+import { useImageFile } from "src/hooks/useImageFile";
 
+import InformationRow from "src/components/rock/details/InformationRow";
+import OverlayCardView from "src/components/ui/OverlayCardView";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 import RouteStructure from "../common/RouteStructure";
 
 import { useAreas } from "src/hooks/useAreas";
@@ -21,7 +26,6 @@ const RockInfoExpanded = () => {
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
-
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const handleOpenRock = () => {
@@ -32,31 +36,33 @@ const RockInfoExpanded = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text>{rock?.attributes.Name}</Text>
-      {routes && <RouteStructure routes={routes} />}
-      <TouchableOpacity onPress={handleOpenRock}>
-        <Text>Otwórz skałoplan</Text>
-      </TouchableOpacity>
-    </View>
+      <View flex={1} height={"100%"} paddingHorizontal='m'>
+        <View
+          flexDirection='row'
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom='l'
+        >
+          <Text
+            variant='h2'
+            additionalStyles={{
+              color: "white",
+              textShadowColor: "rgba(0, 0, 0, 0.85)",
+              textShadowOffset: { width: 2, height: 1 },
+              textShadowRadius: 6,
+              paddingRight: 8,
+            }}
+          >
+            {rock?.attributes.Name}
+          </Text>
+          <TouchableOpacity onPress={handleOpenRock}>
+            <Text variant='h4'>Otwórz skałoplan</Text>
+          </TouchableOpacity>
+        </View>
+        {rock && <InformationRow rock={rock} />}
+        {routes && <RouteStructure routes={routes} />}
+      </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 5,
-    paddingHorizontal: 12,
-    shadowOffset: { width: 0, height: -20 },
-    shadowRadius: 0,
-    shadowColor: "#000",
-    shadowOpacity: 0,
-    rowGap: 12,
-  },
-  resultsContainer: {
-    marginVertical: 6,
-    backgroundColor: "#fff",
-  },
-});
 
 export default RockInfoExpanded;

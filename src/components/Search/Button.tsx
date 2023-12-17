@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   headingWrapper: {},
   heading: {
-    ...styleGuide.text.heading[3],
+    ...styleGuide.text.h3,
   },
   buttonWrapper: {
     display: "flex",

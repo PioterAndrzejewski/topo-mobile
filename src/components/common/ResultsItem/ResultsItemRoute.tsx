@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   grade: {
-    ...styleGuide.text.heading["3"],
+    ...styleGuide.text.h3,
   },
   descriptionContainer: {
     marginLeft: 20,

@@ -234,13 +234,15 @@ export type RockData = {
     recommended: boolean;
     coordinates: Coordinates;
     parking_coordinates: Coordinates;
-    Cover: Cover;
+    family_friendly: boolean;
+    cover: Cover;
     uuid: string;
     image: {data: Photo[]};
     routes: {data: Route[]}
     parent: {
       data: AreaData;
     };
+    Description: string;
   }
 }
 
@@ -295,11 +297,11 @@ export const getRocks = async () => {
   const query = qs.stringify({
     populate: [
       'uuid',
-      'Cover',
-      'Cover.Photo',
       'parent',
       'coordinates',
       'routes',
+      'cover',
+      'cover.Photo'
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
@@ -316,7 +318,9 @@ export const getRock = async (id: string) => {
       'parent',
       'coordinates',
       'parking_coordinates',
-      'ratings'
+      'ratings',
+      'cover',
+      'cover.Photo'
     ],
     filters: {
       uuid: {

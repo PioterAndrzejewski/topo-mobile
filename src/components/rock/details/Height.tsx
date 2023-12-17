@@ -1,4 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { HeightIcon } from "src/components/icons/Height";
+
+import Text from 'src/components/ui/Text';
 
 type HeightProps = {
   height: number;
@@ -7,20 +10,18 @@ type HeightProps = {
 const Height = (props: HeightProps) => {
   return (
     <View style={styles.container}>
-      <Text>{props.height}m</Text>
+      <HeightIcon size={32} />
+      <Text variant='caption'>{`${props.height.toString()}m`}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: 40,
     width: 40,
-    borderWidth: 1,
-    borderRadius: 6,
   },
 });
 

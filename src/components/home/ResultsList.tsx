@@ -77,7 +77,7 @@ export default function ResultsList() {
     if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
-  const bottomSheetSnapPoints = useMemo(() => ["25%", "40%"], []);
+  const bottomSheetSnapPoints = useMemo(() => ["40%"], []);
   const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
 
   return (
@@ -127,10 +127,10 @@ export default function ResultsList() {
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        index={1}
+        index={0}
         snapPoints={bottomSheetSnapPoints}
         onDismiss={() => setSelectedRock(null)}
-        style={styles.bottomSheet}
+        style={styleGuide.bottomSheet}
       >
         <RockInfoExpanded />
       </BottomSheetModal>

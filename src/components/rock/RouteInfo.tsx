@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     flexBasis: 30,
   },
   routeIndex: {
-    ...styleGuide.text.heading["2"],
+    ...styleGuide.text.h2,
   },
   icon: {
     width: 20,

@@ -127,7 +127,6 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setRockAsFavorite = async (rock: RockData) => {
-    console.log("wywoluje rock z ", rock);
     await saveRockToFavorites(rock);
     refreshFavoritesList();
   };

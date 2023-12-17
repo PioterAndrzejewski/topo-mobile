@@ -1,15 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
 import { useAtomValue, useSetAtom } from "jotai";
 import { FC, useMemo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, TouchableOpacity } from "react-native";
 
-import RouteStructure from "src/components/common/RouteStructure";
+import OverlayCardView from "src/components/ui/OverlayCardView";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
+import { useImageFile } from "src/hooks/useImageFile";
 import { RockData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { styleGuide } from "src/styles/guide";
+import { Theme } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
-import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 
 import { HeartIcon } from "src/components/icons/Heart";
@@ -28,8 +31,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const setSelectedRock = useSetAtom(selectedRockAtom);
   const { checkRockInFavorites, setRockAsFavorite, removeRockFromFavorite } =
     useFavoriteContext();
+  const { colors } = useTheme<Theme>();
   const isFavorite = checkRockInFavorites(item.attributes.uuid);
-
+  const image = useImageFile(item.attributes.cover.Photo.data.attributes.url);
   const animateTo = (item: RockData, stage: number) => {
     navigation.navigate("Map");
     const newRegion = getRegionForZoom(
@@ -42,7 +46,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
         map.current.animateToRegion(newRegion);
       }
       setSelectedRock(item.attributes.uuid);
-    });
+    }, 100);
   };
 
   const handlePress = () => {
@@ -52,7 +56,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
 
   const routes = useMemo(() => {
     if (!item) return;
-    return getRoutesFromRock(item);
+    return item.attributes.routes.data.length;
   }, [id]);
 
   const handleHeartPress = () => {
@@ -64,36 +68,62 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.text}>{name}</Text>
-        <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
-          <HeartIcon size={24} fill={isFavorite ? "#f00" : "#fff"} />
-        </TouchableOpacity>
+    <TouchableOpacity onPress={handlePress}>
+      <View
+        rowGap='l'
+        marginBottom='l'
+        shadowOffset={{ width: 0, height: 5 }}
+        shadowRadius={4}
+        shadowOpacity={0.5}
+      >
+        <ImageBackground
+          source={{
+            uri: image || "",
+          }}
+          resizeMode='cover'
+          imageStyle={{ borderRadius: 24 }}
+        >
+          <View
+            paddingHorizontal='m'
+            paddingVertical='xl'
+            gap='m'
+            backgroundColor='imageOverlay'
+            borderRadius={24}
+            borderWidth={0.3}
+          >
+            <View flexDirection='row' justifyContent='space-between'>
+              <Text
+                variant='h2'
+                additionalStyles={{
+                  color: "white",
+                  textShadowColor: "rgba(0, 0, 0, 0.85)",
+                  textShadowOffset: { width: 2, height: 1 },
+                  textShadowRadius: 6,
+                  paddingRight: 8,
+                }}
+              >
+                {name}
+              </Text>
+              <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
+                <HeartIcon
+                  size={32}
+                  fill={
+                    isFavorite ? colors.favoriteRed : colors.mainBackgroundFaded
+                  }
+                />
+              </TouchableOpacity>
+            </View>
+            <OverlayCardView alignSelf='flex-start'>
+              <Text variant='caption'>{`Liczba dróg: ${routes?.toString() || ''}`}</Text>
+            </OverlayCardView>
+            <OverlayCardView alignSelf='flex-start'>
+              <Text variant='caption'>{`zdj: ${item.attributes.cover.Author}`}</Text>
+            </OverlayCardView>
+          </View>
+        </ImageBackground>
       </View>
-      {routes && <RouteStructure routes={routes} />}
     </TouchableOpacity>
   );
 };
 
 export default RockResultsItem;
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    rowGap: 47,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 12,
-    padding: 12,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  text: {
-    ...styleGuide.text.heading["3"],
-    color: "#336383",
-  },
-});
