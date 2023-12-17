@@ -77,7 +77,7 @@ export default function ResultsList() {
     if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
-  const bottomSheetSnapPoints = useMemo(() => ["50%"], []);
+  const bottomSheetSnapPoints = useMemo(() => ["40%"], []);
   const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
 
   return (
