@@ -76,6 +76,7 @@ export type ImageFormat = {
 export type Exhibition = 'north' | 'south' | 'east' | 'west' | 'trees';
 export type Formations = 'slab' | 'vertical' | 'overhang' | 'roof';
 export type Popularity = 'high' | 'medium' | 'low';
+export type Shading = "shadow" | "half-shadow" | "sunny";
 
 export type Photo = {
   id: number;
@@ -243,6 +244,7 @@ export type RockData = {
       data: AreaData;
     };
     Description: string;
+    shading: Shading;
   }
 }
 

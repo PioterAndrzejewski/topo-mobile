@@ -3,13 +3,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
 import AppLoading from "src/components/common/AppLoading";
-import Text from "../ui/Text";
-import View from "../ui/View";
+import InformationRow from "src/components/rock/details/InformationRow";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
+import { Location } from "src/components/icons/Location";
 import { ParkingIcon } from "src/components/icons/Parking";
 import { useRock } from "src/hooks/useRock";
-import { Location } from "../icons/Location";
-import InformationRow from "./details/InformationRow";
 
 type RockDetailsProps = {
   id: string;
