@@ -3,7 +3,7 @@ import { useTheme } from "@shopify/restyle";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import dayjs from "dayjs";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useMemo, useRef, useState } from "react";
 import { LayoutAnimation, TextInput, TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
@@ -11,12 +11,16 @@ import Toast from "react-native-toast-message";
 
 import Accordion from "src/components/common/Accordion";
 import Backdrop from "src/components/common/Backdrop";
+import Button from "src/components/common/Button";
 import Rating from "src/components/common/Rating";
+import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
+import { CommentIcon } from "src/components/icons/Comment";
 import { HeartIcon } from "src/components/icons/Heart";
+import { StarIcon } from "src/components/icons/Star";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { useUserProfile } from "src/hooks/useUserProfile";
 import {
@@ -26,16 +30,13 @@ import {
   updateComment,
   updateRating,
 } from "src/services/rocks";
+import { confirmActionAtom } from "src/store/global";
 import { rockActiveRoute, routeToFavoritesAtom } from "src/store/rock";
 import { styleGuide } from "src/styles/guide";
 import { Theme } from "src/styles/theme";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { getAnchorName } from "src/utils/language/getAnchorName";
 import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
-import Button from "../common/Button";
-import { CommentIcon } from "../icons/Comment";
-import { StarIcon } from "../icons/Star";
-import OverlayCardView from "../ui/OverlayCardView";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
@@ -57,15 +58,17 @@ const RouteInfo = ({
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
-  const [routeToFavorites, setRouteToFavorites] = useAtom(routeToFavoritesAtom);
+  const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
+  const [confirmAction, setConfirmAction] = useAtom(confirmActionAtom);
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
   const { data: userData } = useUserProfile();
-  const { checkRouteInFavorites } = useFavoriteContext();
+  const { checkRouteInFavorites, removeRouteFromFavorites } =
+    useFavoriteContext();
   const favoriteType = checkRouteInFavorites(route.attributes.uuid);
 
   const handlePress = () => {
@@ -223,6 +226,16 @@ const RouteInfo = ({
     commentsBottomSheetModalRef.current?.dismiss();
   };
 
+  const handleFavoritesPress = () => {
+    if (!favoriteType) return setRouteToFavorites({ route, parent });
+    if (favoriteType) {
+      return setConfirmAction({
+        confirmFn: () => removeRouteFromFavorites(route),
+        message: `Usuwasz drogę ${route.attributes.display_name} z zapisanych`,
+      });
+    }
+  };
+
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
@@ -267,9 +280,7 @@ const RouteInfo = ({
                     noFill
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={() => setRouteToFavorites({ route, parent })}
-                >
+                <TouchableOpacity onPress={handleFavoritesPress}>
                   <OverlayCardView
                     padding='xs'
                     backgroundColor='mainBackground'

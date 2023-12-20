@@ -18,6 +18,7 @@ export type ButtonProps = {
   disabled?: boolean;
   isLoading?: boolean;
   containerStyles?: ViewStyle;
+  labelColor?: string;
 };
 
 export default function Button({
@@ -26,6 +27,7 @@ export default function Button({
   disabled,
   isLoading,
   containerStyles,
+  labelColor,
 }: ButtonProps) {
   const {colors} = useTheme<Theme>()
   return (
@@ -49,7 +51,7 @@ export default function Button({
         {isLoading ? (
           <ActivityIndicator size='small' />
         ) : (
-          <Text variant='h3' color={colors.mainBackground}>{label}</Text>
+          <Text variant='h3' color={labelColor || colors.mainBackground}>{label}</Text>
         )}
       </View>
     </TouchableOpacity>
