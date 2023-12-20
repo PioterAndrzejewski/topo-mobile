@@ -2,14 +2,10 @@ import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useTheme } from "@shopify/restyle";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import dayjs from "dayjs";
 import { useAtom } from "jotai";
 import { useMemo, useRef, useState } from "react";
-import {
-  LayoutAnimation,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { LayoutAnimation, TextInput, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
@@ -428,7 +424,7 @@ const RouteInfo = ({
                 </View>
               ) : (
                 <TextInput
-                  style={styles.commentInput}
+                  style={$commentInput}
                   defaultValue={comment}
                   onChangeText={(text) => setComment(text)}
                   multiline
@@ -460,7 +456,9 @@ const RouteInfo = ({
                       paddingBottom='s'
                     >
                       <Text variant='special'>{comment.user}</Text>
-                      <Text variant='special'>{comment.updatedAt}</Text>
+                      <Text variant='special'>
+                        {dayjs(comment.updatedAt).format("YYYY/MM/DD")}
+                      </Text>
                     </View>
                     <Text>{comment.comment}</Text>
                   </View>
@@ -492,76 +490,13 @@ const RouteInfo = ({
   );
 };
 
-const styles = StyleSheet.create({
-  detailsButtons: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignSelf: "stretch",
-  },
-  ratingContainer: {
-    marginRight: 6,
-    width: 60,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  star: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    borderWidth: 1,
-  },
-  starFilled: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    borderWidth: 1,
-    backgroundColor: "yellow",
-  },
-  starsButton: {
-    marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalCommentsContainer: {
-    width: "100%",
-    flex: 1,
-    alignContent: "stretch",
-    justifyContent: "center",
-    alignItems: "stretch",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 12,
-    elevation: 6,
-    zIndex: 6,
-    paddingHorizontal: 12,
-  },
-  commentsContainer: {
-    width: "100%",
-    flex: 1,
-    elevation: 5,
-    paddingHorizontal: 12,
-  },
-  commentInput: {
-    minHeight: 56,
-    lineHeight: 16,
-    padding: 12,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingBottom: 32,
-  },
-  sendRatingButton: {
-    marginRight: 16,
-    alignSelf: "flex-end",
-  },
-  sendCommentButton: {
-    marginRight: 16,
-    alignSelf: "flex-end",
-  },
-});
+const $commentInput = {
+  minHeight: 56,
+  lineHeight: 16,
+  padding: 12,
+  borderWidth: 1,
+  borderRadius: 12,
+  paddingBottom: 32,
+};
 
 export default RouteInfo;

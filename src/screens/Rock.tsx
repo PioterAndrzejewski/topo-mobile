@@ -73,11 +73,11 @@ const Rock = ({ route }: Props) => {
         style={styleGuide.bottomSheet}
       >
         <BottomSheetScrollView scrollEnabled>
-          <View paddingHorizontal='m' paddingBottom='2xl'>
+          <View paddingHorizontal='m' paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>
                 <RockDetails id={data?.attributes.uuid}/>
-                {data?.attributes?.routes.data.map((route, index) => (
+                {data?.attributes?.routes.data.map((route) => (
                   <RouteInfo
                     key={route.attributes.uuid}
                     route={route}
