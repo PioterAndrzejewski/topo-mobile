@@ -6,14 +6,12 @@ import dayjs from "dayjs";
 import { useAtom } from "jotai";
 import { useMemo, useRef, useState } from "react";
 import { LayoutAnimation, TextInput, TouchableOpacity } from "react-native";
-import Modal from "react-native-modal";
 import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
 import Accordion from "src/components/common/Accordion";
 import Backdrop from "src/components/common/Backdrop";
 import Rating from "src/components/common/Rating";
-import FavoritesModal from "src/components/rock/details/FavoritesModal";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
@@ -28,8 +26,7 @@ import {
   updateComment,
   updateRating,
 } from "src/services/rocks";
-import { FavoriteType } from "src/services/storeAsync";
-import { rockActiveRoute } from "src/store/rock";
+import { rockActiveRoute, routeToFavoritesAtom } from "src/store/rock";
 import { styleGuide } from "src/styles/guide";
 import { Theme } from "src/styles/theme";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
@@ -60,15 +57,15 @@ const RouteInfo = ({
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
+  const [routeToFavorites, setRouteToFavorites] = useAtom(routeToFavoritesAtom);
   const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
     null,
   );
   const [rating, setRating] = useState(3);
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
-  const [favoritesModalOpened, setFavoritesModalOpened] = useState(false);
   const { data: userData } = useUserProfile();
-  const { checkRouteInFavorites, setRouteAsFavorite } = useFavoriteContext();
+  const { checkRouteInFavorites } = useFavoriteContext();
   const favoriteType = checkRouteInFavorites(route.attributes.uuid);
 
   const handlePress = () => {
@@ -226,10 +223,6 @@ const RouteInfo = ({
     commentsBottomSheetModalRef.current?.dismiss();
   };
 
-  const handleAddToFavorites = (favoriteType: FavoriteType) => {
-    setRouteAsFavorite(route, favoriteType, parent);
-  };
-
   const snapPoints = useMemo(() => ["40%"], []);
   const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
@@ -256,7 +249,11 @@ const RouteInfo = ({
                 <View gap='s'>
                   <Text variant='h3'>{route.attributes.display_name}</Text>
                   <View flexDirection='row' gap='m'>
-                    <Text variant='h4' color={colors.secondary}>
+                    <Text
+                      variant='h4'
+                      color={colors.secondary}
+                      additionalStyles={{ width: 40 }}
+                    >
                       {getMeaningfulGrade(route.attributes.grade)}
                     </Text>
                     <Text variant='body'>{route.attributes.Type}</Text>
@@ -270,7 +267,9 @@ const RouteInfo = ({
                     noFill
                   />
                 </View>
-                <TouchableOpacity onPress={() => setFavoritesModalOpened(true)}>
+                <TouchableOpacity
+                  onPress={() => setRouteToFavorites({ route, parent })}
+                >
                   <OverlayCardView
                     padding='xs'
                     backgroundColor='mainBackground'
@@ -283,6 +282,7 @@ const RouteInfo = ({
                       fill={getFavoriteColor(favoriteType)}
                       color={colors.secondary}
                       size={32}
+                      noStroke={!!favoriteType}
                     />
                   </OverlayCardView>
                 </TouchableOpacity>
@@ -486,18 +486,6 @@ const RouteInfo = ({
           </View>
         </BottomSheetScrollView>
       </BottomSheetModal>
-      <Modal
-        isVisible={favoritesModalOpened}
-        backdropColor={"rgba(0, 0, 0, 0.8)"}
-        onBackdropPress={() => setFavoritesModalOpened(false)}
-      >
-        <FavoritesModal
-          route={route}
-          favoriteType={favoriteType}
-          onHide={() => setFavoritesModalOpened(false)}
-          setAsFavorite={handleAddToFavorites}
-        />
-      </Modal>
     </>
   );
 };

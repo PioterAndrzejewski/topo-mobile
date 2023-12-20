@@ -11,6 +11,8 @@ const palette = {
 
   blue: '#336383',
 
+  yellow: '#cdbb48',
+
   red: 'rgba(200, 28, 28, 1)',
   red25: 'rgba(173, 16, 16, 0.75)',
 
@@ -27,6 +29,9 @@ const theme = createTheme({
     backgroundBlack: palette.black,
 
     secondary: palette.blue,
+
+    finished: palette.greenDark,
+    project: palette.yellow,
 
     cardPrimaryBackground: palette.purplePrimary,
     imageOverlay: palette.black24,

@@ -7,6 +7,7 @@ import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
 import RockDetails from "src/components/rock/RockDetails";
 import RouteInfo from "src/components/rock/RouteInfo";
+import FavoritesModal from "src/components/rock/details/FavoritesModal";
 import Buttons from "src/components/rock/drawing/Buttons";
 import RockDrawing from "src/components/rock/drawing/RockDrawing";
 import View from "src/components/ui/View";
@@ -76,7 +77,7 @@ const Rock = ({ route }: Props) => {
           <View paddingHorizontal='m' paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>
-                <RockDetails id={data?.attributes.uuid}/>
+                <RockDetails id={data?.attributes.uuid} />
                 {data?.attributes?.routes.data.map((route) => (
                   <RouteInfo
                     key={route.attributes.uuid}
@@ -96,6 +97,7 @@ const Rock = ({ route }: Props) => {
           </View>
         </BottomSheetScrollView>
       </BottomSheet>
+      <FavoritesModal />
     </View>
   );
 };
