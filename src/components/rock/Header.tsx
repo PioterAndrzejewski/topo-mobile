@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import BackArrow from "src/components/common/BackArrow";
-
-import { styleGuide } from "src/styles/guide";
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 type HeaderProps = {
   name?: string;
@@ -24,17 +23,22 @@ const Header = (props: HeaderProps) => {
   }, [props.numberOfImages]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <View style={styles.iconWrapper}>
+    <View
+      width='100%'
+      position='absolute'
+      top={60}
+      zIndex={4}
+      backgroundColor='mainBackgroundFaded'
+      paddingVertical='m'
+    >
+      <View width='100%' flexDirection='row' left={0} justifyContent='center'>
+        <View position='absolute' left={0}>
           <BackArrow onClick={() => navigation.goBack()} />
         </View>
-        <View style={styles.headingWrapper}>
-          <Text style={styles.heading}>{props.name}</Text>
-        </View>
+        <Text variant='h3'>{props.name}</Text>
       </View>
       {props.numberOfImages && props.numberOfImages > 1 && (
-        <View style={styles.circlesContainer}>
+        <View width='100%' gap='xs' flexDirection='row' justifyContent='center'>
           {imagesArray?.map((_, i) => (
             <ImageCircle
               active={i === props.activeImage}
@@ -73,59 +77,6 @@ const ImageCircle = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    position: "absolute",
-    top: 60,
-    zIndex: 4,
-    backgroundColor: "#fffa",
-    paddingVertical: 10,
-  },
-  headerWrapper: {
-    display: "flex",
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  iconWrapper: {
-    position: "absolute",
-    left: 0,
-  },
-  headingWrapper: {},
-  heading: {
-    ...styleGuide.text.h3,
-  },
-  buttonWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  buttonContainer: {
-    display: "flex",
-    flexDirection: "row",
-    paddingVertical: 6,
-    paddingHorizontal: 24,
-    backgroundColor: "#ccc",
-    borderRadius: 24,
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    borderRadius: 24,
-  },
-  buttonActive: {
-    backgroundColor: "#fff",
-  },
-  circlesContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-  },
-});
 
 const $imageCircle = (active: boolean) => ({
   width: 12,

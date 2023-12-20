@@ -12,6 +12,7 @@ import Parking from "./Parking";
 import PopularityInfo from "./PopularityInfo";
 import Prohibited from "./Prohibited";
 import Recommended from "./Recommended";
+import ShadingInfo from "./Shading";
 
 import { RockData } from "src/services/rocks";
 
@@ -31,13 +32,14 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
       alignItems='center'
       justifyContent='space-between'
       gap='s'
+      rowGap='l'
       flexWrap='wrap'
-      marginBottom='xl'
     >
       {rock.attributes.climbing_restricted && renderInWrapper(<Prohibited />)}
       {renderInWrapper(<Parking distance={rock.attributes.walk_distance} />)}
       {rock.attributes.family_friendly && renderInWrapper(<FamilyFriendly />)}
       {renderInWrapper(<Formation formation={rock.attributes.formation} />)}
+      {renderInWrapper(<ShadingInfo shading={rock.attributes.shading} />)}
       {renderInWrapper(<Exposition exposition={rock.attributes.exhibition} />)}
       {renderInWrapper(<Height height={rock.attributes.height} />)}
       {renderInWrapper(

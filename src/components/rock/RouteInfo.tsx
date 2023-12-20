@@ -1,23 +1,21 @@
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useTheme } from "@shopify/restyle";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import dayjs from "dayjs";
 import { useAtom } from "jotai";
 import { useMemo, useRef, useState } from "react";
-import {
-  LayoutAnimation,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { LayoutAnimation, TextInput, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import Animated from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
 import Accordion from "src/components/common/Accordion";
 import Backdrop from "src/components/common/Backdrop";
+import Rating from "src/components/common/Rating";
 import FavoritesModal from "src/components/rock/details/FavoritesModal";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { HeartIcon } from "src/components/icons/Heart";
@@ -33,17 +31,20 @@ import {
 import { FavoriteType } from "src/services/storeAsync";
 import { rockActiveRoute } from "src/store/rock";
 import { styleGuide } from "src/styles/guide";
+import { Theme } from "src/styles/theme";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { getAnchorName } from "src/utils/language/getAnchorName";
 import { getMeaningfulGrade } from "src/utils/language/getMeaningfulGrade";
-import { getRingsConjugation } from "src/utils/language/getRingsConjugation";
+import Button from "../common/Button";
+import { CommentIcon } from "../icons/Comment";
+import { StarIcon } from "../icons/Star";
+import OverlayCardView from "../ui/OverlayCardView";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 
 type RockInfoProps = {
   route: Route;
-  index: number;
   realIndex?: number;
   rockRefetch: () => void;
   parent: RoutesParent;
@@ -51,11 +52,11 @@ type RockInfoProps = {
 
 const RouteInfo = ({
   route,
-  index,
   realIndex,
   rockRefetch,
   parent,
 }: RockInfoProps) => {
+  const { colors } = useTheme<Theme>();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
@@ -67,11 +68,7 @@ const RouteInfo = ({
   const [editingComment, setEditingComment] = useState(false);
   const [favoritesModalOpened, setFavoritesModalOpened] = useState(false);
   const { data: userData } = useUserProfile();
-  const {
-    checkRouteInFavorites,
-    setRouteAsFavorite,
-    removeRouteFromFavorites,
-  } = useFavoriteContext();
+  const { checkRouteInFavorites, setRouteAsFavorite } = useFavoriteContext();
   const favoriteType = checkRouteInFavorites(route.attributes.uuid);
 
   const handlePress = () => {
@@ -80,29 +77,30 @@ const RouteInfo = ({
     setActiveRoute(route.attributes.uuid);
   };
 
-  const { mutate: sendRouteRatingMutation, isLoading } = useMutation({
-    mutationFn: () =>
-      createRating(selectedRouteToRate!.id, rating, userData?.id),
-    onSuccess: () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      rockRefetch();
-      Toast.show({
-        type: "success",
-        text2: "Ocena została zapisana",
-      });
-      setTimeout(() => dismissBottomSheet(), 200);
-    },
-    onError: () => {
-      Toast.show({
-        type: "error",
-        text2: "Coś poszło nie tak",
-      });
-    },
-  });
+  const { mutate: sendRouteRatingMutation, isLoading: sendRatingIsLoading } =
+    useMutation({
+      mutationFn: () =>
+        createRating(selectedRouteToRate!.id, rating, userData?.id),
+      onSuccess: () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        rockRefetch();
+        Toast.show({
+          type: "success",
+          text2: "Ocena została zapisana",
+        });
+        setTimeout(() => dismissBottomSheet(), 200);
+      },
+      onError: () => {
+        Toast.show({
+          type: "error",
+          text2: "Coś poszło nie tak",
+        });
+      },
+    });
 
   const { mutate: updateRouteRatingMutation } = useMutation({
     mutationFn: () => updateRating(route.attributes.usersRating.id, rating),
-    onSuccess: (data) => {
+    onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       Toast.show({
         type: "success",
@@ -200,11 +198,23 @@ const RouteInfo = ({
   };
 
   const handleSendCommentButton = () => {
-    if (route.attributes.usersComment && editingComment && comment.length > 5) {
+    if (
+      route.attributes.usersComment &&
+      editingComment &&
+      comment.length > 5 &&
+      route.attributes.usersComment.comment !== comment
+    ) {
       return updateCommentMutation();
     }
     if (route.attributes.usersComment && !editingComment)
       return setEditingComment(true);
+    if (
+      route.attributes.usersComment &&
+      route.attributes.usersComment.comment.toLowerCase() ===
+        comment.toLowerCase()
+    ) {
+      return setEditingComment(false);
+    }
     if (comment.length > 5) sendCommentMutation();
   };
 
@@ -231,65 +241,116 @@ const RouteInfo = ({
       >
         <Accordion
           Title={
-            <View style={styles.container}>
-              <View style={styles.nameContainer}>
-                <View style={styles.routeIndexContainer}>
-                  <Text style={styles.routeIndex}>{realIndex! + 1}</Text>
+            <View
+              flexDirection='row'
+              justifyContent='space-between'
+              flex={1}
+              alignItems='center'
+            >
+              <View flexDirection='row' alignItems='center'>
+                <View flexBasis={30} marginLeft='s'>
+                  <Text variant='h2'>{(realIndex! + 1).toString()}</Text>
                 </View>
                 <View>
-                  <Text>{route.attributes.display_name}</Text>
-                  <Text>{getMeaningfulGrade(route.attributes.grade)}</Text>
+                  <Text variant='body'>{route.attributes.display_name}</Text>
+                  <Text variant='body'>
+                    {getMeaningfulGrade(route.attributes.grade)}
+                  </Text>
                 </View>
               </View>
-              <View style={styles.ratingContainer}>
-                <View>
+              <View flexDirection='row' gap='m'>
+                <View justifyContent='center'>
                   <Text>
                     {isNaN(route.attributes.averageScore)
                       ? "brak ocen"
-                      : route.attributes.averageScore}
+                      : route.attributes.averageScore.toString()}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={() => setFavoritesModalOpened(true)}>
-                  <HeartIcon fill={getFavoriteColor(favoriteType)} />
+                  <OverlayCardView
+                    padding='xs'
+                    backgroundColor='mainBackground'
+                  >
+                    <HeartIcon fill={getFavoriteColor(favoriteType)} />
+                  </OverlayCardView>
                 </TouchableOpacity>
               </View>
             </View>
           }
           Content={
             route.attributes.uuid === activeRoute && (
-              <View style={styles.detailsContainer}>
-                <View>
-                  <Text>
-                    {route.attributes.rings_number}{" "}
-                    {getRingsConjugation(route.attributes.rings_number)}
-                  </Text>
-                  <Text>{getAnchorName(route.attributes.anchor)}</Text>
-                  {route.attributes.description && (
-                    <Text>{route.attributes.description}</Text>
-                  )}
+              <View
+                flexDirection='row'
+                justifyContent='space-between'
+                alignItems='center'
+              >
+                <View gap='s' maxWidth='75%'>
+                  <View flexDirection='row' gap='s' alignItems='center'>
+                    <Text variant='h3'>Przelotów:</Text>
+                    <Text>{route.attributes.rings_number.toString()}</Text>
+                  </View>
+                  <View flexDirection='row' gap='s' alignItems='center'>
+                    <Text variant='h3'>Stan:</Text>
+                    <Text>{getAnchorName(route.attributes.anchor)}</Text>
+                  </View>
+
                   {route.attributes.author && (
-                    <Text>
-                      Autor: {route.attributes.author},{" "}
-                      {route.attributes.author_date}
-                    </Text>
+                    <View flexDirection='row' gap='s' alignItems='center'>
+                      <Text variant='h3'>Autor:</Text>
+                      <Text>{route.attributes.author}</Text>
+                      <Text>{route.attributes.author_date.toString()}</Text>
+                    </View>
                   )}
                   {route.attributes.first_ascent_author && (
-                    <Text>
-                      1. przejście:
-                      {route.attributes.first_ascent_author}
-                    </Text>
+                    <View flexDirection='row' gap='s' alignItems='center'>
+                      <Text variant='h3'>Przejście 1.:</Text>
+                      <Text>{route.attributes.first_ascent_author}</Text>
+                    </View>
+                  )}
+                  {route.attributes.description && (
+                    <View>
+                      <Text>{route.attributes.description}</Text>
+                    </View>
                   )}
                 </View>
-                <View style={styles.detailsButtons}>
+                <View justifyContent='space-between' gap='m'>
                   <TouchableOpacity onPress={() => handleRateRoute(route)}>
-                    <Text>
-                      {route.attributes.usersRating
-                        ? `Twoja ocena: ${route.attributes.usersRating.score}`
-                        : "Oceń drogę"}
-                    </Text>
+                    <OverlayCardView
+                      width={52}
+                      height={52}
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <Rating
+                        rating={
+                          route.attributes.usersRating
+                            ? route.attributes.usersRating.score.toString()
+                            : null
+                        }
+                      />
+                    </OverlayCardView>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => handleCommentRoute(route)}>
-                    <Text>Komentarze</Text>
+                    <OverlayCardView
+                      width={52}
+                      height={52}
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <CommentIcon
+                        size={32}
+                        color={
+                          route.attributes.usersComment
+                            ? colors.mainBackground
+                            : colors.backgroundBlack
+                        }
+                        fill={
+                          route.attributes.usersComment
+                            ? colors.secondary
+                            : colors.mainBackground
+                        }
+                      />
+                    </OverlayCardView>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -303,24 +364,39 @@ const RouteInfo = ({
         snapPoints={snapPoints}
         onDismiss={dismissBottomSheet}
         enableDismissOnClose
-        style={styles.modalContainer}
+        style={styleGuide.bottomSheet}
       >
-        <Text>Twoja ocena dla drogi</Text>
-        <Text>{selectedRouteToRate?.attributes.display_name}</Text>
-        <View style={styles.starContainer}>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <TouchableOpacity onPress={() => setRating(item)} key={item}>
-              <View style={item <= rating ? styles.starFilled : styles.star} />
-            </TouchableOpacity>
-          ))}
-        </View>
-        <TouchableOpacity onPress={handleSendRateButton}>
-          <View style={styles.sendRatingButton}>
-            <Text>
-              {route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
-            </Text>
+        <View padding='m' justifyContent='center' alignItems='center' gap='s'>
+          <Text variant='h2'>
+            {selectedRouteToRate?.attributes.display_name}
+          </Text>
+          <Text>Twoja ocena</Text>
+          <View
+            marginTop='m'
+            flexDirection='row'
+            justifyContent='center'
+            alignItems='center'
+            columnGap='s'
+          >
+            {[1, 2, 3, 4, 5].map((item) => (
+              <TouchableOpacity onPress={() => setRating(item)} key={item}>
+                {item <= rating ? (
+                  <StarIcon
+                    fill={colors.secondary}
+                    color={colors.secondary}
+                    size={36}
+                  />
+                ) : (
+                  <StarIcon color={colors.secondary} size={36} />
+                )}
+              </TouchableOpacity>
+            ))}
           </View>
-        </TouchableOpacity>
+          <Button
+            label={route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
+            onClick={handleSendRateButton}
+          />
+        </View>
       </BottomSheetModal>
       <BottomSheetModal
         ref={commentsBottomSheetModalRef}
@@ -328,54 +404,74 @@ const RouteInfo = ({
         snapPoints={commentsSnapPoints}
         onDismiss={dismissBottomSheet}
         enableDismissOnClose
-        style={styles.modalCommentsContainer}
+        style={styleGuide.bottomSheet}
         backdropComponent={Backdrop}
       >
-        <BottomSheetScrollView style={styles.commentsContainer}>
-          <Text>
-            Komentarze dla drogi:
-            {selectedRouteToRate?.attributes.display_name}
-          </Text>
-          <Text>Twój komentarz:</Text>
-          {route.attributes.usersComment && !editingComment ? (
-            <View>
-              <Text>{route.attributes.usersComment.comment}</Text>
-            </View>
-          ) : (
-            <TextInput
-              style={styles.commentInput}
-              defaultValue={comment}
-              onChangeText={(text) => setComment(text)}
-              multiline
-              numberOfLines={2}
-              underlineColorAndroid='transparent'
-            />
-          )}
-          <TouchableOpacity onPress={handleSendCommentButton}>
-            <View style={styles.sendCommentButton}>
-              <Text>
-                {route.attributes.usersComment && !editingComment
-                  ? "Edytuj komentarz"
-                  : "Zapisz"}
+        <BottomSheetScrollView>
+          <View padding='m' gap='m'>
+            <View alignItems='center'>
+              <Text variant='h2'>
+                {selectedRouteToRate?.attributes.display_name}
               </Text>
             </View>
-          </TouchableOpacity>
-          {Array.isArray(route.attributes.comments) &&
-          route.attributes.comments.length >= 1 ? (
-            route.attributes.comments.slice(0, 10).map((comment) => (
-              <View key={comment.id}>
-                <Text>
-                  {comment.updatedAt} - {comment.user} - {comment.comment}
-                </Text>
+            <OverlayCardView backgroundColor='mainBackground'>
+              <View borderBottomWidth={0.3} marginBottom='m' paddingBottom='s'>
+                <Text variant='special'>Twój komentarz:</Text>
               </View>
-            ))
-          ) : (
-            <Text>
-              {route.attributes.usersComment
-                ? "Brak innych komentarzy dla tej drogi"
-                : "Brak komentarzy dla tej drogi."}
-            </Text>
-          )}
+              {route.attributes.usersComment && !editingComment ? (
+                <View>
+                  <Text>{route.attributes.usersComment.comment}</Text>
+                </View>
+              ) : (
+                <TextInput
+                  style={$commentInput}
+                  defaultValue={comment}
+                  onChangeText={(text) => setComment(text)}
+                  multiline
+                  numberOfLines={2}
+                  underlineColorAndroid='transparent'
+                />
+              )}
+              <Button
+                label={
+                  route.attributes.usersComment && !editingComment
+                    ? "Edytuj komentarz"
+                    : "Zapisz"
+                }
+                onClick={handleSendCommentButton}
+              />
+            </OverlayCardView>
+            {Array.isArray(route.attributes.comments) &&
+            route.attributes.comments.length >= 1 ? (
+              route.attributes.comments.slice(0, 10).map((comment) => (
+                <OverlayCardView
+                  key={comment.id}
+                  backgroundColor='mainBackground'
+                >
+                  <View gap='m'>
+                    <View
+                      flexDirection='row'
+                      justifyContent='space-between'
+                      borderBottomWidth={0.3}
+                      paddingBottom='s'
+                    >
+                      <Text variant='special'>{comment.user}</Text>
+                      <Text variant='special'>
+                        {dayjs(comment.updatedAt).format("YYYY/MM/DD")}
+                      </Text>
+                    </View>
+                    <Text>{comment.comment}</Text>
+                  </View>
+                </OverlayCardView>
+              ))
+            ) : (
+              <Text>
+                {route.attributes.usersComment
+                  ? "Brak innych komentarzy dla tej drogi"
+                  : "Brak komentarzy dla tej drogi."}
+              </Text>
+            )}
+          </View>
         </BottomSheetScrollView>
       </BottomSheetModal>
       <Modal
@@ -394,127 +490,13 @@ const RouteInfo = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  nameContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  routeIndexContainer: {
-    flexBasis: 30,
-  },
-  routeIndex: {
-    ...styleGuide.text.h2,
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderRadius: 50,
-  },
-  gradeContainer: {
-    flexBasis: 44,
-    borderRightWidth: 1,
-  },
-  detailsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  detailsButtons: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignSelf: "stretch",
-  },
-  ratingContainer: {
-    marginRight: 6,
-    width: 60,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  starContainer: {
-    marginTop: 30,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    columnGap: 4,
-  },
-  star: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    borderWidth: 1,
-  },
-  starFilled: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    borderWidth: 1,
-    backgroundColor: "yellow",
-  },
-  starsButton: {
-    marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalCommentsContainer: {
-    width: "100%",
-    flex: 1,
-    alignContent: "stretch",
-    justifyContent: "center",
-    alignItems: "stretch",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 12,
-    elevation: 6,
-    zIndex: 6,
-    paddingHorizontal: 12,
-  },
-  commentsContainer: {
-    width: "100%",
-    flex: 1,
-    elevation: 5,
-    paddingHorizontal: 12,
-  },
-  commentInput: {
-    minHeight: 56,
-    lineHeight: 16,
-    padding: 12,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingBottom: 32,
-  },
-  sendRatingButton: {
-    marginRight: 16,
-    alignSelf: "flex-end",
-  },
-  sendCommentButton: {
-    marginRight: 16,
-    alignSelf: "flex-end",
-  },
-});
+const $commentInput = {
+  minHeight: 56,
+  lineHeight: 16,
+  padding: 12,
+  borderWidth: 1,
+  borderRadius: 12,
+  paddingBottom: 32,
+};
 
 export default RouteInfo;

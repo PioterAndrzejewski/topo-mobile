@@ -16,7 +16,7 @@ const palette = {
 
   black: '#0B0B0B',
   black24: 'rgba(0, 0, 0, 0)',
-  white: '#F0F2F3',
+  white: '#f9f9f9',
   white80:'rgba(255, 255, 255, 0.8)',
 };
 

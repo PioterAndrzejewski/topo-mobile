@@ -7,12 +7,12 @@ import { Popularity } from "src/services/rocks";
 import { GroupIcon } from "src/components/icons/Group";
 
 const PopularityInfo = ({ popularity }: { popularity: Popularity }) => {
-  const getPopulariy = useMemo(() => {
+  const getPopularity = useMemo(() => {
     switch (popularity) {
       case "high":
         return "duzo";
       case "medium":
-        return "srednio";
+        return "śr.";
       case "low":
         return "mało";
       default:
@@ -22,7 +22,7 @@ const PopularityInfo = ({ popularity }: { popularity: Popularity }) => {
   return (
     <View justifyContent='center' alignItems='center' height={40} width={40}>
       <GroupIcon size={32} />
-      <Text variant='caption'>Duzo</Text>
+      <Text variant='caption'>{getPopularity}</Text>
     </View>
   );
 };

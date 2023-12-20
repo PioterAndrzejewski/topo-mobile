@@ -1,13 +1,16 @@
+import { useTheme } from '@shopify/restyle';
 import {
   ActivityIndicator,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from "react-native";
 
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
+
 import { styleGuide } from "src/styles/guide";
+import { Theme } from 'src/styles/theme';
 
 export type ButtonProps = {
   label: string;
@@ -24,6 +27,7 @@ export default function Button({
   isLoading,
   containerStyles,
 }: ButtonProps) {
+  const {colors} = useTheme<Theme>()
   return (
     <TouchableOpacity
       onPress={() => {
@@ -45,7 +49,7 @@ export default function Button({
         {isLoading ? (
           <ActivityIndicator size='small' />
         ) : (
-          <Text style={styles.label}>{label}</Text>
+          <Text variant='h3' color={colors.mainBackground}>{label}</Text>
         )}
       </View>
     </TouchableOpacity>
