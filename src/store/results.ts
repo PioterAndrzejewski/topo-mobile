@@ -16,6 +16,5 @@ export type AreasList = RegionData[];
 export const resultsStageAtom = atom<number>(0)
 export const regionAtom = atom<Region>(startRegion);
 export const mapAtom = atom<RefObject<MapView> | null >(null);
-export const zoomAtom = atom(8);
 export const listToRenderAtom = atom<RockData[]>([]);
 export const selectedRockAtom = atom<string | null>(null)

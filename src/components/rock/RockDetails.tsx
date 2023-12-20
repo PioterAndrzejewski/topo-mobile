@@ -37,11 +37,11 @@ const RockDetails = (props: RockDetailsProps) => {
   if (!data) return <AppLoading />;
 
   return (
-    <View marginBottom='m'>
+    <View marginBottom='xl' marginTop='m'>
       <View
         flexDirection='row'
         alignItems='center'
-        marginBottom='m'
+        marginBottom='l'
         gap='m'
         justifyContent='space-between'
       >

@@ -25,6 +25,7 @@ import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
+import Backdrop from "../common/Backdrop";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
@@ -86,7 +87,7 @@ export default function ResultsList() {
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
-        style={styles.bottomSheet}
+        style={styleGuide.bottomSheet}
       >
         <View style={styles.location}>
           {locationArray?.length > 0 &&
@@ -131,6 +132,7 @@ export default function ResultsList() {
         snapPoints={bottomSheetSnapPoints}
         onDismiss={() => setSelectedRock(null)}
         style={styleGuide.bottomSheet}
+        backdropComponent={Backdrop}
       >
         <RockInfoExpanded />
       </BottomSheetModal>
@@ -139,9 +141,6 @@ export default function ResultsList() {
 }
 
 const styles = StyleSheet.create({
-  bottomSheet: {
-    ...styleGuide.bottomSheet,
-  },
   container: {
     paddingTop: 20,
     width: "100%",

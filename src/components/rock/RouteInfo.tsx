@@ -248,30 +248,42 @@ const RouteInfo = ({
               alignItems='center'
             >
               <View flexDirection='row' alignItems='center'>
-                <View flexBasis={30} marginLeft='s'>
-                  <Text variant='h2'>{(realIndex! + 1).toString()}</Text>
-                </View>
-                <View>
-                  <Text variant='body'>{route.attributes.display_name}</Text>
-                  <Text variant='body'>
-                    {getMeaningfulGrade(route.attributes.grade)}
+                <View flexBasis={30} marginLeft='xs' borderColor='secondary'>
+                  <Text variant='h2' color={colors.secondary}>
+                    {(realIndex! + 1).toString()}
                   </Text>
+                </View>
+                <View gap='s'>
+                  <Text variant='h3'>{route.attributes.display_name}</Text>
+                  <View flexDirection='row' gap='m'>
+                    <Text variant='h4' color={colors.secondary}>
+                      {getMeaningfulGrade(route.attributes.grade)}
+                    </Text>
+                    <Text variant='body'>{route.attributes.Type}</Text>
+                  </View>
                 </View>
               </View>
-              <View flexDirection='row' gap='m'>
+              <View flexDirection='row' gap='l' alignItems='center'>
                 <View justifyContent='center'>
-                  <Text>
-                    {isNaN(route.attributes.averageScore)
-                      ? "brak ocen"
-                      : route.attributes.averageScore.toString()}
-                  </Text>
+                  <Rating
+                    rating={route.attributes.averageScore.toString()}
+                    noFill
+                  />
                 </View>
                 <TouchableOpacity onPress={() => setFavoritesModalOpened(true)}>
                   <OverlayCardView
                     padding='xs'
                     backgroundColor='mainBackground'
+                    width={46}
+                    height={46}
+                    justifyContent='center'
+                    alignItems='center'
                   >
-                    <HeartIcon fill={getFavoriteColor(favoriteType)} />
+                    <HeartIcon
+                      fill={getFavoriteColor(favoriteType)}
+                      color={colors.secondary}
+                      size={32}
+                    />
                   </OverlayCardView>
                 </TouchableOpacity>
               </View>
@@ -303,7 +315,7 @@ const RouteInfo = ({
                   )}
                   {route.attributes.first_ascent_author && (
                     <View flexDirection='row' gap='s' alignItems='center'>
-                      <Text variant='h3'>Przejście 1.:</Text>
+                      <Text variant='h3'>1. przejście:</Text>
                       <Text>{route.attributes.first_ascent_author}</Text>
                     </View>
                   )}
@@ -316,8 +328,8 @@ const RouteInfo = ({
                 <View justifyContent='space-between' gap='m'>
                   <TouchableOpacity onPress={() => handleRateRoute(route)}>
                     <OverlayCardView
-                      width={52}
-                      height={52}
+                      width={46}
+                      height={46}
                       justifyContent='center'
                       alignItems='center'
                     >
@@ -332,13 +344,13 @@ const RouteInfo = ({
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => handleCommentRoute(route)}>
                     <OverlayCardView
-                      width={52}
-                      height={52}
+                      width={46}
+                      height={46}
                       justifyContent='center'
                       alignItems='center'
                     >
                       <CommentIcon
-                        size={32}
+                        size={36}
                         color={
                           route.attributes.usersComment
                             ? colors.mainBackground
