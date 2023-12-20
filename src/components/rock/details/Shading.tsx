@@ -37,7 +37,7 @@ const ShadingInfo = (props: ShadingProps) => {
     }
   };
   return (
-    <View justifyContent='center' alignItems='center' height={40} width={40}>
+    <View justifyContent='center' alignItems='center' height={40} width={46}>
       {renderIcon()}
       <Text variant='caption'>{renderText()}</Text>
     </View>

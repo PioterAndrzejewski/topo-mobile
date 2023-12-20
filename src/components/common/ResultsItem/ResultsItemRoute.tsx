@@ -43,7 +43,6 @@ const ResultsItemRoute: FC<ListResultProps> = ({
   const {
     checkRouteInFavorites,
     removeRouteFromFavorites,
-    setRouteAsFavorite,
   } = useFavoriteContext();
   const isFavorite = checkRouteInFavorites(id);
 

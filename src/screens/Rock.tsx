@@ -2,7 +2,6 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 import { useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
 
 import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
@@ -10,6 +9,7 @@ import RockDetails from "src/components/rock/RockDetails";
 import RouteInfo from "src/components/rock/RouteInfo";
 import Buttons from "src/components/rock/drawing/Buttons";
 import RockDrawing from "src/components/rock/drawing/RockDrawing";
+import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { useRock } from "src/hooks/useRock";
@@ -49,7 +49,7 @@ const Rock = ({ route }: Props) => {
   const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
 
   return (
-    <View style={styles.container}>
+    <View paddingTop='xl' flex={1}>
       <Header
         name={data?.attributes?.Name}
         numberOfImages={data?.attributes?.image.data.length}
@@ -69,30 +69,31 @@ const Rock = ({ route }: Props) => {
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
-        containerStyle={styles.bottomSheetContainer}
+        containerStyle={$bottomSheetContainer}
         style={styleGuide.bottomSheet}
       >
-        <BottomSheetScrollView style={styles.routesContainer} scrollEnabled>
-          {data?.attributes ? (
-            <>
-              <RockDetails id={data?.attributes.uuid} />
-              {data?.attributes?.routes.data.map((route, index) => (
-                <RouteInfo
-                  key={route.attributes.uuid}
-                  route={route}
-                  index={index}
-                  realIndex={data?.attributes?.routes.data.findIndex(
-                    (dataRoute: Route) =>
-                      route.attributes.uuid === dataRoute.attributes.uuid,
-                  )}
-                  rockRefetch={refetch}
-                  parent={parent}
-                />
-              ))}
-            </>
-          ) : (
-            <AppLoading />
-          )}
+        <BottomSheetScrollView scrollEnabled>
+          <View paddingHorizontal='m' paddingBottom='2xl'>
+            {data?.attributes ? (
+              <>
+                <RockDetails id={data?.attributes.uuid}/>
+                {data?.attributes?.routes.data.map((route, index) => (
+                  <RouteInfo
+                    key={route.attributes.uuid}
+                    route={route}
+                    realIndex={data?.attributes?.routes.data.findIndex(
+                      (dataRoute: Route) =>
+                        route.attributes.uuid === dataRoute.attributes.uuid,
+                    )}
+                    rockRefetch={refetch}
+                    parent={parent}
+                  />
+                ))}
+              </>
+            ) : (
+              <AppLoading />
+            )}
+          </View>
         </BottomSheetScrollView>
       </BottomSheet>
     </View>
@@ -101,51 +102,11 @@ const Rock = ({ route }: Props) => {
 
 export default Rock;
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: styleGuide.color.white,
-    paddingTop: 40,
-    flex: 1,
-  },
-  buttonContainerLeft: {
-    zIndex: 3,
-    position: "absolute",
-  },
-  buttonLeft: {
-    padding: 5,
-    position: "absolute",
-    top: 250,
-    left: 10,
-    backgroundColor: "#fff",
-    opacity: 0.5,
-    borderRadius: 30,
-  },
-  buttonContainerRight: {
-    zIndex: 3,
-    position: "absolute",
-    right: 60,
-  },
-  buttonRight: {
-    padding: 5,
-    position: "absolute",
-    top: 250,
-    backgroundColor: "#fff",
-    opacity: 0.5,
-    borderRadius: 30,
-  },
-  bottomSheetContainer: {
-    zIndex: 24,
-    shadowOffset: { width: 0, height: -20 },
-    shadowRadius: 0,
-    shadowColor: "#000",
-    shadowOpacity: 0,
-    elevation: 24,
-  },
-  routesContainer: {
-    display: "flex",
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    flexDirection: "column",
-    rowGap: 10,
-  },
-});
+const $bottomSheetContainer = {
+  zIndex: 24,
+  shadowOffset: { width: 0, height: -20 },
+  shadowRadius: 0,
+  shadowColor: "#000",
+  shadowOpacity: 0,
+  elevation: 24,
+};

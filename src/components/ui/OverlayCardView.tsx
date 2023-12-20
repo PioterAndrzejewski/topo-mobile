@@ -16,9 +16,9 @@ const OverlayCardView = ({ children, ...rest }: OverlayCardViewProps) => (
     backgroundColor='mainBackgroundFaded'
     padding='s'
     borderRadius={6}
-    shadowOffset={{ width: 0, height: 5 }}
-    shadowRadius={4}
-    shadowOpacity={0.5}
+    shadowOffset={{ width: 0, height: 3 }}
+    shadowRadius={6}
+    shadowOpacity={0.35}
     {...rest}
   >
     {children}

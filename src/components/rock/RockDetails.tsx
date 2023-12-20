@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { showLocation } from "react-native-map-link";
 
@@ -10,13 +9,14 @@ import View from "src/components/ui/View";
 import { Location } from "src/components/icons/Location";
 import { ParkingIcon } from "src/components/icons/Parking";
 import { useRock } from "src/hooks/useRock";
+import OverlayCardView from "../ui/OverlayCardView";
 
 type RockDetailsProps = {
   id: string;
 };
 
 const RockDetails = (props: RockDetailsProps) => {
-  const { data, isSuccess } = useRock(props.id);
+  const { data } = useRock(props.id);
 
   const handleMapOpen = () => {
     if (!data?.attributes) return;
@@ -37,37 +37,33 @@ const RockDetails = (props: RockDetailsProps) => {
   if (!data) return <AppLoading />;
 
   return (
-    <View>
-      <View style={styles.row}>
-        <Text variant='h3'>{data?.attributes?.Name}</Text>
-        <View style={styles.divider} />
-        <TouchableOpacity onPress={handleMapOpen}>
-          <Location size={36} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleParkingOpen}>
-          <ParkingIcon size={36} />
-        </TouchableOpacity>
+    <View marginBottom='m'>
+      <View
+        flexDirection='row'
+        alignItems='center'
+        marginBottom='m'
+        gap='m'
+        justifyContent='space-between'
+      >
+        <View flexShrink={1}>
+          <Text variant='h2'>{data?.attributes?.Name}</Text>
+        </View>
+        <View flexDirection='row' gap='s'>
+          <TouchableOpacity onPress={handleMapOpen}>
+            <OverlayCardView padding='xs' backgroundColor='mainBackground'>
+              <Location size={36} />
+            </OverlayCardView>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleParkingOpen}>
+            <OverlayCardView padding='xs' backgroundColor='mainBackground'>
+              <ParkingIcon size={36} />
+            </OverlayCardView>
+          </TouchableOpacity>
+        </View>
       </View>
       {data?.attributes && <InformationRow rock={data} />}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  row: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    marginBottom: 20,
-    gap: 10,
-  },
-  divider: {
-    flexGrow: 1,
-  },
-});
 
 export default RockDetails;
