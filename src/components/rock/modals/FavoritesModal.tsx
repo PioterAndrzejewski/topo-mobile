@@ -1,5 +1,5 @@
 import { useTheme } from "@shopify/restyle";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import Modal from "react-native-modal";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -16,7 +16,7 @@ import { Theme } from "src/styles/theme";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 
 const FavoritesModal = () => {
-  const [routeToFavorites, setRouteToFavorites] = useAtom(routeToFavoritesAtom);
+  const routeToFavorites = useAtomValue(routeToFavoritesAtom);
   const [showModal, setShowModal] = useState(false);
   const { colors } = useTheme<Theme>();
   const { setRouteAsFavorite } = useFavoriteContext();

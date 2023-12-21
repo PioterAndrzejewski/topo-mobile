@@ -385,6 +385,7 @@ export const createComment = async (routeId: number, comment: string, author: st
 };
 
 export const updateComment = async (commentToUpdate: number | undefined, comment: string ) => {
+  if (commentToUpdate === -1) return;
   const body = {
       data: {
         comment,

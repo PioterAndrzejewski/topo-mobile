@@ -7,13 +7,14 @@ import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
 import RockDetails from "src/components/rock/RockDetails";
 import RouteInfo from "src/components/rock/RouteInfo";
-import FavoritesModal from "src/components/rock/details/FavoritesModal";
 import Buttons from "src/components/rock/drawing/Buttons";
 import RockDrawing from "src/components/rock/drawing/RockDrawing";
+import FavoritesModal from "src/components/rock/modals/FavoritesModal";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
-import RouteRatingModal from "src/components/rock/details/RouteRatingModal";
+import CommentsModal from "src/components/rock/modals/CommentsModal";
+import RouteRatingModal from "src/components/rock/modals/RouteRatingModal";
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
@@ -100,6 +101,7 @@ const Rock = ({ route }: Props) => {
       </BottomSheet>
       <FavoritesModal />
       <RouteRatingModal rockRefetch={refetch} />
+      <CommentsModal rockRefetch={refetch} />
     </View>
   );
 };

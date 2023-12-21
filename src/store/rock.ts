@@ -9,3 +9,5 @@ type RouteWithParent = {
 
 export const rockActiveRoute = atom<string | null>(null);
 export const routeToFavoritesAtom = atom<RouteWithParent | null>(null);
+export const routeToCommentAtom = atom<Route | null>(null);
+export const selectedRouteToRateAtom = atom<Route | null>(null);

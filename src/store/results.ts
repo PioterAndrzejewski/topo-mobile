@@ -18,4 +18,3 @@ export const regionAtom = atom<Region>(startRegion);
 export const mapAtom = atom<RefObject<MapView> | null >(null);
 export const listToRenderAtom = atom<RockData[]>([]);
 export const selectedRockAtom = atom<string | null>(null);
-export const selectedRouteToRateAtom = atom<Route | null>(null);

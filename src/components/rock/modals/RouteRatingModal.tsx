@@ -13,7 +13,7 @@ import View from "src/components/ui/View";
 import { StarIcon } from "src/components/icons/Star";
 import { useUserProfile } from "src/hooks/useUserProfile";
 import { createRating, updateRating } from "src/services/rocks";
-import { selectedRouteToRateAtom } from "src/store/results";
+import { selectedRouteToRateAtom } from 'src/store/rock';
 import { styleGuide } from "src/styles/guide";
 import { Theme } from "src/styles/theme";
 
