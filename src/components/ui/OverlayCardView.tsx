@@ -13,12 +13,13 @@ type OverlayCardViewProps = Object.Merge<
 
 const OverlayCardView = ({ children, ...rest }: OverlayCardViewProps) => (
   <View
-    backgroundColor='mainBackgroundFaded'
+    backgroundColor='mainBackground'
     padding='s'
     borderRadius={6}
     shadowOffset={{ width: 0, height: 3 }}
     shadowRadius={6}
     shadowOpacity={0.35}
+    elevation={5}
     {...rest}
   >
     {children}

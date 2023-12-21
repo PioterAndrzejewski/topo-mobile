@@ -34,7 +34,7 @@ const ConfirmActionModal = () => {
   }, [confirmAction]);
 
   return (
-    <Modal isVisible={showModal} onBackdropPress={() => setShowModal(false)}>
+    <Modal isVisible={showModal} onBackdropPress={() => setShowModal(false)} hideModalContentWhileAnimating backdropTransitionOutTiming={0} animationIn='wobble' animationOutTiming={0}>
       <View
         backgroundColor='mainBackground'
         padding='m'

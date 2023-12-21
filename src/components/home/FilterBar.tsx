@@ -53,6 +53,10 @@ const FilterBar = () => {
         isVisible={settingsVisible}
         backdropColor={"rgba(0, 0, 0, 0.8)"}
         onBackdropPress={() => setSettingsVisible(false)}
+        hideModalContentWhileAnimating
+        backdropTransitionOutTiming={0}
+        animationIn='slideInDown'
+        animationOutTiming={0}
       >
         <Settings onClose={onModalClose} />
       </Modal>

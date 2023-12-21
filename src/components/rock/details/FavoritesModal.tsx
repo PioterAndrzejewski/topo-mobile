@@ -7,6 +7,7 @@ import Button from "src/components/common/Button";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import { useEffect, useState } from "react";
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { FavoriteType } from "src/services/storeAsync";
@@ -16,8 +17,15 @@ import { getFavoriteColor } from "src/utils/getFavoriteColor";
 
 const FavoritesModal = () => {
   const [routeToFavorites, setRouteToFavorites] = useAtom(routeToFavoritesAtom);
+  const [showModal, setShowModal] = useState(false);
   const { colors } = useTheme<Theme>();
   const { setRouteAsFavorite } = useFavoriteContext();
+
+  useEffect(() => {
+    if (routeToFavorites) {
+      setShowModal(true);
+    }
+  }, [routeToFavorites]);
 
   const handleAddToFavorites = (favoriteType: FavoriteType) => {
     if (!routeToFavorites) return;
@@ -26,14 +34,20 @@ const FavoritesModal = () => {
       favoriteType,
       routeToFavorites.parent,
     );
-    setRouteToFavorites(null);
+    setShowModal(false);
   };
 
   return (
     <Modal
-      isVisible={!!routeToFavorites}
+      isVisible={showModal}
       backdropColor={"rgba(0, 0, 0, 0.8)"}
-      onBackdropPress={() => setRouteToFavorites(null)}
+      onBackdropPress={() => setShowModal(false)}
+      backdropTransitionOutTiming={0}
+      animationIn='slideInDown'
+      animationOut='slideOutDown'
+      animationInTiming={0}
+      animationOutTiming={0}
+      onDismiss={() => setShowModal(false)}
     >
       <View
         backgroundColor='mainBackground'

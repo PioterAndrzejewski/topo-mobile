@@ -54,16 +54,17 @@ const RockDetails = (props: RockDetailsProps) => {
           </Text>
         </View>
         <View flexDirection='row' gap='s'>
-          <TouchableOpacity onPress={handleMapOpen}>
-            <OverlayCardView padding='xs' backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='mainBackground'>
+            <TouchableOpacity onPress={handleMapOpen}>
               <Location size={36} />
-            </OverlayCardView>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleParkingOpen}>
-            <OverlayCardView padding='xs' backgroundColor='mainBackground'>
+            </TouchableOpacity>
+          </OverlayCardView>
+
+          <OverlayCardView backgroundColor='mainBackground'>
+            <TouchableOpacity onPress={handleParkingOpen}>
               <ParkingIcon size={36} />
-            </OverlayCardView>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </OverlayCardView>
         </View>
       </View>
       {data?.attributes && <InformationRow rock={data} />}
