@@ -361,6 +361,9 @@ export const updateRating = async (ratingToUpdate: number, rating: number ) => {
         score: rating,
       }
   }
+  if (ratingToUpdate === -1) {
+    return;
+  }
   const { data } = await authService.put(apiConfig.ratings.update(ratingToUpdate), JSON.stringify(body));
   return data;
 };
@@ -382,6 +385,7 @@ export const createComment = async (routeId: number, comment: string, author: st
 };
 
 export const updateComment = async (commentToUpdate: number | undefined, comment: string ) => {
+  if (commentToUpdate === -1) return;
   const body = {
       data: {
         comment,

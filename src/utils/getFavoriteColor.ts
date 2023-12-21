@@ -1,13 +1,14 @@
 import { FavoriteType } from 'src/services/storeAsync';
+import theme from 'src/styles/theme';
 
 export const getFavoriteColor = (favoriteType: FavoriteType | null) => {
   switch (favoriteType) {
     case "project":
-      return "#bbb545";
+      return theme.colors.project;
     case "other":
-      return "#4fd6ff";
+      return theme.colors.secondary;
     case "done":
-      return "#45bb50";
+      return theme.colors.finished;
     default:
       return undefined;
   }

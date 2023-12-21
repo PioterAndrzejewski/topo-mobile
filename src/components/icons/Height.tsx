@@ -14,7 +14,7 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
       <Path
         d='M15 7L17.5 2L20 7'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
         stroke-linejoin='round'
         opacity={0.7}
@@ -22,7 +22,7 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
       <Path
         d='M20 17L17.5 22L15 17'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
         stroke-linejoin='round'
         opacity={0.7}
@@ -30,7 +30,7 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
       <Path
         d='M17.5 3V21'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
       />
       <Rect
@@ -38,32 +38,32 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
         y='2'
         width='6'
         height='20'
-        rx='0,5'
+        rx='1'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
       />
       <Path
         d='M5 6H7'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
       />
       <Path
         d='M5 14H7'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
       />
       <Path
         d='M5 10H9'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
       />
       <Path
         d='M5 18H9'
         stroke='black'
-        stroke-width='0,5'
+        stroke-width='1'
         stroke-linecap='round'
       />
     </Svg>

@@ -15,6 +15,7 @@ import AppLoading from "src/components/common/AppLoading";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
+import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage)
@@ -55,6 +56,7 @@ export default function App() {
               <BottomSheetModalProvider>
                 <FavoritesContextProvider>
                   <RootNavigator />
+                  <ConfirmActionModal />
                 </FavoritesContextProvider>
               </BottomSheetModalProvider>
             </ThemeProvider>

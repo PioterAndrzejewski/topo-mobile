@@ -2,7 +2,9 @@ import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import { useAtomValue, useSetAtom } from 'jotai';
 import BackArrow from "src/components/common/BackArrow";
+import { routeToFavoritesAtom } from 'src/store/rock';
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -15,12 +17,18 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
+  const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
   const imagesArray = useMemo(() => {
     if (!props.numberOfImages || props.numberOfImages < 1) return null;
     return Array.from({ length: props.numberOfImages! }, (_, i) => ({
       index: i,
     }));
   }, [props.numberOfImages]);
+
+  const handleBackArrowPress = () => {
+    navigation.goBack();
+    setRouteToFavorites(null);
+  }
 
   return (
     <View
@@ -33,7 +41,7 @@ const Header = (props: HeaderProps) => {
     >
       <View width='100%' flexDirection='row' left={0} justifyContent='center'>
         <View position='absolute' left={0}>
-          <BackArrow onClick={() => navigation.goBack()} />
+          <BackArrow onClick={handleBackArrowPress} />
         </View>
         <Text variant='h3'>{props.name}</Text>
       </View>
