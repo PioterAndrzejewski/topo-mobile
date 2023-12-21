@@ -32,8 +32,8 @@ const Rock = ({ route }: Props) => {
   const handleImageChange = (step: number) => {
     if (!data) return;
     let newIndex = activeImage + step;
-    if (newIndex < 0) newIndex = data.attributes.image.data.length - 1;
-    if (newIndex === data.attributes.image.data.length) newIndex = 0;
+    if (newIndex < 0) newIndex = data?.attributes.image.data.length - 1;
+    if (newIndex === data?.attributes.image.data.length) newIndex = 0;
     setActiveImage(newIndex);
   };
 
@@ -75,23 +75,28 @@ const Rock = ({ route }: Props) => {
         containerStyle={$bottomSheetContainer}
         style={styleGuide.bottomSheet}
       >
-        <BottomSheetScrollView scrollEnabled>
-          <View paddingHorizontal='m' paddingBottom='2xl' paddingTop='m'>
+        <BottomSheetScrollView
+          scrollEnabled
+          showsVerticalScrollIndicator={false}
+        >
+          <View paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>
                 <RockDetails id={data?.attributes.uuid} />
-                {data?.attributes?.routes.data.map((route) => (
-                  <RouteInfo
-                    key={route.attributes.uuid}
-                    route={route}
-                    realIndex={data?.attributes?.routes.data.findIndex(
-                      (dataRoute: Route) =>
-                        route.attributes.uuid === dataRoute.attributes.uuid,
-                    )}
-                    rockRefetch={refetch}
-                    parent={parent}
-                  />
-                ))}
+                <View paddingHorizontal='m'>
+                  {data?.attributes?.routes.data.map((route) => (
+                    <RouteInfo
+                      key={route.attributes.uuid}
+                      route={route}
+                      realIndex={data?.attributes?.routes.data.findIndex(
+                        (dataRoute: Route) =>
+                          route.attributes.uuid === dataRoute.attributes.uuid,
+                      )}
+                      rockRefetch={refetch}
+                      parent={parent}
+                    />
+                  ))}
+                </View>
               </>
             ) : (
               <AppLoading />

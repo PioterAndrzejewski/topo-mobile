@@ -1,11 +1,10 @@
-import View from "src/components/ui/View";
-
 import { Shading } from "src/services/rocks";
 
 import { HalfShadowIcon } from "src/components/icons/HalfShadow";
 import { ShadowIcon } from "src/components/icons/Shadow";
 import { SunnyIcon } from "src/components/icons/Sunny";
 import Text from "src/components/ui/Text";
+import DetailsWrapper from "./DetailsWrapper";
 
 type ShadingProps = {
   shading: Shading;
@@ -27,20 +26,20 @@ const ShadingInfo = (props: ShadingProps) => {
   const renderText = () => {
     switch (props.shading) {
       case "shadow":
-        return "las";
+        return "Gęsty las";
       case "half-shadow":
-        return "półlas";
+        return "Trochę drzew";
       case "sunny":
-        return "patelnia";
+        return "Brak drzew";
       default:
-        return "b/d";
+        return "Brak danych";
     }
   };
   return (
-    <View justifyContent='center' alignItems='center' height={40} width={46}>
+    <DetailsWrapper>
       {renderIcon()}
       <Text variant='caption'>{renderText()}</Text>
-    </View>
+    </DetailsWrapper>
   );
 };
 

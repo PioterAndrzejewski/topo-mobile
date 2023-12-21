@@ -1,7 +1,9 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { HeightIcon } from "src/components/icons/Height";
 
-import Text from 'src/components/ui/Text';
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
+import DetailsWrapper from "./DetailsWrapper";
 
 type HeightProps = {
   height: number;
@@ -9,10 +11,13 @@ type HeightProps = {
 
 const Height = (props: HeightProps) => {
   return (
-    <View style={styles.container}>
+    <DetailsWrapper>
       <HeightIcon size={32} />
-      <Text variant='caption'>{`${props.height.toString()}m`}</Text>
-    </View>
+      <View alignItems='center'>
+        <Text variant='caption'>Wysokość</Text>
+        <Text variant='caption'>{`${props.height.toString()}m`}</Text>
+      </View>
+    </DetailsWrapper>
   );
 };
 

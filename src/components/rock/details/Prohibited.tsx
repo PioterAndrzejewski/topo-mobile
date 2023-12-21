@@ -1,13 +1,14 @@
 import { ProhibitedIcon } from "src/components/icons/ProhibitedIcon";
+
 import Text from "src/components/ui/Text";
-import View from "src/components/ui/View";
+import DetailsWrapper from "./DetailsWrapper";
 
 const Prohibited = () => {
   return (
-    <View justifyContent='center' alignItems='center' height={40} width={40}>
+    <DetailsWrapper>
       <ProhibitedIcon size={32} />
-      <Text variant='caption'>Zakaz</Text>
-    </View>
+      <Text variant='caption'>Zakaz wspinania</Text>
+    </DetailsWrapper>
   );
 };
 

@@ -47,6 +47,7 @@ const RockDetails = (props: RockDetailsProps) => {
         marginBottom='l'
         gap='m'
         justifyContent='space-between'
+        paddingHorizontal='m'
       >
         <View flexShrink={1}>
           <Text variant='h2' color={colors.secondary}>
