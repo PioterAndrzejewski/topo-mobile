@@ -361,6 +361,9 @@ export const updateRating = async (ratingToUpdate: number, rating: number ) => {
         score: rating,
       }
   }
+  if (ratingToUpdate === -1) {
+    return;
+  }
   const { data } = await authService.put(apiConfig.ratings.update(ratingToUpdate), JSON.stringify(body));
   return data;
 };

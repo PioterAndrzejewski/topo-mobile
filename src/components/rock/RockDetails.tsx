@@ -59,7 +59,6 @@ const RockDetails = (props: RockDetailsProps) => {
               <Location size={36} />
             </TouchableOpacity>
           </OverlayCardView>
-
           <OverlayCardView backgroundColor='mainBackground'>
             <TouchableOpacity onPress={handleParkingOpen}>
               <ParkingIcon size={36} />

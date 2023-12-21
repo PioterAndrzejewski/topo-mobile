@@ -13,6 +13,7 @@ import RockDrawing from "src/components/rock/drawing/RockDrawing";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
+import RouteRatingModal from "src/components/rock/details/RouteRatingModal";
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
@@ -98,6 +99,7 @@ const Rock = ({ route }: Props) => {
         </BottomSheetScrollView>
       </BottomSheet>
       <FavoritesModal />
+      <RouteRatingModal rockRefetch={refetch} />
     </View>
   );
 };

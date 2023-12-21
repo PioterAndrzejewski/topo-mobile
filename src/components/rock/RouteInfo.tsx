@@ -20,17 +20,11 @@ import View from "src/components/ui/View";
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { CommentIcon } from "src/components/icons/Comment";
 import { HeartIcon } from "src/components/icons/Heart";
-import { StarIcon } from "src/components/icons/Star";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { useUserProfile } from "src/hooks/useUserProfile";
-import {
-  Route,
-  createComment,
-  createRating,
-  updateComment,
-  updateRating,
-} from "src/services/rocks";
+import { Route, createComment, updateComment } from "src/services/rocks";
 import { confirmActionAtom } from "src/store/global";
+import { selectedRouteToRateAtom } from "src/store/results";
 import { rockActiveRoute, routeToFavoritesAtom } from "src/store/rock";
 import { styleGuide } from "src/styles/guide";
 import { Theme } from "src/styles/theme";
@@ -55,21 +49,20 @@ const RouteInfo = ({
   parent,
 }: RockInfoProps) => {
   const { colors } = useTheme<Theme>();
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
   const commentsBottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
-  const [selectedRouteToRate, setSelectedRouteToRate] = useState<Route | null>(
-    null,
-  );
-  const [confirmAction, setConfirmAction] = useAtom(confirmActionAtom);
-  const [rating, setRating] = useState(3);
+  const setConfirmAction = useSetAtom(confirmActionAtom);
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(false);
   const { data: userData } = useUserProfile();
   const { checkRouteInFavorites, removeRouteFromFavorites } =
     useFavoriteContext();
   const favoriteType = checkRouteInFavorites(route.attributes.uuid);
+  const [selectedRouteToRate, setSelectedRouteToRate] = useAtom(
+    selectedRouteToRateAtom,
+  );
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -77,49 +70,9 @@ const RouteInfo = ({
     setActiveRoute(route.attributes.uuid);
   };
 
-  const { mutate: sendRouteRatingMutation, isLoading: sendRatingIsLoading } =
-    useMutation({
-      mutationFn: () =>
-        createRating(selectedRouteToRate!.id, rating, userData?.id),
-      onSuccess: () => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        rockRefetch();
-        Toast.show({
-          type: "success",
-          text2: "Ocena została zapisana",
-        });
-        setTimeout(() => dismissBottomSheet(), 200);
-      },
-      onError: () => {
-        Toast.show({
-          type: "error",
-          text2: "Coś poszło nie tak",
-        });
-      },
-    });
-
-  const { mutate: updateRouteRatingMutation } = useMutation({
-    mutationFn: () => updateRating(route.attributes.usersRating.id, rating),
-    onSuccess: () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      Toast.show({
-        type: "success",
-        text2: "Ocena została zaktualizowana",
-      });
-      rockRefetch();
-      setTimeout(() => dismissBottomSheet(), 200);
-    },
-    onError: () => {
-      Toast.show({
-        type: "error",
-        text2: "Coś poszło nie tak",
-      });
-    },
-  });
-
   const { mutate: sendCommentMutation } = useMutation({
     mutationFn: () =>
-      createComment(selectedRouteToRate!.id, comment, userData?.id),
+      createComment(selectedRouteToRate?.id || -1, comment, userData?.id),
     onSuccess: () => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setEditingComment(false);
@@ -171,25 +124,6 @@ const RouteInfo = ({
     },
   });
 
-  const handleRateRoute = (route: Route) => {
-    setSelectedRouteToRate(route);
-    if (route.attributes.usersRating) {
-      setRating(route.attributes.usersRating.score);
-    } else {
-      setRating(4);
-    }
-    bottomSheetModalRef.current?.present();
-  };
-
-  const handleSendRateButton = () => {
-    if (!route.attributes.usersRating) sendRouteRatingMutation();
-    if (
-      route.attributes.usersRating &&
-      rating !== route.attributes.usersRating.score
-    )
-      updateRouteRatingMutation();
-  };
-
   const handleCommentRoute = (route: Route) => {
     if (route.attributes.usersComment)
       setComment(route.attributes.usersComment.comment);
@@ -222,7 +156,6 @@ const RouteInfo = ({
     setSelectedRouteToRate(null);
     setComment("");
     setEditingComment(false);
-    bottomSheetModalRef.current?.dismiss();
     commentsBottomSheetModalRef.current?.dismiss();
   };
 
@@ -236,7 +169,10 @@ const RouteInfo = ({
     }
   };
 
-  const snapPoints = useMemo(() => ["40%"], []);
+  const handleRateRoute = () => {
+    setSelectedRouteToRate(route);
+  };
+
   const commentsSnapPoints = useMemo(() => ["80%"], []);
   return (
     <>
@@ -337,7 +273,7 @@ const RouteInfo = ({
                   )}
                 </View>
                 <View justifyContent='space-between' gap='m'>
-                  <TouchableOpacity onPress={() => handleRateRoute(route)}>
+                  <TouchableOpacity onPress={() => handleRateRoute()}>
                     <OverlayCardView
                       width={46}
                       height={46}
@@ -381,46 +317,7 @@ const RouteInfo = ({
           }
         />
       </AnimatedTouchableOpacity>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
-        snapPoints={snapPoints}
-        onDismiss={dismissBottomSheet}
-        enableDismissOnClose
-        style={styleGuide.bottomSheet}
-      >
-        <View padding='m' justifyContent='center' alignItems='center' gap='s'>
-          <Text variant='h2'>
-            {selectedRouteToRate?.attributes.display_name}
-          </Text>
-          <Text>Twoja ocena</Text>
-          <View
-            marginTop='m'
-            flexDirection='row'
-            justifyContent='center'
-            alignItems='center'
-            columnGap='s'
-          >
-            {[1, 2, 3, 4, 5].map((item) => (
-              <TouchableOpacity onPress={() => setRating(item)} key={item}>
-                {item <= rating ? (
-                  <StarIcon
-                    fill={colors.secondary}
-                    color={colors.secondary}
-                    size={36}
-                  />
-                ) : (
-                  <StarIcon color={colors.secondary} size={36} />
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-          <Button
-            label={route.attributes.usersRating ? "Popraw ocenę" : "Oceń"}
-            onClick={handleSendRateButton}
-          />
-        </View>
-      </BottomSheetModal>
+
       <BottomSheetModal
         ref={commentsBottomSheetModalRef}
         index={0}
