@@ -1,6 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@shopify/restyle";
+import { TouchableOpacity, ViewStyle } from "react-native";
 
-import { styleGuide } from "src/styles/guide";
+import Text from "../ui/Text";
+import View from "../ui/View";
+
+import { Theme } from "src/styles/theme";
 
 type ButtonProps = {
   handlePress: (option: "rocks" | "areas") => void;
@@ -8,18 +12,26 @@ type ButtonProps = {
 };
 
 const Button = ({ handlePress, mode }: ButtonProps) => {
+  const { colors } = useTheme<Theme>();
+
   return (
-    <View style={styles.buttonWrapper}>
-      <View style={styles.buttonContainer}>
+    <View flexDirection='row' justifyContent='center'>
+      <View
+        flexDirection='row'
+        paddingVertical='xs'
+        paddingHorizontal='m'
+        backgroundColor='backgroundSecondary'
+        borderRadius={12}
+      >
         <TouchableOpacity onPress={() => handlePress("rocks")}>
           <View
             style={
               mode === "rocks"
                 ? {
-                    ...styles.button,
-                    ...styles.buttonActive,
+                    ...$button,
+                    backgroundColor: colors.backgroundSecondary,
                   }
-                : styles.button
+                : $button
             }
           >
             <Text>Skały</Text>
@@ -30,10 +42,10 @@ const Button = ({ handlePress, mode }: ButtonProps) => {
           style={
             mode === "areas"
               ? {
-                  ...styles.button,
-                  ...styles.buttonActive,
+                  ...$button,
+                  backgroundColor: colors.backgroundSecondary,
                 }
-              : styles.button
+              : $button
           }
         >
           <Text>Obszary</Text>
@@ -43,48 +55,10 @@ const Button = ({ handlePress, mode }: ButtonProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    position: "absolute",
-    top: 50,
-    zIndex: 4,
-  },
-  headerWrapper: {
-    display: "flex",
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  iconWrapper: {
-    position: "absolute",
-    left: 0,
-  },
-  headingWrapper: {},
-  heading: {
-    ...styleGuide.text.h3,
-  },
-  buttonWrapper: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  buttonContainer: {
-    display: "flex",
-    flexDirection: "row",
-    paddingVertical: 6,
-    paddingHorizontal: 24,
-    backgroundColor: "#ccc",
-    borderRadius: 24,
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 6,
-    borderRadius: 24,
-  },
-  buttonActive: {
-    backgroundColor: "#fff",
-  },
-});
+const $button: ViewStyle = {
+  paddingHorizontal: 20,
+  paddingVertical: 6,
+  borderRadius: 24,
+};
 
 export default Button;

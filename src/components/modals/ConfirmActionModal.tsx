@@ -34,18 +34,22 @@ const ConfirmActionModal = () => {
   }, [confirmAction]);
 
   return (
-    <Modal isVisible={showModal} onBackdropPress={() => setShowModal(false)} hideModalContentWhileAnimating backdropTransitionOutTiming={0} animationIn='wobble' animationOutTiming={0}>
+    <Modal
+      isVisible={showModal}
+      onBackdropPress={() => setShowModal(false)}
+      hideModalContentWhileAnimating
+      backdropTransitionOutTiming={0}
+      animationIn='wobble'
+      animationOutTiming={0}
+    >
       <View
-        backgroundColor='mainBackground'
+        backgroundColor='backgroundScreen'
         padding='m'
         borderRadius={12}
         width='100%'
         gap='l'
       >
-        <Animated.View
-          entering={FadeInDown.delay(300)}
-          style={$iconContainer}
-        >
+        <Animated.View entering={FadeInDown.delay(300)} style={$iconContainer}>
           {renderIcon()}
         </Animated.View>
         <Text>{confirmAction?.message}</Text>
@@ -56,7 +60,7 @@ const ConfirmActionModal = () => {
               label='potwierdź'
               onClick={handleConfirm}
               containerStyles={$confirmButton(colors.secondary)}
-              labelColor={colors.secondary}
+              labelColor='secondary'
             />
           </View>
         </View>
@@ -72,9 +76,9 @@ const $confirmButton = (border: string): ViewStyle => ({
 });
 
 const $iconContainer: ViewStyle = {
-  width: '100%',
-  flexDirection: 'row',
-  justifyContent: 'center',
-}
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "center",
+};
 
 export default ConfirmActionModal;

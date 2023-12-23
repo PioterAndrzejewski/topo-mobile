@@ -17,7 +17,7 @@ import View from "src/components/ui/View";
 import { useUserProfile } from "src/hooks/useUserProfile";
 import { createComment, updateComment } from "src/services/rocks";
 import { routeToCommentAtom } from "src/store/rock";
-import { styleGuide } from "src/styles/guide";
+import { styleGuide } from "src/styles/theme";
 
 type RouteCommentsModalProps = {
   rockRefetch: () => void;
@@ -141,7 +141,7 @@ const CommentsModal = ({ rockRefetch }: RouteCommentsModalProps) => {
               {selectedRouteToComment?.attributes.display_name}
             </Text>
           </View>
-          <OverlayCardView backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='backgroundScreen'>
             <View borderBottomWidth={0.3} marginBottom='m' paddingBottom='s'>
               <Text variant='special'>Twój komentarz:</Text>
             </View>
@@ -179,7 +179,7 @@ const CommentsModal = ({ rockRefetch }: RouteCommentsModalProps) => {
               .map((comment) => (
                 <OverlayCardView
                   key={comment.id}
-                  backgroundColor='mainBackground'
+                  backgroundColor='backgroundScreen'
                 >
                   <View gap='m'>
                     <View

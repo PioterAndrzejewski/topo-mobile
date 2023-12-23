@@ -1,4 +1,5 @@
-import OverlayCardView from "../ui/OverlayCardView";
+import { ScrollView, useWindowDimensions } from "react-native";
+
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -14,20 +15,43 @@ type RouteStructureProps = {
 };
 
 const RouteStructure = ({ routes }: RouteStructureProps) => {
+  const { width } = useWindowDimensions();
   const renderSection = (range: string, number: number) => (
-    <View alignItems='center' borderWidth={1} p='xs' borderRadius={12}>
-      <Text variant='caption'>{range}</Text>
-      <View width='100%' height={1} backgroundColor='backgroundBlack' />
-      <Text variant='caption'>{number.toString()}</Text>
+    <View
+      alignItems='center'
+      borderWidth={1}
+      borderColor='backgroundSecondary'
+      p='xs'
+      borderRadius={12}
+      gap='xs'
+    >
+      <Text variant='body'>{range}</Text>
+      <View width='100%' height={1} backgroundColor='backgroundSecondary' />
+      <Text variant='h4' color='textSecondary'>
+        {number.toString()}
+      </Text>
     </View>
   );
 
   return (
-    <View flexDirection='row' justifyContent='space-between'>
-      {renderSection("III - V+", routes?.toV)}
-      {renderSection("VI - VI.2+", routes?.toVI2)}
-      {renderSection("VI.3 - VI.4+", routes?.toVI4)}
-      {renderSection("VI.5 - VI.8", routes?.toVI8)}
+    <View gap='s' width={width}>
+      <View paddingHorizontal='m'>
+        <Text variant='h3'>Drogi według poziomu:</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View
+          flexDirection='row'
+          justifyContent='space-between'
+          gap='m'
+          paddingLeft='m'
+          minWidth={width - 16}
+        >
+          {renderSection("III - V+", routes?.toV)}
+          {renderSection("VI - VI.2+", routes?.toVI2)}
+          {renderSection("VI.3 - VI.4+", routes?.toVI4)}
+          {renderSection("VI.5 - VI.8", routes?.toVI8)}
+        </View>
+      </ScrollView>
     </View>
   );
 };

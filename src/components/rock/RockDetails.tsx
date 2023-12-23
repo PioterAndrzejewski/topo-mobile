@@ -6,11 +6,10 @@ import InformationRow from "src/components/rock/details/InformationRow";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { useTheme } from "@shopify/restyle";
+import { useWindowDimensions } from "react-native";
 import { Location } from "src/components/icons/Location";
 import { ParkingIcon } from "src/components/icons/Parking";
 import { useRock } from "src/hooks/useRock";
-import { Theme } from "src/styles/theme";
 import OverlayCardView from "../ui/OverlayCardView";
 
 type RockDetailsProps = {
@@ -19,7 +18,7 @@ type RockDetailsProps = {
 
 const RockDetails = (props: RockDetailsProps) => {
   const { data } = useRock(props.id);
-  const { colors } = useTheme<Theme>();
+  const { width } = useWindowDimensions();
 
   const handleMapOpen = () => {
     if (!data?.attributes) return;
@@ -40,26 +39,32 @@ const RockDetails = (props: RockDetailsProps) => {
   if (!data) return <AppLoading />;
 
   return (
-    <View marginBottom='xl' marginTop='m'>
+    <View marginBottom='l'>
       <View
         flexDirection='row'
         alignItems='center'
-        marginBottom='l'
         gap='m'
         justifyContent='space-between'
+        marginHorizontal='m'
+        paddingBottom='l'
+        width={width - 32}
       >
         <View flexShrink={1}>
-          <Text variant='h2' color={colors.secondary}>
-            {data?.attributes?.Name}
-          </Text>
+          <Text variant='h2'>{data?.attributes?.Name}</Text>
+          <View flexDirection='row' flexWrap='wrap'>
+            <Text>W sektorze: </Text>
+            <Text variant='h4' color='secondary'>
+              {data?.attributes?.parent.data.attributes.Name}
+            </Text>
+          </View>
         </View>
         <View flexDirection='row' gap='s'>
-          <OverlayCardView backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='backgroundScreen'>
             <TouchableOpacity onPress={handleMapOpen}>
               <Location size={36} />
             </TouchableOpacity>
           </OverlayCardView>
-          <OverlayCardView backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='backgroundScreen'>
             <TouchableOpacity onPress={handleParkingOpen}>
               <ParkingIcon size={36} />
             </TouchableOpacity>

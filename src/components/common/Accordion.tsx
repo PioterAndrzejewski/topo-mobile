@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+
+import View from "src/components/ui/View";
 
 type Props = {
   Title?: ReactNode;
@@ -9,9 +11,34 @@ type Props = {
 const Accordion = (props: Props) => {
   const { Title, Content } = props;
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>{Title}</View>
-      {Content && <View style={styles.content}>{Content}</View>}
+    <View
+      marginBottom='m'
+      borderColor='backgroundSecondary'
+      shadowColor='backgroundDark'
+      shadowOffset={{ width: 0, height: 0 }}
+      shadowRadius={4}
+      shadowOpacity={0.15}
+      elevation={50}
+      zIndex={50}
+      backgroundColor='backgroundScreen'
+      borderRadius={12}
+      padding='m'
+    >
+      <View flex={1} >
+        {Title}
+      </View>
+      {Content && (
+        <View
+          top={-10}
+          position='relative'
+          marginTop='l'
+          paddingTop='l'
+          borderTopColor='backgroundSecondary'
+          borderTopWidth={1}
+        >
+          {Content}
+        </View>
+      )}
     </View>
   );
 };
@@ -19,20 +46,6 @@ const Accordion = (props: Props) => {
 export default Accordion;
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 10,
-  },
-  header: {
-    flex: 1,
-    padding: 10,
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 6,
-    flexDirection: "row",
-    alignItems: "center",
-    zIndex: 1,
-    backgroundColor: "#fff",
-  },
   content: {
     position: "relative",
     top: -10,

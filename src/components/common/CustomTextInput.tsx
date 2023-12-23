@@ -1,16 +1,14 @@
+import { useTheme } from "@shopify/restyle";
 import { useState } from "react";
 import type { FieldError } from "react-hook-form";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
-import { styleGuide } from "src/styles/guide";
+import { Theme, palette } from "src/styles/theme";
 
 export type CustomTextInputProps = {
   label: string;
@@ -36,6 +34,7 @@ export default function CustomTextInput({
   const [inputFocused, setInputFocused] = useState(false);
   const [hidden, setHidden] = useState<boolean | undefined>(secure);
   const handlePress = () => setHidden((prevValue) => !prevValue);
+  const { textVariants } = useTheme<Theme>();
 
   const handleBlur = () => {
     setInputFocused(false);
@@ -43,7 +42,7 @@ export default function CustomTextInput({
   };
 
   const showPassword = () => (
-    <View style={styles.icon}>
+    <View position='absolute' right={10} top={15}>
       <TouchableOpacity onPress={handlePress} hitSlop={20}>
         {hidden ? <VisionLowIcon /> : <VisionIcon />}
       </TouchableOpacity>
@@ -66,12 +65,12 @@ export default function CustomTextInput({
   };
 
   return (
-    <View style={styles.container}>
+    <View marginVertical='s' width='100%' paddingHorizontal='s'>
       <View>
-        <Text style={styles.label}>{label}</Text>
+        <Text variant='label'>{label}</Text>
         <View>
           <TextInput
-            style={textInputStyles()}
+            style={{ ...textInputStyles(), ...textVariants.input }}
             onFocus={() => setInputFocused(true)}
             onBlur={handleBlur}
             value={value}
@@ -81,7 +80,9 @@ export default function CustomTextInput({
             {...props}
           />
           {error?.message && (
-            <Text style={styles.errorText}>{error.message}</Text>
+            <View position='absolute' right={10} top={15}>
+              <Text color='error'>{error.message}</Text>
+            </View>
           )}
           {secure && showPassword()}
         </View>
@@ -91,44 +92,21 @@ export default function CustomTextInput({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
-    width: "100%",
-    paddingHorizontal: 10,
-  },
-  label: {
-    marginBottom: 4,
-    color: styleGuide.color.primary["900"],
-    ...styleGuide.text.label,
-  },
   input: {
     width: "100%",
     height: 47,
     paddingHorizontal: 20,
-    ...styleGuide.corner.sm,
-    ...styleGuide.text.title,
-    backgroundColor: styleGuide.color.white,
+    borderRadius: 12,
+    backgroundColor: palette.white,
   },
   inputError: {
     borderStyle: "solid",
     borderWidth: 2,
-    borderColor: styleGuide.color.error,
+    borderColor: palette.red,
   },
   inputFocused: {
     borderStyle: "solid",
     borderWidth: 2,
-    borderColor: styleGuide.color.blue["500"],
-  },
-  errorText: {
-    position: "absolute",
-    bottom: -24,
-    right: 0,
-    color: styleGuide.color.error,
-    ...styleGuide.text.caption,
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
-    top: 15,
+    borderColor: palette.blue500,
   },
 });

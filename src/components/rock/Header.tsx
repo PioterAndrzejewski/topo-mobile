@@ -1,12 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
+import { useSetAtom } from "jotai";
 import { useMemo } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { useAtomValue, useSetAtom } from 'jotai';
-import BackArrow from "src/components/common/BackArrow";
-import { routeToFavoritesAtom } from 'src/store/rock';
+import View from "src/components/ui/View";
 import Text from "../ui/Text";
-import View from "../ui/View";
+
+import { confirmActionAtom } from "src/store/global";
+import { routeToCommentAtom, routeToFavoritesAtom } from "src/store/rock";
+import { palette } from "src/styles/theme";
+import { ArrowLeft } from "../icons/ArrowLeft";
+import OverlayCardView from "../ui/OverlayCardView";
 
 type HeaderProps = {
   name?: string;
@@ -18,6 +22,9 @@ type HeaderProps = {
 const Header = (props: HeaderProps) => {
   const navigation = useNavigation();
   const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
+  const setRouteToComment = useSetAtom(routeToCommentAtom);
+  const setConfirmAction = useSetAtom(confirmActionAtom);
+
   const imagesArray = useMemo(() => {
     if (!props.numberOfImages || props.numberOfImages < 1) return null;
     return Array.from({ length: props.numberOfImages! }, (_, i) => ({
@@ -28,25 +35,35 @@ const Header = (props: HeaderProps) => {
   const handleBackArrowPress = () => {
     navigation.goBack();
     setRouteToFavorites(null);
-  }
+    setRouteToComment(null);
+    setConfirmAction(null);
+  };
 
   return (
     <View
-      width='100%'
-      position='absolute'
-      top={60}
-      zIndex={4}
-      backgroundColor='mainBackgroundFaded'
-      paddingVertical='m'
+      paddingTop='3xl'
+      flexDirection='row'
+      alignItems='center'
+      marginHorizontal='m'
+      paddingBottom='m'
+      gap='3xl'
     >
-      <View width='100%' flexDirection='row' left={0} justifyContent='center'>
-        <View position='absolute' left={0}>
-          <BackArrow onClick={handleBackArrowPress} />
-        </View>
-        <Text variant='h3'>{props.name}</Text>
-      </View>
-      {props.numberOfImages && props.numberOfImages > 1 && (
-        <View width='100%' gap='xs' flexDirection='row' justifyContent='center'>
+      <TouchableOpacity onPress={handleBackArrowPress}>
+        <OverlayCardView>
+          <ArrowLeft size={24} />
+        </OverlayCardView>
+      </TouchableOpacity>
+      <View flexDirection='row' gap='s'>
+        <Text variant='h4' color='textSecondary'>
+          Skałoplan:
+        </Text>
+
+        <View
+          gap='xs'
+          flexDirection='row'
+          justifyContent='center'
+          alignItems='center'
+        >
           {imagesArray?.map((_, i) => (
             <ImageCircle
               active={i === props.activeImage}
@@ -56,7 +73,7 @@ const Header = (props: HeaderProps) => {
             />
           ))}
         </View>
-      )}
+      </View>
     </View>
   );
 };
@@ -89,14 +106,13 @@ const ImageCircle = ({
 const $imageCircle = (active: boolean) => ({
   width: 12,
   height: 12,
-  backgroundColor: active ? "#000" : "#777",
+  backgroundColor: active ? palette.green : palette.blue500,
   borderRadius: 20,
-  borderWidth: 1,
 });
 
 const $imageCircleOffset = (active: boolean) => ({
   padding: 4,
-  borderColor: "#000",
+  borderColor: palette.green,
   borderRadius: 20,
   borderWidth: active ? 1 : 0,
 });

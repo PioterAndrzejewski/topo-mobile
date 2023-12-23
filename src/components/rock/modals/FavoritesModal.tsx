@@ -50,7 +50,7 @@ const FavoritesModal = () => {
       onDismiss={() => setShowModal(false)}
     >
       <View
-        backgroundColor='mainBackground'
+        backgroundColor='backgroundScreen'
         padding='l'
         borderRadius={12}
         alignItems='center'

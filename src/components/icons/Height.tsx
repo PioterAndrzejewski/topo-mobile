@@ -17,7 +17,7 @@ export const HeightIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
         stroke-width='1'
         stroke-linecap='round'
         stroke-linejoin='round'
-        opacity={0.7}
+        opacity={0.7} 
       />
       <Path
         d='M20 17L17.5 22L15 17'

@@ -88,7 +88,7 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
             >
               <View flexDirection='row' alignItems='center'>
                 <View flexBasis={30} marginLeft='xs' borderColor='secondary'>
-                  <Text variant='h2' color={colors.secondary}>
+                  <Text variant='h2' color='secondary'>
                     {(realIndex! + 1).toString()}
                   </Text>
                 </View>
@@ -97,7 +97,7 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                   <View flexDirection='row' gap='m'>
                     <Text
                       variant='h4'
-                      color={colors.secondary}
+                      color='secondary'
                       additionalStyles={{ width: 40 }}
                     >
                       {getMeaningfulGrade(route.attributes.grade)}
@@ -116,7 +116,7 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                 <TouchableOpacity onPress={handleFavoritesPress}>
                   <OverlayCardView
                     padding='xs'
-                    backgroundColor='mainBackground'
+                    backgroundColor='backgroundScreen'
                     width={46}
                     height={46}
                     justifyContent='center'
@@ -197,13 +197,13 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                         size={36}
                         color={
                           route.attributes.usersComment
-                            ? colors.mainBackground
-                            : colors.backgroundBlack
+                            ? colors.backgroundScreen
+                            : colors.backgroundDark
                         }
                         fill={
                           route.attributes.usersComment
                             ? colors.secondary
-                            : colors.mainBackground
+                            : colors.backgroundScreen
                         }
                       />
                     </OverlayCardView>
@@ -217,6 +217,5 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
     </>
   );
 };
-
 
 export default RouteInfo;

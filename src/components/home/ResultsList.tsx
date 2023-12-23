@@ -4,11 +4,13 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import RockInfoExpanded from "src/components/home/RockInfoExpanded";
+import Backdrop from "../common/Backdrop";
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 import { useAreas } from "src/hooks/useAreas";
 import { AreaData } from "src/services/rocks";
@@ -19,13 +21,12 @@ import {
   regionAtom,
   selectedRockAtom,
 } from "src/store/results";
-import { styleGuide } from "src/styles/guide";
+import { styleGuide } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
-import Backdrop from "../common/Backdrop";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
@@ -78,7 +79,7 @@ export default function ResultsList() {
     if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
-  const bottomSheetSnapPoints = useMemo(() => ["48%"], []);
+  const bottomSheetSnapPoints = useMemo(() => ["70%"], []);
   const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
 
   return (
@@ -89,7 +90,7 @@ export default function ResultsList() {
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-        <View style={styles.location}>
+        <View flexDirection='row' padding='s' minHeight={60}>
           {locationArray?.length > 0 &&
             locationArray.map((item, index) => (
               <TouchableOpacity
@@ -97,13 +98,17 @@ export default function ResultsList() {
                 onPress={() => animateTo(item, index)}
                 key={item?.attributes?.Name}
               >
-                {index !== 0 && <Text style={{ marginHorizontal: 2 }}>-</Text>}
+                {index !== 0 && (
+                  <View marginHorizontal='3xs'>
+                    <Text>-</Text>
+                  </View>
+                )}
                 <Text>{item?.attributes?.Name}</Text>
               </TouchableOpacity>
             ))}
         </View>
         <BottomSheetScrollView>
-          <View style={styles.container}>
+          <View paddingTop='m' width='100%' height='100%' paddingHorizontal='s'>
             {Array.isArray(listToRender) &&
               listToRender.length >= 1 &&
               listToRender
@@ -139,19 +144,3 @@ export default function ResultsList() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 12,
-  },
-  location: {
-    flexDirection: "row",
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingHorizontal: 12,
-    minHeight: 60,
-  },
-});

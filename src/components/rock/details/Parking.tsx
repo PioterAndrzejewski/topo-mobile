@@ -1,5 +1,6 @@
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+import DetailsWrapper from "./DetailsWrapper";
 
 import { ParkingIcon } from "src/components/icons/Parking";
 
@@ -9,10 +10,13 @@ type ParkingProps = {
 
 const Parking = (props: ParkingProps) => {
   return (
-    <View justifyContent='center' alignItems='center' height={40} width={40}>
+    <DetailsWrapper>
       <ParkingIcon size={32} />
-      <Text variant='caption'>{`${props.distance.toString()} min`}</Text>
-    </View>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Z parkingu:</Text>
+        <Text variant='body'>{`${props.distance.toString()} min`}</Text>
+      </View>
+    </DetailsWrapper>
   );
 };
 

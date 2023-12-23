@@ -2,21 +2,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
+import { TouchableOpacity } from "react-native";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
 import CustomTextInput from "src/components/common/CustomTextInput";
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 import { login } from "src/services/auth";
 import { saveJWT, setUserToStorage } from "src/services/store";
-import { styleGuide } from "src/styles/guide";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function LoginPanel() {
@@ -44,9 +39,17 @@ export default function LoginPanel() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Topo na wyciągnięcie ręki</Text>
-      <View style={styles.innerContainer}>
+    <View
+      paddingTop='l'
+      width='100%'
+      height='100%'
+      paddingHorizontal='l'
+      backgroundColor='backgroundSecondary'
+    >
+      <Text variant='h2' color='textGray'>
+        Topo na wyciągnięcie ręki
+      </Text>
+      <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
         <View>
           <Controller
             control={control}
@@ -94,13 +97,19 @@ export default function LoginPanel() {
               onClick={() => navigation.navigate("Home")}
             />
           )}
-          <View style={styles.registerContainer}>
-            <Text style={styles.noAccount}>Nie masz konta?</Text>
+          <View marginTop='l' justifyContent='center' alignItems='center'>
+            <Text variant='body' color='textGray'>
+              Nie masz konta?
+            </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("Register")}
               hitSlop={20}
             >
-              <Text style={styles.signUp}>Zarejestruj</Text>
+              <View marginLeft='m'>
+                <Text variant='body' color='textBlack'>
+                  Zarejestruj
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -122,38 +131,3 @@ const schema = yup.object().shape({
 });
 
 type LoginData = yup.InferType<typeof schema>;
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 24,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 20,
-  },
-  title: {
-    color: styleGuide.color.primary["500"],
-    ...styleGuide.text.h2,
-  },
-  innerContainer: {
-    marginTop: 36,
-    display: "flex",
-    justifyContent: "space-between",
-    flexGrow: 1,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  registerContainer: {
-    marginTop: 20,
-    ...(styleGuide.center as ViewStyle),
-  },
-  noAccount: {
-    color: styleGuide.color.primary["500"],
-    ...styleGuide.text.body,
-  },
-  signUp: {
-    marginLeft: 12,
-    color: styleGuide.color.primary["700"],
-    ...styleGuide.text.body,
-  },
-});

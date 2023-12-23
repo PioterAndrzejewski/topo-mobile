@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
+import { ScrollView } from "react-native-gesture-handler";
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
@@ -37,19 +38,32 @@ const RockInfoExpanded = () => {
   };
 
   return (
-    <View flex={1} height={"100%"} paddingHorizontal='m' gap='l'>
-      <View
-        flexDirection='row'
-        justifyContent='space-between'
-        alignItems='center'
-      >
-        <Text variant='h2' color={colors.secondary}>
-          {rock?.attributes.Name}
-        </Text>
+    <View flex={1} gap='l'>
+      <ScrollView>
+        <View
+          flexDirection='row'
+          justifyContent='space-between'
+          alignItems='center'
+          flex={1}
+        >
+          <View marginHorizontal='m'>
+            <Text variant='h2' color='textBlack'>
+              {rock?.attributes.Name}
+            </Text>
+            <View flexDirection='row' gap='s'>
+              <Text variant='h4'>w sektorze:</Text>
+              <Text variant='h4' color='textSecondary'>
+                {rock?.attributes.parent.data.attributes.Name}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View marginVertical='m'>{rock && <InformationRow rock={rock} />}</View>
+        {routes && <RouteStructure routes={routes} />}
+      </ScrollView>
+      <View marginBottom='xl' marginHorizontal='m'>
+        <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
       </View>
-      {rock && <InformationRow rock={rock} />}
-      {routes && <RouteStructure routes={routes} />}
-      <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
     </View>
   );
 };

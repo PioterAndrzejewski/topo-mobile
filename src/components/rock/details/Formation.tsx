@@ -6,6 +6,7 @@ import { VerticalIcon } from "src/components/icons/Vertical";
 import { Formations } from "src/services/rocks";
 
 import Text from "src/components/ui/Text";
+import DetailsWrapper from "./DetailsWrapper";
 
 type FormationProps = {
   formation: Formations;
@@ -31,16 +32,19 @@ const Formation = (props: FormationProps) => {
       case "vertical":
         return "pion";
       case "overhang":
-        return "przew";
+        return "przewieszenie";
       case "roof":
         return "dach";
     }
   };
   return (
-    <View justifyContent='center' alignItems='center' height={40} width={40}>
+    <DetailsWrapper>
       {renderIcon()}
-      <Text variant='caption'>{renderText()}</Text>
-    </View>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Główne formacje:</Text>
+        <Text variant='body'>{renderText()}</Text>
+      </View>
+    </DetailsWrapper>
   );
 };
 

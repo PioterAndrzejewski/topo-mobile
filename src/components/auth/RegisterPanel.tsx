@@ -2,22 +2,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
 import CustomTextInput from "src/components/common/CustomTextInput";
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 import { register } from "src/services/auth";
 import { saveJWT, setUserToStorage } from "src/services/store";
-import { styleGuide } from "src/styles/guide";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function RegisterPanel() {
@@ -65,9 +59,9 @@ export default function RegisterPanel() {
   ];
 
   return (
-    <View style={styles.container}>
+    <View width='100%' height='100%' paddingTop='2xl' paddingHorizontal='xl'>
       <ScrollView>
-        <View style={styles.innerContainer}>
+        <View justifyContent='space-between' flexGrow={1}>
           {inputs.map((input) => (
             <Controller
               key={input.field}
@@ -96,34 +90,50 @@ export default function RegisterPanel() {
             isLoading={isLoading}
           />
         </View>
-        <View style={styles.privacy}>
-          <View style={styles.privacyRow}>
-            <Text style={styles.caption}>Rejestrując się akceptujesz</Text>
+        <View marginTop='m'>
+          <View justifyContent='center' alignItems='center'>
+            <Text color='textBlack' variant='caption'>
+              Rejestrując się akceptujesz
+            </Text>
           </View>
-          <View style={styles.privacyRow}>
+          <View justifyContent='center' alignItems='center'>
             <TouchableOpacity
               onPress={() => console.log("open terms")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Regulamin</Text>
+              <Text
+                additionalStyles={{ textDecorationStyle: "solid" }}
+                variant='caption'
+              >
+                Regulamin
+              </Text>
             </TouchableOpacity>
 
-            <Text style={styles.caption}> i </Text>
+            <Text variant='caption'> i </Text>
             <TouchableOpacity
               onPress={() => console.log("open privacy")}
               hitSlop={20}
             >
-              <Text style={styles.captionLink}>Politykę Prywatności.</Text>
+              <Text
+                additionalStyles={{ textDecorationStyle: "solid" }}
+                variant='caption'
+              >
+                Politykę Prywatności.
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.signUpContainer}>
-          <Text style={styles.hasAccount}>Masz już konto?</Text>
+        <View>
+          <Text color='textBlack' variant='body'>
+            Masz już konto?
+          </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Login")}
             hitSlop={20}
           >
-            <Text style={styles.signIn}>Zaloguj</Text>
+            <View marginLeft='s'>
+              <Text variant='body'>Zaloguj</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -152,52 +162,3 @@ const schema = yup.object().shape({
 });
 
 export type RegisterData = yup.InferType<typeof schema>;
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 20,
-  },
-  innerContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexGrow: 1,
-  },
-  privacy: {
-    marginTop: 16,
-  },
-  privacyRow: {
-    ...(styleGuide.center as ViewStyle),
-  },
-  caption: {
-    color: styleGuide.color.primary["900"],
-    ...styleGuide.text.caption,
-  },
-  captionLink: {
-    textDecorationLine: "underline",
-    color: styleGuide.color.primary["900"],
-    ...styleGuide.text.caption,
-  },
-  hasAccount: {
-    color: styleGuide.color.primary["900"],
-    ...styleGuide.text.body,
-  },
-  signUpContainer: {
-    marginTop: 20,
-    ...(styleGuide.center as ViewStyle),
-  },
-  signIn: {
-    marginLeft: 12,
-    color: styleGuide.color.primary["900"],
-    ...styleGuide.text.body,
-  },
-  documentTitle: {
-    marginBottom: 30,
-    ...styleGuide.text.h3,
-  },
-  documentBody: {
-    ...styleGuide.text.body,
-  },
-});

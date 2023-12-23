@@ -1,19 +1,41 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { SunIcon } from "src/components/icons/Sun";
 import { Exhibition } from "src/services/rocks";
 
 import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
+import DetailsWrapper from "./DetailsWrapper";
 
 type HeightProps = {
   exposition: Exhibition;
 };
 
+const getMeaningfulExposition = (exposition: Exhibition) => {
+  switch (exposition) {
+    case "north":
+      return "północ";
+    case "east":
+      return "wschó∂";
+    case "south":
+      return "południe";
+    case "trees":
+      return "zadrzewiony";
+    case "west":
+      "zachód";
+  }
+};
+
 const Exposition = (props: HeightProps) => {
   return (
-    <View style={styles.container}>
+    <DetailsWrapper>
       <SunIcon size={32} />
-      <Text variant='caption'>{props.exposition.slice(0, 1).toUpperCase()}</Text>
-    </View>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Wystawka:</Text>
+        <Text variant='body'>
+          {getMeaningfulExposition(props.exposition)}
+        </Text>
+      </View>
+    </DetailsWrapper>
   );
 };
 
