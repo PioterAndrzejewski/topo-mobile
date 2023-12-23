@@ -103,7 +103,7 @@ export default function ResultsList() {
                   marginVertical='s'
                   paddingHorizontal='m'
                   flexDirection='row'
-                  gap='s'
+                  gap='m'
                 >
                   {locationArray.map((item, index) => (
                     <OverlayCardView>
@@ -131,7 +131,7 @@ export default function ResultsList() {
             {Array.isArray(listToRender) &&
               listToRender.length >= 1 &&
               listToRender
-                .slice(0, 10)
+                .slice(0, 5)
                 .map((item) => (
                   <ResultsItem
                     id={item.attributes.uuid}
@@ -141,9 +141,9 @@ export default function ResultsList() {
                   />
                 ))}
 
-            {Array.isArray(listToRender) && listToRender.length > 2 && (
+            {Array.isArray(listToRender) && listToRender.length > 5 && (
               <Text>
-                Lista wyświetla max. 10 wyników. Przesuń widok na mapie zeby
+                Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
                 wyszukać w innym obszarze.
               </Text>
             )}

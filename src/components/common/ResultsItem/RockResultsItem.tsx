@@ -119,7 +119,6 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 backgroundColor='backgroundFaded'
                 alignItems='center'
               >
-                <Text variant='caption'>Sektor:</Text>
                 <Text variant='h4' color='textSecondary'>
                   {item.attributes.parent.data.attributes.Name}
                 </Text>
