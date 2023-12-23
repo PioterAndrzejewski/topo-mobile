@@ -8,7 +8,7 @@ type Props = {
 
 const DetailsWrapper = (props: Props) => {
   return (
-    <View justifyContent='space-between' flex={1} alignItems='center' gap='s'>
+    <View justifyContent='space-between' flex={1} alignItems='flex-start' gap='s'>
       {props.children}
     </View>
   );

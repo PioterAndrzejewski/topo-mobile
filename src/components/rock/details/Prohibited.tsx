@@ -7,7 +7,7 @@ const Prohibited = () => {
   return (
     <DetailsWrapper>
       <ProhibitedIcon size={32} />
-      <Text variant='caption'>Zakaz wspinania</Text>
+      <Text variant='body'>Zakaz wspinania</Text>
     </DetailsWrapper>
   );
 };

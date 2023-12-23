@@ -1,13 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
 import type { FC } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
+
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { Coordinates, Route } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { styleGuide } from "src/styles/guide";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
@@ -40,10 +42,8 @@ const ResultsItemRoute: FC<ListResultProps> = ({
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
-  const {
-    checkRouteInFavorites,
-    removeRouteFromFavorites,
-  } = useFavoriteContext();
+  const { checkRouteInFavorites, removeRouteFromFavorites } =
+    useFavoriteContext();
   const isFavorite = checkRouteInFavorites(id);
 
   const animateTo = (item: RouteWithParent) => {
@@ -71,55 +71,37 @@ const ResultsItemRoute: FC<ListResultProps> = ({
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <View style={styles.gradeContainer}>
-        <Text style={styles.grade}>
-          {getMeaningfulGrade(item.attributes.grade)}
-        </Text>
+    <TouchableOpacity onPress={handlePress}>
+      <View
+        flexDirection='row'
+        marginBottom='s'
+        borderWidth={1}
+        borderColor='textGray'
+        borderRadius={12}
+        padding='s'
+        alignItems='center'
+      >
+        <View flexBasis={44} borderRightWidth={1} borderColor='textGray'>
+          <Text variant='h3'>{getMeaningfulGrade(item.attributes.grade)}</Text>
+        </View>
+        <View marginLeft='m'>
+          <Text variant='body' color='secondary'>
+            {name}
+          </Text>
+          <Text variant='body' color='secondary'>
+            {`Skała: {item.parent.name}`}
+          </Text>
+        </View>
+        {isFavorite && (
+          <TouchableOpacity onPress={handleHeartPress} hitSlop={12}>
+            <View flexDirection='row' justifyContent='flex-end' flex={1}>
+              <HeartIcon size={24} fill={getFavoriteColor(isFavorite)} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
-      <View style={styles.descriptionContainer}>
-        <Text style={styles.text}>{name}</Text>
-        <Text style={styles.text}>Skała: {item.parent.name}</Text>
-      </View>
-      {isFavorite && (
-        <TouchableOpacity
-          style={styles.heartContainer}
-          onPress={handleHeartPress}
-          hitSlop={12}
-        >
-          <HeartIcon size={24} fill={getFavoriteColor(isFavorite)} />
-        </TouchableOpacity>
-      )}
     </TouchableOpacity>
   );
 };
 
 export default ResultsItemRoute;
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 12,
-    padding: 8,
-    alignItems: "center",
-  },
-  gradeContainer: {
-    flexBasis: 44,
-    borderRightWidth: 1,
-  },
-  grade: {
-    ...styleGuide.text.h3,
-  },
-  descriptionContainer: {
-    marginLeft: 20,
-  },
-  text: {
-    ...styleGuide.text.body,
-    color: "#336383",
-  },
-  heartContainer: { flex: 1, flexDirection: "row", justifyContent: "flex-end" },
-});

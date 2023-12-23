@@ -36,7 +36,7 @@ const Header = (props: HeaderProps) => {
       position='absolute'
       top={60}
       zIndex={4}
-      backgroundColor='mainBackgroundFaded'
+      backgroundColor='backgroundFaded'
       paddingVertical='m'
     >
       <View width='100%' flexDirection='row' left={0} justifyContent='center'>

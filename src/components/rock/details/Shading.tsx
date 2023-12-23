@@ -16,7 +16,7 @@ const ShadingInfo = (props: ShadingProps) => {
       case "shadow":
         return <ShadowIcon size={32} />;
       case "half-shadow":
-        return <HalfShadowIcon size={32} />;
+        return <HalfShadowIcon size={38} />;
       case "sunny":
         return <SunnyIcon size={32} />;
       default:
@@ -38,7 +38,7 @@ const ShadingInfo = (props: ShadingProps) => {
   return (
     <DetailsWrapper>
       {renderIcon()}
-      <Text variant='caption'>{renderText()}</Text>
+      <Text variant='body'>{renderText()}</Text>
     </DetailsWrapper>
   );
 };

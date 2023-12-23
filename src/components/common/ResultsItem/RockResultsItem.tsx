@@ -108,7 +108,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 <HeartIcon
                   size={32}
                   fill={
-                    isFavorite ? colors.favoriteRed : colors.mainBackgroundFaded
+                    isFavorite ? colors.favoriteRed : colors.backgroundFaded
                   }
                 />
               </TouchableOpacity>

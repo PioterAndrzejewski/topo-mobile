@@ -1,4 +1,4 @@
-import { useTheme } from '@shopify/restyle';
+import { useTheme } from "@shopify/restyle";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -9,8 +9,7 @@ import {
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { styleGuide } from "src/styles/guide";
-import { Theme } from 'src/styles/theme';
+import { Theme, palette } from "src/styles/theme";
 
 export type ButtonProps = {
   label: string;
@@ -18,7 +17,7 @@ export type ButtonProps = {
   disabled?: boolean;
   isLoading?: boolean;
   containerStyles?: ViewStyle;
-  labelColor?: string;
+  labelColor?: keyof Theme["colors"];
 };
 
 export default function Button({
@@ -29,7 +28,7 @@ export default function Button({
   containerStyles,
   labelColor,
 }: ButtonProps) {
-  const {colors} = useTheme<Theme>()
+  const { colors } = useTheme<Theme>();
   return (
     <TouchableOpacity
       onPress={() => {
@@ -42,35 +41,33 @@ export default function Button({
         style={
           disabled
             ? {
-                ...styles.container,
-                ...styles.disabled,
+                ...$container,
+                ...$disabled,
               }
-            : { ...styles.container, ...containerStyles }
+            : { ...$container, ...containerStyles }
         }
       >
         {isLoading ? (
           <ActivityIndicator size='small' />
         ) : (
-          <Text variant='h3' color={labelColor || colors.mainBackground}>{label}</Text>
+          <Text variant='h3' color={labelColor || "textWhite"}>
+            {label}
+          </Text>
         )}
       </View>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 30,
-    padding: 14,
-    backgroundColor: "#2F4858",
-    ...(styleGuide.center as ViewStyle),
-    ...styleGuide.corner.sm,
-  },
-  disabled: {
-    backgroundColor: styleGuide.color.primary["300"],
-  },
-  label: {
-    color: styleGuide.color.white,
-    ...styleGuide.text.button,
-  },
-});
+const $container: ViewStyle = {
+  marginTop: 30,
+  padding: 14,
+  backgroundColor: palette.green,
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: 12,
+};
+
+const $disabled: ViewStyle = {
+  backgroundColor: palette.blue700_10,
+}

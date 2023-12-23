@@ -1,7 +1,7 @@
 import type { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
 
-import { styleGuide } from "src/styles/guide";
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 type LoginTitleProps = {
   title: string;
@@ -9,22 +9,12 @@ type LoginTitleProps = {
 
 const LoginTitle: FC<LoginTitleProps> = ({ title }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{title}</Text>
+    <View width='100%' paddingTop='2xl' paddingHorizontal='l'>
+      <Text variant='h1' color='secondary'>
+        {title}
+      </Text>
     </View>
   );
 };
 
 export default LoginTitle;
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    paddingTop: 70,
-    paddingHorizontal: 20,
-  },
-  header: {
-    ...styleGuide.text.h1,
-    color: "#336383",
-  },
-});

@@ -40,9 +40,9 @@ const Formation = (props: FormationProps) => {
   return (
     <DetailsWrapper>
       {renderIcon()}
-      <View>
-        <Text variant='caption'>Główne formacje:</Text>
-        <Text variant='caption'>{renderText()}</Text>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Główne formacje:</Text>
+        <Text variant='body'>{renderText()}</Text>
       </View>
     </DetailsWrapper>
   );

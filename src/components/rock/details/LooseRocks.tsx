@@ -7,7 +7,7 @@ const LooseRocks = () => {
   return (
     <DetailsWrapper>
       <LooseRocksIcon size={32} />
-      <Text variant='caption'>Krucha skała</Text>
+      <Text variant='body'>Krucha skała</Text>
     </DetailsWrapper>
   );
 };

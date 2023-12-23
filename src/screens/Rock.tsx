@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useMemo, useRef, useState } from "react";
 
 import AppLoading from "src/components/common/AppLoading";
@@ -18,13 +18,13 @@ import RouteRatingModal from "src/components/rock/modals/RouteRatingModal";
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
-import { styleGuide } from "src/styles/guide";
+import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
-  const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
+  const activeRoute = useAtomValue(rockActiveRoute);
   const [activeImage, setActiveImage] = useState(0);
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -72,7 +72,6 @@ const Rock = ({ route }: Props) => {
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
-        containerStyle={$bottomSheetContainer}
         style={styleGuide.bottomSheet}
       >
         <BottomSheetScrollView
@@ -112,12 +111,3 @@ const Rock = ({ route }: Props) => {
 };
 
 export default Rock;
-
-const $bottomSheetContainer = {
-  zIndex: 24,
-  shadowOffset: { width: 0, height: -20 },
-  shadowRadius: 0,
-  shadowColor: "#000",
-  shadowOpacity: 0,
-  elevation: 24,
-};

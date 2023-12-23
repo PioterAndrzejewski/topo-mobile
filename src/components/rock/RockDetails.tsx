@@ -50,17 +50,17 @@ const RockDetails = (props: RockDetailsProps) => {
         paddingHorizontal='m'
       >
         <View flexShrink={1}>
-          <Text variant='h2' color={colors.secondary}>
+          <Text variant='h2' color='secondary'>
             {data?.attributes?.Name}
           </Text>
         </View>
         <View flexDirection='row' gap='s'>
-          <OverlayCardView backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='backgroundScreen'>
             <TouchableOpacity onPress={handleMapOpen}>
               <Location size={36} />
             </TouchableOpacity>
           </OverlayCardView>
-          <OverlayCardView backgroundColor='mainBackground'>
+          <OverlayCardView backgroundColor='backgroundScreen'>
             <TouchableOpacity onPress={handleParkingOpen}>
               <ParkingIcon size={36} />
             </TouchableOpacity>

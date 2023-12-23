@@ -7,7 +7,7 @@ const FamilyFriendly = () => {
   return (
     <DetailsWrapper>
       <StrollerIcon size={32} />
-      <Text variant='caption'>Dojedziesz z wózkiem</Text>
+      <Text variant='body'>Dojedziesz z wózkiem</Text>
     </DetailsWrapper>
   );
 };

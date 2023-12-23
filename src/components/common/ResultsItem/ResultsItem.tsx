@@ -1,11 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
 import { FC } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
+
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { AreaData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { styleGuide } from "src/styles/guide";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
@@ -42,26 +44,21 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.container}>
-      <Text style={styles.text}>{name}</Text>
+    <TouchableOpacity onPress={handlePress}>
+      <View
+        rowGap='2xl'
+        marginBottom='s'
+        borderWidth={1}
+        borderColor='textGray'
+        borderRadius={12}
+        padding='s'
+      >
+        <Text variant='h3' color='textGray'>
+          {name}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 export default ResultsItem;
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    rowGap: 47,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 12,
-    padding: 12,
-  },
-  text: {
-    ...styleGuide.text.h3,
-    color: "#336383",
-  },
-});

@@ -29,9 +29,9 @@ const Exposition = (props: HeightProps) => {
   return (
     <DetailsWrapper>
       <SunIcon size={32} />
-      <View alignItems='center'>
-        <Text variant='caption'>Wystawka:</Text>
-        <Text variant='caption'>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Wystawka:</Text>
+        <Text variant='body'>
           {getMeaningfulExposition(props.exposition)}
         </Text>
       </View>

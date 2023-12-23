@@ -7,7 +7,7 @@ const Recommended = () => {
   return (
     <DetailsWrapper>
       <RecommendedIcon size={32} />
-      <Text variant='caption'>Polecana</Text>
+      <Text variant='body'>Polecana</Text>
     </DetailsWrapper>
   );
 };

@@ -12,9 +12,9 @@ const Parking = (props: ParkingProps) => {
   return (
     <DetailsWrapper>
       <ParkingIcon size={32} />
-      <View alignItems='center'>
-        <Text variant='caption'>Z parkingu:</Text>
-        <Text variant='caption'>{`${props.distance.toString()} min`}</Text>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Z parkingu:</Text>
+        <Text variant='body'>{`${props.distance.toString()} min`}</Text>
       </View>
     </DetailsWrapper>
   );

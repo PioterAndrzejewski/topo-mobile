@@ -23,9 +23,9 @@ const PopularityInfo = ({ popularity }: { popularity: Popularity }) => {
   return (
     <DetailsWrapper>
       <GroupIcon size={32} />
-      <View alignItems='center'>
-        <Text variant='caption'>Popularność</Text>
-        <Text variant='caption'>{getPopularity}</Text>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Popularność</Text>
+        <Text variant='body'>{getPopularity}</Text>
       </View>
     </DetailsWrapper>
   );

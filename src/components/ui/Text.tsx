@@ -1,10 +1,11 @@
+import { useTheme } from "@shopify/restyle";
 import { Text as TextBase, TextStyle } from "react-native";
-import { styleGuide } from "src/styles/guide";
+import { Theme } from "src/styles/theme";
 
 type TextProps = {
-  variant?: keyof typeof styleGuide.text;
+  variant?: keyof Theme["textVariants"];
   additionalStyles?: TextStyle;
-  color?: string;
+  color?: keyof Theme["colors"];
   children?: string;
 };
 
@@ -13,12 +14,19 @@ const Text = ({
   additionalStyles,
   color,
   children,
-}: TextProps) => (
-  <TextBase
-    style={[{ color: color }, styleGuide.text[`${variant}`], additionalStyles]}
-  >
-    {children}
-  </TextBase>
-);
+}: TextProps) => {
+  const { textVariants, colors } = useTheme<Theme>();
+  return (
+    <TextBase
+      style={[
+        { color: color ? colors[color] : colors["textBlack"] },
+        textVariants[`${variant}`],
+        additionalStyles,
+      ]}
+    >
+      {children}
+    </TextBase>
+  );
+};
 
 export default Text;

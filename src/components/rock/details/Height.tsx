@@ -13,9 +13,9 @@ const Height = (props: HeightProps) => {
   return (
     <DetailsWrapper>
       <HeightIcon size={32} />
-      <View alignItems='center'>
-        <Text variant='caption'>Wysokość</Text>
-        <Text variant='caption'>{`${props.height.toString()}m`}</Text>
+      <View flexDirection='row' gap='s'>
+        <Text variant='body'>Wysokość</Text>
+        <Text variant='body'>{`${props.height.toString()}m`}</Text>
       </View>
     </DetailsWrapper>
   );

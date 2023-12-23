@@ -47,15 +47,19 @@ const RockInfoExpanded = () => {
           flex={1}
         >
           <View marginHorizontal='m'>
-            <Text variant='h2' color={colors.secondary}>
+            <Text variant='h2' color='textBlack'>
               {rock?.attributes.Name}
             </Text>
+            <View flexDirection='row' gap='s'>
+              <Text variant='h4'>w sektorze:</Text>
+              <Text variant='h4' color='textSecondary'>
+                {rock?.attributes.parent.data.attributes.Name}
+              </Text>
+            </View>
           </View>
         </View>
         <View marginVertical='m'>{rock && <InformationRow rock={rock} />}</View>
-        <View marginHorizontal='m'>
-          {routes && <RouteStructure routes={routes} />}
-        </View>
+        {routes && <RouteStructure routes={routes} />}
       </ScrollView>
       <View marginBottom='xl' marginHorizontal='m'>
         <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
