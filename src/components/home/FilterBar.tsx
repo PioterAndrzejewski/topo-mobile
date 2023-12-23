@@ -17,7 +17,7 @@ const FilterBar = () => {
     },
   });
   const onSubmitHandler = (data: { search: string }) => {
-    setSearchText(data.search)
+    setSearchText(data.search.toLowerCase())
   };
 
   return (

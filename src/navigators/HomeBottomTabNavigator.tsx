@@ -63,7 +63,6 @@ const HomeBottomTabNavigator = () => {
           headerShown: false,
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#eeeeee13",
         })}
       >
         <Tab.Screen name='Map' component={MapScreen} />

@@ -29,14 +29,12 @@ type ListResultProps = {
   name: string;
   item: RouteWithParent;
   isRock?: boolean;
-  itemStage: number;
 };
 
 const ResultsItemRoute: FC<ListResultProps> = ({
   id,
   name,
   item,
-  itemStage,
   isRock,
 }) => {
   const map = useAtomValue(mapAtom);

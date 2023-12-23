@@ -21,7 +21,6 @@ import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 const RockInfoExpanded = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
-  const { colors } = useTheme<Theme>();
   const { rocks } = useAreas();
 
   const rock = useMemo(

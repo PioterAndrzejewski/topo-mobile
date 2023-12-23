@@ -5,10 +5,10 @@ export const palette = {
   white75: "rgba(255, 255, 255, 0.75)",
 
   blue100: "rgb(242, 241, 244)",
+  blue100_25: "rgba(242, 241, 244, 0.25)",
   blue300: "rgba(147, 169, 158, 0.239)",
   blue500: "hsl(240, 12%, 40%)",
   blue700: "rgb(47, 46, 62)",
-
   blue700_10: "rgba(47, 46, 62, 0.1)",
 
 
@@ -22,6 +22,7 @@ const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
     backgroundSecondary: palette.blue100,
+    backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
 
