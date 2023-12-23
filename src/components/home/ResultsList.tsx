@@ -4,7 +4,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
@@ -27,6 +27,7 @@ import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
+import OverlayCardView from "../ui/OverlayCardView";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
@@ -91,25 +92,42 @@ export default function ResultsList() {
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-        <View flexDirection='row' padding='s' minHeight={60}>
-          {locationArray?.length > 0 &&
-            locationArray.map((item, index) => (
-              <TouchableOpacity
-                style={{ flexDirection: "row" }}
-                onPress={() => animateTo(item, index)}
-                key={item?.attributes?.Name}
-              >
-                {index !== 0 && (
-                  <View marginHorizontal='3xs'>
-                    <Text>-</Text>
-                  </View>
-                )}
-                <Text>{item?.attributes?.Name}</Text>
-              </TouchableOpacity>
-            ))}
+        <View>
+          {locationArray?.length > 0 && (
+            <>
+              <View marginHorizontal='m'>
+                <Text variant='body'>Wybrana lokalizacja: </Text>
+              </View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View
+                  marginVertical='s'
+                  paddingHorizontal='m'
+                  flexDirection='row'
+                  gap='s'
+                >
+                  {locationArray.map((item, index) => (
+                    <OverlayCardView>
+                      <TouchableOpacity
+                        style={{ flexDirection: "row" }}
+                        onPress={() => animateTo(item, index)}
+                        key={item?.attributes?.Name}
+                      >
+                        <Text variant='h3' color='textSecondary'>
+                          {item?.attributes?.Name}
+                        </Text>
+                      </TouchableOpacity>
+                    </OverlayCardView>
+                  ))}
+                </View>
+              </ScrollView>
+            </>
+          )}
         </View>
-        <BottomSheetScrollView>
-          <View paddingTop='m' width='100%' height='100%' paddingHorizontal='s'>
+        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
+          <View marginHorizontal='m' marginTop='l' marginBottom='m'>
+            <Text variant='body'>Skały w poblizu:</Text>
+          </View>
+          <View width='100%' height='100%' paddingHorizontal='m'>
             {Array.isArray(listToRender) &&
               listToRender.length >= 1 &&
               listToRender
