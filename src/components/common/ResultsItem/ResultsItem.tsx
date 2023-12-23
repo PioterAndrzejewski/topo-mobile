@@ -24,28 +24,23 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
 
-  const animateTo = (item: AreaData) => {
+  const animateTo = () => {
     navigation.navigate("Map");
     const newRegion = getRegionForZoom(
       item.attributes.coordinates.latitude,
       item.attributes.coordinates.longitude,
-      getZoomFromStage(1),
+      getZoomFromStage(2),
     );
     setTimeout(() => {
       if (map && map.current) {
         map.current.animateToRegion(newRegion);
       }
-      setSelectedRock(item.attributes.uuid);
-    });
-  };
-
-  const handlePress = () => {
-    animateTo(item);
-    setSelectedRock(id);
+      setSelectedRock(null);
+    }, 100);
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={animateTo}>
       <View
         rowGap='2xl'
         marginBottom='s'
@@ -56,7 +51,7 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
         <Text variant='h2' color='textGray'>
           {name}
         </Text>
-        <View >
+        <View>
           <Text variant='h3' color='textSecondary'>
             {item.attributes.parent.data.attributes.Name}
           </Text>

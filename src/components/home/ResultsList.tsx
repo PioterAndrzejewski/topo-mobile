@@ -60,6 +60,7 @@ export default function ResultsList() {
   }, [region]);
 
   useEffect(() => {
+    console.log(selectedRock);
     if (selectedRock) {
       bottomSheetRef.current?.collapse();
       bottomSheetModalRef.current?.present();

@@ -1,7 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
 import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 import Results from "src/components/Search/Results";
@@ -92,14 +91,12 @@ export default function SearchScreen() {
         </View>
       ) : (
         <View>
-          <ScrollView style={{ minHeight: "100%" }}>
-            <Results
-              foundRoutes={foundRoutes}
-              foundRocks={foundRocks}
-              foundSectors={foundSectors}
-              type={activeResults}
-            />
-          </ScrollView>
+          <Results
+            foundRoutes={foundRoutes}
+            foundRocks={foundRocks}
+            foundSectors={foundSectors}
+            type={activeResults}
+          />
         </View>
       )}
     </Animated.View>

@@ -29,19 +29,18 @@ const Results = ({
       case "routes":
         return (
           <Animated.FlatList
-            scrollEnabled={false}
             data={foundRoutes.slice(0, RESULTS_LENGTH)}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
+                key={item.attributes.uuid}
               >
                 <ResultsItemRoute
                   name={item.attributes.display_name}
                   item={item}
                   isRock
                   id={item.attributes.uuid}
-                  key={item.attributes.uuid}
                 />
               </View>
             )}
@@ -50,18 +49,17 @@ const Results = ({
       case "rocks":
         return (
           <Animated.FlatList
-            scrollEnabled={false}
             data={foundRocks.slice(0, RESULTS_LENGTH)}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
+                key={item.attributes.uuid}
               >
                 <RockResultsItem
                   name={item.attributes.Name}
                   item={item}
                   id={item.attributes.uuid}
-                  key={item.attributes.uuid}
                 />
               </View>
             )}
@@ -71,17 +69,16 @@ const Results = ({
         return (
           <Animated.FlatList
             data={foundSectors.slice(0, RESULTS_LENGTH)}
-            scrollEnabled={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
+                key={item.attributes.uuid}
               >
                 <ResultsItem
                   name={item.attributes.Name}
                   item={item}
                   id={item.attributes.uuid}
-                  key={item.attributes.uuid}
                 />
               </View>
             )}
