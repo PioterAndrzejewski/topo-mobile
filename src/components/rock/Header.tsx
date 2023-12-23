@@ -1,14 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
 import { useSetAtom } from "jotai";
 import { useMemo } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import View from "src/components/ui/View";
 import Text from "../ui/Text";
 
 import { confirmActionAtom } from "src/store/global";
 import { routeToCommentAtom, routeToFavoritesAtom } from "src/store/rock";
-import { palette } from "src/styles/theme";
+import { Theme, palette } from "src/styles/theme";
 import { ArrowLeft } from "../icons/ArrowLeft";
 import OverlayCardView from "../ui/OverlayCardView";
 
@@ -24,6 +25,7 @@ const Header = (props: HeaderProps) => {
   const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
   const setRouteToComment = useSetAtom(routeToCommentAtom);
   const setConfirmAction = useSetAtom(confirmActionAtom);
+  const { spacing } = useTheme<Theme>();
 
   const imagesArray = useMemo(() => {
     if (!props.numberOfImages || props.numberOfImages < 1) return null;
@@ -48,21 +50,24 @@ const Header = (props: HeaderProps) => {
       paddingBottom='m'
       gap='3xl'
     >
-      <TouchableOpacity onPress={handleBackArrowPress}>
-        <OverlayCardView>
+      <OverlayCardView>
+        <TouchableOpacity onPress={handleBackArrowPress}>
           <ArrowLeft size={24} />
-        </OverlayCardView>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </OverlayCardView>
       <View flexDirection='row' gap='s'>
         <Text variant='h4' color='textSecondary'>
           Skałoplan:
         </Text>
 
-        <View
-          gap='xs'
-          flexDirection='row'
-          justifyContent='center'
-          alignItems='center'
+        <ScrollView
+          contentContainerStyle={{
+            gap: spacing.m,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          horizontal
         >
           {imagesArray?.map((_, i) => (
             <ImageCircle
@@ -72,7 +77,7 @@ const Header = (props: HeaderProps) => {
               key={i}
             />
           ))}
-        </View>
+        </ScrollView>
       </View>
     </View>
   );

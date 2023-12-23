@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 
 import View from "src/components/ui/View";
+import { styleGuide } from "src/styles/theme";
 
 type Props = {
   Title?: ReactNode;
@@ -14,19 +15,13 @@ const Accordion = (props: Props) => {
     <View
       marginBottom='m'
       borderColor='backgroundSecondary'
+      padding='m'
+      {...styleGuide.cardShadow}
       shadowColor='backgroundDark'
-      shadowOffset={{ width: 0, height: 0 }}
-      shadowRadius={4}
-      shadowOpacity={0.15}
-      elevation={50}
-      zIndex={50}
       backgroundColor='backgroundScreen'
       borderRadius={12}
-      padding='m'
     >
-      <View flex={1} >
-        {Title}
-      </View>
+      <View flex={1}>{Title}</View>
       {Content && (
         <View
           top={-10}

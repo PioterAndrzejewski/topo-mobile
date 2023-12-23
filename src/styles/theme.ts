@@ -2,13 +2,15 @@ import { createTheme } from "@shopify/restyle";
 
 export const palette = {
   white: "#ffffff",
-  white75: "rgba(255, 255, 255, 0.75)",
+  white75: "#ffffffbf",
+
+  black: "rgba(14, 13, 18, 1)",
 
   blue100: "rgb(242, 241, 244)",
+  blue100_25: "rgba(242, 241, 244, 0.25)",
   blue300: "rgba(147, 169, 158, 0.239)",
   blue500: "hsl(240, 12%, 40%)",
   blue700: "rgb(47, 46, 62)",
-
   blue700_10: "rgba(47, 46, 62, 0.1)",
 
 
@@ -22,6 +24,7 @@ const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
     backgroundSecondary: palette.blue100,
+    backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
 
@@ -123,6 +126,19 @@ export const styleGuide = {
     border: 1,
     borderColor: "#000000",
   },
+  cardShadow: {
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+    backgroundColor: 'backgroundScreen' as keyof typeof theme['colors'],
+    shadowRadius: 6,
+    shadowOpacity: 0.15,
+    elevation: 5,
+    zIndex: 99,
+    shadowColor: 'backgroundDark' as keyof typeof theme['colors'],
+    borderRadius: 12
+  }
 }
 
 export type Theme = typeof theme;

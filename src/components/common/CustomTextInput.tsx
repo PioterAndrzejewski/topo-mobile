@@ -1,5 +1,5 @@
 import { useTheme } from "@shopify/restyle";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import type { FieldError } from "react-hook-form";
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
@@ -8,10 +8,10 @@ import View from "../ui/View";
 
 import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
-import { Theme, palette } from "src/styles/theme";
+import { Theme, palette, styleGuide } from "src/styles/theme";
 
 export type CustomTextInputProps = {
-  label: string;
+  label?: string;
   secure?: boolean;
   onChange: (val: string) => void;
   value: string | undefined;
@@ -19,6 +19,7 @@ export type CustomTextInputProps = {
   error?: FieldError;
   onBlur?: any;
   hookBlurHandler: any;
+  icon?: ReactNode;
 };
 
 export default function CustomTextInput({
@@ -29,6 +30,7 @@ export default function CustomTextInput({
   field,
   error,
   hookBlurHandler,
+  icon,
   ...props
 }: CustomTextInputProps) {
   const [inputFocused, setInputFocused] = useState(false);
@@ -49,6 +51,14 @@ export default function CustomTextInput({
     </View>
   );
 
+  const showIcon = () => (
+    <View position='absolute' left={10} top={15}>
+      <TouchableOpacity onPress={() => setInputFocused(true)} hitSlop={20}>
+        {icon}
+      </TouchableOpacity>
+    </View>
+  );
+
   const textInputStyles = () => {
     if (error)
       return {
@@ -65,9 +75,9 @@ export default function CustomTextInput({
   };
 
   return (
-    <View marginVertical='s' width='100%' paddingHorizontal='s'>
+    <View width='100%' paddingHorizontal='s'>
       <View gap='s'>
-        <Text variant='label'>{label}</Text>
+        {label && <Text variant='label'>{label}</Text>}
         <View>
           <TextInput
             style={{ ...textInputStyles(), ...textVariants.input }}
@@ -85,6 +95,7 @@ export default function CustomTextInput({
             </View>
           )}
           {secure && showPassword()}
+          {icon && showIcon()}
         </View>
       </View>
     </View>
@@ -96,23 +107,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 47,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    ...styleGuide.cardShadow,
     backgroundColor: palette.white,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.35,
-    shadowRadius: 6,
-    shadowColor: palette.blue500,
-    elevation: 4,
-    zIndex: 4,
+    shadowColor: palette.black,
   },
   inputError: {
     borderStyle: "solid",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: palette.red,
   },
   inputFocused: {
     borderStyle: "solid",
-    borderWidth: 2,
-    borderColor: palette.blue500,
+    borderWidth: 1,
+    borderColor: palette.green,
   },
 });

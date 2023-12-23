@@ -80,7 +80,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
-  const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
+  const snapPoints = useMemo(() => ["14%", "45%", "90%"], []);
 
   return (
     <>

@@ -8,6 +8,7 @@ import View from "src/components/ui/View";
 
 import { AreaData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
+import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
@@ -48,14 +49,18 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
       <View
         rowGap='2xl'
         marginBottom='s'
-        borderWidth={1}
-        borderColor='textGray'
-        borderRadius={12}
         padding='s'
+        {...styleGuide.cardShadow}
+        gap='s'
       >
-        <Text variant='h3' color='textGray'>
+        <Text variant='h2' color='textGray'>
           {name}
         </Text>
+        <View >
+          <Text variant='h3' color='textSecondary'>
+            {item.attributes.parent.data.attributes.Name}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );

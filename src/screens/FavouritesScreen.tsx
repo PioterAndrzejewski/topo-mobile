@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 import Switcher from "src/components/common/Switcher";
 import RockFavorites from "src/components/favorites/RockFavorites";
@@ -31,19 +31,13 @@ export default function SearchScreen() {
   }, [mode]);
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={{ flex: 1 }}
+      entering={SlideInRight}
+      exiting={SlideInLeft}
+    >
       <Switcher onPress={setMode} active={mode} options={options} />
       {renderFavorites}
-    </View>
+    </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 12,
-    paddingHorizontal: 12,
-    backgroundColor: "#fff",
-    gap: 12,
-  },
-});

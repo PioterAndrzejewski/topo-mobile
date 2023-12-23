@@ -75,6 +75,8 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
           bottom: 0,
           left: 0,
           width: 40,
+          zIndex: 40,
+          elevation: 40,
         }}
       />
       <LinearGradient
@@ -86,6 +88,8 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
           bottom: 0,
           right: 0,
           width: 40,
+          zIndex: 40,
+          elevation: 40,
         }}
       />
     </View>

@@ -1,24 +1,20 @@
+import { useTheme } from "@shopify/restyle";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import {
-  LayoutAnimation,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
+import { ScrollView } from "react-native";
+import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
-import ResultsItem from "src/components/common/ResultsItem/ResultsItem";
-import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
-import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import Results from "src/components/Search/Results";
+import FilterBar from "src/components/home/FilterBar";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { RouteWithParent } from "src/components/common/ResultsItem/ResultsItemRoute";
-import { RegionData, RockData } from "src/services/rocks";
-
+import Switcher from "src/components/common/Switcher";
 import { useAreas } from "src/hooks/useAreas";
+import { RegionData, RockData } from "src/services/rocks";
 import { searchTextAtom } from "src/store/search";
+import { Theme } from "src/styles/theme";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -43,16 +39,22 @@ const searchForRoutes = (rocks: RockData[], searchText: string) => {
 
 export default function SearchScreen() {
   const { areas, regions, sectors, rocks } = useAreas();
+  const [activeResults, setActiveResults] = useState<
+    "routes" | "rocks" | "sectors"
+  >("routes");
   const [foundRoutes, setFoundRoutes] = useState<RouteWithParent[]>([]);
   const [foundSectors, setFoundSectors] = useState<RegionData[]>([]);
   const [foundRocks, setFoundRocks] = useState<RockData[]>([]);
-  const [routesExpanded, setRoutesExpanded] = useState(true);
-  const [rocksExpanded, setRocksExpanded] = useState(true);
-  const [sectorsExpanded, setSectorsExpanded] = useState(true);
   const searchText = useAtomValue(searchTextAtom);
+  const { colors } = useTheme<Theme>();
 
   useEffect(() => {
-    if (searchText.length < 1) return;
+    console.log(searchText);
+    if (searchText.length < 1) {
+      setFoundRocks([]);
+      setFoundRoutes([]);
+      setFoundSectors([]);
+    }
     setFoundSectors(
       sectors?.filter((sector) =>
         sector.attributes.Name.toLowerCase().includes(searchText),
@@ -66,140 +68,40 @@ export default function SearchScreen() {
     if (rocks) setFoundRoutes(searchForRoutes(rocks, searchText));
   }, [searchText, areas, regions, sectors, rocks]);
 
-  const handleExpansion = (
-    section: "routes" | "rocks" | "sectors" | "regions",
-  ) => {
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 200,
-    });
-    if (section === "routes") setRoutesExpanded((prev) => !prev);
-    if (section === "rocks") setRocksExpanded((prev) => !prev);
-    if (section === "sectors") setSectorsExpanded((prev) => !prev);
-  };
-
-  if (searchText === "" || !searchText) {
-    return (
-      <View style={styles.container}>
-        <Text>Czego szukasz?</Text>
-      </View>
-    );
-  }
-
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("routes")}>
-          <View style={styles.titleContainer}>
-            <Text>Drogi - {foundRoutes.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundRoutes.length < 1 && <Text>Brak dróg dla szukanej frazy</Text>}
-        {foundRoutes.length > 0 && routesExpanded && (
-          <Animated.FlatList
-            scrollEnabled={false}
-            data={foundRoutes.slice(0, 8)}
-            renderItem={({ item }) => (
-              <ResultsItemRoute
-                name={item.attributes.display_name}
-                item={item}
-                itemStage={3}
-                isRock
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
+    <Animated.View
+      style={{ flex: 1, backgroundColor: colors.backgroundScreen }}
+      entering={SlideInRight}
+      exiting={SlideInLeft}
+    >
+      <FilterBar />
+      <View marginHorizontal='m' marginTop='m'>
+        <Switcher
+          options={[
+            { label: "Drogi", value: "routes" },
+            { label: "Skały", value: "rocks" },
+            { label: "Sektory", value: "sectors" },
+          ]}
+          active={activeResults}
+          onPress={setActiveResults}
+        />
       </View>
-
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("rocks")}>
-          <View style={styles.titleContainer}>
-            <Text>Skały - {foundRocks.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundRocks.length < 1 && <Text>Brak skał dla szukanej frazy</Text>}
-        {foundRocks.length > 0 && rocksExpanded && (
-          <Animated.FlatList
-            scrollEnabled={false}
-            data={foundRocks.slice(0, 8)}
-            renderItem={({ item }) => (
-              <RockResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-        {foundRocks.length > 8 && (
-          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
-        )}
-      </View>
-
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("sectors")}>
-          <View style={styles.titleContainer}>
-            <Text>Sektory - {foundSectors.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundSectors.length < 1 && (
-          <Text>Brak sektorów dla szukanej frazy</Text>
-        )}
-        {foundSectors.length > 0 && sectorsExpanded && (
-          <Animated.FlatList
-            data={foundSectors.slice(0, 8)}
-            scrollEnabled={false}
-            renderItem={({ item }) => (
-              <ResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-        {foundRocks.length > 8 && (
-          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
-        )}
-      </View>
-
-      {foundRocks.length > 8 && (
-        <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+      {searchText === "" || !searchText ? (
+        <View paddingHorizontal='m' paddingTop='m'>
+          <Text>Czego szukasz?</Text>
+        </View>
+      ) : (
+        <View>
+          <ScrollView style={{ minHeight: "100%" }}>
+            <Results
+              foundRoutes={foundRoutes}
+              foundRocks={foundRocks}
+              foundSectors={foundSectors}
+              type={activeResults}
+            />
+          </ScrollView>
+        </View>
       )}
-      <View style={styles.dummy} />
-    </ScrollView>
+    </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 5,
-    backgroundColor: "#fff",
-    paddingHorizontal: 12,
-    shadowOffset: { width: 0, height: -20 },
-    shadowRadius: 0,
-    shadowColor: "#000",
-    shadowOpacity: 0,
-    columnGap: 12,
-  },
-  resultsContainer: {
-    marginVertical: 6,
-    backgroundColor: "#fff",
-  },
-  titleContainer: {
-    alignItems: "flex-end",
-    paddingVertical: 10,
-  },
-  listElement: {
-    borderWidth: 1,
-  },
-  dummy: {
-    height: 50,
-    backgroundColor: "#fff",
-  },
-});

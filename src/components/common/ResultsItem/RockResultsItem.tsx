@@ -8,16 +8,15 @@ import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import { HeartIcon } from "src/components/icons/Heart";
+import { useFavoriteContext } from "src/context/FavoritesContext";
 import { useImageFile } from "src/hooks/useImageFile";
 import { RockData } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { Theme } from "src/styles/theme";
+import { Theme, styleGuide } from "src/styles/theme";
+import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-
-import { HeartIcon } from "src/components/icons/Heart";
-import { useFavoriteContext } from "src/context/FavoritesContext";
-import { HomeScreenNavigationProp } from "src/types/type";
 
 type ListResultProps = {
   id: string;
@@ -68,15 +67,14 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
       removeRockFromFavorite(item.attributes.uuid);
     }
   };
-
+  if (!image) return;
   return (
     <TouchableOpacity onPress={handlePress}>
       <View
         rowGap='l'
         marginBottom='l'
-        shadowOffset={{ width: 0, height: 5 }}
-        shadowRadius={4}
-        shadowOpacity={0.5}
+        {...styleGuide.cardShadow}
+        borderRadius={24}
       >
         <ImageBackground
           source={{
@@ -91,34 +89,55 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
             gap='m'
             borderRadius={24}
           >
-            <View flexDirection='row' justifyContent='space-between'>
-              <Text
-                variant='h2'
-                additionalStyles={{
-                  color: "white",
-                  textShadowColor: "rgba(0, 0, 0, 0.85)",
-                  textShadowOffset: { width: 2, height: 1 },
-                  textShadowRadius: 6,
-                  paddingRight: 8,
-                }}
+            <View gap='2xs'>
+              <View flexDirection='row' justifyContent='space-between'>
+                <Text
+                  variant='h2'
+                  additionalStyles={{
+                    color: "white",
+                    textShadowColor: "rgba(0, 0, 0, 0.85)",
+                    textShadowOffset: { width: 2, height: 1 },
+                    textShadowRadius: 6,
+                    paddingRight: 8,
+                  }}
+                >
+                  {name}
+                </Text>
+                <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
+                  <HeartIcon
+                    size={32}
+                    fill={
+                      isFavorite ? colors.favoriteRed : colors.backgroundFaded
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+              <OverlayCardView
+                flexDirection='row'
+                gap='xs'
+                alignSelf='flex-start'
+                backgroundColor='backgroundFaded'
+                alignItems='center'
               >
-                {name}
-              </Text>
-              <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
-                <HeartIcon
-                  size={32}
-                  fill={
-                    isFavorite ? colors.favoriteRed : colors.backgroundFaded
-                  }
-                />
-              </TouchableOpacity>
+                <Text variant='caption'>Sektor:</Text>
+                <Text variant='h4' color='textSecondary'>
+                  {item.attributes.parent.data.attributes.Name}
+                </Text>
+              </OverlayCardView>
             </View>
-            <OverlayCardView alignSelf='flex-start'>
+
+            <OverlayCardView
+              alignSelf='flex-start'
+              backgroundColor='backgroundFaded'
+            >
               <Text variant='caption'>{`Liczba dróg: ${
                 routes?.toString() || ""
               }`}</Text>
             </OverlayCardView>
-            <OverlayCardView alignSelf='flex-start'>
+            <OverlayCardView
+              alignSelf='flex-start'
+              backgroundColor='backgroundFaded'
+            >
               <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
             </OverlayCardView>
           </View>

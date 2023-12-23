@@ -10,6 +10,7 @@ import Button from "src/components/common/Button";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import Backdrop from "src/components/common/Backdrop";
 import { StarIcon } from "src/components/icons/Star";
 import { useUserProfile } from "src/hooks/useUserProfile";
 import { createRating, updateRating } from "src/services/rocks";
@@ -102,6 +103,7 @@ const RouteRatingModal = ({ rockRefetch }: RouteRatingModalProps) => {
       onDismiss={dismissBottomSheet}
       enableDismissOnClose
       style={styleGuide.bottomSheet}
+      backdropComponent={Backdrop}
     >
       <View padding='m' justifyContent='center' alignItems='center' gap='s'>
         <Text variant='h2'>{selectedRouteToRate?.attributes.display_name}</Text>

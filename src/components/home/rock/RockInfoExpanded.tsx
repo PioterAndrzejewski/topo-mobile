@@ -21,7 +21,6 @@ import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 const RockInfoExpanded = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
-  const { colors } = useTheme<Theme>();
   const { rocks } = useAreas();
 
   const rock = useMemo(
@@ -53,14 +52,14 @@ const RockInfoExpanded = () => {
           </View>
         </View>
       </View>
-      <BottomSheetScrollView >
+      <BottomSheetScrollView showsVerticalScrollIndicator={false}>
         <View marginVertical='m'>{rock && <InformationRow rock={rock} />}</View>
         {routes && <RouteStructure routes={routes} />}
         {rock?.attributes && rock?.attributes.cover.length > 0 && (
           <RockGallery images={rock?.attributes.cover} />
         )}
       </BottomSheetScrollView>
-      <View marginBottom='xl' marginHorizontal='m'>
+      <View marginBottom='l' marginHorizontal='m'>
         <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
       </View>
     </View>
