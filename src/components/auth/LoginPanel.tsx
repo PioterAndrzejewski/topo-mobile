@@ -44,7 +44,7 @@ export default function LoginPanel() {
       width='100%'
       height='100%'
       paddingHorizontal='l'
-      backgroundColor='backgroundSecondary'
+      backgroundColor='backgroundScreen'
     >
       <Text variant='h2' color='textGray'>
         Topo na wyciągnięcie ręki
@@ -97,7 +97,7 @@ export default function LoginPanel() {
               onClick={() => navigation.navigate("Home")}
             />
           )}
-          <View marginTop='l' justifyContent='center' alignItems='center'>
+          <View marginTop='l' justifyContent='center' alignItems='center' flexDirection='row'>
             <Text variant='body' color='textGray'>
               Nie masz konta?
             </Text>
@@ -106,7 +106,7 @@ export default function LoginPanel() {
               hitSlop={20}
             >
               <View marginLeft='m'>
-                <Text variant='body' color='textBlack'>
+                <Text variant='body' color='textSecondary'>
                   Zarejestruj
                 </Text>
               </View>
