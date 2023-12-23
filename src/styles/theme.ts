@@ -2,7 +2,7 @@ import { createTheme } from "@shopify/restyle";
 
 export const palette = {
   white: "#ffffff",
-  white80: "#ffffff",
+  white75: "rgba(255, 255, 255, 0.75)",
 
   blue100: "rgb(242, 241, 244)",
   blue300: "rgba(147, 169, 158, 0.239)",
@@ -22,7 +22,7 @@ const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
     backgroundSecondary: palette.blue100,
-    backgroundFaded: palette.white80,
+    backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
 
     secondary: palette.green,
@@ -48,9 +48,12 @@ const theme = createTheme({
     "xs": 6,
     "s": 8,
     "m": 16,
+    "-m": -16,
     "l": 24,
+    "-l": -32,
     "xl": 40,
     "2xl": 48,
+    "3xl": 60,
   },
   textVariants: {
     h1: {
@@ -108,7 +111,7 @@ const theme = createTheme({
 
 export const styleGuide = {
   bottomSheet: {
-    shadowColor: "#6d6d6d",
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 0,
@@ -118,7 +121,7 @@ export const styleGuide = {
     elevation: 999,
     zIndex: 999,
     border: 1,
-    borderColor: "#6d6d6d",
+    borderColor: "#000000",
   },
 }
 

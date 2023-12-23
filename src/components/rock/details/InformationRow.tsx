@@ -2,6 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode } from "react";
 
 import Height from "src/components/rock/details/Height";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import Exposition from "./Exposition";
@@ -34,13 +35,16 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
     </View>
   );
   return (
-    <View>
+    <View marginVertical='m'>
+      <View marginLeft='m' paddingBottom='s'>
+        <Text variant='h3'>Informacje o skale:</Text>
+      </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View
           flexDirection='row'
           gap='l'
-          paddingVertical='m'
           paddingHorizontal='m'
+          paddingRight='xl'
         >
           {rock.attributes.climbing_restricted &&
             renderInWrapper(<Prohibited />)}
@@ -62,6 +66,17 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
           {rock.attributes.recommended && renderInWrapper(<Recommended />)}
         </View>
       </ScrollView>
+      <LinearGradient
+        colors={["rgb(255, 255, 255)", "rgba(255, 255, 255, 0)"]}
+        start={[0, 1]}
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 40,
+        }}
+      />
       <LinearGradient
         colors={["rgba(255, 255, 255, 0)", "rgb(255, 255, 255)"]}
         start={[0, 1]}

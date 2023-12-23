@@ -7,9 +7,9 @@ import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
 import RockDetails from "src/components/rock/RockDetails";
 import RouteInfo from "src/components/rock/RouteInfo";
-import Buttons from "src/components/rock/drawing/Buttons";
 import RockDrawing from "src/components/rock/drawing/RockDrawing";
 import FavoritesModal from "src/components/rock/modals/FavoritesModal";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
@@ -29,14 +29,6 @@ const Rock = ({ route }: Props) => {
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const handleImageChange = (step: number) => {
-    if (!data) return;
-    let newIndex = activeImage + step;
-    if (newIndex < 0) newIndex = data?.attributes.image.data.length - 1;
-    if (newIndex === data?.attributes.image.data.length) newIndex = 0;
-    setActiveImage(newIndex);
-  };
-
   const parent: RoutesParent = useMemo(() => {
     return {
       name: data?.attributes?.Name || "",
@@ -49,10 +41,10 @@ const Rock = ({ route }: Props) => {
     };
   }, [data]);
 
-  const snapPoints = useMemo(() => ["15%", "30", "50%", "80%"], []);
+  const snapPoints = useMemo(() => ["16%", "50%", "80%"], []);
 
   return (
-    <View paddingTop='xl' flex={1}>
+    <View flex={1} backgroundColor='backgroundScreen'>
       <Header
         name={data?.attributes?.Name}
         numberOfImages={data?.attributes?.image.data.length}
@@ -67,22 +59,21 @@ const Rock = ({ route }: Props) => {
           activeImage={activeImage}
         />
       )}
-      <Buttons handleRouteChange={handleImageChange} />
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-        <BottomSheetScrollView
-          scrollEnabled
-          showsVerticalScrollIndicator={false}
-        >
+        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
           <View paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>
                 <RockDetails id={data?.attributes.uuid} />
                 <View paddingHorizontal='m'>
+                  <View marginBottom='m'>
+                    <Text variant='h3'>Drogi:</Text>
+                  </View>
                   {data?.attributes?.routes.data.map((route) => (
                     <RouteInfo
                       key={route.attributes.uuid}

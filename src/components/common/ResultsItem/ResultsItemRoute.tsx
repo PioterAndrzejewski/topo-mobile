@@ -82,19 +82,33 @@ const ResultsItemRoute: FC<ListResultProps> = ({
         alignItems='center'
       >
         <View flexBasis={44} borderRightWidth={1} borderColor='textGray'>
-          <Text variant='h3'>{getMeaningfulGrade(item.attributes.grade)}</Text>
+          <Text variant='h3' color='textSecondary'>
+            {getMeaningfulGrade(item.attributes.grade)}
+          </Text>
         </View>
         <View marginLeft='m'>
-          <Text variant='body' color='secondary'>
-            {name}
-          </Text>
-          <Text variant='body' color='secondary'>
-            {`Skała: {item.parent.name}`}
-          </Text>
+          <Text variant='h3'>{name}</Text>
+          <View flexDirection='row' gap='s'>
+            <Text variant='body' color='textGray'>
+              Skała:
+            </Text>
+            <Text variant='body' color='textBlack'>
+              {item.parent.name}
+            </Text>
+          </View>
         </View>
         {isFavorite && (
-          <TouchableOpacity onPress={handleHeartPress} hitSlop={12}>
-            <View flexDirection='row' justifyContent='flex-end' flex={1}>
+          <TouchableOpacity
+            onPress={handleHeartPress}
+            hitSlop={12}
+            style={{ flexGrow: 1 }}
+          >
+            <View
+              flexDirection='row'
+              justifyContent='flex-end'
+              alignItems='center'
+              flex={1}
+            >
               <HeartIcon size={24} fill={getFavoriteColor(isFavorite)} />
             </View>
           </TouchableOpacity>

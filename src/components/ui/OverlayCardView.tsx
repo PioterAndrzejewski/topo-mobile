@@ -1,6 +1,6 @@
 import { BoxProps } from "@shopify/restyle";
 import { ReactNode } from "react";
-import Animated, { FadeInDown, FadeInUp, FadeOutDown, FadeOutUp } from "react-native-reanimated";
+import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { Object } from "ts-toolbelt";
 
 import { Theme } from "src/styles/theme";
