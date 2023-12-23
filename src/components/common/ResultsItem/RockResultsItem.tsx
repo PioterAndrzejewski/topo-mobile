@@ -89,9 +89,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
             paddingHorizontal='m'
             paddingVertical='xl'
             gap='m'
-            backgroundColor='imageOverlay'
             borderRadius={24}
-            borderWidth={0.3}
           >
             <View flexDirection='row' justifyContent='space-between'>
               <Text

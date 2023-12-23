@@ -40,7 +40,7 @@ const RockGallery = ({ images }: RockGalleryProps) => {
                     alignSelf='flex-start'
                     backgroundColor='backgroundFaded'
                   >
-                    <Text variant='body'>{`Autor: ${item.Author}`}</Text>
+                    <Text variant='caption'>{`Autor: ${item.Author}`}</Text>
                   </OverlayCardView>
                 </View>
               </ImageBackground>
