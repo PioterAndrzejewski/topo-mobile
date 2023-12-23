@@ -43,7 +43,7 @@ const theme = createTheme({
     textWhite: palette.blue100,
   },
   spacing: {
-    "3xs": 4,
+    "3xs": 2,
     "2xs": 4,
     "xs": 6,
     "s": 8,

@@ -66,7 +66,7 @@ export default function CustomTextInput({
 
   return (
     <View marginVertical='s' width='100%' paddingHorizontal='s'>
-      <View>
+      <View gap='s'>
         <Text variant='label'>{label}</Text>
         <View>
           <TextInput
@@ -98,6 +98,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
     backgroundColor: palette.white,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    shadowColor: palette.blue500,
+    elevation: 4,
+    zIndex: 4,
   },
   inputError: {
     borderStyle: "solid",

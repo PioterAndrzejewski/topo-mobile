@@ -9,7 +9,11 @@ type LoginTitleProps = {
 
 const LoginTitle: FC<LoginTitleProps> = ({ title }) => {
   return (
-    <View width='100%' paddingTop='2xl' paddingHorizontal='l'>
+    <View
+      width='100%'
+      paddingHorizontal='l'
+      backgroundColor='backgroundScreen'
+    >
       <Text variant='h1' color='secondary'>
         {title}
       </Text>

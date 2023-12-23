@@ -50,7 +50,7 @@ export default function Button({
         {isLoading ? (
           <ActivityIndicator size='small' />
         ) : (
-          <Text variant='h3' color={labelColor || "textWhite"}>
+          <Text variant='button' color={labelColor || "textWhite"}>
             {label}
           </Text>
         )}
