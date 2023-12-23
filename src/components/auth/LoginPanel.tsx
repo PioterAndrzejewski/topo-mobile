@@ -68,36 +68,45 @@ export default function LoginPanel() {
               />
             )}
           />
-          <Controller
-            control={control}
-            name='password'
-            rules={{ required: true }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error },
-            }) => (
-              <CustomTextInput
-                hookBlurHandler={onBlur}
-                onChange={(value) => onChange(value)}
-                value={value}
-                label='Hasło'
-                error={error}
-                secure
-              />
-            )}
-          />
-          <Button
-            label='Zaloguj'
-            onClick={handleSubmit(onSubmitHandler)}
-            isLoading={isLoading}
-          />
+          <View marginTop='m'>
+            <Controller
+              control={control}
+              name='password'
+              rules={{ required: true }}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <CustomTextInput
+                  hookBlurHandler={onBlur}
+                  onChange={(value) => onChange(value)}
+                  value={value}
+                  label='Hasło'
+                  error={error}
+                  secure
+                />
+              )}
+            />
+          </View>
+          <View marginTop='m'>
+            <Button
+              label='Zaloguj'
+              onClick={handleSubmit(onSubmitHandler)}
+              isLoading={isLoading}
+            />
+          </View>
           {isError && (
             <Button
               label='Uzywaj w trybie offline'
               onClick={() => navigation.navigate("Home")}
             />
           )}
-          <View marginTop='l' justifyContent='center' alignItems='center' flexDirection='row'>
+          <View
+            marginTop='l'
+            justifyContent='center'
+            alignItems='center'
+            flexDirection='row'
+          >
             <Text variant='body' color='textGray'>
               Nie masz konta?
             </Text>

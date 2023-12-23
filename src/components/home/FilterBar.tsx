@@ -1,24 +1,34 @@
 import { Controller, useForm } from "react-hook-form";
+import { Keyboard } from "react-native";
 
 import CustomTextInput from "src/components/common/CustomTextInput";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import View from "src/components/ui/View";
 
 import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SearchIcon } from "src/components/icons/Search";
 import { searchTextAtom } from "src/store/search";
 
 const FilterBar = () => {
   const setSearchText = useSetAtom(searchTextAtom);
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, getValues } = useForm({
     defaultValues: {
       search: "",
     },
   });
   const onSubmitHandler = (data: { search: string }) => {
-    setSearchText(data.search.toLowerCase())
+    setSearchText(data.search.toLowerCase());
   };
+
+  useEffect(() => {
+    const closeHandler = () => {
+      onSubmitHandler(getValues());
+    };
+    Keyboard.addListener("keyboardDidHide", closeHandler);
+    return () => Keyboard.removeAllListeners("keyboardDidHide");
+  });
 
   return (
     <View
@@ -44,11 +54,11 @@ const FilterBar = () => {
           )}
         />
       </View>
-      <TouchableOpacity onPress={handleSubmit(onSubmitHandler)}>
-        <OverlayCardView borderRadius={20}>
+      <OverlayCardView borderRadius={20} zIndex={99}>
+        <TouchableOpacity onPress={handleSubmit(onSubmitHandler)}>
           <SearchIcon size={32} />
-        </OverlayCardView>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </OverlayCardView>
     </View>
   );
 };

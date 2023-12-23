@@ -5,7 +5,7 @@ import ScreenTitle from "src/components/common/ScreenTitle";
 import View from "src/components/ui/View";
 
 import { LogoIcon } from "src/components/icons/Logo";
-import { palette } from "src/styles/theme";
+import { palette, styleGuide } from "src/styles/theme";
 
 export default function LoginScreen() {
   return (
@@ -20,12 +20,8 @@ export default function LoginScreen() {
       >
         <View
           padding='3xs'
-          shadowRadius={16}
-          shadowOpacity={0.1}
-          shadowOffset={{ width: 0, height: 0 }}
-          backgroundColor='backgroundScreen'
+          {...styleGuide.cardShadow}
           borderRadius={70}
-          elevation={1}
         >
           <LogoIcon size={120} />
         </View>

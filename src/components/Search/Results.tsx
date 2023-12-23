@@ -6,7 +6,6 @@ import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { useMemo } from "react";
 import { RouteWithParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { RegionData, RockData } from "src/services/rocks";
 
@@ -32,14 +31,19 @@ const Results = ({
           <Animated.FlatList
             scrollEnabled={false}
             data={foundRoutes.slice(0, RESULTS_LENGTH)}
-            renderItem={({ item }) => (
-              <ResultsItemRoute
-                name={item.attributes.display_name}
-                item={item}
-                isRock
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
+            renderItem={({ item, index }) => (
+              <View
+                paddingHorizontal='m'
+                paddingTop={index === 0 ? "m" : undefined}
+              >
+                <ResultsItemRoute
+                  name={item.attributes.display_name}
+                  item={item}
+                  isRock
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              </View>
             )}
           />
         );
@@ -48,13 +52,18 @@ const Results = ({
           <Animated.FlatList
             scrollEnabled={false}
             data={foundRocks.slice(0, RESULTS_LENGTH)}
-            renderItem={({ item }) => (
-              <RockResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
+            renderItem={({ item, index }) => (
+              <View
+                paddingHorizontal='m'
+                paddingTop={index === 0 ? "m" : undefined}
+              >
+                <RockResultsItem
+                  name={item.attributes.Name}
+                  item={item}
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              </View>
             )}
           />
         );
@@ -63,20 +72,25 @@ const Results = ({
           <Animated.FlatList
             data={foundSectors.slice(0, RESULTS_LENGTH)}
             scrollEnabled={false}
-            renderItem={({ item }) => (
-              <ResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
+            renderItem={({ item, index }) => (
+              <View
+                paddingHorizontal='m'
+                paddingTop={index === 0 ? "m" : undefined}
+              >
+                <ResultsItem
+                  name={item.attributes.Name}
+                  item={item}
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              </View>
             )}
           />
         );
     }
   };
 
-  const results = useMemo(() => {
+  const results = () => {
     switch (type) {
       case "routes":
         return foundRoutes;
@@ -85,20 +99,20 @@ const Results = ({
       case "sectors":
         return foundSectors;
     }
-  }, [type]);
+  };
 
   return (
-    <View paddingHorizontal='m' paddingTop='m'>
-      <View flexDirection='row' gap='s' marginBottom='s'>
+    <View paddingTop='m'>
+      <View flexDirection='row' gap='s' paddingHorizontal='m'>
         <Text variant='h3'>Wyników: </Text>
         <Text
           variant='h3'
           color='textSecondary'
-        >{`${results.length.toString()}`}</Text>
+        >{`${results().length.toString()}`}</Text>
       </View>
-      {results.length > 0 && renderResults()}
-      {results.length > RESULTS_LENGTH && (
-        <View>
+      {results().length > 0 && renderResults()}
+      {results().length > RESULTS_LENGTH && (
+        <View paddingHorizontal='m'>
           <Text variant='caption'>
             {`Mamy tego więcej - lista wyświetla tylko ${RESULTS_LENGTH.toString()} pierwszych wyników`}
           </Text>

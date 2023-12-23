@@ -44,7 +44,7 @@ const Rock = ({ route }: Props) => {
   const snapPoints = useMemo(() => ["16%", "50%", "80%"], []);
 
   return (
-    <View flex={1} backgroundColor='backgroundScreen'>
+    <View flex={1} backgroundColor='backgroundSecondary'>
       <Header
         name={data?.attributes?.Name}
         numberOfImages={data?.attributes?.image.data.length}

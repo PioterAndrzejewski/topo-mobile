@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { ImageBackground, useWindowDimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -34,6 +35,7 @@ const RockGallery = ({ images }: RockGalleryProps) => {
                 }}
                 resizeMode='cover'
                 imageStyle={{ borderRadius: 24 }}
+                key={item.id}
               >
                 <View
                   width={width - 32}
@@ -55,7 +57,7 @@ const RockGallery = ({ images }: RockGalleryProps) => {
           })}
         </View>
       </ScrollView>
-      {/* <LinearGradient
+      <LinearGradient
         colors={["rgb(255, 255, 255)", "rgba(255, 255, 255, 0)"]}
         start={[0, 1]}
         style={{
@@ -64,6 +66,8 @@ const RockGallery = ({ images }: RockGalleryProps) => {
           bottom: 0,
           left: 0,
           width: 30,
+          zIndex: 40,
+          elevation: 40,
         }}
       />
       <LinearGradient
@@ -75,8 +79,10 @@ const RockGallery = ({ images }: RockGalleryProps) => {
           bottom: 0,
           right: 0,
           width: 30,
+          zIndex: 40,
+          elevation: 40,
         }}
-      /> */}
+      />
     </View>
   );
 };

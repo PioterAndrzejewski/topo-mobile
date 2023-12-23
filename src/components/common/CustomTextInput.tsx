@@ -8,7 +8,7 @@ import View from "../ui/View";
 
 import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
-import { Theme, palette } from "src/styles/theme";
+import { Theme, palette, styleGuide } from "src/styles/theme";
 
 export type CustomTextInputProps = {
   label?: string;
@@ -107,23 +107,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 47,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    ...styleGuide.cardShadow,
     backgroundColor: palette.white,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    shadowColor: palette.blue500,
-    elevation: 4,
-    zIndex: 4,
+    shadowColor: palette.black,
   },
   inputError: {
     borderStyle: "solid",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: palette.red,
   },
   inputFocused: {
     borderStyle: "solid",
-    borderWidth: 2,
-    borderColor: palette.blue500,
+    borderWidth: 1,
+    borderColor: palette.green,
   },
 });

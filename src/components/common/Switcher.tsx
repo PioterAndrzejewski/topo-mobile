@@ -4,7 +4,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-import { palette } from "src/styles/theme";
+
+import { palette, styleGuide } from "src/styles/theme";
 
 export type SwitcherOption<T> = {
   label: string;
@@ -74,19 +75,20 @@ const $option = (width: number): ViewStyle => ({
   paddingBottom: 4,
   elevation: 5,
   zIndex: 5,
-
   width,
+  backgroundColor: undefined,
+  borderRadius: 40,
+  shadowRadius: 0,
+  shadowColor: "#fff",
 });
 
 const $activeOption = (color: string | undefined): ViewStyle => ({
-  backgroundColor: palette.white,
-  borderRadius: 40,
   borderColor: color,
   borderWidth: color ? 1 : 0,
+  ...styleGuide.cardShadow,
+  backgroundColor: palette.white,
   shadowColor: palette.blue300,
-  shadowRadius: 6,
-  shadowOpacity: 1,
-  shadowOffset: { width: 0, height: 0 },
+  borderRadius: 40,
 });
 
 export default Switcher;

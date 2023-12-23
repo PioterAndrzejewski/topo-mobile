@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { Object } from "ts-toolbelt";
 
-import { Theme } from "src/styles/theme";
+import { Theme, styleGuide } from "src/styles/theme";
 
 import View from "./View";
 
@@ -15,13 +15,8 @@ type OverlayCardViewProps = Object.Merge<
 const OverlayCardView = ({ children, ...rest }: OverlayCardViewProps) => (
   <Animated.View entering={FadeInUp} exiting={FadeOutUp}>
     <View
-      backgroundColor='backgroundScreen'
       padding='s'
-      borderRadius={6}
-      shadowOffset={{ width: 0, height: 3 }}
-      shadowRadius={6}
-      shadowOpacity={0.15}
-      elevation={5}
+      {...styleGuide.cardShadow}
       {...rest}
     >
       {children}

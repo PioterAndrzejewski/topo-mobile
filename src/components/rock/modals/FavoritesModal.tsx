@@ -12,7 +12,7 @@ import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { FavoriteType } from "src/services/storeAsync";
 import { routeToFavoritesAtom } from "src/store/rock";
-import { Theme } from "src/styles/theme";
+import { Theme, palette, styleGuide } from "src/styles/theme";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 
 const FavoritesModal = () => {
@@ -88,10 +88,6 @@ const FavoritesModal = () => {
 
 const $icon = {
   marginVertical: 24,
-  shadowOpacity: 0.1,
-  shadowColor: "#000",
-  shadowRadius: 5,
-  shadowOffset: { height: 2, width: 0 },
 };
 
 export default FavoritesModal;

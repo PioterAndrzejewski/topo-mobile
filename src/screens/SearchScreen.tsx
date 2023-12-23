@@ -50,7 +50,11 @@ export default function SearchScreen() {
 
   useEffect(() => {
     console.log(searchText);
-    if (searchText.length < 1) return;
+    if (searchText.length < 1) {
+      setFoundRocks([]);
+      setFoundRoutes([]);
+      setFoundSectors([]);
+    }
     setFoundSectors(
       sectors?.filter((sector) =>
         sector.attributes.Name.toLowerCase().includes(searchText),
@@ -71,24 +75,24 @@ export default function SearchScreen() {
       exiting={SlideInLeft}
     >
       <FilterBar />
+      <View marginHorizontal='m' marginTop='m'>
+        <Switcher
+          options={[
+            { label: "Drogi", value: "routes" },
+            { label: "Skały", value: "rocks" },
+            { label: "Sektory", value: "sectors" },
+          ]}
+          active={activeResults}
+          onPress={setActiveResults}
+        />
+      </View>
       {searchText === "" || !searchText ? (
-        <View padding='m'>
+        <View paddingHorizontal='m' paddingTop='m'>
           <Text>Czego szukasz?</Text>
         </View>
       ) : (
-        <View paddingTop='m'>
-          <View marginHorizontal='m'>
-            <Switcher
-              options={[
-                { label: "Drogi", value: "routes" },
-                { label: "Skały", value: "rocks" },
-                { label: "Sektory", value: "sectors" },
-              ]}
-              active={activeResults}
-              onPress={setActiveResults}
-            />
-          </View>
-          <ScrollView style={{minHeight: "100%"}}>
+        <View>
+          <ScrollView style={{ minHeight: "100%" }}>
             <Results
               foundRoutes={foundRoutes}
               foundRocks={foundRocks}

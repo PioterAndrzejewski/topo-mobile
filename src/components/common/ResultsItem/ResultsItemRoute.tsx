@@ -10,6 +10,7 @@ import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { Coordinates, Route } from "src/services/rocks";
 import { mapAtom, selectedRockAtom } from "src/store/results";
+import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
@@ -31,12 +32,7 @@ type ListResultProps = {
   isRock?: boolean;
 };
 
-const ResultsItemRoute: FC<ListResultProps> = ({
-  id,
-  name,
-  item,
-  isRock,
-}) => {
+const ResultsItemRoute: FC<ListResultProps> = ({ id, name, item, isRock }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
@@ -73,11 +69,9 @@ const ResultsItemRoute: FC<ListResultProps> = ({
       <View
         flexDirection='row'
         marginBottom='s'
-        borderWidth={1}
-        borderColor='textGray'
-        borderRadius={12}
         padding='s'
         alignItems='center'
+        {...styleGuide.cardShadow}
       >
         <View flexBasis={44} borderRightWidth={1} borderColor='textGray'>
           <Text variant='h3' color='textSecondary'>
@@ -90,7 +84,7 @@ const ResultsItemRoute: FC<ListResultProps> = ({
             <Text variant='body' color='textGray'>
               Skała:
             </Text>
-            <Text variant='body' color='textBlack'>
+            <Text variant='body' color='textSecondary'>
               {item.parent.name}
             </Text>
           </View>
