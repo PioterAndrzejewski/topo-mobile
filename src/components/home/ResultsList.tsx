@@ -39,10 +39,11 @@ export default function ResultsList() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
+    if (!region || !areas || !sectors || !regions || !rocks) return;
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
     const newLocationArray: AreasList = [];
-    if (stage >= 1 && areas) {
+    if (areas) {
       newLocationArray.push(sortAreas(region, areas)[0]);
     }
     if (stage >= 2 && regions) {
@@ -57,10 +58,9 @@ export default function ResultsList() {
       const sortedRocks = sortRocks(region, rocks);
       setListToRender(sortedRocks);
     }
-  }, [region]);
+  }, [areas, region, regions, rocks, sectors]);
 
   useEffect(() => {
-    console.log(selectedRock);
     if (selectedRock) {
       bottomSheetRef.current?.collapse();
       bottomSheetModalRef.current?.present();
