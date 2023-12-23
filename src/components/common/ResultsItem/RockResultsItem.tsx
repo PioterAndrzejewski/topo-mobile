@@ -68,7 +68,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
       removeRockFromFavorite(item.attributes.uuid);
     }
   };
-
+  if (!image) return;
   return (
     <TouchableOpacity onPress={handlePress}>
       <View

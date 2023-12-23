@@ -25,6 +25,7 @@ export default function LoginScreen() {
           shadowOffset={{ width: 0, height: 0 }}
           backgroundColor='backgroundScreen'
           borderRadius={70}
+          elevation={1}
         >
           <LogoIcon size={120} />
         </View>

@@ -1,18 +1,15 @@
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import {
-  LayoutAnimation,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { LayoutAnimation, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
+import Animated, { SlideInDown, SlideOutUp } from "react-native-reanimated";
 
 import ResultsItem from "src/components/common/ResultsItem/ResultsItem";
 import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
 import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import FilterBar from "src/components/home/FilterBar";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { RouteWithParent } from "src/components/common/ResultsItem/ResultsItemRoute";
 import { RegionData, RockData } from "src/services/rocks";
@@ -80,126 +77,101 @@ export default function SearchScreen() {
 
   if (searchText === "" || !searchText) {
     return (
-      <View style={styles.container}>
+      <View flex={1}>
+        <Animated.View entering={SlideInDown} exiting={SlideOutUp}>
+          <FilterBar />
+        </Animated.View>
+
         <Text>Czego szukasz?</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("routes")}>
-          <View style={styles.titleContainer}>
-            <Text>Drogi - {foundRoutes.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundRoutes.length < 1 && <Text>Brak dróg dla szukanej frazy</Text>}
-        {foundRoutes.length > 0 && routesExpanded && (
-          <Animated.FlatList
-            scrollEnabled={false}
-            data={foundRoutes.slice(0, 8)}
-            renderItem={({ item }) => (
-              <ResultsItemRoute
-                name={item.attributes.display_name}
-                item={item}
-                itemStage={3}
-                isRock
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-      </View>
+    <View flex={1}>
+      <Animated.View entering={SlideInDown} exiting={SlideOutUp}>
+        <FilterBar />
+      </Animated.View>
+      <ScrollView>
+        <View>
+          <TouchableOpacity onPress={() => handleExpansion("routes")}>
+            <View>
+              <Text>{`Drogi - ${foundRoutes.length.toString()}`}</Text>
+            </View>
+          </TouchableOpacity>
+          {foundRoutes.length < 1 && <Text>Brak dróg dla szukanej frazy</Text>}
+          {foundRoutes.length > 0 && routesExpanded && (
+            <Animated.FlatList
+              scrollEnabled={false}
+              data={foundRoutes.slice(0, 8)}
+              renderItem={({ item }) => (
+                <ResultsItemRoute
+                  name={item.attributes.display_name}
+                  item={item}
+                  itemStage={3}
+                  isRock
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              )}
+            />
+          )}
+        </View>
 
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("rocks")}>
-          <View style={styles.titleContainer}>
-            <Text>Skały - {foundRocks.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundRocks.length < 1 && <Text>Brak skał dla szukanej frazy</Text>}
-        {foundRocks.length > 0 && rocksExpanded && (
-          <Animated.FlatList
-            scrollEnabled={false}
-            data={foundRocks.slice(0, 8)}
-            renderItem={({ item }) => (
-              <RockResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-        {foundRocks.length > 8 && (
-          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
-        )}
-      </View>
+        <View>
+          <TouchableOpacity onPress={() => handleExpansion("rocks")}>
+            <View>
+              <Text>{`Skały - ${foundRocks.length}`}</Text>
+            </View>
+          </TouchableOpacity>
+          {foundRocks.length < 1 && <Text>Brak skał dla szukanej frazy</Text>}
+          {foundRocks.length > 0 && rocksExpanded && (
+            <Animated.FlatList
+              scrollEnabled={false}
+              data={foundRocks.slice(0, 8)}
+              renderItem={({ item }) => (
+                <RockResultsItem
+                  name={item.attributes.Name}
+                  item={item}
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              )}
+            />
+          )}
+          {foundRocks.length > 8 && (
+            <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+          )}
+        </View>
 
-      <View style={styles.resultsContainer}>
-        <TouchableOpacity onPress={() => handleExpansion("sectors")}>
-          <View style={styles.titleContainer}>
-            <Text>Sektory - {foundSectors.length}</Text>
-          </View>
-        </TouchableOpacity>
-        {foundSectors.length < 1 && (
-          <Text>Brak sektorów dla szukanej frazy</Text>
-        )}
-        {foundSectors.length > 0 && sectorsExpanded && (
-          <Animated.FlatList
-            data={foundSectors.slice(0, 8)}
-            scrollEnabled={false}
-            renderItem={({ item }) => (
-              <ResultsItem
-                name={item.attributes.Name}
-                item={item}
-                id={item.attributes.uuid}
-                key={item.attributes.uuid}
-              />
-            )}
-          />
-        )}
-        {foundRocks.length > 8 && (
-          <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
-        )}
-      </View>
-
-      {foundRocks.length > 8 && (
-        <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
-      )}
-      <View style={styles.dummy} />
-    </ScrollView>
+        <View>
+          <TouchableOpacity onPress={() => handleExpansion("sectors")}>
+            <View>
+              <Text>{`Sektory - ${foundSectors.length}`}</Text>
+            </View>
+          </TouchableOpacity>
+          {foundSectors.length < 1 && (
+            <Text>Brak sektorów dla szukanej frazy</Text>
+          )}
+          {foundSectors.length > 0 && sectorsExpanded && (
+            <Animated.FlatList
+              data={foundSectors.slice(0, 8)}
+              scrollEnabled={false}
+              renderItem={({ item }) => (
+                <ResultsItem
+                  name={item.attributes.Name}
+                  item={item}
+                  id={item.attributes.uuid}
+                  key={item.attributes.uuid}
+                />
+              )}
+            />
+          )}
+          {foundRocks.length > 8 && (
+            <Text>Mamy tego więcej, ale wyświetlono tylko 8 wyników.</Text>
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 5,
-    backgroundColor: "#fff",
-    paddingHorizontal: 12,
-    shadowOffset: { width: 0, height: -20 },
-    shadowRadius: 0,
-    shadowColor: "#000",
-    shadowOpacity: 0,
-    columnGap: 12,
-  },
-  resultsContainer: {
-    marginVertical: 6,
-    backgroundColor: "#fff",
-  },
-  titleContainer: {
-    alignItems: "flex-end",
-    paddingVertical: 10,
-  },
-  listElement: {
-    borderWidth: 1,
-  },
-  dummy: {
-    height: 50,
-    backgroundColor: "#fff",
-  },
-});

@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 
-import FilterBar from "src/components/home/FilterBar";
 import View from "src/components/ui/View";
 import FavouritesScreen from "src/screens/FavouritesScreen";
 import MapScreen from "src/screens/MapScreen";
@@ -10,6 +9,7 @@ import SearchScreen from "src/screens/SearchScreen";
 import { HeartIcon } from "src/components/icons/Heart";
 import { MapIcon } from "src/components/icons/Map";
 import { SearchIcon } from "src/components/icons/Search";
+import { palette } from "src/styles/theme";
 import { BottomTabParamList } from "src/types/type";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -42,13 +42,20 @@ const renderIcon = ({
     ? TAB_ICONS[route.name].active
     : TAB_ICONS[route.name].inactive;
 
-  return <Icon size={size} color={focused ? "#000" : "#999"} />;
+  return (
+    <View
+      shadowColor='backgroundSecondary'
+      shadowRadius={focused ? 12 : 0}
+      shadowOpacity={1}
+    >
+      <Icon size={size} color={focused ? palette.green : palette.blue700} />
+    </View>
+  );
 };
 
 const HomeBottomTabNavigator = () => {
   return (
     <View style={{ flex: 1 }}>
-      <FilterBar />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, size }) =>

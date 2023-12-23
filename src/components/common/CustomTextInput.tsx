@@ -1,5 +1,5 @@
 import { useTheme } from "@shopify/restyle";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import type { FieldError } from "react-hook-form";
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
@@ -11,7 +11,7 @@ import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
 import { Theme, palette } from "src/styles/theme";
 
 export type CustomTextInputProps = {
-  label: string;
+  label?: string;
   secure?: boolean;
   onChange: (val: string) => void;
   value: string | undefined;
@@ -19,6 +19,7 @@ export type CustomTextInputProps = {
   error?: FieldError;
   onBlur?: any;
   hookBlurHandler: any;
+  icon?: ReactNode;
 };
 
 export default function CustomTextInput({
@@ -29,6 +30,7 @@ export default function CustomTextInput({
   field,
   error,
   hookBlurHandler,
+  icon,
   ...props
 }: CustomTextInputProps) {
   const [inputFocused, setInputFocused] = useState(false);
@@ -49,6 +51,14 @@ export default function CustomTextInput({
     </View>
   );
 
+  const showIcon = () => (
+    <View position='absolute' left={10} top={15}>
+      <TouchableOpacity onPress={() => setInputFocused(true)} hitSlop={20}>
+        {icon}
+      </TouchableOpacity>
+    </View>
+  );
+
   const textInputStyles = () => {
     if (error)
       return {
@@ -65,9 +75,9 @@ export default function CustomTextInput({
   };
 
   return (
-    <View marginVertical='s' width='100%' paddingHorizontal='s'>
+    <View width='100%' paddingHorizontal='s'>
       <View gap='s'>
-        <Text variant='label'>{label}</Text>
+        {label && <Text variant='label'>{label}</Text>}
         <View>
           <TextInput
             style={{ ...textInputStyles(), ...textVariants.input }}
@@ -85,6 +95,7 @@ export default function CustomTextInput({
             </View>
           )}
           {secure && showPassword()}
+          {icon && showIcon()}
         </View>
       </View>
     </View>
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: palette.white,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.15,
     shadowRadius: 6,
     shadowColor: palette.blue500,
     elevation: 4,

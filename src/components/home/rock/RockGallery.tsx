@@ -1,5 +1,5 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { ImageBackground, ScrollView, useWindowDimensions } from "react-native";
+import { ImageBackground, useWindowDimensions } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -17,9 +17,16 @@ const RockGallery = ({ images }: RockGalleryProps) => {
   return (
     <View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View paddingLeft='m' paddingRight='xl' gap='m' flexDirection='row' marginTop='l'>
-          {images.map((item, index) => {
+        <View
+          paddingLeft='m'
+          paddingRight='xl'
+          gap='m'
+          flexDirection='row'
+          marginTop='l'
+        >
+          {images.map((item) => {
             const image = useImageFile(item.Photo.data.attributes.url);
+            if (!image) return;
             return (
               <ImageBackground
                 source={{
@@ -48,7 +55,7 @@ const RockGallery = ({ images }: RockGalleryProps) => {
           })}
         </View>
       </ScrollView>
-      <LinearGradient
+      {/* <LinearGradient
         colors={["rgb(255, 255, 255)", "rgba(255, 255, 255, 0)"]}
         start={[0, 1]}
         style={{
@@ -69,7 +76,7 @@ const RockGallery = ({ images }: RockGalleryProps) => {
           right: 0,
           width: 30,
         }}
-      />
+      /> */}
     </View>
   );
 };
