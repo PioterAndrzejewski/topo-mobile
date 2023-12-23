@@ -236,7 +236,7 @@ export type RockData = {
     coordinates: Coordinates;
     parking_coordinates: Coordinates;
     family_friendly: boolean;
-    cover: Cover;
+    cover: Cover[];
     uuid: string;
     image: {data: Photo[]};
     routes: {data: Route[]}

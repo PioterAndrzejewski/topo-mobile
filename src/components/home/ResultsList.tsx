@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
-import RockInfoExpanded from "src/components/home/RockInfoExpanded";
+import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
 import Backdrop from "../common/Backdrop";
 import Text from "../ui/Text";
 import View from "../ui/View";
@@ -79,7 +79,7 @@ export default function ResultsList() {
     if (map && map.current) map.current.animateToRegion(newRegion);
   };
 
-  const bottomSheetSnapPoints = useMemo(() => ["70%"], []);
+  const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
   const snapPoints = useMemo(() => ["14%", "45%", "97%"], []);
 
   return (
