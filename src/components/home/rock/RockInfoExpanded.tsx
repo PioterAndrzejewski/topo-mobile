@@ -2,14 +2,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { useAtom } from "jotai";
 import { useMemo } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
 import InformationRow from "src/components/rock/details/InformationRow";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+import RockGallery from "./RockGallery";
 
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useAreas } from "src/hooks/useAreas";
 import { RockData } from "src/services/rocks";
 import { selectedRockAtom } from "src/store/results";
@@ -38,29 +39,27 @@ const RockInfoExpanded = () => {
   };
 
   return (
-    <View flex={1} gap='l'>
-      <ScrollView>
-        <View
-          flexDirection='row'
-          justifyContent='space-between'
-          alignItems='center'
-          flex={1}
-        >
-          <View marginHorizontal='m'>
-            <Text variant='h2' color='textBlack'>
-              {rock?.attributes.Name}
+    <View height='100%'>
+      <View>
+        <View marginHorizontal='m'>
+          <Text variant='h2' color='textBlack'>
+            {rock?.attributes.Name}
+          </Text>
+          <View flexDirection='row' gap='s'>
+            <Text variant='h4'>w sektorze:</Text>
+            <Text variant='h4' color='textSecondary'>
+              {rock?.attributes.parent.data.attributes.Name}
             </Text>
-            <View flexDirection='row' gap='s'>
-              <Text variant='h4'>w sektorze:</Text>
-              <Text variant='h4' color='textSecondary'>
-                {rock?.attributes.parent.data.attributes.Name}
-              </Text>
-            </View>
           </View>
         </View>
+      </View>
+      <BottomSheetScrollView >
         <View marginVertical='m'>{rock && <InformationRow rock={rock} />}</View>
         {routes && <RouteStructure routes={routes} />}
-      </ScrollView>
+        {rock?.attributes && rock?.attributes.cover.length > 0 && (
+          <RockGallery images={rock?.attributes.cover} />
+        )}
+      </BottomSheetScrollView>
       <View marginBottom='xl' marginHorizontal='m'>
         <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
       </View>

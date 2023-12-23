@@ -33,7 +33,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
     useFavoriteContext();
   const { colors } = useTheme<Theme>();
   const isFavorite = checkRockInFavorites(item.attributes.uuid);
-  const image = useImageFile(item.attributes.cover.Photo.data.attributes.url);
+  const image = useImageFile(
+    item.attributes.cover[0].Photo.data.attributes.url,
+  );
   const animateTo = (item: RockData, stage: number) => {
     navigation.navigate("Map");
     const newRegion = getRegionForZoom(
@@ -87,9 +89,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
             paddingHorizontal='m'
             paddingVertical='xl'
             gap='m'
-            backgroundColor='imageOverlay'
             borderRadius={24}
-            borderWidth={0.3}
           >
             <View flexDirection='row' justifyContent='space-between'>
               <Text
@@ -114,10 +114,12 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
               </TouchableOpacity>
             </View>
             <OverlayCardView alignSelf='flex-start'>
-              <Text variant='caption'>{`Liczba dróg: ${routes?.toString() || ''}`}</Text>
+              <Text variant='caption'>{`Liczba dróg: ${
+                routes?.toString() || ""
+              }`}</Text>
             </OverlayCardView>
             <OverlayCardView alignSelf='flex-start'>
-              <Text variant='caption'>{`zdj: ${item.attributes.cover.Author}`}</Text>
+              <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
             </OverlayCardView>
           </View>
         </ImageBackground>

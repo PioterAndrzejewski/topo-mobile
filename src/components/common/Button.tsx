@@ -60,7 +60,7 @@ export default function Button({
 }
 
 const $container: ViewStyle = {
-  marginTop: 30,
+  marginTop: 12,
   padding: 14,
   backgroundColor: palette.green,
   justifyContent: "center",
