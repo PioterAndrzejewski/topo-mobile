@@ -9,6 +9,7 @@ import View from "src/components/ui/View";
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { Coordinates, Route } from "src/services/rocks";
+import { confirmActionAtom } from "src/store/global";
 import { mapAtom, selectedRockAtom } from "src/store/results";
 import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
@@ -39,6 +40,7 @@ const ResultsItemRoute: FC<ListResultProps> = ({ id, name, item, isRock }) => {
   const { checkRouteInFavorites, removeRouteFromFavorites } =
     useFavoriteContext();
   const isFavorite = checkRouteInFavorites(id);
+  const setConfirmAction = useSetAtom(confirmActionAtom);
 
   const animateTo = (item: RouteWithParent) => {
     navigation.navigate("Map");
@@ -61,7 +63,12 @@ const ResultsItemRoute: FC<ListResultProps> = ({ id, name, item, isRock }) => {
   };
 
   const handleHeartPress = () => {
-    if (isFavorite) removeRouteFromFavorites(item);
+    if (isFavorite) {
+      setConfirmAction({
+        confirmFn: () => removeRouteFromFavorites(item),
+        message: `Usuwasz drogę ${item.attributes.display_name} z zapisanych`,
+      });
+    }
   };
 
   return (

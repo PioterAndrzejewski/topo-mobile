@@ -199,7 +199,7 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                     >
                       <CommentIcon
                         size={36}
-                        color={colors.secondary}
+                        color={route.attributes.usersComment ? colors.textWhite : colors.secondary}
                         fill={
                           route.attributes.usersComment
                             ? colors.secondary

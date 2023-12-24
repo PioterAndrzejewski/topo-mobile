@@ -12,6 +12,7 @@ import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { useImageFile } from "src/hooks/useImageFile";
 import { RockData } from "src/services/rocks";
+import { confirmActionAtom } from "src/store/global";
 import { mapAtom, selectedRockAtom } from "src/store/results";
 import { Theme, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
@@ -30,6 +31,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const setSelectedRock = useSetAtom(selectedRockAtom);
   const { checkRockInFavorites, setRockAsFavorite, removeRockFromFavorite } =
     useFavoriteContext();
+  const setConfirmAction = useSetAtom(confirmActionAtom);
   const { colors } = useTheme<Theme>();
   const isFavorite = checkRockInFavorites(item.attributes.uuid);
   const image = useImageFile(
@@ -64,7 +66,10 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
     if (!isFavorite) {
       setRockAsFavorite(item);
     } else {
-      removeRockFromFavorite(item.attributes.uuid);
+      setConfirmAction({
+        confirmFn: () => removeRockFromFavorite(item.attributes.uuid),
+        message: `Usuwasz skałę ${item.attributes.Name} z ulubionych`,
+      });
     }
   };
   if (!image) return;

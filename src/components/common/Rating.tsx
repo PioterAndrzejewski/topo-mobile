@@ -31,7 +31,7 @@ const Rating = ({
         justifyContent='center'
         alignItems='center'
       >
-        <Text variant={"special"} color={"textSecondary"}>
+        <Text variant={!noFill && rating ? "h4" : "special"} color={!noFill && rating ? "textWhite" : "textSecondary"}>
           {rating ? rating.toString() : "?"}
         </Text>
       </View>

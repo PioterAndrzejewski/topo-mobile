@@ -65,7 +65,7 @@ const Rock = ({ route }: Props) => {
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
+      <BottomSheetScrollView showsVerticalScrollIndicator={false}>
           <View paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>
