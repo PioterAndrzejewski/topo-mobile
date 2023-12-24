@@ -1,5 +1,5 @@
 import Text from "src/components/ui/Text";
-import DetailsWrapper from "./DetailsWrapper";
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 
 import { RecommendedIcon } from "src/components/icons/Recommended";
 

@@ -1,4 +1,4 @@
-import { Svg } from "react-native-svg";
+import { Path, Svg } from "react-native-svg";
 
 type Props = {
   size?: number;
@@ -10,8 +10,8 @@ export const OverhangIcon = ({ size = 20, color }: Props): JSX.Element => {
 
   return (
     <Svg width={size} height={size} viewBox='0 0 24 24' fill='none'>
-      <path d='M2 2L22 2L22 22' stroke={colorToUse} />
-      <path d='M2 2L12 12L22 22' stroke={colorToUse} />
+      <Path d='M2 2L22 2L22 22' stroke={colorToUse} />
+      <Path d='M2 2L12 12L22 22' stroke={colorToUse} />
     </Svg>
   );
 };

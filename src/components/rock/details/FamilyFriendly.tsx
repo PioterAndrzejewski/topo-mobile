@@ -1,7 +1,7 @@
 import Text from "src/components/ui/Text";
 
 import { StrollerIcon } from "src/components/icons/Stroller";
-import DetailsWrapper from "./DetailsWrapper";
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 
 const FamilyFriendly = () => {
   return (

@@ -44,15 +44,15 @@ export default function ResultsList() {
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
     const newLocationArray: AreasList = [];
-    if (areas) {
-      newLocationArray.push(sortAreas(region, areas)[0]);
-    }
-    if (stage >= 2 && regions) {
+
+    newLocationArray.push(sortAreas(region, areas)[0]);
+    if (stage >= 2) {
       newLocationArray.push(sortAreas(region, regions)[0]);
     }
-    if (stage >= 3 && sectors) {
+    if (stage >= 3) {
       newLocationArray.push(sortAreas(region, sectors)[0]);
     }
+
     setLocationArray(newLocationArray);
 
     if (rocks) {
@@ -96,7 +96,7 @@ export default function ResultsList() {
           {locationArray?.length > 0 && (
             <>
               <View marginHorizontal='m'>
-                <Text variant='body'>Wybrana lokalizacja: </Text>
+                <Text variant='h3'>Wybrana lokalizacja: </Text>
               </View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View
@@ -125,7 +125,7 @@ export default function ResultsList() {
         </View>
         <BottomSheetScrollView showsVerticalScrollIndicator={false}>
           <View marginHorizontal='m' marginTop='l' marginBottom='m'>
-            <Text variant='body'>Skały w poblizu:</Text>
+            <Text variant='h3'>Skały w poblizu:</Text>
           </View>
           <View width='100%' height='100%' paddingHorizontal='m'>
             {Array.isArray(listToRender) &&

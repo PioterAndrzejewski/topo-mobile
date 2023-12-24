@@ -1,7 +1,7 @@
 import { ProhibitedIcon } from "src/components/icons/ProhibitedIcon";
 
 import Text from "src/components/ui/Text";
-import DetailsWrapper from "./DetailsWrapper";
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 
 const Prohibited = () => {
   return (

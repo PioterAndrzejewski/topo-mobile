@@ -1,32 +1,17 @@
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { OverhangIcon } from "src/components/icons/Overhang";
 import { SlabIcon } from "src/components/icons/Slab";
-import { VerticalIcon } from "src/components/icons/Vertical";
-import { Formations } from "src/services/rocks";
-
-import Text from "src/components/ui/Text";
-import DetailsWrapper from "./DetailsWrapper";
+import { FormationData, Formations } from "src/services/rocks";
 
 type FormationProps = {
-  formation: Formations;
+  formation: FormationData[];
 };
 
 const Formation = (props: FormationProps) => {
-  const renderIcon = () => {
-    switch (props.formation) {
-      case "slab":
-        return <SlabIcon size={32} />;
-      case "vertical":
-        return <VerticalIcon size={32} />;
-      case "overhang":
-        return <OverhangIcon size={32} />;
-      case "roof":
-        return <OverhangIcon size={32} />;
-    }
-  };
-  const renderText = () => {
-    switch (props.formation) {
+  const renderText = (formation: Formations) => {
+    switch (formation) {
       case "slab":
         return "połóg";
       case "vertical":
@@ -35,14 +20,29 @@ const Formation = (props: FormationProps) => {
         return "przewieszenie";
       case "roof":
         return "dach";
+      case "chimney":
+        return "komin";
+      case "crack":
+        return "rysa";
+      case "pillar":
+        return "filar";
     }
   };
+
+  console.log(props);
   return (
     <DetailsWrapper>
-      {renderIcon()}
+      <SlabIcon size={32} />
       <View flexDirection='row' gap='s'>
         <Text variant='body'>Główne formacje:</Text>
-        <Text variant='body'>{renderText()}</Text>
+        {props.formation.length &&
+          props.formation.length > 0 &&
+          props.formation.map((item, index) => (
+            <Text>
+              {renderText(item.formation) +
+                (index === props.formation.length - 1 ? "" : ", ")}
+            </Text>
+          ))}
       </View>
     </DetailsWrapper>
   );

@@ -3,7 +3,7 @@ import { HeightIcon } from "src/components/icons/Height";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-import DetailsWrapper from "./DetailsWrapper";
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 
 type HeightProps = {
   height: number;
