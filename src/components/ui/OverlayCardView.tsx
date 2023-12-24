@@ -1,6 +1,6 @@
 import { BoxProps } from "@shopify/restyle";
 import { ReactNode } from "react";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { Object } from "ts-toolbelt";
 
 import { Theme, styleGuide } from "src/styles/theme";
@@ -13,12 +13,8 @@ type OverlayCardViewProps = Object.Merge<
 >;
 
 const OverlayCardView = ({ children, ...rest }: OverlayCardViewProps) => (
-  <Animated.View entering={FadeInUp} exiting={FadeOutUp}>
-    <View
-      padding='s'
-      {...styleGuide.cardShadow}
-      {...rest}
-    >
+  <Animated.View>
+    <View padding='s' {...styleGuide.cardShadow} {...rest}>
       {children}
     </View>
   </Animated.View>

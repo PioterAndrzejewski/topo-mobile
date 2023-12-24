@@ -28,7 +28,6 @@ const options: SwitcherOption<"done" | "project" | "other">[] = [
 
 const RouteFavorites = () => {
   const [section, setSection] = useState<FavoriteType>("done");
-  const { rocks } = useAreas();
   const { favoriteRoutes } = useFavoriteContext();
 
   return (
@@ -46,7 +45,6 @@ const RouteFavorites = () => {
             <ResultsItemRoute
               name={item.attributes.display_name}
               item={item}
-              itemStage={3}
               isRock
               id={item.attributes.uuid}
               key={item.attributes.uuid}

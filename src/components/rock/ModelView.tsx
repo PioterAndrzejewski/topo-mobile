@@ -1,10 +1,10 @@
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { LayoutAnimation, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 import { viewerUrl } from "src/services/apiConfig";
-import { getFromSecureStorage } from "src/services/store";
+import { getFromSecureStorage } from "src/services/store";  
 import { rockActiveRoute } from "src/store/rock";
 
 type ModelViewProps = {
@@ -29,7 +29,6 @@ const ModelView = (props: ModelViewProps) => {
   }, []);
 
   const receiveMessage = (e: WebViewMessageEvent) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setActiveRoute(e.nativeEvent.data === "null" ? null : e.nativeEvent.data);
   };
 
