@@ -6,11 +6,12 @@ import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
+import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
-import Backdrop from "../common/Backdrop";
-import Text from "../ui/Text";
-import View from "../ui/View";
+import OverlayCardView from "src/components/ui/OverlayCardView";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { useAreas } from "src/hooks/useAreas";
 import { AreaData } from "src/services/rocks";
@@ -27,7 +28,6 @@ import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
-import OverlayCardView from "../ui/OverlayCardView";
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
