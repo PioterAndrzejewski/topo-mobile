@@ -43,7 +43,7 @@ export default function SearchScreen() {
     >
       <ScreenTitle title='Zapisane' centered />
       <View flex={1}>
-        <View paddingHorizontal='m'>
+        <View paddingHorizontal='m' borderBottomWidth={1} paddingBottom='m' borderBottomColor='backgroundSecondary'>
           <Switcher onPress={setMode} active={mode} options={options} />
         </View>
         {renderFavorites}

@@ -9,14 +9,17 @@ const RouteFavorites = () => {
   const { favoriteRocks } = useFavoriteContext();
 
   return (
-    <View flex={1} paddingTop='m' gap='s'>
+    <View flex={1} gap='s'>
       {favoriteRocks && favoriteRocks.length > 0 && (
         <Animated.FlatList
           data={favoriteRocks}
           keyExtractor={(item) => item.attributes.Name}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
-              <View paddingHorizontal='m'>
+              <View
+                paddingHorizontal='m'
+                paddingTop={index === 0 ? "m" : undefined}
+              >
                 <RockResultsItem
                   name={item.attributes.Name}
                   item={item}

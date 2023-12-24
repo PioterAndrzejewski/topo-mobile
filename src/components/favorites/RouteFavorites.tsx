@@ -30,8 +30,13 @@ const RouteFavorites = () => {
   const { favoriteRoutes } = useFavoriteContext();
 
   return (
-    <View flex={1} paddingTop='m' gap='m'>
-      <View paddingHorizontal='m'>
+    <View flex={1} paddingTop='m'>
+      <View
+        paddingHorizontal='m'
+        borderBottomWidth={1}
+        borderBottomColor='backgroundSecondary'
+        paddingBottom='m'
+      >
         <Switcher
           onPress={setSection}
           active={section}
@@ -45,7 +50,7 @@ const RouteFavorites = () => {
           renderItem={({ item, index }) => (
             <View
               paddingHorizontal='m'
-              paddingTop={index === 0 ? "m" : undefined}
+              paddingTop={index === 0 ? "l" : undefined}
             >
               <ResultsItemRoute
                 name={item.attributes.display_name}

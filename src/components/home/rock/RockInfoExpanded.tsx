@@ -40,7 +40,7 @@ const RockInfoExpanded = () => {
   return (
     <View height='100%'>
       <View>
-        <View marginHorizontal='m'>
+        <View paddingHorizontal='m' borderBottomWidth={1} borderBottomColor='backgroundSecondary' paddingBottom='m'>
           <Text variant='h2' color='textBlack'>
             {rock?.attributes.Name}
           </Text>
@@ -53,7 +53,7 @@ const RockInfoExpanded = () => {
         </View>
       </View>
       <BottomSheetScrollView showsVerticalScrollIndicator={false}>
-        <View marginVertical='m'>{rock && <InformationRow rock={rock} />}</View>
+        <View marginBottom='m'>{rock && <InformationRow rock={rock} />}</View>
         {routes && <RouteStructure routes={routes} />}
         {rock?.attributes && rock?.attributes.cover.length > 0 && (
           <RockGallery images={rock?.attributes.cover} />

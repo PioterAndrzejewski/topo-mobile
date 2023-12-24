@@ -79,10 +79,12 @@ export default function ResultsList() {
       getZoomFromStage(stage),
     );
     if (map && map.current) map.current.animateToRegion(newRegion);
+    bottomSheetModalRef.current?.dismiss();
+    bottomSheetRef?.current?.collapse();
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
-  const snapPoints = useMemo(() => ["14%", "45%", "90%"], []);
+  const snapPoints = useMemo(() => ["15%", "45%", "80%"], []);
 
   return (
     <>
@@ -98,33 +100,40 @@ export default function ResultsList() {
               <View marginHorizontal='m'>
                 <Text variant='h3'>Wybrana lokalizacja: </Text>
               </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View
-                  marginVertical='s'
-                  paddingHorizontal='m'
-                  flexDirection='row'
-                  gap='m'
-                >
-                  {locationArray.map((item, index) => (
-                    <OverlayCardView>
-                      <TouchableOpacity
-                        style={{ flexDirection: "row" }}
-                        onPress={() => animateTo(item, index)}
-                        key={item?.attributes?.Name}
-                      >
-                        <Text variant='h3' color='textSecondary'>
-                          {item?.attributes?.Name}
-                        </Text>
-                      </TouchableOpacity>
-                    </OverlayCardView>
-                  ))}
-                </View>
-              </ScrollView>
+              <View
+                borderBottomWidth={1}
+                borderBottomColor='backgroundSecondary'
+                paddingBottom='s'
+              >
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View
+                    marginTop='m'
+                    paddingHorizontal='m'
+                    flexDirection='row'
+                    gap='m'
+                    paddingBottom='m'
+                  >
+                    {locationArray.map((item, index) => (
+                      <OverlayCardView>
+                        <TouchableOpacity
+                          style={{ flexDirection: "row" }}
+                          onPress={() => animateTo(item, index)}
+                          key={item?.attributes?.Name}
+                        >
+                          <Text variant='h3' color='textSecondary'>
+                            {item?.attributes?.Name}
+                          </Text>
+                        </TouchableOpacity>
+                      </OverlayCardView>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
             </>
           )}
         </View>
         <BottomSheetScrollView showsVerticalScrollIndicator={false}>
-          <View marginHorizontal='m' marginTop='l' marginBottom='m'>
+          <View marginHorizontal='m' marginTop='s' marginBottom='m'>
             <Text variant='h3'>Skały w poblizu:</Text>
           </View>
           <View width='100%' height='100%' paddingHorizontal='m'>
