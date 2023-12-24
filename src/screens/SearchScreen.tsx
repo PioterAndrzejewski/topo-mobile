@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 import Results from "src/components/Search/Results";
+import ScreenTitle from "src/components/common/ScreenTitle";
 import FilterBar from "src/components/home/FilterBar";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -73,6 +74,7 @@ export default function SearchScreen() {
       entering={SlideInRight}
       exiting={SlideInLeft}
     >
+      <ScreenTitle title='Wyszukiwarka' centered />
       <FilterBar />
       <View marginHorizontal='m' marginTop='m'>
         <Switcher

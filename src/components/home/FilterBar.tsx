@@ -33,7 +33,6 @@ const FilterBar = () => {
   return (
     <View
       backgroundColor='backgroundScreen'
-      paddingTop='3xl'
       paddingBottom='m'
       paddingHorizontal='m'
       flexDirection='row'
