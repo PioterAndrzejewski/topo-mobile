@@ -29,7 +29,6 @@ const Formation = (props: FormationProps) => {
     }
   };
 
-  console.log(props);
   return (
     <DetailsWrapper>
       <SlabIcon size={32} />
