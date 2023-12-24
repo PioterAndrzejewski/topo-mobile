@@ -1,10 +1,9 @@
-import { StyleSheet } from "react-native";
 import { SunIcon } from "src/components/icons/Sun";
 import { Exhibition } from "src/services/rocks";
 
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-import DetailsWrapper from "./DetailsWrapper";
 
 type HeightProps = {
   exposition: Exhibition;
@@ -13,15 +12,15 @@ type HeightProps = {
 const getMeaningfulExposition = (exposition: Exhibition) => {
   switch (exposition) {
     case "north":
-      return "północ";
+      return "Wystawka północna";
     case "east":
-      return "wschó∂";
+      return "Wystawka wschodnia";
     case "south":
-      return "południe";
+      return "Wystawka południowa";
     case "trees":
-      return "zadrzewiony";
+      return "Skała w lesie";
     case "west":
-      "zachód";
+      "Wystawka zachodnia";
   }
 };
 
@@ -30,22 +29,10 @@ const Exposition = (props: HeightProps) => {
     <DetailsWrapper>
       <SunIcon size={32} />
       <View flexDirection='row' gap='s'>
-        <Text variant='body'>Wystawka:</Text>
-        <Text variant='body'>
-          {getMeaningfulExposition(props.exposition)}
-        </Text>
+        <Text variant='body'>{getMeaningfulExposition(props.exposition)}</Text>
       </View>
     </DetailsWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    width: 40,
-  },
-});
 
 export default Exposition;

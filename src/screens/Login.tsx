@@ -16,7 +16,6 @@ export default function LoginScreen() {
         marginTop='3xl'
         zIndex={999}
         elevation={999}
-        marginBottom='l'
       >
         <View
           padding='3xs'

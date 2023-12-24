@@ -1,10 +1,10 @@
-import { Shading } from "src/services/rocks";
+import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
+import Text from "src/components/ui/Text";
 
 import { HalfShadowIcon } from "src/components/icons/HalfShadow";
 import { ShadowIcon } from "src/components/icons/Shadow";
 import { SunnyIcon } from "src/components/icons/Sunny";
-import Text from "src/components/ui/Text";
-import DetailsWrapper from "./DetailsWrapper";
+import { Shading } from "src/services/rocks";
 
 type ShadingProps = {
   shading: Shading;

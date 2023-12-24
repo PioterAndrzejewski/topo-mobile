@@ -5,15 +5,16 @@ import Height from "src/components/rock/details/Height";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import Exposition from "./Exposition";
-import FamilyFriendly from "./FamilyFriendly";
-import Formation from "./Formation";
-import LooseRocks from "./LooseRocks";
-import Parking from "./Parking";
-import PopularityInfo from "./PopularityInfo";
-import Prohibited from "./Prohibited";
-import Recommended from "./Recommended";
-import ShadingInfo from "./Shading";
+import Exposition from "src/components/rock/details/Exposition";
+import FamilyFriendly from "src/components/rock/details/FamilyFriendly";
+import Formation from "src/components/rock/details/Formation";
+import LooseRocks from "src/components/rock/details/LooseRocks";
+import Parking from "src/components/rock/details/Parking";
+import PopularityInfo from "src/components/rock/details/PopularityInfo";
+import Prohibited from "src/components/rock/details/Prohibited";
+import Recommended from "src/components/rock/details/Recommended";
+import RockDescription from "src/components/rock/details/RockDescription";
+import ShadingInfo from "src/components/rock/details/Shading";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { RockData } from "src/services/rocks";
@@ -46,6 +47,10 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
           paddingHorizontal='m'
           paddingRight='xl'
         >
+          {rock.attributes.Description &&
+            renderInWrapper(
+              <RockDescription description={rock.attributes.Description} />,
+            )}
           {rock.attributes.climbing_restricted &&
             renderInWrapper(<Prohibited />)}
           {renderInWrapper(

@@ -4,8 +4,7 @@ import { getRock } from 'src/services/rocks';
 export const useRock = (id: string) => {
   return useQuery({
     queryFn: () => getRock(id),
-    queryKey: ['areas'],
+    queryKey: ['rock', id],
     refetchInterval: 1000 * 60 * 60 * 24,
-    cacheTime: Infinity,
   });
 };

@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
 import Switcher from "src/components/common/Switcher";
+import View from "../ui/View";
 
 import { SwitcherOption } from "src/components/common/Switcher";
 import { useFavoriteContext } from "src/context/FavoritesContext";
-import { useAreas } from "src/hooks/useAreas";
 import { FavoriteType } from "src/services/storeAsync";
 import { getFavoriteColor } from "src/utils/getFavoriteColor";
 
@@ -31,38 +30,41 @@ const RouteFavorites = () => {
   const { favoriteRoutes } = useFavoriteContext();
 
   return (
-    <View style={styles.container}>
-      <Switcher
-        onPress={setSection}
-        active={section}
-        options={options}
-        badgeColor={getFavoriteColor(section)}
-      />
+    <View flex={1} paddingTop='m'>
+      <View
+        paddingHorizontal='m'
+        borderBottomWidth={1}
+        borderBottomColor='backgroundSecondary'
+        paddingBottom='m'
+      >
+        <Switcher
+          onPress={setSection}
+          active={section}
+          options={options}
+          badgeColor={getFavoriteColor(section)}
+        />
+      </View>
       {favoriteRoutes && favoriteRoutes[`${section}`].length > 0 && (
         <Animated.FlatList
           data={favoriteRoutes[`${section}`]}
-          renderItem={({ item }) => (
-            <ResultsItemRoute
-              name={item.attributes.display_name}
-              item={item}
-              isRock
-              id={item.attributes.uuid}
-              key={item.attributes.uuid}
-            />
+          renderItem={({ item, index }) => (
+            <View
+              paddingHorizontal='m'
+              paddingTop={index === 0 ? "l" : undefined}
+            >
+              <ResultsItemRoute
+                name={item.attributes.display_name}
+                item={item}
+                isRock
+                id={item.attributes.uuid}
+                key={item.attributes.uuid}
+              />
+            </View>
           )}
         />
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 12,
-    backgroundColor: "#fff",
-    gap: 12,
-  },
-});
 
 export default RouteFavorites;

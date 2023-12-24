@@ -109,7 +109,11 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
               <View flexDirection='row' gap='l' alignItems='center'>
                 <View justifyContent='center'>
                   <Rating
-                    rating={route.attributes.averageScore.toString()}
+                    rating={
+                      route.attributes.averageScore > 1
+                        ? route.attributes.averageScore.toString()
+                        : "?"
+                    }
                     noFill
                   />
                 </View>
@@ -195,15 +199,11 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                     >
                       <CommentIcon
                         size={36}
-                        color={
-                          route.attributes.usersComment
-                            ? colors.backgroundScreen
-                            : colors.backgroundDark
-                        }
+                        color={colors.secondary}
                         fill={
                           route.attributes.usersComment
                             ? colors.secondary
-                            : colors.backgroundScreen
+                            : undefined
                         }
                       />
                     </OverlayCardView>

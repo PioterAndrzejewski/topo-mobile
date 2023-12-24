@@ -74,9 +74,14 @@ export type ImageFormat = {
 }
 
 export type Exhibition = 'north' | 'south' | 'east' | 'west' | 'trees';
-export type Formations = 'slab' | 'vertical' | 'overhang' | 'roof';
+export type Formations = 'slab' | 'vertical' | 'overhang' | 'roof' | 'chimney' | 'crack' | 'pillar';
 export type Popularity = 'high' | 'medium' | 'low';
 export type Shading = "shadow" | "half-shadow" | "sunny";
+
+export type FormationData = {
+  id: number;
+  formation: Formations;
+}
 
 export type Photo = {
   id: number;
@@ -228,7 +233,7 @@ export type RockData = {
     walk_distance: number;
     height: number;
     exhibition: Exhibition;
-    formation: Formations;
+    formation: FormationData[];
     popularity: Popularity;
     climbing_restricted: boolean;
     loose_rocks: boolean;
@@ -303,7 +308,8 @@ export const getRocks = async () => {
       'coordinates',
       'routes',
       'cover',
-      'cover.Photo'
+      'cover.Photo',
+      'formation',
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
@@ -322,7 +328,8 @@ export const getRock = async (id: string) => {
       'parking_coordinates',
       'ratings',
       'cover',
-      'cover.Photo'
+      'cover.Photo',
+      'formation'
     ],
     filters: {
       uuid: {
