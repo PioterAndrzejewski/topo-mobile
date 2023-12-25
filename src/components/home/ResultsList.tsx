@@ -2,7 +2,7 @@ import BottomSheet, {
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
@@ -17,6 +17,7 @@ import { useAreas } from "src/hooks/useAreas";
 import { AreaData } from "src/services/rocks";
 import {
   AreasList,
+  bottomSheetRefAtom,
   listToRenderAtom,
   mapAtom,
   regionAtom,
@@ -34,6 +35,7 @@ export default function ResultsList() {
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const setBottomSheetGlobalRef = useSetAtom(bottomSheetRefAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -72,6 +74,12 @@ export default function ResultsList() {
     }
   }, [selectedRock]);
 
+  useEffect(() => {
+    if (bottomSheetRef.current) {
+      setBottomSheetGlobalRef(bottomSheetRef);
+    }
+  }, [bottomSheetRef]);
+
   const animateTo = (item: AreaData, stage: number) => {
     const newRegion = getRegionForZoom(
       item.attributes.coordinates.latitude,
@@ -105,7 +113,11 @@ export default function ResultsList() {
                 borderBottomColor='backgroundSecondary'
                 paddingBottom='s'
               >
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <ScrollView
+                  horizontal
+                  shouldCancelWhenOutside
+                  showsHorizontalScrollIndicator={false}
+                >
                   <View
                     marginTop='m'
                     paddingHorizontal='m'

@@ -1,4 +1,5 @@
-import { ScrollView, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
+import { ScrollView } from 'react-native-gesture-handler';
 
 import Text from "../ui/Text";
 import View from "../ui/View";
