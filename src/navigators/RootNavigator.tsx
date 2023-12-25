@@ -7,8 +7,6 @@ import Rock from "src/screens/Rock";
 
 import { RootStackParamList } from "src/types/type";
 
-
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => (
@@ -20,11 +18,7 @@ const RootNavigator = () => (
     <Stack.Screen name='Login' component={LoginScreen} />
     <Stack.Screen name='Register' component={RegisterScreen} />
     <Stack.Screen name='HomeNavigator' component={HomeBottomTabNavigator} />
-    <Stack.Screen
-      name='Rock'
-      component={Rock}
-      initialParams={{ id: "none" }}
-    />
+    <Stack.Screen name='Rock' component={Rock} initialParams={{ id: "none" }} />
   </Stack.Navigator>
 );
 

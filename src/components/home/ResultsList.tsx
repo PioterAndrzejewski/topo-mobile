@@ -1,10 +1,11 @@
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -75,7 +76,7 @@ export default function ResultsList() {
   }, [selectedRock]);
 
   useEffect(() => {
-    if (bottomSheetRef.current) {
+    if (bottomSheetRef.current && !bottomSheetRef) {
       setBottomSheetGlobalRef(bottomSheetRef);
     }
   }, [bottomSheetRef]);
@@ -126,7 +127,9 @@ export default function ResultsList() {
                     paddingBottom='m'
                   >
                     {locationArray.map((item, index) => (
-                      <OverlayCardView>
+                      <OverlayCardView
+                        key={item.id + index + item.attributes.uuid}
+                      >
                         <TouchableOpacity
                           style={{ flexDirection: "row" }}
                           onPress={() => animateTo(item, index)}
@@ -144,32 +147,37 @@ export default function ResultsList() {
             </>
           )}
         </View>
-        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
-          <View marginHorizontal='m' marginTop='s' marginBottom='m'>
-            <Text variant='h3'>Skały w poblizu:</Text>
-          </View>
-          <View width='100%' height='100%' paddingHorizontal='m'>
-            {Array.isArray(listToRender) &&
-              listToRender.length >= 1 &&
-              listToRender
-                .slice(0, 5)
-                .map((item) => (
-                  <ResultsItem
-                    id={item.attributes.uuid}
-                    name={item.attributes.Name}
-                    key={item.attributes.Name}
-                    item={item}
+        <FlatList
+          data={[0]}
+          renderItem={() => (
+            <View>
+              <View marginHorizontal='m' marginTop='s' marginBottom='m'>
+                <Text variant='h3'>Skały w poblizu:</Text>
+              </View>
+              <View width='100%' height='100%' paddingHorizontal='m'>
+                {
+                  <FlatList
+                    data={listToRender.slice(0, 5)}
+                    renderItem={({ item }) => (
+                      <ResultsItem
+                        id={item.attributes.uuid}
+                        name={item.attributes.Name}
+                        key={item.attributes.Name}
+                        item={item}
+                      />
+                    )}
                   />
-                ))}
-
-            {Array.isArray(listToRender) && listToRender.length > 5 && (
-              <Text>
-                Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
-                wyszukać w innym obszarze.
-              </Text>
-            )}
-          </View>
-        </BottomSheetScrollView>
+                }
+                {Array.isArray(listToRender) && listToRender.length > 5 && (
+                  <Text>
+                    Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
+                    wyszukać w innym obszarze.
+                  </Text>
+                )}
+              </View>
+            </View>
+          )}
+        />
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}

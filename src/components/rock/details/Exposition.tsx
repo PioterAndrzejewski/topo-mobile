@@ -29,7 +29,7 @@ const Exposition = (props: ExpositionProps) => {
       <View flexDirection='row' gap='s'>
         <Text>Wystawka: </Text>
         {props.exposition.map((expo, index) => (
-          <Text>
+          <Text key={expo.exhibition + expo.id}>
             {getMeaningfulExposition(expo.exhibition) +
               (index === props.exposition.length - 1 ? "" : ", ")}
           </Text>
