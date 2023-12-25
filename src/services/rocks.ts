@@ -83,6 +83,11 @@ export type FormationData = {
   formation: Formations;
 }
 
+export type ExhibitionData = {
+  id: number;
+  exhibition: Exhibition;
+}
+
 export type Photo = {
   id: number;
   attributes: {
@@ -232,7 +237,7 @@ export type RockData = {
     updatedAt: string;
     walk_distance: number;
     height: number;
-    exhibition: Exhibition;
+    exhibition: ExhibitionData[];
     formation: FormationData[];
     popularity: Popularity;
     climbing_restricted: boolean;
@@ -310,6 +315,7 @@ export const getRocks = async () => {
       'cover',
       'cover.Photo',
       'formation',
+      'exhibition'
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
@@ -329,7 +335,8 @@ export const getRock = async (id: string) => {
       'ratings',
       'cover',
       'cover.Photo',
-      'formation'
+      'formation',
+      'exhibition'
     ],
     filters: {
       uuid: {

@@ -45,6 +45,7 @@ const RouteStructure = ({ routes }: RouteStructureProps) => {
           justifyContent='space-between'
           gap='m'
           paddingLeft='m'
+          paddingRight='m'
           minWidth={width - 16}
         >
           {renderSection("III - V+", routes?.toV)}
