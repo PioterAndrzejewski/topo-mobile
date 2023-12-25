@@ -1,10 +1,12 @@
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 import {
+  Blur,
   Circle,
   DashPathEffect,
   Group,
   Image,
   ImageSVG,
+  Paint,
   Path,
   Skia,
   Text,
@@ -21,10 +23,10 @@ import AppLoading from "src/components/common/AppLoading";
 import { useImageFile } from "src/hooks/useImageFile";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
+import { palette } from "src/styles/theme";
 import { getRingsCoords } from "src/utils/getRingsCoords";
-import { getRingsToOmit } from "src/utils/getRingsToOmit";
 import { getRouteColor } from "src/utils/getRouteColor";
-import { chaing_anchor, rescue_ring, two_rings } from "./Anchor";
+import { ChainAnchor, RescueRing, Ring, TwoRings } from "./DrawingIcons";
 
 const CANVAS_BOUNDARY = 40;
 
@@ -50,6 +52,11 @@ const RockDrawing: FC<RockDrawingProps> = ({
     require("../../../assets/fonts/PoppinsBold.ttf"),
     skImage ? skImage.width() / 30 : 70,
   );
+
+  const ringWidth = Ring()?.width();
+  const ringHeight = Ring()?.height();
+
+  const elementsScale = 1;
 
   const TouchableCircle = withTouchableHandler(Circle);
   const TouchablePath = withTouchableHandler(Path);
@@ -89,16 +96,17 @@ const RockDrawing: FC<RockDrawingProps> = ({
           zoomStep={0.5}
           initialZoom={width / skImage.width()}
           style={{
-            padding: 10,
+            padding: 100,
             position: "absolute",
             top: 0,
             height: height / 2,
           }}
-          disablePanOnInitialZoom={false}
-          panBoundaryPadding={skImage.width() / 3}
           ref={zoomable}
-          doubleTapZoomToCenter={false}
-          doubleTapDelay={0}
+          bindToBorders={true}
+          doubleTapZoomToCenter
+          contentHeight={skImage.height()}
+          contentWidth={skImage.width()}
+          panBoundaryPadding={300}
         >
           <Touchable.Canvas
             style={{
@@ -117,15 +125,13 @@ const RockDrawing: FC<RockDrawingProps> = ({
             {routes &&
               routes.map((route, index) => {
                 if (route.attributes.image_index !== activeImage) return;
+
                 const points = getRingsCoords(route.attributes.path);
-                const ringsToOmit = getRingsToOmit(
-                  route.attributes.path_omit_rings,
-                );
                 const anchor = () => {
-                  if (route.attributes.anchor === "two_rings") return two_rings;
+                  if (route.attributes.anchor === "two_rings") return TwoRings;
                   if (route.attributes.anchor === "rescue_ring")
-                    return rescue_ring;
-                  return chaing_anchor;
+                    return RescueRing;
+                  return ChainAnchor;
                 };
 
                 const touchablePath = Skia.Path.MakeFromSVGString(
@@ -139,7 +145,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
                   >
                     <TouchablePath
                       path={route.attributes.path}
-                      strokeWidth={skImage.width() / 180}
+                      strokeWidth={15 + elementsScale}
                       color={getRouteColor(route.attributes.grade)}
                       style='stroke'
                       strokeCap='round'
@@ -153,63 +159,99 @@ const RockDrawing: FC<RockDrawingProps> = ({
                       }
                     >
                       <DashPathEffect
-                        intervals={[skImage.width() / 80, skImage.width() / 80]}
+                        intervals={[35 * elementsScale, 35 * elementsScale]}
                       />
                     </TouchablePath>
-                    <ImageSVG
-                      svg={anchor()}
-                      x={points.anchor.x - 20}
-                      y={points.anchor.y - 20}
-                      width={20}
-                      height={20}
-                      strokeWidth={1}
-                      opacity={0.5}
-                    />
+                    <Group
+                      layer={
+                        <Paint>
+                          <Blur
+                            blur={
+                              !activeId || route.attributes.uuid === activeId
+                                ? 0
+                                : 6
+                            }
+                          />
+                        </Paint>
+                      }
+                    >
+                      <ImageSVG
+                        svg={anchor()(elementsScale)}
+                        x={
+                          points.anchor.x -
+                          (anchor()(elementsScale)?.width()
+                            ? anchor()(elementsScale)!.width() / 2
+                            : 0)
+                        }
+                        y={
+                          points.anchor.y -
+                          (anchor()(elementsScale)?.height()
+                            ? anchor()(elementsScale)!.height() / 2
+                            : 0)
+                        }
+                      />
+                    </Group>
                     {points.rings &&
-                      points.rings.map((ring, index) => {
+                      points.rings.map((ring) => {
                         const touchableCirclePath = Skia.Path.Make().addCircle(
                           ring.x,
                           ring.y,
                           20,
                         );
-                        const isOmmited = ringsToOmit.find(
-                          (ring) => ring === index,
-                        );
+
                         return (
-                          <TouchableCircle
-                            key={JSON.stringify(ring)}
-                            cx={ring.x}
-                            cy={ring.y}
-                            r={skImage?.width() / 100}
-                            style='stroke'
-                            color='#000'
-                            opacity={isOmmited ? 0 : 1}
-                            strokeWidth={4}
-                            touchablePath={touchableCirclePath}
-                            onStart={() =>
-                              setActiveRoute(
-                                route.attributes.uuid === activeRoute
-                                  ? null
-                                  : route.attributes.uuid,
-                              )
+                          <Group
+                            layer={
+                              <Paint>
+                                <Blur
+                                  blur={
+                                    !activeId ||
+                                    route.attributes.uuid === activeId
+                                      ? 0
+                                      : 6
+                                  }
+                                />
+                              </Paint>
                             }
-                          />
+                          >
+                            <TouchableCircle
+                              key={JSON.stringify(ring)}
+                              cx={ring.x}
+                              cy={ring.y}
+                              r={ringWidth ? ringWidth : skImage?.width() / 100}
+                              opacity={0}
+                              touchablePath={touchableCirclePath}
+                              onStart={() =>
+                                setActiveRoute(
+                                  route.attributes.uuid === activeRoute
+                                    ? null
+                                    : route.attributes.uuid,
+                                )
+                              }
+                            />
+                            <ImageSVG
+                              svg={Ring(elementsScale)}
+                              x={ring.x - (ringWidth ? ringWidth / 2 : 0)}
+                              y={ring.y - (ringHeight ? ringHeight / 2 : 0)}
+                              opacity={1}
+                            />
+                          </Group>
                         );
                       })}
                     <Circle
                       cx={getInboundX(points.start.x, -10)}
                       cy={getInboundY(points.start.y, 68, false)}
-                      r={skImage.width() / 30}
+                      r={70 * elementsScale}
                       style='fill'
-                      color='#767676f8f'
-                      opacity={0.3}
+                      color='#fffffff'
+                      opacity={0.5}
                     />
                     <Text
-                      x={getInboundX(points.start.x, -30)}
-                      y={getInboundY(points.start.y, 100, true)}
+                      x={getInboundX(points.start.x, -30 * elementsScale)}
+                      y={getInboundY(points.start.y, 100 * elementsScale, true)}
                       text={(index + 1).toString()}
                       font={font}
-                      color='#fff'
+                      color={palette.green}
                     />
                   </Group>
                 );
