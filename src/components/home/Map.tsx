@@ -1,6 +1,6 @@
 import { useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 import MapView from "react-native-map-clustering";
 import {
   Marker,
@@ -9,7 +9,10 @@ import {
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import Animated from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
+
+import Text from "../ui/Text";
+import View from "../ui/View";
 
 import { useAreas } from "src/hooks/useAreas";
 import { useDebounce } from "src/hooks/useDebounce";
@@ -20,8 +23,10 @@ import {
   selectedRockAtom,
   startRegion,
 } from "src/store/results";
+import { styleGuide, palette } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
+import { LogoIcon } from "../icons/Logo";
 
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
@@ -42,7 +47,7 @@ export default function Map() {
   };
 
   return (
-    <View style={styles.container}>
+    <View flex={1}>
       <MapView
         ref={mapRef}
         showsMyLocationButton
@@ -51,7 +56,7 @@ export default function Map() {
         showsUserLocation
         showsBuildings={false}
         provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
-        style={styles.map}
+        style={$mapStyle}
         region={region}
         onRegionChangeComplete={onRegionChangeComplete}
       >
@@ -77,8 +82,9 @@ export default function Map() {
                   }
                 }}
               >
-                <Animated.View style={styles.markerContainer}>
-                  <Text>{item.attributes.Name}</Text>
+                <Animated.View style={$markerContainer} entering={FadeIn}>
+                  <LogoIcon size={48} />
+                  <Text variant='body'>{item.attributes.Name}</Text>
                 </Animated.View>
               </Marker>
             );
@@ -88,21 +94,17 @@ export default function Map() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "90%",
-  },
-  markerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    borderWidth: 1,
-    borderRadius: 100,
-    backgroundColor: "#dddddd78",
-  },
-});
+const $mapStyle: ViewStyle = {
+  width: "100%",
+  height: "90%",
+};
+
+const $markerContainer: ViewStyle = {
+  flex: 1,
+  width: 140,
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 12,
+  ...styleGuide.cardShadow,
+  backgroundColor: palette.white75,
+}; 

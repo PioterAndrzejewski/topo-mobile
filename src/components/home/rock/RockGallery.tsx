@@ -2,9 +2,9 @@ import { FlatList } from "react-native-gesture-handler";
 
 import View from "src/components/ui/View";
 import Text from 'src/components/ui/Text';
+import RockImage from "src/components/home/rock/RockImage";
 
 import { Cover } from "src/services/rocks";
-import RockImage from "./RockImage";
 
 type RockGalleryProps = {
   images: Cover[];

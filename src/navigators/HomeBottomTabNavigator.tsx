@@ -43,11 +43,7 @@ const renderIcon = ({
     : TAB_ICONS[route.name].inactive;
 
   return (
-    <View
-      shadowColor='backgroundSecondary'
-      shadowRadius={focused ? 12 : 0}
-      shadowOpacity={1}
-    >
+    <View>
       <Icon size={size} color={focused ? palette.green : palette.blue700} />
     </View>
   );

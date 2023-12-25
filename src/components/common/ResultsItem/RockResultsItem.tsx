@@ -104,6 +104,8 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                     textShadowOffset: { width: 2, height: 1 },
                     textShadowRadius: 6,
                     paddingRight: 8,
+                    paddingLeft: 4,
+                    marginLeft: -4
                   }}
                 >
                   {name}

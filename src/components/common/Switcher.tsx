@@ -76,10 +76,7 @@ const $option = (width: number): ViewStyle => ({
   elevation: 5,
   zIndex: 5,
   width,
-  backgroundColor: undefined,
   borderRadius: 40,
-  shadowRadius: 0,
-  shadowColor: "#fff",
 });
 
 const $activeOption = (color: string | undefined): ViewStyle => ({
