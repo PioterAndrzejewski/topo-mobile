@@ -101,7 +101,7 @@ export default function Map() {
 
 const $mapStyle: ViewStyle = {
   width: "100%",
-  height: "90%",
+  height: "100%",
 };
 
 const $markerContainer: ViewStyle = {

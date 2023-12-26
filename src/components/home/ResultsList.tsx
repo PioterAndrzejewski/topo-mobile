@@ -70,14 +70,18 @@ export default function ResultsList() {
   }, [areas, region, regions, rocks, sectors]);
 
   useEffect(() => {
-    if (selectedRock) {
-      bottomSheetRef.current?.collapse();
-      bottomSheetModalRef.current?.present();
-      return;
-    }
-    if (!selectedRock) {
-      bottomSheetModalRef.current?.dismiss();
-    }
+    const handleModals = async () => {
+      if (selectedRock) {
+        await bottomSheetRef.current?.forceClose();
+        await bottomSheetModalRef.current?.present();
+        return;
+      }
+      if (!selectedRock) {
+        await bottomSheetModalRef.current?.dismiss();
+        await bottomSheetRef.current?.snapToIndex(0);
+      }
+    };
+    handleModals();
   }, [selectedRock]);
 
   useEffect(() => {
@@ -86,14 +90,14 @@ export default function ResultsList() {
     }
   }, [bottomSheetRef]);
 
-  const animateTo = (item: AreaData, stage: number) => {
+  const animateTo = async (item: AreaData, stage: number) => {
     const newRegion = getRegionForZoom(
       item.attributes.coordinates.latitude,
       item.attributes.coordinates.longitude,
       getZoomFromStage(stage),
     );
     if (map && map.current) map.current.animateToRegion(newRegion);
-    bottomSheetModalRef.current?.dismiss();
+    await bottomSheetModalRef.current?.dismiss();
     bottomSheetRef?.current?.collapse();
   };
 

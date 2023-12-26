@@ -42,11 +42,7 @@ const renderIcon = ({
     ? TAB_ICONS[route.name].active
     : TAB_ICONS[route.name].inactive;
 
-  return (
-    <View>
-      <Icon size={size} color={focused ? palette.green : palette.blue700} />
-    </View>
-  );
+  return <Icon size={size} color={focused ? palette.green : palette.blue700} />;
 };
 
 const HomeBottomTabNavigator = () => {
