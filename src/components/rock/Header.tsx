@@ -129,7 +129,7 @@ const ImageCircle = ({
         alignItems='center'
       >
         <Text color='textGray' variant='h4'>
-          {index.toString()}
+          {index === 0 ? "M" : index.toString()}
         </Text>
       </View>
     </TouchableOpacity>

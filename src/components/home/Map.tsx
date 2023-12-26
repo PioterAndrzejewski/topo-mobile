@@ -110,6 +110,6 @@ const $markerContainer: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
   padding: 4,
-  ...styleGuide.cardShadow,
+  borderRadius: 12,
   backgroundColor: palette.white75,
 };

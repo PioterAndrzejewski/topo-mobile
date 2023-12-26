@@ -104,7 +104,7 @@ export default function ResultsList() {
     <>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
+        index={0}
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
@@ -174,7 +174,6 @@ export default function ResultsList() {
                   <ResultsItem
                     id={item.attributes.uuid}
                     name={item.attributes.Name}
-                    key={item.attributes.Name}
                     item={item}
                   />
                 </View>

@@ -31,13 +31,25 @@ const Rock = ({ route }: Props) => {
 
   refetch();
 
-  useEffect(() => {
-    const selectedRoute = data?.attributes.routes.data.find(
+  const selectedRoute = useMemo(() => {
+    if (!activeRoute) return null;
+    return data?.attributes.routes.data.find(
       (route) => route.attributes.uuid === activeRoute,
     );
-    if (selectedRoute?.attributes.image_index !== activeImage)
+  }, [activeRoute]);
+
+  useEffect(() => {
+    if (selectedRoute?.attributes.image_index !== activeImage) {
       setActiveRoute(null);
+    }
   }, [activeImage]);
+
+  useEffect(() => {
+    if (!selectedRoute) return;
+    if (selectedRoute?.attributes.image_index !== activeImage) {
+      setActiveImage(selectedRoute.attributes.image_index);
+    }
+  }, [selectedRoute]);
 
   const parent: RoutesParent = useMemo(() => {
     return {
