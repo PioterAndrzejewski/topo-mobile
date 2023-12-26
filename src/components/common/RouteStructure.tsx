@@ -1,4 +1,5 @@
-import { ScrollView, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
+import { ScrollView } from 'react-native-gesture-handler';
 
 import Text from "../ui/Text";
 import View from "../ui/View";
@@ -44,6 +45,7 @@ const RouteStructure = ({ routes }: RouteStructureProps) => {
           justifyContent='space-between'
           gap='m'
           paddingLeft='m'
+          paddingRight='m'
           minWidth={width - 16}
         >
           {renderSection("III - V+", routes?.toV)}

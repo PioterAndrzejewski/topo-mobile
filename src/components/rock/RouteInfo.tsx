@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useAtom, useSetAtom } from "jotai";
-import { LayoutAnimation, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
 
 import Accordion from "src/components/common/Accordion";
@@ -48,7 +48,6 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
   const setSelectedRouteToComment = useSetAtom(routeToCommentAtom);
 
   const handlePress = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     if (activeRoute === route.attributes.uuid) return setActiveRoute(null);
     setActiveRoute(route.attributes.uuid);
   };
@@ -167,6 +166,10 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                       <Text>{route.attributes.first_ascent_author}</Text>
                     </View>
                   )}
+                  <View flexDirection='row' gap='s' alignItems='center'>
+                    <Text variant='h3'>Skałoplan nr:</Text>
+                    <Text>{route.attributes.image_index.toString()}</Text>
+                  </View>
                   {route.attributes.description && (
                     <View>
                       <Text>{route.attributes.description}</Text>
@@ -199,7 +202,11 @@ const RouteInfo = ({ route, realIndex, parent }: RockInfoProps) => {
                     >
                       <CommentIcon
                         size={36}
-                        color={route.attributes.usersComment ? colors.textWhite : colors.secondary}
+                        color={
+                          route.attributes.usersComment
+                            ? colors.textWhite
+                            : colors.secondary
+                        }
                         fill={
                           route.attributes.usersComment
                             ? colors.secondary

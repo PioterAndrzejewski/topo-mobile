@@ -119,12 +119,14 @@ export const styleGuide = {
       width: 0,
       height: 0,
     },
+    backgroundColor: '#fff',
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
     elevation: 999,
     zIndex: 999,
     border: 1,
     borderColor: "#000000",
+    borderRadius: 12,
   },
   cardShadow: {
     shadowOffset: {

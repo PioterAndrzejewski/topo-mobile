@@ -7,7 +7,11 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { AreaData } from "src/services/rocks";
-import { mapAtom, selectedRockAtom } from "src/store/results";
+import {
+  bottomSheetRefAtom,
+  mapAtom,
+  selectedRockAtom,
+} from "src/store/results";
 import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
@@ -22,6 +26,7 @@ type ListResultProps = {
 const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const resultsBottomSheet = useAtomValue(bottomSheetRefAtom);
   const setSelectedRock = useSetAtom(selectedRockAtom);
 
   const animateTo = () => {
@@ -36,6 +41,7 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
         map.current.animateToRegion(newRegion);
       }
       setSelectedRock(null);
+      resultsBottomSheet?.current?.snapToIndex(0);
     }, 100);
   };
 

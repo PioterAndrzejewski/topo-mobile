@@ -1,4 +1,4 @@
-import Animated from "react-native-reanimated";
+import { FlashList } from "@shopify/flash-list";
 
 import ResultsItem from "src/components/common/ResultsItem/ResultsItem";
 import ResultsItemRoute from "src/components/common/ResultsItem/ResultsItemRoute";
@@ -28,13 +28,14 @@ const Results = ({
     switch (type) {
       case "routes":
         return (
-          <Animated.FlatList
+          <FlashList
             data={foundRoutes.slice(0, RESULTS_LENGTH)}
+            estimatedItemSize={70}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
-                key={item.attributes.uuid}
               >
                 <ResultsItemRoute
                   name={item.attributes.display_name}
@@ -48,13 +49,14 @@ const Results = ({
         );
       case "rocks":
         return (
-          <Animated.FlatList
+          <FlashList
             data={foundRocks.slice(0, RESULTS_LENGTH)}
+            estimatedItemSize={200}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
-                key={item.attributes.uuid}
               >
                 <RockResultsItem
                   name={item.attributes.Name}
@@ -67,13 +69,14 @@ const Results = ({
         );
       case "sectors":
         return (
-          <Animated.FlatList
+          <FlashList
             data={foundSectors.slice(0, RESULTS_LENGTH)}
+            estimatedItemSize={80}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
                 paddingTop={index === 0 ? "m" : undefined}
-                key={item.attributes.uuid}
               >
                 <ResultsItem
                   name={item.attributes.Name}
@@ -99,8 +102,8 @@ const Results = ({
   };
 
   return (
-    <View paddingTop='m'>
-      <View flexDirection='row' gap='s' paddingHorizontal='m'>
+    <View flex={1}>
+      <View flexDirection='row' gap='s' paddingHorizontal='m' marginTop='m'>
         <Text variant='h3'>Wyników: </Text>
         <Text
           variant='h3'

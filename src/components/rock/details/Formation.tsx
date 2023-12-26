@@ -37,7 +37,7 @@ const Formation = (props: FormationProps) => {
         {props.formation.length &&
           props.formation.length > 0 &&
           props.formation.map((item, index) => (
-            <Text>
+            <Text key={item.formation + index}>
               {renderText(item.formation) +
                 (index === props.formation.length - 1 ? "" : ", ")}
             </Text>

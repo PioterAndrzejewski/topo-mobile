@@ -1,10 +1,12 @@
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import Animated, {
+  LightSpeedInRight,
+  LightSpeedOutRight,
+} from "react-native-reanimated";
 
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -17,6 +19,7 @@ import { useAreas } from "src/hooks/useAreas";
 import { AreaData } from "src/services/rocks";
 import {
   AreasList,
+  bottomSheetRefAtom,
   listToRenderAtom,
   mapAtom,
   regionAtom,
@@ -34,6 +37,8 @@ export default function ResultsList() {
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+  const [bottomSheetGlobalRef, setBottomSheetGlobalRef] =
+    useAtom(bottomSheetRefAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -72,6 +77,12 @@ export default function ResultsList() {
     }
   }, [selectedRock]);
 
+  useEffect(() => {
+    if (bottomSheetRef.current && !bottomSheetGlobalRef) {
+      setBottomSheetGlobalRef(bottomSheetRef);
+    }
+  }, [bottomSheetRef]);
+
   const animateTo = (item: AreaData, stage: number) => {
     const newRegion = getRegionForZoom(
       item.attributes.coordinates.latitude,
@@ -84,7 +95,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
-  const snapPoints = useMemo(() => ["15%", "45%", "80%"], []);
+  const snapPoints = useMemo(() => ["15%", "80%"], []);
 
   return (
     <>
@@ -105,7 +116,11 @@ export default function ResultsList() {
                 borderBottomColor='backgroundSecondary'
                 paddingBottom='s'
               >
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <ScrollView
+                  horizontal
+                  shouldCancelWhenOutside
+                  showsHorizontalScrollIndicator={false}
+                >
                   <View
                     marginTop='m'
                     paddingHorizontal='m'
@@ -114,17 +129,27 @@ export default function ResultsList() {
                     paddingBottom='m'
                   >
                     {locationArray.map((item, index) => (
-                      <OverlayCardView>
-                        <TouchableOpacity
-                          style={{ flexDirection: "row" }}
-                          onPress={() => animateTo(item, index)}
-                          key={item?.attributes?.Name}
+                      <Animated.View
+                        key={item.attributes.uuid}
+                        entering={LightSpeedInRight}
+                        exiting={LightSpeedOutRight}
+                      >
+                        <OverlayCardView
+                          key={item.id + index + item.attributes.uuid}
                         >
-                          <Text variant='h3' color='textSecondary'>
-                            {item?.attributes?.Name}
-                          </Text>
-                        </TouchableOpacity>
-                      </OverlayCardView>
+                          <TouchableOpacity
+                            style={{ flexDirection: "row" }}
+                            onPress={() =>
+                              animateTo(item, index === 0 ? 0 : index + 1)
+                            }
+                            key={item?.attributes?.Name}
+                          >
+                            <Text variant='h3' color='textSecondary'>
+                              {item?.attributes?.Name}
+                            </Text>
+                          </TouchableOpacity>
+                        </OverlayCardView>
+                      </Animated.View>
                     ))}
                   </View>
                 </ScrollView>
@@ -132,32 +157,32 @@ export default function ResultsList() {
             </>
           )}
         </View>
-        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
+        <View flex={1}>
           <View marginHorizontal='m' marginTop='s' marginBottom='m'>
             <Text variant='h3'>Skały w poblizu:</Text>
           </View>
-          <View width='100%' height='100%' paddingHorizontal='m'>
-            {Array.isArray(listToRender) &&
-              listToRender.length >= 1 &&
-              listToRender
-                .slice(0, 5)
-                .map((item) => (
-                  <ResultsItem
-                    id={item.attributes.uuid}
-                    name={item.attributes.Name}
-                    key={item.attributes.Name}
-                    item={item}
-                  />
-                ))}
-
-            {Array.isArray(listToRender) && listToRender.length > 5 && (
-              <Text>
-                Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
-                wyszukać w innym obszarze.
-              </Text>
+          <FlashList
+            data={listToRender.slice(0, 5)}
+            estimatedItemSize={200}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View marginHorizontal='m'>
+                <ResultsItem
+                  id={item.attributes.uuid}
+                  name={item.attributes.Name}
+                  key={item.attributes.Name}
+                  item={item}
+                />
+              </View>
             )}
-          </View>
-        </BottomSheetScrollView>
+          />
+          {Array.isArray(listToRender) && listToRender.length > 5 && (
+            <Text>
+              Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
+              wyszukać w innym obszarze.
+            </Text>
+          )}
+        </View>
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}

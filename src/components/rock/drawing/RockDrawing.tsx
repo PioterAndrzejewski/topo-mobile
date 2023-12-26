@@ -1,30 +1,29 @@
 import { ReactNativeZoomableView } from "@openspacelabs/react-native-zoomable-view";
 import {
+  Canvas,
   Circle,
   DashPathEffect,
   Group,
   Image,
   ImageSVG,
+  Paint,
   Path,
-  Skia,
+  Shadow,
   Text,
   useFont,
   useImage,
 } from "@shopify/react-native-skia";
-import { useAtom } from "jotai";
 import { FC, createRef } from "react";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
-import Touchable, { withTouchableHandler } from "react-native-skia-gesture";
+import { useWindowDimensions } from "react-native";
 
 import AppLoading from "src/components/common/AppLoading";
+import View from "src/components/ui/View";
 
 import { useImageFile } from "src/hooks/useImageFile";
 import { Route } from "src/services/rocks";
-import { rockActiveRoute } from "src/store/rock";
-import { getRingsCoords } from "src/utils/getRingsCoords";
-import { getRingsToOmit } from "src/utils/getRingsToOmit";
+import { palette } from "src/styles/theme";
 import { getRouteColor } from "src/utils/getRouteColor";
-import { chaing_anchor, rescue_ring, two_rings } from "./Anchor";
+import { ChainAnchor, RescueRing, Ring, TwoRings } from "./DrawingIcons";
 
 const CANVAS_BOUNDARY = 40;
 
@@ -33,6 +32,7 @@ type RockDrawingProps = {
   routes: Route[];
   activeId: string | null;
   activeImage: number;
+  elementsScale: number;
 };
 
 const RockDrawing: FC<RockDrawingProps> = ({
@@ -40,19 +40,19 @@ const RockDrawing: FC<RockDrawingProps> = ({
   routes,
   activeId,
   activeImage,
+  elementsScale = 1,
 }) => {
   const zoomable = createRef<ReactNativeZoomableView>();
-  const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const { width, height } = useWindowDimensions();
   const image = useImageFile(imageUrl);
   const skImage = useImage(image);
   const font = useFont(
     require("../../../assets/fonts/PoppinsBold.ttf"),
-    skImage ? skImage.width() / 30 : 70,
+    60 * elementsScale,
   );
 
-  const TouchableCircle = withTouchableHandler(Circle);
-  const TouchablePath = withTouchableHandler(Path);
+  const ringWidth = Ring()?.width();
+  const ringHeight = Ring()?.height();
 
   const getOpacity = (id: string) => {
     if (!activeId) return 0.85;
@@ -60,27 +60,10 @@ const RockDrawing: FC<RockDrawingProps> = ({
     return 0.3;
   };
 
-  const getInboundY = (y: number, offset: number, isText: boolean) => {
-    if (!skImage) return 0;
-    if (y + offset > skImage.height() - CANVAS_BOUNDARY)
-      return isText
-        ? skImage.height() - CANVAS_BOUNDARY + 20
-        : skImage.height() - CANVAS_BOUNDARY;
-    return y + offset;
-  };
-
-  const getInboundX = (x: number, offset: number) => {
-    if (!skImage) return 0;
-    if (x + offset > skImage.width() - CANVAS_BOUNDARY)
-      return skImage.width() - CANVAS_BOUNDARY;
-    if (x + offset < CANVAS_BOUNDARY) return CANVAS_BOUNDARY;
-    return x + offset;
-  };
-
   if (!font) return null;
 
   return (
-    <View style={styles.container}>
+    <View flex={1}>
       {!skImage?.width() && <AppLoading />}
       {skImage && skImage?.width() && (
         <ReactNativeZoomableView
@@ -89,18 +72,19 @@ const RockDrawing: FC<RockDrawingProps> = ({
           zoomStep={0.5}
           initialZoom={width / skImage.width()}
           style={{
-            padding: 10,
+            padding: 100,
             position: "absolute",
             top: 0,
             height: height / 2,
           }}
-          disablePanOnInitialZoom={false}
-          panBoundaryPadding={skImage.width() / 3}
           ref={zoomable}
+          bindToBorders={true}
           doubleTapZoomToCenter={false}
-          doubleTapDelay={0}
+          contentHeight={skImage.height()}
+          contentWidth={skImage.width()}
+          panBoundaryPadding={300}
         >
-          <Touchable.Canvas
+          <Canvas
             style={{
               width: skImage?.width(),
               height: skImage?.height(),
@@ -117,104 +101,101 @@ const RockDrawing: FC<RockDrawingProps> = ({
             {routes &&
               routes.map((route, index) => {
                 if (route.attributes.image_index !== activeImage) return;
-                const points = getRingsCoords(route.attributes.path);
-                const ringsToOmit = getRingsToOmit(
-                  route.attributes.path_omit_rings,
-                );
+
                 const anchor = () => {
-                  if (route.attributes.anchor === "two_rings") return two_rings;
+                  if (route.attributes.anchor === "two_rings") return TwoRings;
                   if (route.attributes.anchor === "rescue_ring")
-                    return rescue_ring;
-                  return chaing_anchor;
+                    return RescueRing;
+                  return ChainAnchor;
                 };
 
-                const touchablePath = Skia.Path.MakeFromSVGString(
-                  route.attributes.path,
-                );
+                const shouldRenderAnchor = () => {
+                  if (!activeId) return true;
+                  if (route.attributes.uuid === activeId) return true;
+                  return false;
+                };
 
                 return (
                   <Group
                     opacity={getOpacity(route.attributes.uuid)}
                     key={route.attributes.uuid}
                   >
-                    <TouchablePath
+                    <Path
                       path={route.attributes.path}
-                      strokeWidth={skImage.width() / 180}
+                      strokeWidth={15 * elementsScale}
                       color={getRouteColor(route.attributes.grade)}
                       style='stroke'
                       strokeCap='round'
-                      touchablePath={touchablePath!}
-                      onStart={() =>
-                        setActiveRoute(
-                          route.attributes.uuid === activeRoute
-                            ? null
-                            : route.attributes.uuid,
-                        )
-                      }
                     >
                       <DashPathEffect
-                        intervals={[skImage.width() / 80, skImage.width() / 80]}
+                        intervals={[35 * elementsScale, 35 * elementsScale]}
                       />
-                    </TouchablePath>
-                    <ImageSVG
-                      svg={anchor()}
-                      x={points.anchor.x - 20}
-                      y={points.anchor.y - 20}
-                      width={20}
-                      height={20}
-                      strokeWidth={1}
-                      opacity={0.5}
-                    />
-                    {points.rings &&
-                      points.rings.map((ring, index) => {
-                        const touchableCirclePath = Skia.Path.Make().addCircle(
-                          ring.x,
-                          ring.y,
-                          20,
-                        );
-                        const isOmmited = ringsToOmit.find(
-                          (ring) => ring === index,
-                        );
+                    </Path>
+
+                    {shouldRenderAnchor() && (
+                      <Group>
+                        <ImageSVG
+                          svg={anchor()(elementsScale)}
+                          x={
+                            route.attributes.anchor_coords.x -
+                            (anchor()(elementsScale)?.width()
+                              ? anchor()(elementsScale)!.width() / 2
+                              : 0)
+                          }
+                          y={
+                            route.attributes.anchor_coords.y -
+                            (anchor()(elementsScale)?.height()
+                              ? anchor()(elementsScale)!.height() / 2
+                              : 0)
+                          }
+                        />
+                      </Group>
+                    )}
+
+                    {route?.attributes?.rings_coords?.length > 0 &&
+                      route?.attributes?.rings_coords.map((ring) => {
+                        if (activeId && route.attributes.uuid !== activeId)
+                          return;
                         return (
-                          <TouchableCircle
-                            key={JSON.stringify(ring)}
-                            cx={ring.x}
-                            cy={ring.y}
-                            r={skImage?.width() / 100}
-                            style='stroke'
-                            color='#000'
-                            opacity={isOmmited ? 0 : 1}
-                            strokeWidth={4}
-                            touchablePath={touchableCirclePath}
-                            onStart={() =>
-                              setActiveRoute(
-                                route.attributes.uuid === activeRoute
-                                  ? null
-                                  : route.attributes.uuid,
-                              )
-                            }
-                          />
+                          <Group key={ring.id + ring.x + ring.y}>
+                            <Circle
+                              key={JSON.stringify(ring)}
+                              cx={ring.x}
+                              cy={ring.y}
+                              r={ringWidth ? ringWidth : skImage?.width() / 100}
+                              opacity={0}
+                            />
+                            <ImageSVG
+                              svg={Ring(elementsScale)}
+                              x={ring.x - (ringWidth ? ringWidth / 2 : 0)}
+                              y={ring.y - (ringHeight ? ringHeight / 2 : 0)}
+                              opacity={1}
+                            />
+                          </Group>
                         );
                       })}
                     <Circle
-                      cx={getInboundX(points.start.x, -10)}
-                      cy={getInboundY(points.start.y, 68, false)}
-                      r={skImage.width() / 30}
+                      cx={route.attributes.number_coords.x}
+                      cy={route.attributes.number_coords.y}
+                      r={70 * elementsScale}
                       style='fill'
-                      color='#767676f8f'
                       opacity={0.3}
-                    />
+                    >
+                      <Paint color={palette.green} opacity={0.3} />
+                    </Circle>
                     <Text
-                      x={getInboundX(points.start.x, -30)}
-                      y={getInboundY(points.start.y, 100, true)}
+                      x={route.attributes.number_coords.x - 17 * elementsScale}
+                      y={route.attributes.number_coords.y + 25 * elementsScale}
                       text={(index + 1).toString()}
                       font={font}
-                      color='#fff'
-                    />
+                      color={palette.white}
+                    >
+                      <Shadow dx={0} dy={0} blur={25} color={palette.blue700} />
+                    </Text>
                   </Group>
                 );
               })}
-          </Touchable.Canvas>
+          </Canvas>
         </ReactNativeZoomableView>
       )}
     </View>
@@ -222,15 +203,3 @@ const RockDrawing: FC<RockDrawingProps> = ({
 };
 
 export default RockDrawing;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  font: {
-    fontFamily: "Poppins",
-    fontSize: 14,
-    fontStyle: "italic",
-    fontWeight: "bold",
-  },
-});

@@ -1,35 +1,39 @@
 import { SunIcon } from "src/components/icons/Sun";
-import { Exhibition } from "src/services/rocks";
+import { Exhibition, ExhibitionData } from "src/services/rocks";
 
 import DetailsWrapper from "src/components/rock/details/DetailsWrapper";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-type HeightProps = {
-  exposition: Exhibition;
+type ExpositionProps = {
+  exposition: ExhibitionData[];
 };
 
 const getMeaningfulExposition = (exposition: Exhibition) => {
   switch (exposition) {
     case "north":
-      return "Wystawka północna";
+      return "północna";
     case "east":
-      return "Wystawka wschodnia";
+      return "wschodnia";
     case "south":
-      return "Wystawka południowa";
-    case "trees":
-      return "Skała w lesie";
+      return "południowa";
     case "west":
-      "Wystawka zachodnia";
+      "zachodnia";
   }
 };
 
-const Exposition = (props: HeightProps) => {
+const Exposition = (props: ExpositionProps) => {
   return (
     <DetailsWrapper>
       <SunIcon size={32} />
       <View flexDirection='row' gap='s'>
-        <Text variant='body'>{getMeaningfulExposition(props.exposition)}</Text>
+        <Text>Wystawka: </Text>
+        {props.exposition.map((expo, index) => (
+          <Text key={expo.exhibition + expo.id}>
+            {getMeaningfulExposition(expo.exhibition) +
+              (index === props.exposition.length - 1 ? "" : ", ")}
+          </Text>
+        ))}
       </View>
     </DetailsWrapper>
   );

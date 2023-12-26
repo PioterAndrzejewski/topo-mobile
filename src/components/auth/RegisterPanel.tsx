@@ -2,7 +2,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { ScrollView } from 'react-native-gesture-handler';
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";

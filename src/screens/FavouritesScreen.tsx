@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useMemo, useState } from "react";
-import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 import ScreenTitle from "src/components/common/ScreenTitle";
 import Switcher from "src/components/common/Switcher";
@@ -38,12 +38,15 @@ export default function SearchScreen() {
   return (
     <Animated.View
       style={{ flex: 1, backgroundColor: colors.backgroundScreen }}
-      entering={SlideInRight}
-      exiting={SlideInLeft}
     >
       <ScreenTitle title='Zapisane' centered />
       <View flex={1}>
-        <View paddingHorizontal='m' borderBottomWidth={1} paddingBottom='m' borderBottomColor='backgroundSecondary'>
+        <View
+          paddingHorizontal='m'
+          borderBottomWidth={1}
+          paddingBottom='m'
+          borderBottomColor='backgroundSecondary'
+        >
           <Switcher onPress={setMode} active={mode} options={options} />
         </View>
         {renderFavorites}

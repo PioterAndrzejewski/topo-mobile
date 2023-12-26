@@ -4,7 +4,6 @@ import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LayoutAnimation } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 
@@ -42,7 +41,6 @@ const CommentsModal = ({ rockRefetch }: RouteCommentsModalProps) => {
     mutationFn: () =>
       createComment(selectedRouteToComment?.id || -1, comment, userData?.id),
     onSuccess: () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setEditingComment(false);
       Toast.show({
         type: "success",
@@ -73,7 +71,6 @@ const CommentsModal = ({ rockRefetch }: RouteCommentsModalProps) => {
         comment,
       ),
     onSuccess: () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       rockRefetch();
       Toast.show({
         type: "success",

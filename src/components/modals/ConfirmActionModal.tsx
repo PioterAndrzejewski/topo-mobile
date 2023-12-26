@@ -54,15 +54,15 @@ const ConfirmActionModal = () => {
         </Animated.View>
         <Text>{confirmAction?.message}</Text>
         <View flexDirection='row' gap='m'>
-          <Button label='anuluj' onClick={() => setShowModal(false)} />
           <View flex={1}>
-            <Button
-              label='potwierdź'
-              onClick={handleConfirm}
-              containerStyles={$confirmButton(colors.secondary)}
-              labelColor='secondary'
-            />
+            <Button label='anuluj' onClick={() => setShowModal(false)} />
           </View>
+          <Button
+            label='potwierdź'
+            onClick={handleConfirm}
+            containerStyles={$confirmButton(colors.secondary)}
+            labelColor='secondary'
+          />
         </View>
       </View>
     </Modal>
