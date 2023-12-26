@@ -1,11 +1,11 @@
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
-import { FlashList } from "@shopify/flash-list";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import Animated, {
   LightSpeedInRight,
   LightSpeedOutRight,
@@ -108,65 +108,61 @@ export default function ResultsList() {
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-        <View>
-          {locationArray?.length > 0 && (
-            <>
-              <View marginHorizontal='m'>
-                <Text variant='h3'>Wybrana lokalizacja: </Text>
-              </View>
-              <View
-                borderBottomWidth={1}
-                borderBottomColor='backgroundSecondary'
-                paddingBottom='s'
-              >
-                <ScrollView
-                  horizontal
-                  shouldCancelWhenOutside
-                  showsHorizontalScrollIndicator={false}
-                >
-                  <View
-                    marginTop='m'
-                    paddingHorizontal='m'
-                    flexDirection='row'
-                    gap='m'
-                    paddingBottom='m'
-                  >
-                    {locationArray.map((item, index) => (
-                      <Animated.View
-                        key={item.attributes.uuid}
-                        entering={LightSpeedInRight}
-                        exiting={LightSpeedOutRight}
-                      >
-                        <OverlayCardView
-                          key={item.id + index + item.attributes.uuid}
-                        >
-                          <TouchableOpacity
-                            style={{ flexDirection: "row" }}
-                            onPress={() =>
-                              animateTo(item, index === 0 ? 0 : index + 1)
-                            }
-                            key={item?.attributes?.Name}
-                          >
-                            <Text variant='h3' color='textSecondary'>
-                              {item?.attributes?.Name}
-                            </Text>
-                          </TouchableOpacity>
-                        </OverlayCardView>
-                      </Animated.View>
-                    ))}
-                  </View>
-                </ScrollView>
-              </View>
-            </>
-          )}
+        <View marginHorizontal='m'>
+          <Text variant='h3'>Wybrana lokalizacja: </Text>
         </View>
-        <BottomSheetView style={{ flex: 1 }}>
-          <View marginHorizontal='m' marginTop='s' marginBottom='m'>
-            <Text variant='h3'>Skały w poblizu:</Text>
+        {locationArray && locationArray?.length > 0 && (
+          <View
+            borderBottomWidth={1}
+            borderBottomColor='backgroundSecondary'
+            paddingBottom='s'
+          >
+            <ScrollView
+              horizontal
+              shouldCancelWhenOutside
+              showsHorizontalScrollIndicator={false}
+            >
+              <View
+                marginTop='m'
+                paddingHorizontal='m'
+                flexDirection='row'
+                gap='m'
+                paddingBottom='m'
+              >
+                {locationArray.map((item, index) => (
+                  <Animated.View
+                    key={item.attributes.uuid}
+                    entering={LightSpeedInRight}
+                    exiting={LightSpeedOutRight}
+                  >
+                    <OverlayCardView
+                      key={item.id + index + item.attributes.uuid}
+                    >
+                      <TouchableOpacity
+                        style={{ flexDirection: "row" }}
+                        onPress={() =>
+                          animateTo(item, index === 0 ? 0 : index + 1)
+                        }
+                        key={item?.attributes?.Name}
+                      >
+                        <Text variant='h3' color='textSecondary'>
+                          {item?.attributes?.Name}
+                        </Text>
+                      </TouchableOpacity>
+                    </OverlayCardView>
+                  </Animated.View>
+                ))}
+              </View>
+            </ScrollView>
           </View>
-          <FlashList
+        )}
+        <View marginHorizontal='m' marginTop='s' marginBottom='m'>
+          <Text variant='h3'>Skały w poblizu:</Text>
+        </View>
+        <View flex={1}>
+          <FlatList
             data={listToRender.slice(0, 5)}
-            estimatedItemSize={200}
+            nestedScrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
@@ -180,13 +176,13 @@ export default function ResultsList() {
               );
             }}
           />
-          {Array.isArray(listToRender) && listToRender.length > 5 && (
-            <Text>
-              Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
-              wyszukać w innym obszarze.
-            </Text>
-          )}
-        </BottomSheetView>
+        </View>
+        {Array.isArray(listToRender) && listToRender.length > 5 && (
+          <Text>
+            Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby wyszukać
+            w innym obszarze.
+          </Text>
+        )}
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}

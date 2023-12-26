@@ -74,20 +74,20 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
   if (!image) return;
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <View
-        rowGap='l'
-        marginBottom='l'
-        {...styleGuide.cardShadow}
-        borderRadius={24}
+    <View
+      rowGap='l'
+      marginBottom='l'
+      {...styleGuide.cardShadow}
+      borderRadius={24}
+    >
+      <ImageBackground
+        source={{
+          uri: image || "",
+        }}
+        resizeMode='cover'
+        imageStyle={{ borderRadius: 24 }}
       >
-        <ImageBackground
-          source={{
-            uri: image || "",
-          }}
-          resizeMode='cover'
-          imageStyle={{ borderRadius: 24 }}
-        >
+        <TouchableOpacity onPress={handlePress}>
           <View
             paddingHorizontal='m'
             paddingVertical='xl'
@@ -114,7 +114,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                   <HeartIcon
                     size={32}
                     fill={
-                      isFavorite ? colors.favoriteRed : colors.backgroundSecondary
+                      isFavorite
+                        ? colors.favoriteRed
+                        : colors.backgroundSecondary
                     }
                   />
                 </TouchableOpacity>
@@ -147,9 +149,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
               <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
             </OverlayCardView>
           </View>
-        </ImageBackground>
-      </View>
-    </TouchableOpacity>
+        </TouchableOpacity>
+      </ImageBackground>
+    </View>
   );
 };
 

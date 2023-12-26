@@ -73,7 +73,7 @@ const $option = (width: number): ViewStyle => ({
   paddingHorizontal: 6,
   paddingTop: 8,
   paddingBottom: 4,
-  elevation: 5,
+  elevation: 0,
   zIndex: 5,
   width,
   borderRadius: 40,
@@ -86,6 +86,7 @@ const $activeOption = (color: string | undefined): ViewStyle => ({
   backgroundColor: palette.white,
   shadowColor: palette.blue300,
   borderRadius: 40,
+  elevation: 4,
 });
 
 export default Switcher;
