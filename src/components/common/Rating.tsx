@@ -30,8 +30,12 @@ const Rating = ({
         bottom={0}
         justifyContent='center'
         alignItems='center'
+        paddingTop='2xs'
       >
-        <Text variant={!noFill && rating ? "h4" : "special"} color={!noFill && rating ? "textWhite" : "textSecondary"}>
+        <Text
+          variant={!noFill && rating ? "h4" : "special"}
+          color={!noFill && rating ? "textWhite" : "textSecondary"}
+        >
           {rating ? rating.toString() : "?"}
         </Text>
       </View>

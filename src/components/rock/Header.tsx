@@ -13,7 +13,7 @@ import {
   routeToCommentAtom,
   routeToFavoritesAtom,
 } from "src/store/rock";
-import { Theme } from "src/styles/theme";
+import { Theme, palette } from "src/styles/theme";
 import { ArrowLeft } from "../icons/ArrowLeft";
 import OverlayCardView from "../ui/OverlayCardView";
 
@@ -58,7 +58,7 @@ const Header = (props: HeaderProps) => {
     >
       <OverlayCardView>
         <TouchableOpacity onPress={handleBackArrowPress}>
-          <ArrowLeft size={24} />
+          <ArrowLeft size={24} color={palette.green} />
         </TouchableOpacity>
       </OverlayCardView>
       <View flexDirection='row' gap='s'>

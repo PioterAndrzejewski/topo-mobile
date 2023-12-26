@@ -1,4 +1,7 @@
-import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetModal,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -157,7 +160,7 @@ export default function ResultsList() {
             </>
           )}
         </View>
-        <View flex={1}>
+        <BottomSheetView style={{ flex: 1 }}>
           <View marginHorizontal='m' marginTop='s' marginBottom='m'>
             <Text variant='h3'>Skały w poblizu:</Text>
           </View>
@@ -165,16 +168,18 @@ export default function ResultsList() {
             data={listToRender.slice(0, 5)}
             estimatedItemSize={200}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <View marginHorizontal='m'>
-                <ResultsItem
-                  id={item.attributes.uuid}
-                  name={item.attributes.Name}
-                  key={item.attributes.Name}
-                  item={item}
-                />
-              </View>
-            )}
+            renderItem={({ item }) => {
+              return (
+                <View marginHorizontal='m'>
+                  <ResultsItem
+                    id={item.attributes.uuid}
+                    name={item.attributes.Name}
+                    key={item.attributes.Name}
+                    item={item}
+                  />
+                </View>
+              );
+            }}
           />
           {Array.isArray(listToRender) && listToRender.length > 5 && (
             <Text>
@@ -182,7 +187,7 @@ export default function ResultsList() {
               wyszukać w innym obszarze.
             </Text>
           )}
-        </View>
+        </BottomSheetView>
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}

@@ -102,13 +102,17 @@ const theme = createTheme({
     special: {
       fontFamily: "PoppinsRegular",
       fontSize: 12,
-      lineHeight: 16,
+      lineHeight: 14,
     },
     input: {
       fontFamily: "PoppinsRegular",
       fontSize: 15,
       letterSpacing: 2,
     },
+    marker: {
+      fontFamily: "PoppinsBold",
+      fontSize: 12,
+    }
   },
 });
 

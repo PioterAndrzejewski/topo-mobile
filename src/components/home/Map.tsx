@@ -23,7 +23,7 @@ import {
   selectedRockAtom,
   startRegion,
 } from "src/store/results";
-import { styleGuide, palette } from "src/styles/theme";
+import { palette, styleGuide } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { LogoIcon } from "../icons/Logo";
@@ -84,7 +84,12 @@ export default function Map() {
               >
                 <Animated.View style={$markerContainer} entering={FadeIn}>
                   <LogoIcon size={48} />
-                  <Text variant='body'>{item.attributes.Name}</Text>
+                  <Text
+                    variant='marker'
+                    additionalStyles={{ textAlign: "center" }}
+                  >
+                    {item.attributes.Name}
+                  </Text>
                 </Animated.View>
               </Marker>
             );
@@ -101,10 +106,10 @@ const $mapStyle: ViewStyle = {
 
 const $markerContainer: ViewStyle = {
   flex: 1,
-  width: 80,
+  width: 120,
   justifyContent: "center",
   alignItems: "center",
   padding: 4,
   ...styleGuide.cardShadow,
   backgroundColor: palette.white75,
-}; 
+};
