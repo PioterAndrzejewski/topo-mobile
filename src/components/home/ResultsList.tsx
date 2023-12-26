@@ -2,11 +2,7 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Animated, {
   LightSpeedInRight,
   LightSpeedOutRight,
@@ -131,7 +127,7 @@ export default function ResultsList() {
                     flexDirection='row'
                     gap='m'
                     paddingBottom='m'
-                  > 
+                  >
                     {locationArray.map((item, index) => (
                       <Animated.View
                         key={item.attributes.uuid}
@@ -161,38 +157,32 @@ export default function ResultsList() {
             </>
           )}
         </View>
-        <FlatList
-          data={[0]}
-          renderItem={() => (
-            <View>
-              <View marginHorizontal='m' marginTop='s' marginBottom='m'>
-                <Text variant='h3'>Skały w poblizu:</Text>
+        <View flex={1}>
+          <View marginHorizontal='m' marginTop='s' marginBottom='m'>
+            <Text variant='h3'>Skały w poblizu:</Text>
+          </View>
+          <FlashList
+            data={listToRender.slice(0, 5)}
+            estimatedItemSize={200}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View marginHorizontal='m'>
+                <ResultsItem
+                  id={item.attributes.uuid}
+                  name={item.attributes.Name}
+                  key={item.attributes.Name}
+                  item={item}
+                />
               </View>
-              <View width='100%' height='100%' paddingHorizontal='m'>
-                {
-                  <FlashList
-                    data={listToRender.slice(0, 5)}
-                    estimatedItemSize={200}
-                    renderItem={({ item }) => (
-                      <ResultsItem
-                        id={item.attributes.uuid}
-                        name={item.attributes.Name}
-                        key={item.attributes.Name}
-                        item={item}
-                      />
-                    )}
-                  />
-                }
-                {Array.isArray(listToRender) && listToRender.length > 5 && (
-                  <Text>
-                    Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
-                    wyszukać w innym obszarze.
-                  </Text>
-                )}
-              </View>
-            </View>
+            )}
+          />
+          {Array.isArray(listToRender) && listToRender.length > 5 && (
+            <Text>
+              Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby
+              wyszukać w innym obszarze.
+            </Text>
           )}
-        />
+        </View>
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}

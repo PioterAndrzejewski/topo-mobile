@@ -31,6 +31,7 @@ const Results = ({
           <FlashList
             data={foundRoutes.slice(0, RESULTS_LENGTH)}
             estimatedItemSize={70}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
@@ -51,6 +52,7 @@ const Results = ({
           <FlashList
             data={foundRocks.slice(0, RESULTS_LENGTH)}
             estimatedItemSize={200}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
@@ -70,6 +72,7 @@ const Results = ({
           <FlashList
             data={foundSectors.slice(0, RESULTS_LENGTH)}
             estimatedItemSize={80}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <View
                 paddingHorizontal='m'
