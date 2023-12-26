@@ -131,7 +131,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
                         intervals={[35 * elementsScale, 35 * elementsScale]}
                       />
                     </Path>
-                    
+
                     {shouldRenderAnchor() && (
                       <Group>
                         <ImageSVG
@@ -157,7 +157,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
                         if (activeId && route.attributes.uuid !== activeId)
                           return;
                         return (
-                          <Group>
+                          <Group key={ring.id + ring.x + ring.y}>
                             <Circle
                               key={JSON.stringify(ring)}
                               cx={ring.x}

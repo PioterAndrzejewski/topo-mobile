@@ -1,4 +1,5 @@
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -98,7 +99,7 @@ export default function ResultsList() {
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
-  const snapPoints = useMemo(() => ["15%", "45%", "80%"], []);
+  const snapPoints = useMemo(() => ["15%", "80%"], []);
 
   return (
     <>
@@ -130,9 +131,10 @@ export default function ResultsList() {
                     flexDirection='row'
                     gap='m'
                     paddingBottom='m'
-                  >
+                  > 
                     {locationArray.map((item, index) => (
                       <Animated.View
+                        key={item.attributes.uuid}
                         entering={LightSpeedInRight}
                         exiting={LightSpeedOutRight}
                       >
@@ -168,8 +170,9 @@ export default function ResultsList() {
               </View>
               <View width='100%' height='100%' paddingHorizontal='m'>
                 {
-                  <FlatList
+                  <FlashList
                     data={listToRender.slice(0, 5)}
+                    estimatedItemSize={200}
                     renderItem={({ item }) => (
                       <ResultsItem
                         id={item.attributes.uuid}

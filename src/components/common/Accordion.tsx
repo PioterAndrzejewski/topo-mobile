@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -21,7 +20,8 @@ const Accordion = (props: Props) => {
   const height = useSharedValue(120);
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      height: height.value > 0 ? withTiming(height.value + 120) : withTiming(120),
+      height:
+        height.value > 0 ? withTiming(height.value + 120) : withTiming(120),
     };
   }, []);
 

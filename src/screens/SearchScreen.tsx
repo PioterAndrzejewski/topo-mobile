@@ -1,7 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 import Results from "src/components/Search/Results";
 import ScreenTitle from "src/components/common/ScreenTitle";
@@ -49,7 +48,6 @@ export default function SearchScreen() {
   const { colors } = useTheme<Theme>();
 
   useEffect(() => {
-    console.log(searchText);
     if (searchText.length < 1) {
       setFoundRocks([]);
       setFoundRoutes([]);
@@ -69,11 +67,7 @@ export default function SearchScreen() {
   }, [searchText, areas, regions, sectors, rocks]);
 
   return (
-    <Animated.View
-      style={{ flex: 1, backgroundColor: colors.backgroundScreen }}
-      entering={SlideInRight}
-      exiting={SlideInLeft}
-    >
+    <View style={{ backgroundColor: colors.backgroundScreen, flex: 1 }}>
       <ScreenTitle title='Wyszukiwarka' centered />
       <FilterBar />
       <View marginHorizontal='m' marginTop='m'>
@@ -92,15 +86,13 @@ export default function SearchScreen() {
           <Text>Czego szukasz?</Text>
         </View>
       ) : (
-        <View>
-          <Results
-            foundRoutes={foundRoutes}
-            foundRocks={foundRocks}
-            foundSectors={foundSectors}
-            type={activeResults}
-          />
-        </View>
+        <Results
+          foundRoutes={foundRoutes}
+          foundRocks={foundRocks}
+          foundSectors={foundSectors}
+          type={activeResults}
+        />
       )}
-    </Animated.View>
+    </View>
   );
 }

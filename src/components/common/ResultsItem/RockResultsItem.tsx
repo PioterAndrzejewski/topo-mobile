@@ -105,7 +105,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                     textShadowRadius: 6,
                     paddingRight: 8,
                     paddingLeft: 4,
-                    marginLeft: -4
+                    marginLeft: -4,
                   }}
                 >
                   {name}
@@ -114,7 +114,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                   <HeartIcon
                     size={32}
                     fill={
-                      isFavorite ? colors.favoriteRed : colors.backgroundFaded
+                      isFavorite ? colors.favoriteRed : colors.backgroundSecondary
                     }
                   />
                 </TouchableOpacity>
@@ -123,7 +123,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
                 flexDirection='row'
                 gap='xs'
                 alignSelf='flex-start'
-                backgroundColor='backgroundFaded'
+                backgroundColor='backgroundSecondary'
                 alignItems='center'
               >
                 <Text variant='h4' color='textSecondary'>
@@ -134,7 +134,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
 
             <OverlayCardView
               alignSelf='flex-start'
-              backgroundColor='backgroundFaded'
+              backgroundColor='backgroundSecondary'
             >
               <Text variant='caption'>{`Liczba dróg: ${
                 routes?.toString() || ""
@@ -142,7 +142,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
             </OverlayCardView>
             <OverlayCardView
               alignSelf='flex-start'
-              backgroundColor='backgroundFaded'
+              backgroundColor='backgroundSecondary'
             >
               <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
             </OverlayCardView>

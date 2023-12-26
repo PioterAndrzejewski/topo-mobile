@@ -1,5 +1,4 @@
-import { ImageBackground } from "react-native";
-import { useWindowDimensions } from 'react-native';
+import { ImageBackground, useWindowDimensions } from "react-native";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -29,7 +28,7 @@ const RockImage = ({ item }: { item: any }) => {
       >
         <OverlayCardView
           alignSelf='flex-start'
-          backgroundColor='backgroundFaded'
+          backgroundColor='backgroundSecondary'
         >
           <Text variant='caption'>{`Autor: ${item.Author}`}</Text>
         </OverlayCardView>
