@@ -101,10 +101,10 @@ const $mapStyle: ViewStyle = {
 
 const $markerContainer: ViewStyle = {
   flex: 1,
-  width: 140,
+  width: 80,
   justifyContent: "center",
   alignItems: "center",
-  padding: 12,
+  padding: 4,
   ...styleGuide.cardShadow,
   backgroundColor: palette.white75,
 }; 

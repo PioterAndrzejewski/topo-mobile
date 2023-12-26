@@ -3,7 +3,7 @@ import { useTheme } from "@shopify/restyle";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LayoutAnimation, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Toast from "react-native-toast-message";
 
 import Button from "src/components/common/Button";
@@ -46,7 +46,6 @@ const RouteRatingModal = ({ rockRefetch }: RouteRatingModalProps) => {
       mutationFn: () =>
         createRating(selectedRouteToRate!.id, rating, userData?.id),
       onSuccess: () => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         rockRefetch();
         Toast.show({
           type: "success",
@@ -69,7 +68,6 @@ const RouteRatingModal = ({ rockRefetch }: RouteRatingModalProps) => {
         rating,
       ),
     onSuccess: () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       Toast.show({
         type: "success",
         text2: "Ocena została zaktualizowana",

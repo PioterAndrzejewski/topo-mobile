@@ -1,11 +1,15 @@
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   ScrollView,
   TouchableOpacity,
 } from "react-native-gesture-handler";
+import Animated, {
+  LightSpeedInRight,
+  LightSpeedOutRight,
+} from "react-native-reanimated";
 
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -36,7 +40,8 @@ export default function ResultsList() {
   const [locationArray, setLocationArray] = useState<AreasList>([]);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
   const [listToRender, setListToRender] = useAtom(listToRenderAtom);
-  const setBottomSheetGlobalRef = useSetAtom(bottomSheetRefAtom);
+  const [bottomSheetGlobalRef, setBottomSheetGlobalRef] =
+    useAtom(bottomSheetRefAtom);
   const region = useAtomValue(regionAtom);
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -76,7 +81,7 @@ export default function ResultsList() {
   }, [selectedRock]);
 
   useEffect(() => {
-    if (bottomSheetRef.current && !bottomSheetRef) {
+    if (bottomSheetRef.current && !bottomSheetGlobalRef) {
       setBottomSheetGlobalRef(bottomSheetRef);
     }
   }, [bottomSheetRef]);
@@ -127,19 +132,26 @@ export default function ResultsList() {
                     paddingBottom='m'
                   >
                     {locationArray.map((item, index) => (
-                      <OverlayCardView
-                        key={item.id + index + item.attributes.uuid}
+                      <Animated.View
+                        entering={LightSpeedInRight}
+                        exiting={LightSpeedOutRight}
                       >
-                        <TouchableOpacity
-                          style={{ flexDirection: "row" }}
-                          onPress={() => animateTo(item, index)}
-                          key={item?.attributes?.Name}
+                        <OverlayCardView
+                          key={item.id + index + item.attributes.uuid}
                         >
-                          <Text variant='h3' color='textSecondary'>
-                            {item?.attributes?.Name}
-                          </Text>
-                        </TouchableOpacity>
-                      </OverlayCardView>
+                          <TouchableOpacity
+                            style={{ flexDirection: "row" }}
+                            onPress={() =>
+                              animateTo(item, index === 0 ? 0 : index + 1)
+                            }
+                            key={item?.attributes?.Name}
+                          >
+                            <Text variant='h3' color='textSecondary'>
+                              {item?.attributes?.Name}
+                            </Text>
+                          </TouchableOpacity>
+                        </OverlayCardView>
+                      </Animated.View>
                     ))}
                   </View>
                 </ScrollView>

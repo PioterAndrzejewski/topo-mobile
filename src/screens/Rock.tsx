@@ -1,20 +1,20 @@
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useAtomValue } from "jotai";
-import { useMemo, useRef, useState } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
 import RockDetails from "src/components/rock/RockDetails";
 import RouteInfo from "src/components/rock/RouteInfo";
 import RockDrawing from "src/components/rock/drawing/RockDrawing";
+import CommentsModal from "src/components/rock/modals/CommentsModal";
 import FavoritesModal from "src/components/rock/modals/FavoritesModal";
+import RouteRatingModal from "src/components/rock/modals/RouteRatingModal";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
-import CommentsModal from "src/components/rock/modals/CommentsModal";
-import RouteRatingModal from "src/components/rock/modals/RouteRatingModal";
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
@@ -24,10 +24,20 @@ import { HomeScreenNavigationProp } from "src/types/type";
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
 const Rock = ({ route }: Props) => {
-  const activeRoute = useAtomValue(rockActiveRoute);
+  const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [activeImage, setActiveImage] = useState(0);
   const { data, refetch } = useRock(route.params.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  refetch();
+
+  useEffect(() => {
+    const selectedRoute = data?.attributes.routes.data.find(
+      (route) => route.attributes.uuid === activeRoute,
+    );
+    if (selectedRoute?.attributes.image_index !== activeImage)
+      setActiveRoute(null);
+  }, [activeImage]);
 
   const parent: RoutesParent = useMemo(() => {
     return {
@@ -47,16 +57,19 @@ const Rock = ({ route }: Props) => {
     <View flex={1} backgroundColor='backgroundSecondary'>
       <Header
         name={data?.attributes?.Name}
-        numberOfImages={data?.attributes?.image.data.length}
+        numberOfImages={data?.attributes?.image.length}
         onCirclePress={setActiveImage}
         activeImage={activeImage}
       />
       {data && data.attributes && (
         <RockDrawing
-          imageUrl={data.attributes.image?.data[activeImage].attributes.url}
+          imageUrl={
+            data.attributes.image[activeImage].image.data.attributes.url
+          }
           routes={data.attributes.routes.data}
           activeId={activeRoute}
           activeImage={activeImage}
+          elementsScale={data.attributes.image[activeImage].elements_scale}
         />
       )}
       <BottomSheet
@@ -65,7 +78,7 @@ const Rock = ({ route }: Props) => {
         snapPoints={snapPoints}
         style={styleGuide.bottomSheet}
       >
-      <BottomSheetScrollView showsVerticalScrollIndicator={false}>
+        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
           <View paddingBottom='2xl' paddingTop='m'>
             {data?.attributes ? (
               <>

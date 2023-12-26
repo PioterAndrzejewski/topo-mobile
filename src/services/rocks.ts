@@ -73,6 +73,12 @@ export type ImageFormat = {
   width: string;
 }
 
+export type DrawingCoords = {
+  id: number;
+  x: number;
+  y: number;
+}
+
 export type Exhibition = 'north' | 'south' | 'east' | 'west' | 'trees';
 export type Formations = 'slab' | 'vertical' | 'overhang' | 'roof' | 'chimney' | 'crack' | 'pillar';
 export type Popularity = 'high' | 'medium' | 'low';
@@ -217,13 +223,20 @@ export type RouteInner = {
   description: string;
   author_date: number;
   image_index: number;
-  path_omit_rings: string;
-  coordinates: Coordinates;
+  rings_coords: DrawingCoords[];
+  anchor_coords: DrawingCoords;
+  number_coords: DrawingCoords;
 }
 
 export type Route = {
   id: number;
   attributes: RouteInner
+}
+
+export type DrawingImage = {
+  id: number;
+  elements_scale: number;
+  image: {data: Photo};
 }
 
 export type RockData = {
@@ -248,7 +261,7 @@ export type RockData = {
     family_friendly: boolean;
     cover: Cover[];
     uuid: string;
-    image: {data: Photo[]};
+    image: DrawingImage[];
     routes: {data: Route[]}
     parent: {
       data: AreaData;
@@ -326,9 +339,10 @@ export const getRock = async (id: string) => {
   const query = qs.stringify({
     populate: [
       'uuid',
-      'image',
-      'image.Photo',
       'routes',
+      'routes.rings_coords',
+      'routes.anchor_coords',
+      'routes.number_coords',
       'parent',
       'coordinates',
       'parking_coordinates',
@@ -336,7 +350,9 @@ export const getRock = async (id: string) => {
       'cover',
       'cover.Photo',
       'formation',
-      'exhibition'
+      'exhibition',
+      'image',
+      'image.image',
     ],
     filters: {
       uuid: {

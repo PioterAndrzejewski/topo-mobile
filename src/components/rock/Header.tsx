@@ -8,8 +8,12 @@ import View from "src/components/ui/View";
 import Text from "../ui/Text";
 
 import { confirmActionAtom } from "src/store/global";
-import { routeToCommentAtom, routeToFavoritesAtom } from "src/store/rock";
-import { Theme, palette } from "src/styles/theme";
+import {
+  rockActiveRoute,
+  routeToCommentAtom,
+  routeToFavoritesAtom,
+} from "src/store/rock";
+import { Theme } from "src/styles/theme";
 import { ArrowLeft } from "../icons/ArrowLeft";
 import OverlayCardView from "../ui/OverlayCardView";
 
@@ -25,6 +29,7 @@ const Header = (props: HeaderProps) => {
   const setRouteToFavorites = useSetAtom(routeToFavoritesAtom);
   const setRouteToComment = useSetAtom(routeToCommentAtom);
   const setConfirmAction = useSetAtom(confirmActionAtom);
+  const setActiveRoute = useSetAtom(rockActiveRoute);
   const { spacing } = useTheme<Theme>();
 
   const imagesArray = useMemo(() => {
@@ -39,6 +44,7 @@ const Header = (props: HeaderProps) => {
     setRouteToFavorites(null);
     setRouteToComment(null);
     setConfirmAction(null);
+    setActiveRoute(null);
   };
 
   return (
@@ -56,9 +62,11 @@ const Header = (props: HeaderProps) => {
         </TouchableOpacity>
       </OverlayCardView>
       <View flexDirection='row' gap='s'>
-        <Text variant='h4' color='textSecondary'>
-          Skałoplan:
-        </Text>
+        <View alignSelf='center'>
+          <Text variant='h4' color='textSecondary'>
+            Skałoplan:
+          </Text>
+        </View>
 
         <ScrollView
           contentContainerStyle={{
@@ -95,31 +103,37 @@ const ImageCircle = ({
   const handlePress = () => onPress(index);
   if (active)
     return (
-      <View style={$imageCircleOffset(active)}>
-        <View style={$imageCircle(active)} />
+      <View
+        borderColor='secondary'
+        borderWidth={2}
+        borderRadius={20}
+        width={25}
+        height={25}
+        justifyContent='center'
+        alignItems='center'
+      >
+        <Text color='textSecondary' variant='h4'>
+          {index === 0 ? "M" : index.toString()}
+        </Text>
       </View>
     );
   return (
     <TouchableOpacity onPress={handlePress}>
-      <View style={$imageCircleOffset(active)}>
-        <View style={$imageCircle(active)} />
+      <View
+        borderColor='textLight'
+        borderWidth={1}
+        borderRadius={20}
+        width={25}
+        height={25}
+        justifyContent='center'
+        alignItems='center'
+      >
+        <Text color='textGray' variant='h4'>
+          {index.toString()}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 };
-
-const $imageCircle = (active: boolean) => ({
-  width: 12,
-  height: 12,
-  backgroundColor: active ? palette.green : palette.blue500,
-  borderRadius: 20,
-});
-
-const $imageCircleOffset = (active: boolean) => ({
-  padding: 4,
-  borderColor: palette.green,
-  borderRadius: 20,
-  borderWidth: active ? 1 : 0,
-});
 
 export default Header;

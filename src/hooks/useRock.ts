@@ -5,6 +5,5 @@ export const useRock = (id: string) => {
   return useQuery({
     queryFn: () => getRock(id),
     queryKey: ['rock', id],
-    refetchInterval: 1000 * 60 * 60 * 24,
   });
 };

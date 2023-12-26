@@ -41,7 +41,7 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
         map.current.animateToRegion(newRegion);
       }
       setSelectedRock(null);
-      resultsBottomSheet?.current?.collapse();
+      resultsBottomSheet?.current?.snapToIndex(0);
     }, 100);
   };
 

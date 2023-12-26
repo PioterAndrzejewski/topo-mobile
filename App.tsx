@@ -44,6 +44,11 @@ export default function App() {
     return <AppLoading />;
   }
 
+  queryClient.invalidateQueries([
+    "rock",
+    "698f8d42-9b01-4726-a56d-65b8911db3e8",
+  ]);
+
   return (
     <>
       <GestureHandlerRootView style={styles.container}>
