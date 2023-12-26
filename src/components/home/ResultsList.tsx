@@ -6,10 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native-gesture-handler";
-import Animated, {
-  LightSpeedInRight,
-  LightSpeedOutRight,
-} from "react-native-reanimated";
 
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -134,11 +130,7 @@ export default function ResultsList() {
                 paddingBottom='m'
               >
                 {locationArray.map((item, index) => (
-                  <Animated.View
-                    key={item.attributes.uuid}
-                    entering={LightSpeedInRight}
-                    exiting={LightSpeedOutRight}
-                  >
+                  <View key={item.attributes.uuid}>
                     <OverlayCardView
                       key={item.id + index + item.attributes.uuid}
                     >
@@ -154,7 +146,7 @@ export default function ResultsList() {
                         </Text>
                       </TouchableOpacity>
                     </OverlayCardView>
-                  </Animated.View>
+                  </View>
                 ))}
               </View>
             </ScrollView>

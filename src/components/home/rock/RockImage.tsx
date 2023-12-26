@@ -1,4 +1,4 @@
-import { ImageBackground, useWindowDimensions } from "react-native";
+import { ImageBackground } from "react-native";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -7,7 +7,6 @@ import View from "src/components/ui/View";
 import { useImageFile } from "src/hooks/useImageFile";
 
 const RockImage = ({ item }: { item: any }) => {
-  const { width } = useWindowDimensions();
   const image = useImageFile(item.Photo.data.attributes.url);
   if (!image) return <View />;
   return (

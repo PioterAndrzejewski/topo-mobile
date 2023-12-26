@@ -25,8 +25,6 @@ import { palette } from "src/styles/theme";
 import { getRouteColor } from "src/utils/getRouteColor";
 import { ChainAnchor, RescueRing, Ring, TwoRings } from "./DrawingIcons";
 
-const CANVAS_BOUNDARY = 40;
-
 type RockDrawingProps = {
   imageUrl: string;
   routes: Route[];
@@ -60,7 +58,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
     return 0.3;
   };
 
-  if (!font) return null;
+  if (!font || !skImage || !skImage.width()) return <AppLoading />;
 
   return (
     <View flex={1}>
