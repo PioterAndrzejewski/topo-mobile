@@ -17,6 +17,10 @@ export async function saveJWT(value: string) {
   await SecureStore.setItemAsync('jwt', value)
 }
 
+export async function saveRefreshToken(value: string) {
+  await SecureStore.setItemAsync('refreshToken', value)
+}
+
 export const setUserToStorage = async (user: UserLoginData) => {
   try {
     await AsyncStorage.setItem("userEmail", user.email);

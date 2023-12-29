@@ -17,6 +17,7 @@ import theme from "src/styles/theme";
 
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
+import { saveToSecureStorage } from "src/services/store";
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage)
   .configure()
@@ -44,6 +45,8 @@ export default function App() {
     return <AppLoading />;
   }
 
+  saveToSecureStorage("jwt", "random");
+  
   return (
     <>
       <GestureHandlerRootView style={styles.container}>

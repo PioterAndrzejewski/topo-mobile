@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { apiConfig } from 'src/services/apiConfig';
-import { getFromSecureStorage } from 'src/services/store';
+import { getFromSecureStorage, saveJWT, saveRefreshToken } from 'src/services/store';
 
 export type UserLoginData = {
   blocked: boolean;
@@ -15,7 +15,13 @@ export type UserLoginData = {
 
 export type LoggedUserData = {
   jwt: string;
+  refreshToken: string;
   user: UserLoginData;
+}
+
+export type TokenRefreshResponse = {
+  jwt: string;
+  refreshToken: string;
 }
 
 const instance = axios.create({
@@ -25,6 +31,18 @@ const instance = axios.create({
   },
 });
 
+export const refreshToken = async (): Promise<AxiosResponse<TokenRefreshResponse>> => {
+  console.log('refreshing the token!')
+  const storedRefreshToken = await getFromSecureStorage('refreshToken');
+
+  if (storedRefreshToken) {
+    const res = await axios.post(apiConfig.auth.refreshToken, { withCredentials: true });
+    return res;
+  }
+  // TODO: logout, navigate to login screen
+  return Promise.reject(new Error('No refresh token found'));
+};
+
 instance.interceptors.request.use(
   async (config) => {
     const jwt = await getFromSecureStorage('jwt')
@@ -32,6 +50,42 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config;
+
+    console.log(
+      '[API] error',
+      originalRequest?.url ?? 'unknown url',
+      typeof error?.response?.data === 'string'
+        ? error.response.data
+        : JSON.stringify(error.response?.data)
+    );
+
+    if (originalRequest) {
+      if (originalRequest.url === apiConfig.auth.refreshToken) {
+        // TODO: logout and move to login screen
+        return Promise.reject(error);
+      }
+
+      if (error?.response?.status === 401) {
+        const {data: refreshResponse} = await refreshToken();
+        if (refreshResponse.refreshToken) {
+          saveJWT(refreshResponse.jwt);
+          saveRefreshToken(refreshResponse.refreshToken);
+          originalRequest.headers.setAuthorization(
+            `Bearer ${refreshResponse.jwt}`
+          );
+          return Promise.resolve(instance(originalRequest));
+        }
+      }
+    }
+
     return Promise.reject(error);
   }
 );
