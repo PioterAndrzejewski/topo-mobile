@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from 'expo-secure-store';
+import navigate from 'src/navigators/navigationRef';
 
 import type { UserLoginData } from 'src/services/auth';
 
@@ -29,3 +30,15 @@ export const setUserToStorage = async (user: UserLoginData) => {
     return null;
   }
 };
+ 
+export const logout = async () => {
+  try {
+    await SecureStore.deleteItemAsync('refreshToken');
+    await SecureStore.deleteItemAsync('jwt');
+    await SecureStore.deleteItemAsync('userEmail');
+    await SecureStore.deleteItemAsync('userName');
+    navigate('Login')
+  } catch (err) {
+    console.log('something went wrong during logout')
+  }
+}

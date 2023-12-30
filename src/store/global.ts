@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { ReactNode } from 'react';
+import { ReactNode} from 'react';
 
 type ConfirmAction = {
   Icon?: ReactNode;

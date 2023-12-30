@@ -11,6 +11,8 @@ import { MapIcon } from "src/components/icons/Map";
 import { SearchIcon } from "src/components/icons/Search";
 import { palette } from "src/styles/theme";
 import { BottomTabParamList } from "src/types/type";
+import { SettingsIcon } from 'src/components/icons/Settings';
+import UserScreen from 'src/screens/UserScreen';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -26,6 +28,10 @@ const TAB_ICONS = {
   Favourites: {
     active: HeartIcon,
     inactive: HeartIcon,
+  },
+  User: {
+    active: SettingsIcon,
+    inactive: SettingsIcon,
   },
 };
 
@@ -60,6 +66,7 @@ const HomeBottomTabNavigator = () => {
         <Tab.Screen name='Map' component={MapScreen} />
         <Tab.Screen name='Search' component={SearchScreen} />
         <Tab.Screen name='Favourites' component={FavouritesScreen} />
+        <Tab.Screen name='User' component={UserScreen} />
       </Tab.Navigator>
     </View>
   );

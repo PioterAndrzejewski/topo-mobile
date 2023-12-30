@@ -15,6 +15,7 @@ export type BottomTabParamList = {
   Map: undefined;
   Search: undefined;
   Favourites: undefined;
+  User: undefined;
 };
 
 export type HomeScreenNavigationProp = NativeStackScreenProps<

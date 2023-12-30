@@ -1,11 +1,15 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationContainerRefWithCurrent,
+} from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts } from "expo-font";
+import { useAtom } from "jotai";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
@@ -14,10 +18,10 @@ import Reactotron from "reactotron-react-native";
 import AppLoading from "src/components/common/AppLoading";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
-
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
+
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
-import { saveToSecureStorage } from "src/services/store";
+import { navigationRef } from 'src/navigators/navigationRef';
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage)
   .configure()
@@ -45,8 +49,6 @@ export default function App() {
     return <AppLoading />;
   }
 
-  saveToSecureStorage("jwt", "random");
-  
   return (
     <>
       <GestureHandlerRootView style={styles.container}>
@@ -54,7 +56,7 @@ export default function App() {
           client={queryClient}
           persistOptions={{ persister: asyncStoragePersister }}
         >
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <ThemeProvider theme={theme}>
               <BottomSheetModalProvider>
                 <FavoritesContextProvider>

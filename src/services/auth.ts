@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { apiConfig } from 'src/services/apiConfig';
 import { getFromSecureStorage, saveJWT, saveRefreshToken } from 'src/services/store';
+import { logout } from 'src/services/store';
+
 
 export type UserLoginData = {
   blocked: boolean;
@@ -40,6 +42,7 @@ export const refreshToken = async (): Promise<AxiosResponse<TokenRefreshResponse
     return res;
   }
   // TODO: logout, navigate to login screen
+  logout();
   return Promise.reject(new Error('No refresh token found'));
 };
 
