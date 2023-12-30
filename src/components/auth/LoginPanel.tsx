@@ -11,7 +11,7 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { login } from "src/services/auth";
-import { saveJWT, setUserToStorage } from "src/services/store";
+import { saveJWT, saveRefreshToken, setUserToStorage } from "src/services/store";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function LoginPanel() {
@@ -21,6 +21,7 @@ export default function LoginPanel() {
     mutationFn: (data: LoginData) => login(data.email, data.password),
     onSuccess: (data) => {
       saveJWT(data.jwt);
+      saveRefreshToken(data.refreshToken);
       setUserToStorage(data.user);
       navigation.navigate("HomeNavigator");
     },

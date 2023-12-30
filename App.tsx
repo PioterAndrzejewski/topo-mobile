@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts } from "expo-font";
 import { StyleSheet } from "react-native";
@@ -12,22 +11,22 @@ import Toast from "react-native-toast-message";
 import Reactotron from "reactotron-react-native";
 
 import AppLoading from "src/components/common/AppLoading";
+import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
-import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
+import { useEffect, useState } from "react";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
+import { QueryClientSingleton } from "src/helpers/QueryClient";
+import { navigationRef } from "src/navigators/navigationRef";
+import { initApp } from 'src/helpers/initApp';
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage)
   .configure()
   .useReactNative()
   .connect();
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: 2, cacheTime: 1000 * 60 * 60 * 24 * 30 * 12 },
-  },
-});
+const queryClient = QueryClientSingleton.getInstance();
 
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -39,8 +38,18 @@ export default function App() {
     PoppinsMedium: require("src/assets/fonts/PoppinsMedium.ttf"),
     PoppinsRegular: require("src/assets/fonts/PoppinsRegular.ttf"),
   });
+  const [initAppResult, setInitAppResult] = useState(false);
 
-  if (!fontLoaded) {
+  useEffect(() => {
+    const asyncInit = async () => {
+      const result = await initApp();
+      setInitAppResult(result);
+    }
+
+    asyncInit();
+  });
+
+  if (!fontLoaded || !initAppResult) {
     return <AppLoading />;
   }
 
@@ -51,7 +60,7 @@ export default function App() {
           client={queryClient}
           persistOptions={{ persister: asyncStoragePersister }}
         >
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <ThemeProvider theme={theme}>
               <BottomSheetModalProvider>
                 <FavoritesContextProvider>

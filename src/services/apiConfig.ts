@@ -1,11 +1,12 @@
-// export const apiUrl = "http://localhost:1337";
-export const apiUrl = "http://192.168.50.16:1337";
+export const apiUrl = "http://localhost:1337";
+// export const apiUrl = "http://192.168.50.16:1337";
 export const viewerUrl = "http://localhost:3000";
 
 export const apiConfig = {
   auth: {
     login: `${apiUrl}/api/auth/local/`,
-    register: `${apiUrl}/api/auth/local/register/`
+    register: `${apiUrl}/api/auth/local/register/`,
+    refreshToken: `${apiUrl}/api/token/refresh/`
   },
   user: {
     me: `${apiUrl}/api/users/me`
