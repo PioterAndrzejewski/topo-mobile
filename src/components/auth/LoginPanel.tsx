@@ -2,7 +2,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
@@ -11,11 +12,16 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { login } from "src/services/auth";
-import { saveJWT, saveRefreshToken, setUserToStorage } from "src/services/store";
+import {
+  saveJWT,
+  saveRefreshToken,
+  setUserToStorage,
+} from "src/services/store";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const {height} = useWindowDimensions();
   const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
@@ -40,38 +46,16 @@ export default function LoginPanel() {
   };
 
   return (
-    <View
-      width='100%'
-      height='100%'
-      paddingHorizontal='l'
-      backgroundColor='backgroundScreen'
-    >
-      <Text variant='h2' color='textGray'>
-        Topo na wyciągnięcie ręki
-      </Text>
-      <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
-        <View>
-          <Controller
-            control={control}
-            name='email'
-            rules={{ required: true }}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error },
-            }) => (
-              <CustomTextInput
-                hookBlurHandler={onBlur}
-                onChange={(value) => onChange(value)}
-                value={value}
-                label='Adres e-mail'
-                error={error}
-              />
-            )}
-          />
-          <View marginTop='m'>
+    <KeyboardAwareScrollView>
+      <View height={height} backgroundColor='backgroundScreen' paddingHorizontal='m'>
+        <Text variant='h2' color='textGray'>
+          Topo na wyciągnięcie ręki
+        </Text>
+        <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
+          <View>
             <Controller
               control={control}
-              name='password'
+              name='email'
               rules={{ required: true }}
               render={({
                 field: { onChange, onBlur, value },
@@ -81,49 +65,68 @@ export default function LoginPanel() {
                   hookBlurHandler={onBlur}
                   onChange={(value) => onChange(value)}
                   value={value}
-                  label='Hasło'
+                  label='Adres e-mail'
                   error={error}
-                  secure
                 />
               )}
             />
-          </View>
-          <View marginTop='m'>
-            <Button
-              label='Zaloguj'
-              onClick={handleSubmit(onSubmitHandler)}
-              isLoading={isLoading}
-            />
-          </View>
-          {isError && (
-            <Button
-              label='Uzywaj w trybie offline'
-              onClick={() => navigation.navigate("Home")}
-            />
-          )}
-          <View
-            marginTop='l'
-            justifyContent='center'
-            alignItems='center'
-            flexDirection='row'
-          >
-            <Text variant='body' color='textGray'>
-              Nie masz konta?
-            </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Register")}
-              hitSlop={20}
+            <View marginTop='m'>
+              <Controller
+                control={control}
+                name='password'
+                rules={{ required: true }}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
+                  <CustomTextInput
+                    hookBlurHandler={onBlur}
+                    onChange={(value) => onChange(value)}
+                    value={value}
+                    label='Hasło'
+                    error={error}
+                    secure
+                  />
+                )}
+              />
+            </View>
+            <View marginTop='m'>
+              <Button
+                label='Zaloguj'
+                onClick={handleSubmit(onSubmitHandler)}
+                isLoading={isLoading}
+              />
+            </View>
+            {isError && (
+              <Button
+                label='Uzywaj w trybie offline'
+                onClick={() => navigation.navigate("Home")}
+              />
+            )}
+            <View
+              marginTop='l'
+              justifyContent='center'
+              alignItems='center'
+              flexDirection='row'
             >
-              <View marginLeft='m'>
-                <Text variant='body' color='textSecondary'>
-                  Zarejestruj
-                </Text>
-              </View>
-            </TouchableOpacity>
+              <Text variant='body' color='textGray'>
+                Nie masz konta?
+              </Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Register")}
+                hitSlop={20}
+              >
+                <View marginLeft='m'>
+                  <Text variant='body' color='textSecondary'>
+                    Zarejestruj
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
