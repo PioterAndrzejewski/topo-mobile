@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import reactotron from "reactotron-react-native";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
@@ -14,7 +13,8 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { AxiosError } from "axios";
-import { register } from "src/services/auth";
+import Toast from "react-native-toast-message";
+import { RegisterResponseError, register } from "src/services/auth";
 import { saveJWT, setUserToStorage } from "src/services/store";
 import { HomeScreenNavigationProp } from "src/types/type";
 
@@ -27,14 +27,21 @@ export default function RegisterPanel() {
     mutationFn: (data: RegisterData) =>
       register(data.username, data.email, data.password),
     onSuccess: (data) => {
-      console.log("a moe to");
       saveJWT(data.data.jwt);
       setUserToStorage(data.data.user);
       navigation.navigate("HomeNavigator");
     },
     onError(error, variables, context) {
-      console.log("no jest ttu");
-      console.log(error.message)
+      const axiosError = error as AxiosError<RegisterResponseError>;
+      if (
+        axiosError.response?.data.error.message.toLowerCase() ===
+        "Email or Username are already taken".toLowerCase()
+      ) {
+        Toast.show({
+          type: "error",
+          text2: "Ten adres e-mail jest juz zajęty",
+        });
+      }
     },
   });
 

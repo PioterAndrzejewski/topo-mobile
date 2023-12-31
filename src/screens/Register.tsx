@@ -1,11 +1,10 @@
-import { View } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import RegisterPanel from "src/components/auth/RegisterPanel";
 
 export default function RegisterScreen() {
   return (
-    <View>
+    <SafeAreaView>
       <RegisterPanel />
-    </View>
+    </SafeAreaView>
   );
 }

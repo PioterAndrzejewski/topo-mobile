@@ -46,7 +46,7 @@ export default function LoginPanel() {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
       <View height={height} backgroundColor='backgroundScreen' paddingHorizontal='m'>
         <Text variant='h2' color='textGray'>
           Topo na wyciągnięcie ręki

@@ -1,4 +1,4 @@
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import LoginPanel from "src/components/auth/LoginPanel";
 import ScreenTitle from "src/components/common/ScreenTitle";
@@ -13,15 +13,11 @@ export default function LoginScreen() {
       <View
         justifyContent='center'
         alignItems='center'
-        marginTop='3xl'
         zIndex={999}
         elevation={999}
+        marginVertical='l'
       >
-        <View
-          padding='3xs'
-          {...styleGuide.cardShadow}
-          borderRadius={70}
-        >
+        <View padding='3xs' {...styleGuide.cardShadow} borderRadius={70}>
           <LogoIcon size={120} />
         </View>
       </View>
