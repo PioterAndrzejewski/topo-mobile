@@ -17,7 +17,6 @@ const ScreenTitle: FC<ScreenTitleProps> = ({ title, centered }) => {
       justifyContent={centered ? "center" : undefined}
       alignItems={centered ? "center" : undefined}
       paddingBottom='m'
-      paddingTop='3xl'
     >
       <Text variant='h1' color='secondary'>
         {title}

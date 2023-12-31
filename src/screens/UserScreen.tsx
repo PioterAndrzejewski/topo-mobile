@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useSetAtom } from "jotai";
 import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "src/components/common/Button";
 import ScreenTitle from "src/components/common/ScreenTitle";
@@ -8,6 +9,7 @@ import View from "src/components/ui/View";
 
 import { logout } from "src/services/store";
 import { confirmActionAtom } from "src/store/global";
+import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function UserScreen() {
@@ -20,13 +22,13 @@ export default function UserScreen() {
     });
   };
   return (
-    <View style={{ flex: 1 }} backgroundColor='backgroundScreen'>
+    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
       <ScreenTitle centered title='Twój profil' />
       <ScrollView style={{ flex: 1 }}>
         <View paddingHorizontal='m'>
           <Button label='Wyloguj' onClick={handleLogout} />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

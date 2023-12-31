@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useMemo, useState } from "react";
-import Animated from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import ScreenTitle from "src/components/common/ScreenTitle";
 import Switcher from "src/components/common/Switcher";
@@ -9,7 +9,7 @@ import RouteFavorites from "src/components/favorites/RouteFavorites";
 import View from "src/components/ui/View";
 
 import { SwitcherOption } from "src/components/common/Switcher";
-import { Theme } from "src/styles/theme";
+import { Theme, palette } from "src/styles/theme";
 
 const options: SwitcherOption<"routes" | "rocks">[] = [
   {
@@ -36,9 +36,7 @@ export default function SearchScreen() {
   }, [mode]);
 
   return (
-    <Animated.View
-      style={{ flex: 1, backgroundColor: colors.backgroundScreen }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
       <ScreenTitle title='Zapisane' centered />
       <View flex={1}>
         <View
@@ -51,6 +49,6 @@ export default function SearchScreen() {
         </View>
         {renderFavorites}
       </View>
-    </Animated.View>
+    </SafeAreaView>
   );
 }

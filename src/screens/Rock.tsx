@@ -2,6 +2,7 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
+import {SafeAreaView} from 'react-native-safe-area-context'
 
 import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
@@ -20,6 +21,7 @@ import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
 import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
+import { palette } from 'src/styles/theme';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -66,7 +68,7 @@ const Rock = ({ route }: Props) => {
   const snapPoints = useMemo(() => ["16%", "50%", "80%"], []);
 
   return (
-    <View flex={1} backgroundColor='backgroundSecondary'>
+    <SafeAreaView style={{flex: 1, backgroundColor: palette.blue100_25}}>
       <Header
         name={data?.attributes?.Name}
         numberOfImages={data?.attributes?.image.length}
@@ -122,7 +124,7 @@ const Rock = ({ route }: Props) => {
       <FavoritesModal />
       <RouteRatingModal rockRefetch={refetch} />
       <CommentsModal rockRefetch={refetch} />
-    </View>
+    </SafeAreaView>
   );
 };
 

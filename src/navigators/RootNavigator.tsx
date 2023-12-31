@@ -5,7 +5,7 @@ import LoginScreen from "src/screens/Login";
 import RegisterScreen from "src/screens/Register";
 import Rock from "src/screens/Rock";
 
-import { RootStackParamList } from "src/types/type"; 
+import { RootStackParamList } from "src/types/type";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

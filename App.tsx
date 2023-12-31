@@ -16,10 +16,11 @@ import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
 import { useEffect, useState } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
+import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
-import { initApp } from 'src/helpers/initApp';
 
 Reactotron.setAsyncStorageHandler!(AsyncStorage)
   .configure()
@@ -44,7 +45,7 @@ export default function App() {
     const asyncInit = async () => {
       const result = await initApp();
       setInitAppResult(result);
-    }
+    };
 
     asyncInit();
   });
@@ -54,7 +55,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <SafeAreaProvider>
       <GestureHandlerRootView style={styles.container}>
         <PersistQueryClientProvider
           client={queryClient}
@@ -73,7 +74,7 @@ export default function App() {
         </PersistQueryClientProvider>
       </GestureHandlerRootView>
       <Toast topOffset={60} />
-    </>
+    </SafeAreaProvider>
   );
 }
 

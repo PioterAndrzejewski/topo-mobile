@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { apiConfig } from 'src/services/apiConfig';
-import { getFromSecureStorage, saveJWT, saveRefreshToken } from 'src/services/store';
-import { logout } from 'src/services/store';
+import { getFromSecureStorage, logout, saveJWT, saveRefreshToken } from 'src/services/store';
 
 
 export type UserLoginData = {
@@ -24,6 +23,16 @@ export type LoggedUserData = {
 export type TokenRefreshResponse = {
   jwt: string;
   refreshToken: string;
+}
+
+export type RegisterResponseError = {
+  data: null;
+  error: {
+    status: number;
+    name: string;
+    message: string;
+    details: {}
+  }
 }
 
 const instance = axios.create({
@@ -102,7 +111,7 @@ export const login = async (email: string, password: string) => {
 };
 
 export const register = async (username: string, email: string, password: string) => {
-  const { data } = await axios.post<LoggedUserData>(apiConfig.auth.register, {
+  const data = await axios.post<LoggedUserData>(apiConfig.auth.register, {
     username,
     email,
     password,

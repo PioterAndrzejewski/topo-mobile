@@ -1,6 +1,7 @@
 import { useTheme } from "@shopify/restyle";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Results from "src/components/Search/Results";
 import ScreenTitle from "src/components/common/ScreenTitle";
@@ -13,7 +14,7 @@ import Switcher from "src/components/common/Switcher";
 import { useAreas } from "src/hooks/useAreas";
 import { RegionData, RockData } from "src/services/rocks";
 import { searchTextAtom } from "src/store/search";
-import { Theme } from "src/styles/theme";
+import { Theme, palette } from "src/styles/theme";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -67,7 +68,7 @@ export default function SearchScreen() {
   }, [searchText, areas, regions, sectors, rocks]);
 
   return (
-    <View style={{ backgroundColor: colors.backgroundScreen, flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
       <ScreenTitle title='Wyszukiwarka' centered />
       <FilterBar />
       <View marginHorizontal='m' marginTop='m'>
@@ -93,6 +94,6 @@ export default function SearchScreen() {
           type={activeResults}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }
