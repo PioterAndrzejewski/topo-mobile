@@ -6,6 +6,7 @@ import ScreenTitle from "src/components/common/ScreenTitle";
 import Switcher from "src/components/common/Switcher";
 import RockFavorites from "src/components/favorites/RockFavorites";
 import RouteFavorites from "src/components/favorites/RouteFavorites";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { SwitcherOption } from "src/components/common/Switcher";
@@ -36,7 +37,7 @@ export default function SearchScreen() {
   }, [mode]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }} edges={['top']}>
       <ScreenTitle title='Zapisane' centered />
       <View flex={1}>
         <View
@@ -48,6 +49,13 @@ export default function SearchScreen() {
           <Switcher onPress={setMode} active={mode} options={options} />
         </View>
         {renderFavorites}
+        <View paddingHorizontal='m'>
+          <Text variant='caption'>
+            Elementy zapisują się jedynie na Twoim urządzeniu i nie będą
+            dostępne jak usuniesz aplikację, dane aplikacji, lub będziesz używać
+            innego urządzenia. Pracujemy nad tym :)
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );

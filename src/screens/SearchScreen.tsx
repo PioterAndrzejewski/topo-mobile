@@ -68,7 +68,10 @@ export default function SearchScreen() {
   }, [searchText, areas, regions, sectors, rocks]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: palette.white }}
+      edges={["top"]}
+    >
       <ScreenTitle title='Wyszukiwarka' centered />
       <FilterBar />
       <View marginHorizontal='m' marginTop='m'>
