@@ -27,6 +27,9 @@ export const apiConfig = {
     update: (id: number | undefined) => `${apiUrl}/api/comments/${id}`,
     get: (qs: string) => `${apiUrl}/api/comments?${qs}`,
   },
+  product: {
+    get: (qs: string) => `${apiUrl}/api/products?${qs}`
+  },
   payments: {
     intent: `${apiUrl}/api/payments`
   }

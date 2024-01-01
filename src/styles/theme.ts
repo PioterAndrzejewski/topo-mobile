@@ -27,6 +27,7 @@ const theme = createTheme({
     backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
+    backgroundTertiary: palette.yellow,
 
     secondary: palette.green,
     finished: palette.green,

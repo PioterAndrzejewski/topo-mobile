@@ -74,15 +74,17 @@ const RockInfoExpanded = () => {
               </Text>
             </View>
           </View>
-          <OverlayCardView
-            justifyContent='center'
-            alignItems='center'
-            width={50}
-          >
-            <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
-              <CartIcon size={28} color={palette.green} strokeWidth={1.5} />
-            </TouchableOpacity>
-          </OverlayCardView>
+          {rock?.attributes.product.data && (
+            <OverlayCardView
+              justifyContent='center'
+              alignItems='center'
+              width={50}
+            >
+              <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
+                <CartIcon size={28} color={palette.green} strokeWidth={1.5} />
+              </TouchableOpacity>
+            </OverlayCardView>
+          )}
         </View>
       </View>
       <FlatList

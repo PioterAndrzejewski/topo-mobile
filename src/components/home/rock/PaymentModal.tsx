@@ -3,17 +3,27 @@ import {
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useMemo, useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import Toast from "react-native-toast-message";
 
+import Button from "src/components/common/Button";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { getPaymentIntent } from "src/services/payments";
+import { ViewStyle } from "react-native";
+import { useAreas } from "src/hooks/useAreas";
+import {
+  getPaymentIntent,
+  useProduct,
+  useSubscription,
+} from "src/services/payments";
+import { RockData } from "src/services/rocks";
 import { selectedRockAtom } from "src/store/results";
+import { palette } from "src/styles/theme";
+import SectorProduct from "./products/SectorProduct";
+import SubscriptionProduct from "./products/SubscriptionProduct";
 
 type PaymentModalProps = {
   opened: boolean;
@@ -22,19 +32,25 @@ type PaymentModalProps = {
 
 const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   const selectedRock = useAtomValue(selectedRockAtom);
-  const [isReady, setIsReady] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { rocks } = useAreas();
+  const rock = useMemo(
+    () =>
+      rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
+    [selectedRock],
+  );
+  const { data: subscription } = useSubscription();
+  const { data: product } = useProduct(
+    rock?.attributes.product.data?.attributes.uuid || "",
+  );
 
-  useEffect(() => {
-    initialisePaymentSheet();
-  }, []);
-
-  const initialisePaymentSheet = async () => {
+  const initialisePaymentSheet = async (productId: string) => {
+    console.log("no zaczynam dla id ", productId);
     if (!selectedRock) return;
 
-    const { data } = await getPaymentIntent(selectedRock);
+    const { data } = await getPaymentIntent(productId);
 
-    const { error } = await initPaymentSheet({
+    const { error: initPaymentError } = await initPaymentSheet({
       customerId: data.data.customer,
       customerEphemeralKeySecret: data.data.ephemeralKey.secret,
       paymentIntentClientSecret: data.data.paymentIntent.client_secret || "",
@@ -42,18 +58,13 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       allowsDelayedPaymentMethods: false,
     });
 
-    if (error) {
-      Toast.show({
+    if (initPaymentError) {
+      return Toast.show({
         type: "error",
         text2: "Coś poszło nie tak podczas przygotowywania płatności",
       });
-    } else {
-      setIsReady(true);
     }
-  };
 
-  const handleBuy = async () => {
-    if (!isReady) return;
     const { error } = await presentPaymentSheet();
 
     if (error) {
@@ -67,7 +78,14 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
         type: "success",
         text2: "Płatność poprawna!",
       });
+      setIsProcessing(false);
     }
+  };
+
+  const handleBuy = async (productId: string | undefined) => {
+    console.log("no zaczynam dla id ", productId);
+    if (isProcessing || !productId) return;
+    initialisePaymentSheet(productId);
   };
 
   return (
@@ -86,24 +104,41 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
         borderRadius={24}
         paddingVertical='l'
         paddingHorizontal='m'
-        gap='m'
       >
-        <TouchableOpacity onPress={handleBuy}>
-          <TouchableOpacity>
-            <View width='100%' borderRadius={12} borderWidth={1} padding='m'>
-              <Text variant='caption'>kup subskrypcję</Text>
-            </View>
-          </TouchableOpacity>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleBuy}>
-          <View width='100%' borderRadius={12} borderWidth={1} padding='m'>
-            <Text variant='caption'>Kup tylko region</Text>
-            <Text variant='caption'>wchodzi w skłąd to i to</Text>
+        <ScrollView>
+          <View gap='m'>
+            <Text variant='h2'>Uzyskaj dostęp do tych materiałów!</Text>
+            <TouchableOpacity>
+              {subscription && <SubscriptionProduct isLoading={isProcessing} />}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                handleBuy(rock?.attributes.product.data?.attributes.uuid)
+              }
+            >
+              {product && (
+                <SectorProduct product={product} isLoading={isProcessing} />
+              )}
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+          <Button
+            label='Innym razem'
+            onClick={onClose}
+            containerStyles={$buttonStyle}
+            labelColor='textSecondary'
+            isLoading={isProcessing}
+          />
+        </ScrollView>
       </View>
     </Modal>
   );
 };
+
+const $buttonStyle = {
+  backgroundColor: palette.white,
+  borderColor: palette.green,
+  borderWidth: 1,
+  borderRadius: 12,
+} satisfies ViewStyle;
 
 export default PaymentModal;
