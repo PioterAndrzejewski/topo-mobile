@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
@@ -11,7 +11,6 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { usePaymentSheet } from "@stripe/stripe-react-native";
 import { useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";
@@ -19,6 +18,7 @@ import OverlayCardView from "src/components/ui/OverlayCardView";
 import { useAreas } from "src/hooks/useAreas";
 import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
+import { saveLastSeenRock } from "src/services/storeAsync";
 import { selectedRockAtom } from "src/store/results";
 import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
@@ -27,7 +27,6 @@ import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 const RockInfoExpanded = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
-  const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
   const [paymentModalOpened, setPaymentModalOpened] = useState(false);
   const { rocks } = useAreas();
   const { width } = useWindowDimensions();
@@ -38,6 +37,13 @@ const RockInfoExpanded = () => {
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
+
+  useEffect(() => {
+    if (selectedRock && rock) {
+      saveLastSeenRock(rock);
+    }
+  }, [rock, selectedRock]);
+
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {

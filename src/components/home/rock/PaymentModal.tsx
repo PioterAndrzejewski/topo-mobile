@@ -203,6 +203,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
           />
         </ScrollView>
       </View>
+      <Toast />
     </Modal>
   );
 };
