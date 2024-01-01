@@ -11,6 +11,7 @@ import {
 } from "react-native-maps";
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import LastViewed from "../common/LastViewed";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -23,7 +24,7 @@ import {
   selectedRockAtom,
   startRegion,
 } from "src/store/results";
-import { palette, styleGuide } from "src/styles/theme";
+import { palette } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { LogoIcon } from "../icons/Logo";
@@ -57,7 +58,7 @@ export default function Map() {
         showsBuildings={false}
         provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
         style={$mapStyle}
-        region={region}
+        region={startRegion}
         onRegionChangeComplete={onRegionChangeComplete}
       >
         {rocks &&
@@ -95,6 +96,7 @@ export default function Map() {
             );
           })}
       </MapView>
+      <LastViewed />
     </View>
   );
 }

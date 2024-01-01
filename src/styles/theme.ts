@@ -14,8 +14,10 @@ export const palette = {
   blue700_10: "rgba(47, 46, 62, 0.1)",
 
 
-  yellow: "#cdbb48",
+  yellow: "#cdbb48", 
+  yellow50: "rgba(205, 187, 72, 0.2)",
   green: "#25AC57",
+  green20: "rgba(37, 172, 87, 0.2)",
 
   red: "rgb(210, 47, 39)",
 };
@@ -28,6 +30,8 @@ const theme = createTheme({
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
     backgroundTertiary: palette.yellow,
+    backgroundTertiaryFaded: palette.yellow50,
+    backgroundGreenFaded: palette.green20,
 
     secondary: palette.green,
     finished: palette.green,

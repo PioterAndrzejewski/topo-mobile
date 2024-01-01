@@ -12,6 +12,7 @@ import Toast from "react-native-toast-message";
 import Reactotron from "reactotron-react-native";
 
 import AppLoading from "src/components/common/AppLoading";
+import LastViewed from "src/components/common/LastViewed";
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
@@ -33,6 +34,10 @@ const queryClient = QueryClientSingleton.getInstance();
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
 });
+
+const toastConfig = {
+  lastViewed: () => <LastViewed />,
+};
 
 export default function App() {
   const [fontLoaded] = useFonts({
@@ -78,7 +83,7 @@ export default function App() {
           </PersistQueryClientProvider>
         </StripeProvider>
       </GestureHandlerRootView>
-      <Toast topOffset={60} />
+      <Toast topOffset={60} config={toastConfig}/>
     </SafeAreaProvider>
   );
 }

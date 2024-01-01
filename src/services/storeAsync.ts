@@ -8,6 +8,9 @@ const storage = {
   favorites: {
     routes: 'favRoutes',
     rocks: 'favRocks'
+  },
+  lastSeen: {
+    rock: 'lastSeenRock'
   }
 }
 
@@ -135,4 +138,23 @@ export const getAllFavoriteRocks = async (): Promise<RockData[]> => {
     });
   }
   return [];
+}
+
+export const saveLastSeenRock = async (rock: RockData) => {
+  try {
+    await AsyncStorage.setItem(storage.lastSeen.rock, JSON.stringify(rock))
+  } catch(e) {
+    console.log(e)
+  }
+  return [];
+}
+
+export const getLastSeenRock = async () => {
+  try {
+    const rock = await AsyncStorage.getItem(storage.lastSeen.rock)
+    if (rock) return JSON.parse(rock) as RockData;
+    return null;
+  } catch(e) {
+    console.log(e)
+  }
 }
