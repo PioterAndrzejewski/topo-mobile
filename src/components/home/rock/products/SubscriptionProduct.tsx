@@ -7,6 +7,7 @@ import { DiamondIcon } from "src/components/icons/Diamond";
 import { useSubscription } from "src/services/payments";
 import { palette } from "src/styles/theme";
 import { getPriceString } from "src/utils/getPriceString";
+import { ActivityIndicator } from 'react-native';
 
 const SubscriptionProduct = ({ isLoading }: { isLoading: boolean }) => {
   const { data: subscription } = useSubscription();
@@ -41,7 +42,7 @@ const SubscriptionProduct = ({ isLoading }: { isLoading: boolean }) => {
         borderRadius={12}
       >
         {isLoading ? (
-          <AppLoading />
+          <ActivityIndicator color={palette.white}/>
         ) : (
           <Text color='textWhite' variant='button'>
             {getPriceString(subscription?.price)}

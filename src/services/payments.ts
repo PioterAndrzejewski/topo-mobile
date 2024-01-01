@@ -94,6 +94,16 @@ export const useProduct = (id: string) => {
   return useQuery({
     queryKey: queryKeys.product(id),
     queryFn: () => getProduct(id),
-    select: (data) => data && data[0].attributes,
+    select: (data) => data && data[0],
   })
 }
+
+export const confirmPayment = async (productId: string, intentId: string) => {
+  if (productId === '' || intentId === '') return;
+  const body = {
+    productId,
+    intentId
+  }
+  const data = await authService.post(apiConfig.payments.confirm, body);
+  return data;
+};

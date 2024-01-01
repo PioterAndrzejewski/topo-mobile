@@ -1,12 +1,12 @@
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import { ActivityIndicator } from "react-native";
 import { ItemIcon } from "src/components/icons/Item";
 import { TickIcon } from "src/components/icons/Tick";
 import { Product } from "src/services/payments";
 import { palette } from "src/styles/theme";
 import { getPriceString } from "src/utils/getPriceString";
-import AppLoading from 'src/components/common/AppLoading';
 
 const SectorProduct = ({
   product,
@@ -31,25 +31,31 @@ const SectorProduct = ({
         paddingBottom='m'
         marginBottom='m'
       >
-        <ItemIcon size={26} color={palette.yellow} />
-        <Text variant='h3' color='textSecondary'>
-          {product.name}
-        </Text>
+        <ItemIcon size={32} color={palette.yellow} />
+        <View flexShrink={1}>
+          <Text variant='h3' color='textSecondary'>
+            {product.name}
+          </Text>
+          <Text color='textGray'>Ze wszystkimi przyszłymi aktualizacjami</Text>
+        </View>
       </View>
       <Text variant='body' color='textGray'>
         {product.description}
       </Text>
       <View marginVertical='m'>
-        <Text variant='h3'>Pakiet zawiera skały:</Text>
+        <Text variant='h3'>Pakiet zawiera skały</Text>
       </View>
       {product.map_rocks.data.map((item) => (
-        <View flexDirection='row' gap='s'>
+        <View flexDirection='row' gap='s' marginBottom='m' key={item.id}>
           <TickIcon />
           <Text variant='body' color='textGray'>
             {item.attributes.Name}
           </Text>
         </View>
       ))}
+      <Text variant='body' color='textGray'>
+        I może zostać w przyszłości uzupełniony o dodatkowe elementy.
+      </Text>
       <View
         width='100%'
         backgroundColor='secondary'
@@ -60,7 +66,7 @@ const SectorProduct = ({
         borderRadius={12}
       >
         {isLoading ? (
-          <AppLoading />
+          <ActivityIndicator color={palette.white} />
         ) : (
           <Text color='textWhite' variant='button'>
             {getPriceString(product.price)}

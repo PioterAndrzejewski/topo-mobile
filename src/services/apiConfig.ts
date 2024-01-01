@@ -31,6 +31,7 @@ export const apiConfig = {
     get: (qs: string) => `${apiUrl}/api/products?${qs}`
   },
   payments: {
-    intent: `${apiUrl}/api/payments`
+    intent: `${apiUrl}/api/payments`,
+    confirm: `${apiUrl}/api/payments/confirm`
   }
 }
