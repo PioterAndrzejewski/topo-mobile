@@ -37,7 +37,7 @@ export const logout = async () => {
     await SecureStore.deleteItemAsync('jwt');
     await SecureStore.deleteItemAsync('userEmail');
     await SecureStore.deleteItemAsync('userName');
-    navigate('Login')
+    await navigate('Login')
   } catch (err) {
     console.log('something went wrong during logout')
   }

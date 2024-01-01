@@ -239,6 +239,16 @@ export type DrawingImage = {
   image: {data: Photo};
 }
 
+export type ProductSanitized = {
+  price: number;
+  description: string;
+  uuid: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
+}
+
 export type RockData = {
   id: number;
   attributes: {
@@ -268,6 +278,12 @@ export type RockData = {
     };
     Description: string;
     shading: Shading;
+    product: {
+      data: {
+        id: number;
+        attributes: ProductSanitized
+      } | null;
+    };
   }
 }
 
@@ -325,10 +341,11 @@ export const getRocks = async () => {
       'parent',
       'coordinates',
       'routes',
-      'cover',
       'cover.Photo',
       'formation',
-      'exhibition'
+      'exhibition',
+      'product',
+      'product.uuid',
     ]
   });
   const { data } = await authService.get<RocksData>(apiConfig.topo.rocks(query));
@@ -353,6 +370,11 @@ export const getRock = async (id: string) => {
       'exhibition',
       'image',
       'image.image',
+      'product',
+      'product.name',
+      'product.uuid',
+      'product.price',
+      'product.description'
     ],
     filters: {
       uuid: {

@@ -37,7 +37,10 @@ export default function SearchScreen() {
   }, [mode]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }} edges={['top']}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: palette.white }}
+      edges={["top"]}
+    >
       <ScreenTitle title='Zapisane' centered />
       <View flex={1}>
         <View
@@ -51,9 +54,9 @@ export default function SearchScreen() {
         {renderFavorites}
         <View paddingHorizontal='m'>
           <Text variant='caption'>
-            Elementy zapisują się jedynie na Twoim urządzeniu i nie będą
-            dostępne jak usuniesz aplikację, dane aplikacji, lub będziesz używać
-            innego urządzenia. Pracujemy nad tym :)
+            Ulubione zapisujesz na Twoim urządzeniu i nie będą dostępne jak
+            usuniesz aplikację, dane aplikacji i na innych urządzeniach.
+            Pracujemy nad tym :)
           </Text>
         </View>
       </View>
