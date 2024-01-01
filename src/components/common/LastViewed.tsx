@@ -63,31 +63,33 @@ const LastViewed = () => {
     >
       <Animated.View entering={BounceInUp}>
         <View justifyContent='center' width='100%' alignItems='center'>
-          <View borderRadius={24} overflow='hidden'>
-            <BlurView>
-              <TouchableOpacity onPress={animateTo}>
-                <View
-                  paddingHorizontal='3xl'
-                  paddingVertical='m'
-                  borderRadius={12}
-                  backgroundColor='backgroundTertiaryFaded'
-                  justifyContent='center'
-                  alignItems='center'
-                  gap='s'
-                  flexDirection='row'
-                >
-                  <LogoIcon size={44} />
-                  <View>
-                    <Text variant='body'>Ostatnio oglądane:</Text>
+          <BlurView
+            intensity={15}
+            blurReductionFactor={1}
+            style={{ borderRadius: 24, overflow: "hidden" }}
+          >
+            <TouchableOpacity onPress={animateTo}>
+              <View
+                paddingHorizontal='3xl'
+                paddingVertical='m'
+                borderRadius={12}
+                backgroundColor='backgroundTertiaryFaded'
+                justifyContent='center'
+                alignItems='center'
+                gap='s'
+                flexDirection='row'
+              >
+                <LogoIcon size={44} />
+                <View>
+                  <Text variant='body'>Ostatnio oglądane:</Text>
 
-                    <Text variant='h4' color='textSecondary'>
-                      {lastViewed.attributes.Name}
-                    </Text>
-                  </View>
+                  <Text variant='h4' color='textSecondary'>
+                    {lastViewed.attributes.Name}
+                  </Text>
                 </View>
-              </TouchableOpacity>
-            </BlurView>
-          </View>
+              </View>
+            </TouchableOpacity>
+          </BlurView>
         </View>
       </Animated.View>
     </Swipeable>

@@ -58,7 +58,7 @@ export default function Map() {
         showsBuildings={false}
         provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
         style={$mapStyle}
-        region={region}
+        region={startRegion}
         onRegionChangeComplete={onRegionChangeComplete}
       >
         {rocks &&

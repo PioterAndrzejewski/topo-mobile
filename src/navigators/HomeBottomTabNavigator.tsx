@@ -70,10 +70,17 @@ const HomeBottomTabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, size }) => renderIcon({ focused, size, route }),
         headerShown: false,
-        tabBarHideOnKeyboard: true,
+        tabBarHideOnKeyboard: false,
         tabBarShowLabel: true,
-        tabBarStyle: {paddingTop: 4},
-        tabBarLabel: ({ focused }) => <Text variant='caption' color={focused ? 'textSecondary' : 'textGray'}>{getName(route.name)}</Text>,
+        tabBarStyle: { paddingTop: 4 },
+        tabBarLabel: ({ focused }) => (
+          <Text
+            variant='caption'
+            color={focused ? "textSecondary" : "textGray"}
+          >
+            {getName(route.name)}
+          </Text>
+        ),
       })}
     >
       <Tab.Screen name='Map' component={MapScreen} />
