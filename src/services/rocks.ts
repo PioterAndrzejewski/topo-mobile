@@ -239,6 +239,13 @@ export type DrawingImage = {
   image: {data: Photo};
 }
 
+export type ProductSanitized = {
+  price: number;
+  description: string;
+  uuid: string;
+  name: string;
+}
+
 export type RockData = {
   id: number;
   attributes: {
@@ -268,6 +275,7 @@ export type RockData = {
     };
     Description: string;
     shading: Shading;
+    product: ProductSanitized;
   }
 }
 

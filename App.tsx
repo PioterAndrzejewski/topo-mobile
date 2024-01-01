@@ -2,6 +2,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts } from "expo-font";
@@ -57,21 +58,25 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={styles.container}>
-        <PersistQueryClientProvider
-          client={queryClient}
-          persistOptions={{ persister: asyncStoragePersister }}
+        <StripeProvider
+          publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
         >
-          <NavigationContainer ref={navigationRef}>
-            <ThemeProvider theme={theme}>
-              <BottomSheetModalProvider>
-                <FavoritesContextProvider>
-                  <RootNavigator />
-                  <ConfirmActionModal />
-                </FavoritesContextProvider>
-              </BottomSheetModalProvider>
-            </ThemeProvider>
-          </NavigationContainer>
-        </PersistQueryClientProvider>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister: asyncStoragePersister }}
+          >
+            <NavigationContainer ref={navigationRef}>
+              <ThemeProvider theme={theme}>
+                <BottomSheetModalProvider>
+                  <FavoritesContextProvider>
+                    <RootNavigator />
+                    <ConfirmActionModal />
+                  </FavoritesContextProvider>
+                </BottomSheetModalProvider>
+              </ThemeProvider>
+            </NavigationContainer>
+          </PersistQueryClientProvider>
+        </StripeProvider>
       </GestureHandlerRootView>
       <Toast topOffset={60} />
     </SafeAreaProvider>

@@ -21,14 +21,14 @@ import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
-    onSuccess: (data) => {
-      saveJWT(data.jwt);
-      saveRefreshToken(data.refreshToken);
-      setUserToStorage(data.user);
+    onSuccess: async (data) => {
+      await saveJWT(data.jwt);
+      await saveRefreshToken(data.refreshToken);
+      await setUserToStorage(data.user);
       navigation.navigate("HomeNavigator");
     },
   });
@@ -47,7 +47,11 @@ export default function LoginPanel() {
 
   return (
     <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-      <View height={height} backgroundColor='backgroundScreen' paddingHorizontal='m'>
+      <View
+        height={height}
+        backgroundColor='backgroundScreen'
+        paddingHorizontal='m'
+      >
         <Text variant='h2' color='textGray'>
           Topo na wyciągnięcie ręki
         </Text>
