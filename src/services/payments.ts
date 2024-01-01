@@ -104,6 +104,47 @@ export const confirmPayment = async (productId: string, intentId: string) => {
     productId,
     intentId
   }
-  const data = await authService.post(apiConfig.payments.confirm, body);
+  const data = await authService.post<GetProductResponse>(apiConfig.payments.confirm, body);
   return data;
 };
+
+type ProductObject = {
+  attributes: {
+    createdAt: Date,
+    updatedAt: Date,
+    product: {
+      data: {
+        id: number;
+        attributes: Product;
+      }
+    }
+  }
+  id: number;
+}
+
+type GetProductsResponse = {
+  data: ProductObject[];
+}
+
+export const getProducts = async () => {
+  const query = qs.stringify({
+    pagination: {
+      pageSize: 200
+    },
+    populate: [
+      'product',
+      'product.uuid',
+    ],
+  })
+  const { data } = await authService.get<GetProductsResponse>(apiConfig.productTransaction.get(query));
+  return data;
+};
+
+
+export const useUserProducts = () => {
+  return useQuery({
+    queryKey: queryKeys.products,
+    queryFn: () => getProducts(),
+    select: (data) => data.data,
+  })
+}

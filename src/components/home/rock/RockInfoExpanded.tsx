@@ -17,6 +17,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import { useAreas } from "src/hooks/useAreas";
+import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
 import { selectedRockAtom } from "src/store/results";
 import { palette } from "src/styles/theme";
@@ -30,6 +31,7 @@ const RockInfoExpanded = () => {
   const [paymentModalOpened, setPaymentModalOpened] = useState(false);
   const { rocks } = useAreas();
   const { width } = useWindowDimensions();
+  const { data: userProducts } = useUserProducts();
 
   const rock = useMemo(
     () =>
@@ -37,6 +39,18 @@ const RockInfoExpanded = () => {
     [selectedRock],
   );
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
+
+  const userHasBoughtThisProduct = useMemo(() => {
+    console.log("w usememo: ");
+    console.log(userProducts);
+    if (!userProducts || !userProducts.length || userProducts.length < 1)
+      return false;
+    return !!userProducts?.find(
+      (product) =>
+        product.attributes.product.data.attributes.uuid ===
+        rock?.attributes.product.data?.attributes.uuid,
+    );
+  }, [userProducts, rock]);
 
   const handleOpenRock = () => {
     navigation.navigate("Rock", {
@@ -74,7 +88,7 @@ const RockInfoExpanded = () => {
               </Text>
             </View>
           </View>
-          {rock?.attributes.product.data && (
+          {rock?.attributes.product.data && !userHasBoughtThisProduct && (
             <OverlayCardView
               justifyContent='center'
               alignItems='center'
@@ -103,7 +117,18 @@ const RockInfoExpanded = () => {
         )}
       />
       <View marginBottom='l' marginHorizontal='m'>
-        <Button label='Otwórz skałoplan' onClick={handleOpenRock} />
+        <Button
+          label={
+            !!rock?.attributes.product.data && !userHasBoughtThisProduct
+              ? "Wykup dostęp"
+              : "Otwórz skałoplan"
+          }
+          onClick={
+            !!rock?.attributes.product.data && !userHasBoughtThisProduct
+              ? () => setPaymentModalOpened(true)
+              : handleOpenRock
+          }
+        />
       </View>
       {paymentModalOpened && (
         <PaymentModal

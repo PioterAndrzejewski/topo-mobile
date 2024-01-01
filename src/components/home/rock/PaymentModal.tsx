@@ -2,10 +2,11 @@ import {
   initPaymentSheet,
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useMemo, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import Toast from "react-native-toast-message";
 
@@ -24,6 +25,7 @@ import {
   useProduct,
   useSubscription,
 } from "src/services/payments";
+import { queryKeys } from "src/services/queryKeys";
 import { RockData } from "src/services/rocks";
 import { selectedRockAtom } from "src/store/results";
 import { palette } from "src/styles/theme";
@@ -38,6 +40,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { rocks } = useAreas();
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
   const rock = useMemo(
     () =>
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
@@ -47,7 +50,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   const { data: product } = useProduct(
     rock?.attributes.product.data?.attributes.uuid || "",
   );
-  const { mutate: confirmPaymentMutation } = useMutation({
+  const { mutate: confirmProductPaymentMutation } = useMutation({
     mutationFn: ({
       productId,
       intentId,
@@ -55,7 +58,21 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       productId: string;
       intentId: string;
     }) => confirmPayment(productId, intentId),
-    retryDelay: 1000,
+    retryDelay: 5000,
+    retry: true,
+    onSuccess: () => {
+      queryClient.refetchQueries(queryKeys.products);
+    },
+  });
+  const { mutate: confirmSubscriptionPaymentMutation } = useMutation({
+    mutationFn: ({
+      productId,
+      intentId,
+    }: {
+      productId: string;
+      intentId: string;
+    }) => confirmPayment(productId, intentId),
+    retryDelay: 5000,
     retry: true,
     onSuccess: (data) => {
       console.log(data && data.data);
@@ -66,7 +83,6 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     productId: string,
     item: "product" | "subscription",
   ) => {
-    console.log("no zaczynam dla id ", productId);
     if (!selectedRock) return setIsProcessing(false);
 
     const { data: intentData } = await getPaymentIntent(productId);
@@ -81,6 +97,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     });
 
     if (initPaymentError) {
+      onClose();
       setIsProcessing(false);
       return Toast.show({
         type: "error",
@@ -91,7 +108,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     const { error } = await presentPaymentSheet();
 
     if (error) {
-      console.log("no jest platność jakaś tu?");
+      onClose();
       setIsProcessing(false);
       return Toast.show({
         type: "error",
@@ -99,16 +116,16 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       });
     }
     try {
-      await confirmPaymentMutation({
-        productId:
-          item === "product" && product?.id
-            ? product?.id.toString()
-            : productId
-            ? productId
+      if (item === "product") {
+        await confirmProductPaymentMutation({
+          productId: rock?.attributes.product?.data
+            ? rock?.attributes.product.data.id.toString()
             : "",
-        intentId: intentData.data.paymentIntent.id || "",
-      });
+          intentId: intentData.data.paymentIntent.id,
+        });
+      }
     } catch (e) {
+      onClose();
       Toast.show({
         type: "error",
         text2:
@@ -129,7 +146,6 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     productId: string | undefined,
     item: "product" | "subscription",
   ) => {
-    console.log("no zaczynam dla id ", productId);
     if (isProcessing || !productId) return;
     setIsProcessing(true);
     initialisePaymentSheet(productId, item);
