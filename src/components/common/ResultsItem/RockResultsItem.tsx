@@ -35,7 +35,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   const { colors } = useTheme<Theme>();
   const isFavorite = checkRockInFavorites(item.attributes.uuid);
   const image = useImageFile(
-    item.attributes.cover[0].Photo.data.attributes.url,
+    item?.attributes?.cover[0]?.Photo?.data.attributes.url || '',
   );
   const animateTo = (item: RockData, stage: number) => {
     navigation.navigate("Map");

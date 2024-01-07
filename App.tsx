@@ -9,7 +9,6 @@ import { useFonts } from "expo-font";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
-import Reactotron from "reactotron-react-native";
 
 import AppLoading from "src/components/common/AppLoading";
 import LastViewed from "src/components/common/LastViewed";
@@ -19,15 +18,15 @@ import theme from "src/styles/theme";
 
 import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Reactotron from "reactotron-react-native";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
 
-Reactotron.setAsyncStorageHandler!(AsyncStorage)
-  .configure()
-  .useReactNative()
-  .connect();
+Reactotron.configure({ host: "192.168.50.223", port: 9090 })
+  .useReactNative() // add all built-in react native plugins
+  .connect(); // let's connect!
 
 const queryClient = QueryClientSingleton.getInstance();
 
@@ -83,7 +82,7 @@ export default function App() {
           </PersistQueryClientProvider>
         </StripeProvider>
       </GestureHandlerRootView>
-      <Toast topOffset={60} config={toastConfig}/>
+      <Toast topOffset={60} config={toastConfig} />
     </SafeAreaProvider>
   );
 }

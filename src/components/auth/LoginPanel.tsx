@@ -71,6 +71,7 @@ export default function LoginPanel() {
                   value={value}
                   label='Adres e-mail'
                   error={error}
+                  autoComplete='email'
                 />
               )}
             />

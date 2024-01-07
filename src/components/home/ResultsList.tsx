@@ -130,9 +130,9 @@ export default function ResultsList() {
                 paddingBottom='m'
               >
                 {locationArray.map((item, index) => (
-                  <View key={item.attributes.uuid}>
+                  <View key={item?.attributes?.uuid}>
                     <OverlayCardView
-                      key={item.id + index + item.attributes.uuid}
+                      key={item?.id + index + item?.attributes.uuid}
                     >
                       <TouchableOpacity
                         style={{ flexDirection: "row" }}

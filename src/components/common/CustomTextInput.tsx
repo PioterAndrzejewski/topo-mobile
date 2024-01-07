@@ -10,6 +10,8 @@ import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
 import { Theme, palette, styleGuide } from "src/styles/theme";
 
+export type AutoComplete = "email" | "username" | undefined;
+
 export type CustomTextInputProps = {
   label?: string;
   secure?: boolean;
@@ -20,6 +22,7 @@ export type CustomTextInputProps = {
   onBlur?: any;
   hookBlurHandler: any;
   icon?: ReactNode;
+  autoComplete?: AutoComplete;
 };
 
 export default function CustomTextInput({
@@ -31,6 +34,7 @@ export default function CustomTextInput({
   error,
   hookBlurHandler,
   icon,
+  autoComplete,
   ...props
 }: CustomTextInputProps) {
   const [inputFocused, setInputFocused] = useState(false);
@@ -87,6 +91,7 @@ export default function CustomTextInput({
             editable
             secureTextEntry={secure && hidden}
             onChangeText={onChange}
+            autoComplete={autoComplete}
             {...props}
           />
           {error?.message && (

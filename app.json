@@ -14,7 +14,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "plugins": ["./src/plugins/android-manifest.plugin.js"],
+    "plugins": [
+      "./src/plugins/android-manifest.plugin.js"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -42,15 +44,18 @@
           "dgis",
           "lftgpas"
         ]
-     }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["android.permission.INTERNET"],
-      "usesCleartextTraffic": "true"
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
+      "usesCleartextTraffic": "true",
+      "package": "com.wspinapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

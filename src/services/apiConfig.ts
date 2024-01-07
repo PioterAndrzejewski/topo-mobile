@@ -1,6 +1,8 @@
+export const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 // export const apiUrl = "http://localhost:1337";
-export const apiUrl = "http://192.168.50.16:1337";
-export const viewerUrl = "http://localhost:3000";
+// export const apiUrl = "http://192.168.50.223:1337";
+// export const viewerUrl = "http://localhost:3000";
 
 export const apiConfig = {
   auth: {
