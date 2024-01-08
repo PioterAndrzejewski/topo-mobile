@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-toast-message";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
@@ -18,6 +19,7 @@ import {
   setUserToStorage,
 } from "src/services/store";
 import { HomeScreenNavigationProp } from "src/types/type";
+import { resetPass } from 'src/services/auth';
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -30,6 +32,16 @@ export default function LoginPanel() {
       await saveRefreshToken(data.refreshToken);
       await setUserToStorage(data.user);
       navigation.navigate("HomeNavigator");
+    },
+  });
+  const { mutate: resetPasswordMutation } = useMutation({
+    mutationKey: ["resetPass"],
+    mutationFn: () => resetPass("p.andrzejewski@outlook.com"),
+    onSuccess: async () => {
+      Toast.show({
+        type: "success",
+        text2: "no wysłano",
+      });
     },
   });
   const { control, handleSubmit } = useForm({
@@ -124,6 +136,26 @@ export default function LoginPanel() {
                 <View marginLeft='m'>
                   <Text variant='body' color='textSecondary'>
                     Zarejestruj
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              marginTop='l'
+              justifyContent='center'
+              alignItems='center'
+              flexDirection='row'
+            >
+              <Text variant='body' color='textGray'>
+                Zapomniałeś hasła?
+              </Text>
+              <TouchableOpacity
+                onPress={() => resetPasswordMutation()}
+                hitSlop={20}
+              >
+                <View marginLeft='m'>
+                  <Text variant='body' color='textSecondary'>
+                    Resetuj
                   </Text>
                 </View>
               </TouchableOpacity>

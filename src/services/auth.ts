@@ -117,4 +117,11 @@ export const register = async (username: string, email: string, password: string
   return data;
 };
 
+export const resetPass = async (email: string) => {
+  const { data } = await axios.post<LoggedUserData>(apiConfig.auth.forgotPassword, {
+    email,
+  });
+  return data;
+};
+
 export default instance;
