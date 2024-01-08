@@ -1,4 +1,5 @@
 import { useTheme } from "@shopify/restyle";
+import { ReactNode } from "react";
 import { Text as TextBase, TextStyle } from "react-native";
 import { Theme } from "src/styles/theme";
 
@@ -6,7 +7,7 @@ type TextProps = {
   variant?: keyof Theme["textVariants"];
   additionalStyles?: TextStyle;
   color?: keyof Theme["colors"];
-  children?: string;
+  children?: string | ReactNode;
 };
 
 const Text = ({

@@ -4,6 +4,8 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
   Login: undefined;
+  ResetPassword: undefined;
+  ResetPasswordSuccessScreen: {email: string};
   Register: undefined;
   HomeNavigator: undefined;
   Rock: {
@@ -23,6 +25,8 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   HomeNavigator,
   BottomTabParamList,
   Login,
+  'ResetPasswordSuccessScreen',
+  ResetPasswordSuccessScreen,
   Register,
   Rock
 >;
