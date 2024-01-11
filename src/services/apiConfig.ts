@@ -1,7 +1,7 @@
-export const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+// export const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 // export const apiUrl = "http://localhost:1337";
-// export const apiUrl = "http://192.168.50.223:1337";
+export const apiUrl = "http://192.168.50.223:1337";
 // export const viewerUrl = "http://localhost:3000";
 
 export const apiConfig = {
@@ -9,16 +9,16 @@ export const apiConfig = {
     login: `${apiUrl}/api/auth/local/`,
     register: `${apiUrl}/api/auth/local/register/`,
     forgotPassword: `${apiUrl}/api/auth/forgot-password/`,
-    refreshToken: `${apiUrl}/api/token/refresh/`
+    refreshToken: `${apiUrl}/api/token/refresh/`,
   },
   user: {
-    me: `${apiUrl}/api/users/me`
+    me: `${apiUrl}/api/users/me`,
   },
   topo: {
     areas: (qs: string) => `${apiUrl}/api/map-areas?${qs}`,
     regions: (qs: string) => `${apiUrl}/api/map-regions?${qs}`,
     sectors: (qs: string) => `${apiUrl}/api/map-sectors?${qs}`,
-    rocks: (qs: string) => `${apiUrl}/api/rocks?${qs}`
+    rocks: (qs: string) => `${apiUrl}/api/rocks?${qs}`,
   },
   ratings: {
     create: `${apiUrl}/api/ratings`,
@@ -31,13 +31,16 @@ export const apiConfig = {
     get: (qs: string) => `${apiUrl}/api/comments?${qs}`,
   },
   product: {
-    get: (qs: string) => `${apiUrl}/api/products?${qs}`
+    get: (qs: string) => `${apiUrl}/api/products?${qs}`,
+  },
+  subscription: {
+    get: `${apiUrl}/api/subscription-product`,
   },
   productTransaction: {
     get: (qs: string) => `${apiUrl}/api/product-transactions?${qs}`,
   },
   payments: {
     intent: `${apiUrl}/api/payments`,
-    confirm: `${apiUrl}/api/payments/confirm`
-  }
-}
+    confirm: `${apiUrl}/api/payments/confirm`,
+  },
+};

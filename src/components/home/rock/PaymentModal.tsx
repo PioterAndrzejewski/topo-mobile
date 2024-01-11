@@ -55,27 +55,13 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       productId,
       intentId,
     }: {
-      productId: string;
+      productId: string | number;
       intentId: string;
     }) => confirmPayment(productId, intentId),
     retryDelay: 5000,
     retry: true,
     onSuccess: () => {
       queryClient.refetchQueries(queryKeys.products);
-    },
-  });
-  const { mutate: confirmSubscriptionPaymentMutation } = useMutation({
-    mutationFn: ({
-      productId,
-      intentId,
-    }: {
-      productId: string;
-      intentId: string;
-    }) => confirmPayment(productId, intentId),
-    retryDelay: 5000,
-    retry: true,
-    onSuccess: (data) => {
-      console.log(data && data.data);
     },
   });
 
@@ -85,7 +71,9 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   ) => {
     if (!selectedRock) return setIsProcessing(false);
 
-    const { data: intentData } = await getPaymentIntent(productId);
+    const { data: intentData } = await getPaymentIntent(
+      item === "subscription" ? "subscription" : productId,
+    );
 
     const { error: initPaymentError } = await initPaymentSheet({
       customerId: intentData.data.customer,
@@ -116,14 +104,14 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       });
     }
     try {
-      if (item === "product") {
-        await confirmProductPaymentMutation({
-          productId: rock?.attributes.product?.data
-            ? rock?.attributes.product.data.id.toString()
-            : "",
-          intentId: intentData.data.paymentIntent.id,
-        });
-      }
+      if (!rock?.attributes.product.data) return;
+      await confirmProductPaymentMutation({
+        productId:
+          item === "subscription"
+            ? "subscription"
+            : rock?.attributes.product.data?.id,
+        intentId: intentData.data.paymentIntent.id,
+      });
     } catch (e) {
       onClose();
       Toast.show({
@@ -133,7 +121,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
         visibilityTime: 3000,
       });
     }
-
+    queryClient.invalidateQueries(["user-profile"]);
     onClose();
     Toast.show({
       type: "success",

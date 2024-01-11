@@ -57,6 +57,8 @@ export default function App() {
     asyncInit();
   });
 
+  console.log(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
   if (!fontLoaded || !initAppResult) {
     return <AppLoading />;
   }
