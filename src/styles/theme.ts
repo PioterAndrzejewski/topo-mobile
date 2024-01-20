@@ -8,13 +8,13 @@ export const palette = {
 
   blue100: "rgb(242, 241, 244)",
   blue100_25: "rgba(242, 241, 244, 0.25)",
+  blue200: "rgba(183, 202, 192, 0.239)",
   blue300: "rgba(147, 169, 158, 0.239)",
   blue500: "hsl(240, 12%, 40%)",
   blue700: "rgb(47, 46, 62)",
   blue700_10: "rgba(47, 46, 62, 0.1)",
 
-
-  yellow: "#cdbb48", 
+  yellow: "#cdbb48",
   yellow50: "rgba(205, 187, 72, 0.2)",
   green: "#25AC57",
   green20: "rgba(37, 172, 87, 0.2)",
@@ -32,6 +32,7 @@ const theme = createTheme({
     backgroundTertiary: palette.yellow,
     backgroundTertiaryFaded: palette.yellow50,
     backgroundGreenFaded: palette.green20,
+    backgroundLight: palette.blue200,
 
     secondary: palette.green,
     finished: palette.green,
@@ -53,13 +54,13 @@ const theme = createTheme({
   spacing: {
     "3xs": 2,
     "2xs": 4,
-    "xs": 6,
-    "s": 8,
-    "m": 16,
+    xs: 6,
+    s: 8,
+    m: 16,
     "-m": -16,
-    "l": 24,
+    l: 24,
     "-l": -32,
-    "xl": 40,
+    xl: 40,
     "2xl": 48,
     "3xl": 60,
   },
@@ -117,7 +118,7 @@ const theme = createTheme({
     marker: {
       fontFamily: "PoppinsBold",
       fontSize: 12,
-    }
+    },
   },
 });
 
@@ -128,7 +129,7 @@ export const styleGuide = {
       width: 0,
       height: 0,
     },
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
     elevation: 999,
@@ -142,15 +143,15 @@ export const styleGuide = {
       height: 0,
       width: 0,
     },
-    backgroundColor: 'backgroundScreen' as keyof typeof theme['colors'],
+    backgroundColor: "backgroundScreen" as keyof (typeof theme)["colors"],
     shadowRadius: 6,
     shadowOpacity: 0.15,
     elevation: 5,
     zIndex: 99,
-    shadowColor: 'backgroundDark' as keyof typeof theme['colors'],
-    borderRadius: 12
-  }
-}
+    shadowColor: "backgroundDark" as keyof (typeof theme)["colors"],
+    borderRadius: 12,
+  },
+};
 
 export type Theme = typeof theme;
 export default theme;

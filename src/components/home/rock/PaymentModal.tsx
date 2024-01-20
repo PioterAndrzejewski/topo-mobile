@@ -163,6 +163,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
             <Text variant='h2'>Uzyskaj dostęp do tych materiałów!</Text>
             <TouchableOpacity
               onPress={() => handleBuy(subscription?.uuid, "subscription")}
+              disabled={isProcessing}
             >
               {subscription && <SubscriptionProduct isLoading={isProcessing} />}
             </TouchableOpacity>
@@ -173,6 +174,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
                   "product",
                 )
               }
+              disabled={isProcessing}
             >
               {product && (
                 <SectorProduct
