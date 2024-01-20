@@ -3,14 +3,14 @@ import View from "src/components/ui/View";
 
 import AppLoading from "src/components/common/AppLoading";
 
+import { ActivityIndicator } from "react-native";
 import { DiamondIcon } from "src/components/icons/Diamond";
-import { useSubscription } from "src/services/payments";
+import { useSubscriptionProduct } from "src/services/payments";
 import { palette } from "src/styles/theme";
 import { getPriceString } from "src/utils/getPriceString";
-import { ActivityIndicator } from 'react-native';
 
 const SubscriptionProduct = ({ isLoading }: { isLoading: boolean }) => {
-  const { data: subscription } = useSubscription();
+  const { data: subscription } = useSubscriptionProduct();
 
   if (!subscription) return <AppLoading />;
   return (
@@ -42,7 +42,7 @@ const SubscriptionProduct = ({ isLoading }: { isLoading: boolean }) => {
         borderRadius={12}
       >
         {isLoading ? (
-          <ActivityIndicator color={palette.white}/>
+          <ActivityIndicator color={palette.white} />
         ) : (
           <Text color='textWhite' variant='button'>
             {getPriceString(subscription?.price)}

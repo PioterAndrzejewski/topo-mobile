@@ -24,11 +24,9 @@ import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
 
-if (__DEV__) {
-  Reactotron.configure({ host: "192.168.50.223", port: 9090 })
-    .useReactNative() // add all built-in react native plugins
-    .connect(); // let's connect!
-}
+Reactotron.configure({ host: "192.168.50.223", port: 9090 })
+  .useReactNative()
+  .connect();
 
 const queryClient = QueryClientSingleton.getInstance();
 
@@ -56,8 +54,6 @@ export default function App() {
 
     asyncInit();
   });
-
-  console.log(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
   if (!fontLoaded || !initAppResult) {
     return <AppLoading />;

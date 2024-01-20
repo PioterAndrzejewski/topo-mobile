@@ -23,7 +23,7 @@ import {
   confirmPayment,
   getPaymentIntent,
   useProduct,
-  useSubscription,
+  useSubscriptionProduct,
 } from "src/services/payments";
 import { queryKeys } from "src/services/queryKeys";
 import { RockData } from "src/services/rocks";
@@ -46,7 +46,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
-  const { data: subscription } = useSubscription();
+  const { data: subscription } = useSubscriptionProduct();
   const { data: product } = useProduct(
     rock?.attributes.product.data?.attributes.uuid || "",
   );
@@ -62,6 +62,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     retry: true,
     onSuccess: () => {
       queryClient.refetchQueries(queryKeys.products);
+      queryClient.refetchQueries(queryKeys.profile.me);
     },
   });
 

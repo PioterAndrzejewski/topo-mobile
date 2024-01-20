@@ -57,7 +57,7 @@ export const getSubscription = async () => {
   return data;
 };
 
-export const useSubscription = () => {
+export const useSubscriptionProduct = () => {
   return useQuery({
     queryKey: queryKeys.product("year_subscription"),
     queryFn: getSubscription,

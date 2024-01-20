@@ -16,6 +16,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import { useAreas } from "src/hooks/useAreas";
+import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
 import { saveLastSeenRock } from "src/services/storeAsync";
@@ -31,12 +32,17 @@ const RockInfoExpanded = () => {
   const { rocks } = useAreas();
   const { width } = useWindowDimensions();
   const { data: userProducts } = useUserProducts();
+  const hasSubscription = useUserSubscription();
 
   const rock = useMemo(
     () =>
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
+
+  useEffect(() => {
+    console.log("has subscription? ", hasSubscription);
+  }, [hasSubscription]);
 
   useEffect(() => {
     if (selectedRock && rock) {
@@ -49,14 +55,18 @@ const RockInfoExpanded = () => {
   const userHasBoughtThisProduct = useMemo(() => {
     console.log("w usememo: ");
     console.log(userProducts);
-    if (!userProducts || !userProducts.length || userProducts.length < 1)
+    if (hasSubscription) {
+      return true;
+    }
+    if (!userProducts || !userProducts.length || userProducts.length < 1) {
       return false;
+    }
     return !!userProducts?.find(
       (product) =>
         product.attributes.product.data.attributes.uuid ===
         rock?.attributes.product.data?.attributes.uuid,
     );
-  }, [userProducts, rock]);
+  }, [userProducts, rock, hasSubscription]);
 
   const handleOpenRock = () => {
     navigation.navigate("Rock", {
