@@ -49,7 +49,6 @@ const instance = axios.create({
 export const refreshToken = async (): Promise<
   AxiosResponse<TokenRefreshResponse>
 > => {
-  console.log("refreshing the token!");
   const storedRefreshToken = await getFromSecureStorage("refreshToken");
 
   if (storedRefreshToken) {

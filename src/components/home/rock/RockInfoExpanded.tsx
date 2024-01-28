@@ -34,15 +34,12 @@ const RockInfoExpanded = () => {
   const { data: userProducts } = useUserProducts();
   const hasSubscription = useUserSubscription();
 
-  const rock = useMemo(
-    () =>
-      rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
-    [selectedRock],
-  );
-
-  useEffect(() => {
-    console.log("has subscription? ", hasSubscription);
-  }, [hasSubscription]);
+  const rock = useMemo(() => {
+    if (!rocks) return null;
+    return rocks?.find(
+      (rock: RockData) => rock.attributes.uuid === selectedRock,
+    );
+  }, [selectedRock]);
 
   useEffect(() => {
     if (selectedRock && rock) {
@@ -53,8 +50,6 @@ const RockInfoExpanded = () => {
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {
-    console.log("w usememo: ");
-    console.log(userProducts);
     if (hasSubscription) {
       return true;
     }
@@ -75,6 +70,10 @@ const RockInfoExpanded = () => {
     setSelectedRock(null);
   };
 
+  if (!rock || !rock.attributes) {
+    return null;
+  }
+
   return (
     <View height='100%'>
       <View>
@@ -92,17 +91,19 @@ const RockInfoExpanded = () => {
             <Text variant='h2' color='textBlack'>
               {rock?.attributes.Name}
             </Text>
-            <View
-              flexDirection='row'
-              gap='s'
-              maxWidth={width - 80}
-              flexWrap='wrap'
-            >
-              <Text variant='h4'>w sektorze:</Text>
-              <Text variant='h4' color='textSecondary'>
-                {rock?.attributes.parent.data.attributes.Name}
-              </Text>
-            </View>
+            {rock.attributes.parent.data && (
+              <View
+                flexDirection='row'
+                gap='s'
+                maxWidth={width - 80}
+                flexWrap='wrap'
+              >
+                <Text variant='h4'>w sektorze:</Text>
+                <Text variant='h4' color='textSecondary'>
+                  {rock.attributes.parent.data.attributes.Name}
+                </Text>
+              </View>
+            )}
           </View>
           {rock?.attributes.product.data && !userHasBoughtThisProduct && (
             <OverlayCardView
@@ -127,7 +128,9 @@ const RockInfoExpanded = () => {
             </View>
             {routes && <RouteStructure routes={routes} />}
             {rock?.attributes && rock?.attributes.cover.length > 0 && (
-              <RockGallery images={rock?.attributes.cover} />
+              <>
+                <RockGallery images={rock?.attributes.cover} />
+              </>
             )}
           </View>
         )}

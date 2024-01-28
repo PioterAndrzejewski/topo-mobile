@@ -9,17 +9,14 @@ export const initApp = async () => {
   const qc = QueryClientSingleton.getInstance();
 
   try {
-    console.log("zaczynam try w init");
     const profile = await qc.fetchQuery({
       queryKey: queryKeys.profile.me,
       queryFn: () => getUserProfile(),
     });
-    console.log("przechodze za fetchquery");
     if (profile.id) {
       setUserToStorage(profile);
       navigate("HomeNavigator");
     }
-    console.log("koncze try w init");
   } catch (e) {
     console.log("No user found");
   }

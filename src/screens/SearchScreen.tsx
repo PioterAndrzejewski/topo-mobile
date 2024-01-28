@@ -1,4 +1,3 @@
-import { useTheme } from "@shopify/restyle";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,7 +13,7 @@ import Switcher from "src/components/common/Switcher";
 import { useAreas } from "src/hooks/useAreas";
 import { RegionData, RockData } from "src/services/rocks";
 import { searchTextAtom } from "src/store/search";
-import { Theme, palette } from "src/styles/theme";
+import { palette } from "src/styles/theme";
 
 const searchForRoutes = (rocks: RockData[], searchText: string) => {
   let routesFound: RouteWithParent[] = [];
@@ -46,7 +45,6 @@ export default function SearchScreen() {
   const [foundSectors, setFoundSectors] = useState<RegionData[]>([]);
   const [foundRocks, setFoundRocks] = useState<RockData[]>([]);
   const searchText = useAtomValue(searchTextAtom);
-  const { colors } = useTheme<Theme>();
 
   useEffect(() => {
     if (searchText.length < 1) {
@@ -74,17 +72,20 @@ export default function SearchScreen() {
     >
       <ScreenTitle title='Wyszukiwarka' centered />
       <FilterBar />
-      <View marginHorizontal='m' marginTop='m'>
-        <Switcher
-          options={[
-            { label: "Drogi", value: "routes" },
-            { label: "Skały", value: "rocks" },
-            { label: "Sektory", value: "sectors" },
-          ]}
-          active={activeResults}
-          onPress={setActiveResults}
-        />
-      </View>
+      {searchText.length > 0 && (
+        <View marginHorizontal='m' marginTop='m'>
+          <Switcher
+            options={[
+              { label: "Drogi", value: "routes" },
+              { label: "Skały", value: "rocks" },
+              { label: "Sektory", value: "sectors" },
+            ]}
+            active={activeResults}
+            onPress={setActiveResults}
+          />
+        </View>
+      )}
+
       {searchText === "" || !searchText ? (
         <View paddingHorizontal='m' paddingTop='m'>
           <Text>Czego szukasz?</Text>

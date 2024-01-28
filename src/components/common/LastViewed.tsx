@@ -51,13 +51,12 @@ const LastViewed = () => {
   if (!lastViewed) return;
   return (
     <Swipeable
-      renderLeftActions={() => <View width='100%' height='100%' />}
+      renderLeftActions={() => <View width='100%' height={200} />}
       containerStyle={{
         position: "absolute",
         top: 20,
         left: 0,
         width: "100%",
-        height: 200,
       }}
       onSwipeableOpen={() => setLastViewed(null)}
     >

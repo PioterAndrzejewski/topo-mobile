@@ -16,12 +16,16 @@ const SubscriptionDetails = () => {
   const renderSubscriptionData = () => (
     <>
       <Text>
-        Subskrypcja do:{" "}
+        Subskrypcja do:
         {dayjs(Number(user.data?.subscriptionTo)).format("DD/MM/YYYY")}
       </Text>
-      {dayjs().isBefore(subscriptionDate) && (
+      {dayjs().isBefore(subscriptionDate) ? (
         <Text>
           Ważna jeszcze {subscriptionDate.diff(currentDate, "day")} dni
+        </Text>
+      ) : (
+        <Text>
+          Wygasła {-subscriptionDate.diff(currentDate, "day")} dni temu
         </Text>
       )}
     </>

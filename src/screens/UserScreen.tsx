@@ -6,6 +6,7 @@ import ScreenTitle from "src/components/common/ScreenTitle";
 import View from "src/components/ui/View";
 import AccountDetails from "src/components/user/AccountDetails";
 import ButtonList from "src/components/user/ButtonList";
+import Statistics from "src/components/user/Statistics";
 import SubscriptionDetails from "src/components/user/SubscriptionDetails";
 
 import { useUserProfile } from "src/hooks/useUserProfile";
@@ -52,6 +53,7 @@ export default function UserScreen() {
         <View borderColor='backgroundSecondary' gap='l'>
           <AccountDetails />
           <SubscriptionDetails />
+          <Statistics />
           <ButtonList buttonList={accountButtons} />
           <ButtonList buttonList={logoutButton} />
         </View>

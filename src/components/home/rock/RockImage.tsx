@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ImageBackground } from "react-native";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
@@ -8,6 +9,10 @@ import { useImageFile } from "src/hooks/useImageFile";
 
 const RockImage = ({ item }: { item: any }) => {
   const image = useImageFile(item.Photo.data.attributes.url);
+  console.log(item.Photo.data.attributes.url);
+  useEffect(() => {
+    console.log("image w useeffect", image);
+  }, [image]);
   if (!image) return <View />;
   return (
     <ImageBackground
