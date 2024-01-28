@@ -17,14 +17,14 @@ const Statistics = () => {
       justifyContent='space-between'
     >
       <View width='47%' height='100%'>
-        <Card title='Zapisane elementy' isOutline flexGrow={1}>
+        <Card title='Zapisanych' isOutline flexGrow={1}>
           <Text>Skały: {stats.rocks}</Text>
           <Text>Dróg: {stats.routes}</Text>
         </Card>
       </View>
       <View width='47%' height='100%'>
         <Card title='Produkty' isOutline flexGrow={1}>
-          <Text>Kupionych produktów: {products?.length}</Text>
+          <Text>Produkty: {products?.length}</Text>
         </Card>
       </View>
     </View>

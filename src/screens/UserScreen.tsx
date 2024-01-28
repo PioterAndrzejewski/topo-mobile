@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useSetAtom } from "jotai";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,28 +10,14 @@ import ButtonList from "src/components/user/ButtonList";
 import Statistics from "src/components/user/Statistics";
 import SubscriptionDetails from "src/components/user/SubscriptionDetails";
 
-import { useUserProfile } from "src/hooks/useUserProfile";
 import { logout } from "src/services/store";
 import { confirmActionAtom } from "src/store/global";
 import { palette } from "src/styles/theme";
-
-const accountButtons = [
-  {
-    label: "Zmień hasło",
-    action: () => console.log("zmień hasło"),
-  },
-  {
-    label: "Jakaś inna akcja",
-    action: () => console.log("inna akcja"),
-  },
-  {
-    label: "Usuń konto",
-    action: () => console.log("usuń konto"),
-  },
-];
+import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function UserScreen() {
-  const user = useUserProfile();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const setConfirmAction = useSetAtom(confirmActionAtom);
   const handleLogout = async () => {
     setConfirmAction({
@@ -41,8 +28,27 @@ export default function UserScreen() {
 
   const logoutButton = [
     {
+      label: "Zmień hasło",
+      action: () => navigation.navigate("ChangePassword"),
+    },
+    {
       label: "Wyloguj",
       action: handleLogout,
+    },
+  ];
+
+  const termsButtons = [
+    {
+      label: "Regulamin korzystania z aplikacji",
+      action: () => console.log("regulamin"),
+    },
+    {
+      label: "Inne",
+      action: () => console.log("inne"),
+    },
+    {
+      label: "Informacje o aplikacji",
+      action: () => console.log("o aplikacji"),
     },
   ];
 
@@ -50,11 +56,11 @@ export default function UserScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
       <ScreenTitle centered title='Twój profil' />
       <ScrollView style={{ flex: 1 }}>
-        <View borderColor='backgroundSecondary' gap='l' pt="s">
+        <View borderColor='backgroundSecondary' gap='xl' pt='s'>
           <AccountDetails />
           <SubscriptionDetails />
           <Statistics />
-          <ButtonList buttonList={accountButtons} />
+          <ButtonList buttonList={termsButtons} />
           <ButtonList buttonList={logoutButton} />
         </View>
       </ScrollView>

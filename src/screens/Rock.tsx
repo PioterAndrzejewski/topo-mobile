@@ -2,7 +2,7 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {SafeAreaView} from 'react-native-safe-area-context'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppLoading from "src/components/common/AppLoading";
 import Header from "src/components/rock/Header";
@@ -19,9 +19,8 @@ import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
-import { styleGuide } from "src/styles/theme";
+import { palette, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
-import { palette } from 'src/styles/theme';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -68,24 +67,27 @@ const Rock = ({ route }: Props) => {
   const snapPoints = useMemo(() => ["16%", "50%", "80%"], []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: palette.blue100_25}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: palette.blue100_25 }}>
       <Header
         name={data?.attributes?.Name}
         numberOfImages={data?.attributes?.image.length}
         onCirclePress={setActiveImage}
         activeImage={activeImage}
       />
-      {data && data.attributes && (
-        <RockDrawing
-          imageUrl={
-            data.attributes.image[activeImage].image.data.attributes.url
-          }
-          routes={data.attributes.routes.data}
-          activeId={activeRoute}
-          activeImage={activeImage}
-          elementsScale={data.attributes.image[activeImage].elements_scale}
-        />
-      )}
+      {data &&
+        data.attributes &&
+        data.attributes.image &&
+        data.attributes.image.length > 0 ? (
+          <RockDrawing
+            imageUrl={
+              data.attributes.image[activeImage].image.data.attributes.url
+            }
+            routes={data.attributes.routes.data}
+            activeId={activeRoute}
+            activeImage={activeImage}
+            elementsScale={data.attributes.image[activeImage].elements_scale}
+          />
+        ) : <Text>Wystąpił błąd podczas wczytywania obrazów</Text>}
       <BottomSheet
         ref={bottomSheetRef}
         index={1}

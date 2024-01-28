@@ -15,23 +15,39 @@ const SubscriptionDetails = () => {
 
   const currentDate = dayjs();
   const subscriptionDate = dayjs(Number(user.data?.subscriptionTo));
+  const subscriptionDays = subscriptionDate.diff(currentDate, "day");
+
+  const renderBuySubscription = () => (
+    <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
+      <View
+        alignItems='center'
+        paddingHorizontal='l'
+        backgroundColor='backgroundLight'
+        paddingVertical='s'
+        borderRadius={24}
+      >
+        <Text variant='body' color='textBlack'>
+          Wykup subskrypcję
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   const renderSubscriptionData = () => (
-    <>
-      <Text>
-        Subskrypcja do:{" "}
-        {dayjs(Number(user.data?.subscriptionTo)).format("DD/MM/YYYY")}
-      </Text>
-      {dayjs().isBefore(subscriptionDate) ? (
+    <View gap='m'>
+      <View>
         <Text>
-          Ważna jeszcze {subscriptionDate.diff(currentDate, "day")} dni
+          Subskrypcja do:{" "}
+          {dayjs(Number(user.data?.subscriptionTo)).format("DD/MM/YYYY")}
         </Text>
-      ) : (
-        <Text>
-          Wygasła {-subscriptionDate.diff(currentDate, "day")} dni temu
-        </Text>
-      )}
-    </>
+        {dayjs().isBefore(subscriptionDate) ? (
+          <Text>Ważna jeszcze {subscriptionDays} dni</Text>
+        ) : (
+          <Text>Wygasła {-subscriptionDays} dni temu</Text>
+        )}
+      </View>
+      {renderBuySubscription()}
+    </View>
   );
 
   const renderLackOfSubscription = () => (
@@ -40,19 +56,7 @@ const SubscriptionDetails = () => {
         <Text variant='h3'>Subskrypcja: </Text>
         <Text>brak</Text>
       </View>
-      <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
-        <View
-          alignItems='center'
-          paddingHorizontal='l'
-          backgroundColor='backgroundLight'
-          paddingVertical='s'
-          borderRadius={24}
-        >
-          <Text variant='body' color='textBlack'>
-            Wykup subskrypcję
-          </Text>
-        </View>
-      </TouchableOpacity>
+      {renderBuySubscription()}
     </View>
   );
 

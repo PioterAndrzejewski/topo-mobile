@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import HomeBottomTabNavigator from "src/navigators/HomeBottomTabNavigator";
+import ChangePasswordScreen from "src/screens/ChangePassword";
 import LoginScreen from "src/screens/Login";
 import RegisterScreen from "src/screens/Register";
 import ResetPasswordScreen from "src/screens/ResetPassword";
@@ -26,6 +27,13 @@ const RootNavigator = () => (
     <Stack.Screen name='Register' component={RegisterScreen} />
     <Stack.Screen name='HomeNavigator' component={HomeBottomTabNavigator} />
     <Stack.Screen name='Rock' component={Rock} initialParams={{ id: "none" }} />
+    <Stack.Screen
+      name='ChangePassword'
+      component={ChangePasswordScreen}
+      options={{
+        presentation: "modal",
+      }}
+    />
   </Stack.Navigator>
 );
 
