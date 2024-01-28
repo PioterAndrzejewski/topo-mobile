@@ -1,14 +1,17 @@
 import dayjs from "dayjs";
+import { useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import PaymentModal from "src/components/home/rock/PaymentModal";
 import Card from "src/components/ui/Card";
-import Text from "../ui/Text";
-import View from "../ui/View";
+import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 
 import { useUserProfile } from "src/hooks/useUserProfile";
 
 const SubscriptionDetails = () => {
   const user = useUserProfile();
+  const [paymentModalOpened, setPaymentModalOpened] = useState(false);
 
   const currentDate = dayjs();
   const subscriptionDate = dayjs(Number(user.data?.subscriptionTo));
@@ -16,7 +19,7 @@ const SubscriptionDetails = () => {
   const renderSubscriptionData = () => (
     <>
       <Text>
-        Subskrypcja do:
+        Subskrypcja do:{" "}
         {dayjs(Number(user.data?.subscriptionTo)).format("DD/MM/YYYY")}
       </Text>
       {dayjs().isBefore(subscriptionDate) ? (
@@ -37,7 +40,7 @@ const SubscriptionDetails = () => {
         <Text variant='h3'>Subskrypcja: </Text>
         <Text>brak</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
         <View
           alignItems='center'
           paddingHorizontal='l'
@@ -54,11 +57,19 @@ const SubscriptionDetails = () => {
   );
 
   return (
-    <Card title='Subskrypcja' marginHorizontal='m' isOutline>
-      {user.data?.subscriptionTo
-        ? renderSubscriptionData()
-        : renderLackOfSubscription()}
-    </Card>
+    <>
+      <Card title='Subskrypcja' marginHorizontal='m' isOutline>
+        {user.data?.subscriptionTo
+          ? renderSubscriptionData()
+          : renderLackOfSubscription()}
+      </Card>
+      {paymentModalOpened && (
+        <PaymentModal
+          opened={paymentModalOpened}
+          onClose={() => setPaymentModalOpened(false)}
+        />
+      )}
+    </>
   );
 };
 

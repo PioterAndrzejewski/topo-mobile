@@ -81,11 +81,12 @@ export const getProduct = async (id: string) => {
   return data.data;
 };
 
-export const useProduct = (id: string) => {
+export const useProduct = (id: string, enabled: boolean) => {
   return useQuery({
     queryKey: queryKeys.product(id),
     queryFn: () => getProduct(id),
     select: (data) => data && data[0],
+    enabled,
   });
 };
 

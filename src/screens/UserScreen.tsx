@@ -50,7 +50,7 @@ export default function UserScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
       <ScreenTitle centered title='Twój profil' />
       <ScrollView style={{ flex: 1 }}>
-        <View borderColor='backgroundSecondary' gap='l'>
+        <View borderColor='backgroundSecondary' gap='l' pt="s">
           <AccountDetails />
           <SubscriptionDetails />
           <Statistics />

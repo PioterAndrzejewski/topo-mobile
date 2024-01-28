@@ -24,7 +24,7 @@ import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
 
-Reactotron.configure({ host: "192.168.50.223", port: 9090 })
+Reactotron.configure({ host: "localhost", port: 9090 })
   .useReactNative()
   .connect();
 

@@ -49,6 +49,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   const { data: subscription } = useSubscriptionProduct();
   const { data: product } = useProduct(
     rock?.attributes.product.data?.attributes.uuid || "",
+    !!rock,
   );
   const { mutate: confirmProductPaymentMutation } = useMutation({
     mutationFn: ({
@@ -135,7 +136,9 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     productId: string | undefined,
     item: "product" | "subscription",
   ) => {
-    if (isProcessing || !productId) return;
+    if (isProcessing || !productId) {
+      return;
+    }
     setIsProcessing(true);
     initialisePaymentSheet(productId, item);
   };
@@ -160,7 +163,11 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           <View gap='l' marginBottom='l'>
-            <Text variant='h2'>Uzyskaj dostęp do tych materiałów!</Text>
+            <Text variant='h2'>
+              {!!product
+                ? "Uzyskaj dostęp do tych materiałów!"
+                : "Wykup subskrypcję i ciesz się pełnym dostępem"}
+            </Text>
             <TouchableOpacity
               onPress={() => handleBuy(subscription?.uuid, "subscription")}
               disabled={isProcessing}

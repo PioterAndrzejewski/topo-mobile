@@ -26,6 +26,11 @@ type RoutesFiltered = {
   other: RouteWithFavoriteAndParent[];
 };
 
+type FavoritesStats = {
+  rocks: number;
+  routes: number;
+};
+
 type FavoritesContextValue = {
   favoriteRoutes: RoutesFiltered | undefined;
   favoriteRocks: RockData[] | undefined;
@@ -40,6 +45,7 @@ type FavoritesContextValue = {
   setRockAsFavorite: (rock: RockData) => void;
   removeRouteFromFavorites: (route: Route) => void;
   removeRockFromFavorite: (uuid: string) => void;
+  getStats: () => FavoritesStats;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue>({
@@ -56,6 +62,7 @@ const FavoritesContext = createContext<FavoritesContextValue>({
   removeRouteFromFavorites: () => undefined,
   removeRockFromFavorite: () => undefined,
   checkRockInFavorites: () => false,
+  getStats: () => ({ rocks: 0, routes: 0 }),
 });
 
 const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
@@ -136,6 +143,20 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
     refreshFavoritesList();
   };
 
+  const getStats = () => {
+    let routesNumber = 0;
+    for (const routes in favoriteRoutes) {
+      console.log(favoriteRoutes);
+      console.log(routes);
+      const key = routes as keyof typeof favoriteRoutes;
+      routesNumber += favoriteRoutes[key].length;
+    }
+    return {
+      rocks: favoriteRocks?.length || 0,
+      routes: routesNumber,
+    };
+  };
+
   return (
     <FavoritesContext.Provider
       value={{
@@ -148,6 +169,7 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
         checkRockInFavorites,
         setRockAsFavorite,
         removeRockFromFavorite,
+        getStats,
       }}
     >
       {children}
