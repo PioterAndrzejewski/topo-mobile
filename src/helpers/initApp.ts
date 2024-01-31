@@ -1,11 +1,9 @@
+import { QueryClientSingleton } from "src/helpers/QueryClient";
+import { getUserProfile } from "src/services/profile";
+import { queryKeys } from "src/services/queryKeys";
+import { setUserToStorage } from "src/services/store";
 
-
-import { QueryClientSingleton } from 'src/helpers/QueryClient';
-import { getUserProfile } from 'src/services/profile';
-import { queryKeys } from 'src/services/queryKeys';
-import { setUserToStorage } from 'src/services/store';
-
-import navigate from 'src/navigators/navigationRef';
+import navigate from "src/navigators/navigationRef";
 
 export const initApp = async () => {
   const qc = QueryClientSingleton.getInstance();
@@ -17,10 +15,10 @@ export const initApp = async () => {
     });
     if (profile.id) {
       setUserToStorage(profile);
-      navigate('HomeNavigator')
+      navigate("HomeNavigator");
     }
   } catch (e) {
-    console.log('No user found')
+    console.log("No user found");
   }
   return true;
-}
+};

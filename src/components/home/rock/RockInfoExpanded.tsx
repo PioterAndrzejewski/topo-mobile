@@ -16,6 +16,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import { useAreas } from "src/hooks/useAreas";
+import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
 import { saveLastSeenRock } from "src/services/storeAsync";
@@ -31,12 +32,14 @@ const RockInfoExpanded = () => {
   const { rocks } = useAreas();
   const { width } = useWindowDimensions();
   const { data: userProducts } = useUserProducts();
+  const hasSubscription = useUserSubscription();
 
-  const rock = useMemo(
-    () =>
-      rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
-    [selectedRock],
-  );
+  const rock = useMemo(() => {
+    if (!rocks) return null;
+    return rocks?.find(
+      (rock: RockData) => rock.attributes.uuid === selectedRock,
+    );
+  }, [selectedRock]);
 
   useEffect(() => {
     if (selectedRock && rock) {
@@ -47,16 +50,18 @@ const RockInfoExpanded = () => {
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {
-    console.log("w usememo: ");
-    console.log(userProducts);
-    if (!userProducts || !userProducts.length || userProducts.length < 1)
+    if (hasSubscription) {
+      return true;
+    }
+    if (!userProducts || !userProducts.length || userProducts.length < 1) {
       return false;
+    }
     return !!userProducts?.find(
       (product) =>
         product.attributes.product.data.attributes.uuid ===
         rock?.attributes.product.data?.attributes.uuid,
     );
-  }, [userProducts, rock]);
+  }, [userProducts, rock, hasSubscription]);
 
   const handleOpenRock = () => {
     navigation.navigate("Rock", {
@@ -64,6 +69,10 @@ const RockInfoExpanded = () => {
     });
     setSelectedRock(null);
   };
+
+  if (!rock || !rock.attributes) {
+    return null;
+  }
 
   return (
     <View height='100%'>
@@ -82,17 +91,19 @@ const RockInfoExpanded = () => {
             <Text variant='h2' color='textBlack'>
               {rock?.attributes.Name}
             </Text>
-            <View
-              flexDirection='row'
-              gap='s'
-              maxWidth={width - 80}
-              flexWrap='wrap'
-            >
-              <Text variant='h4'>w sektorze:</Text>
-              <Text variant='h4' color='textSecondary'>
-                {rock?.attributes.parent.data.attributes.Name}
-              </Text>
-            </View>
+            {rock.attributes.parent.data && (
+              <View
+                flexDirection='row'
+                gap='s'
+                maxWidth={width - 80}
+                flexWrap='wrap'
+              >
+                <Text variant='h4'>w sektorze:</Text>
+                <Text variant='h4' color='textSecondary'>
+                  {rock.attributes.parent.data.attributes.Name}
+                </Text>
+              </View>
+            )}
           </View>
           {rock?.attributes.product.data && !userHasBoughtThisProduct && (
             <OverlayCardView
@@ -117,7 +128,9 @@ const RockInfoExpanded = () => {
             </View>
             {routes && <RouteStructure routes={routes} />}
             {rock?.attributes && rock?.attributes.cover.length > 0 && (
-              <RockGallery images={rock?.attributes.cover} />
+              <>
+                <RockGallery images={rock?.attributes.cover} />
+              </>
             )}
           </View>
         )}

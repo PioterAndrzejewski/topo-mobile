@@ -23,7 +23,7 @@ import {
   confirmPayment,
   getPaymentIntent,
   useProduct,
-  useSubscription,
+  useSubscriptionProduct,
 } from "src/services/payments";
 import { queryKeys } from "src/services/queryKeys";
 import { RockData } from "src/services/rocks";
@@ -46,36 +46,24 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       rocks?.find((rock: RockData) => rock.attributes.uuid === selectedRock),
     [selectedRock],
   );
-  const { data: subscription } = useSubscription();
+  const { data: subscription } = useSubscriptionProduct();
   const { data: product } = useProduct(
     rock?.attributes.product.data?.attributes.uuid || "",
+    !!rock,
   );
   const { mutate: confirmProductPaymentMutation } = useMutation({
     mutationFn: ({
       productId,
       intentId,
     }: {
-      productId: string;
+      productId: string | number;
       intentId: string;
     }) => confirmPayment(productId, intentId),
     retryDelay: 5000,
     retry: true,
     onSuccess: () => {
       queryClient.refetchQueries(queryKeys.products);
-    },
-  });
-  const { mutate: confirmSubscriptionPaymentMutation } = useMutation({
-    mutationFn: ({
-      productId,
-      intentId,
-    }: {
-      productId: string;
-      intentId: string;
-    }) => confirmPayment(productId, intentId),
-    retryDelay: 5000,
-    retry: true,
-    onSuccess: (data) => {
-      console.log(data && data.data);
+      queryClient.refetchQueries(queryKeys.profile.me);
     },
   });
 
@@ -85,7 +73,9 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
   ) => {
     if (!selectedRock) return setIsProcessing(false);
 
-    const { data: intentData } = await getPaymentIntent(productId);
+    const { data: intentData } = await getPaymentIntent(
+      item === "subscription" ? "subscription" : productId,
+    );
 
     const { error: initPaymentError } = await initPaymentSheet({
       customerId: intentData.data.customer,
@@ -116,14 +106,14 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       });
     }
     try {
-      if (item === "product") {
-        await confirmProductPaymentMutation({
-          productId: rock?.attributes.product?.data
-            ? rock?.attributes.product.data.id.toString()
-            : "",
-          intentId: intentData.data.paymentIntent.id,
-        });
-      }
+      if (!rock?.attributes.product.data) return;
+      await confirmProductPaymentMutation({
+        productId:
+          item === "subscription"
+            ? "subscription"
+            : rock?.attributes.product.data?.id,
+        intentId: intentData.data.paymentIntent.id,
+      });
     } catch (e) {
       onClose();
       Toast.show({
@@ -133,7 +123,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
         visibilityTime: 3000,
       });
     }
-
+    queryClient.invalidateQueries(["user-profile"]);
     onClose();
     Toast.show({
       type: "success",
@@ -146,7 +136,9 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     productId: string | undefined,
     item: "product" | "subscription",
   ) => {
-    if (isProcessing || !productId) return;
+    if (isProcessing || !productId) {
+      return;
+    }
     setIsProcessing(true);
     initialisePaymentSheet(productId, item);
   };
@@ -171,9 +163,14 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           <View gap='l' marginBottom='l'>
-            <Text variant='h2'>Uzyskaj dostęp do tych materiałów!</Text>
+            <Text variant='h2'>
+              {!!product
+                ? "Uzyskaj dostęp do tych materiałów!"
+                : "Wykup subskrypcję i ciesz się pełnym dostępem"}
+            </Text>
             <TouchableOpacity
               onPress={() => handleBuy(subscription?.uuid, "subscription")}
+              disabled={isProcessing}
             >
               {subscription && <SubscriptionProduct isLoading={isProcessing} />}
             </TouchableOpacity>
@@ -184,6 +181,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
                   "product",
                 )
               }
+              disabled={isProcessing}
             >
               {product && (
                 <SectorProduct

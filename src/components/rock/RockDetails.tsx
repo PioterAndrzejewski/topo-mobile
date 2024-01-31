@@ -47,8 +47,6 @@ const RockDetails = (props: RockDetailsProps) => {
         justifyContent='space-between'
         paddingBottom='l'
         paddingHorizontal='m'
-        borderBottomWidth={1}
-        borderBottomColor='backgroundSecondary'
       >
         <View flexShrink={1}>
           <Text variant='h2'>{data?.attributes?.Name}</Text>

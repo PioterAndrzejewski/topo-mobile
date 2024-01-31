@@ -2,7 +2,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode } from "react";
 
 import Height from "src/components/rock/details/Height";
-import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import Exposition from "src/components/rock/details/Exposition";
@@ -37,9 +36,6 @@ const InformationRow = ({ rock, inCard }: InformationRowProps) => {
   );
   return (
     <View marginVertical='m'>
-      <View marginLeft='m' paddingBottom='s'>
-        <Text variant='h3'>Informacje o skale:</Text>
-      </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View
           flexDirection='row'
