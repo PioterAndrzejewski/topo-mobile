@@ -44,7 +44,8 @@
           "dgis",
           "lftgpas"
         ]
-      }
+      },
+      "bundleIdentifier": "qweq"
     },
     "android": {
       "adaptiveIcon": {
