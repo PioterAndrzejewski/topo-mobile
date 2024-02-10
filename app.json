@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile_chat",
-    "slug": "mobile_chat",
+    "name": "WspinApp",
+    "slug": "WspinApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
@@ -11,12 +11,8 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "plugins": [
-      "./src/plugins/android-manifest.plugin.js"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["./src/plugins/android-manifest.plugin.js"],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -52,9 +48,7 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.INTERNET"
-      ],
+      "permissions": ["android.permission.INTERNET"],
       "usesCleartextTraffic": "true",
       "package": "com.wspinapp"
     },

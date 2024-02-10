@@ -130,6 +130,13 @@ export const register = async (
   return data;
 };
 
+export const resetVerificationEmail = async (email: string) => {
+  const data = await axios.post<LoggedUserData>(apiConfig.auth.resendVerification, {
+    email,
+  });
+  return data;
+}
+
 export const resetPass = async (email: string) => {
   const { data } = await axios.post<LoggedUserData>(
     apiConfig.auth.forgotPassword,

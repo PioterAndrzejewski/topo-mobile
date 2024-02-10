@@ -11,6 +11,7 @@ import CustomTextInput from "src/components/common/CustomTextInput";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
+import { AxiosError } from "axios";
 import { login } from "src/services/auth";
 import {
   saveJWT,
@@ -25,15 +26,30 @@ export default function LoginPanel() {
   const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
+    onError: async (data) => {
+      if (data instanceof AxiosError) {
+        const message = data.response?.data.error.message as string;
+        if (
+          typeof message === "string" &&
+          message.toLowerCase().includes("email is not confirmed")
+        ) {
+          const formValues = getValues();
+          navigation.navigate("Registered", {
+            email: formValues.email,
+            password: formValues.password,
+          });
+        }
+      }
+    },
     onSuccess: async (data) => {
       await saveJWT(data.jwt);
       await saveRefreshToken(data.refreshToken);
       await setUserToStorage(data.user);
-      navigation.navigate("HomeNavigator");
+      navigation.navigate("HomeNavigator", { email: "userEmail" });
     },
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, getValues } = useForm({
     defaultValues: {
       email: "mikel@gg.pl",
       password: "mikel1",
@@ -168,4 +184,4 @@ const schema = yup.object().shape({
     .required("Wpisz hasło"),
 });
 
-type LoginData = yup.InferType<typeof schema>;
+export type LoginData = yup.InferType<typeof schema>;

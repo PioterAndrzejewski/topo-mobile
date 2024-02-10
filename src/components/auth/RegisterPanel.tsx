@@ -8,7 +8,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
-import CustomTextInput, { AutoComplete } from "src/components/common/CustomTextInput";
+import CustomTextInput, {
+  AutoComplete,
+} from "src/components/common/CustomTextInput";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -29,7 +31,11 @@ export default function RegisterPanel() {
     onSuccess: (data) => {
       saveJWT(data.data.jwt);
       setUserToStorage(data.data.user);
-      navigation.navigate("HomeNavigator");
+      const formValues = getValues();
+      navigation.navigate("Registered", {
+        email: formValues.email,
+        password: formValues.password,
+      });
     },
     onError(error, variables, context) {
       const axiosError = error as AxiosError<RegisterResponseError>;
@@ -45,7 +51,7 @@ export default function RegisterPanel() {
     },
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, getValues } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
@@ -58,7 +64,7 @@ export default function RegisterPanel() {
     {
       label: "Adres e-mail",
       field: "email",
-      others: {autoComplete: 'email' as AutoComplete}
+      others: { autoComplete: "email" as AutoComplete },
     },
     {
       label: "Nazwa użytkownika",

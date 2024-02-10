@@ -1,10 +1,5 @@
 import { useTheme } from "@shopify/restyle";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -29,14 +24,14 @@ export default function Button({
   labelColor,
 }: ButtonProps) {
   const { colors } = useTheme<Theme>();
+  const handlePress = () => {
+    if (disabled) {
+      return;
+    }
+    onClick();
+  };
   return (
-    <TouchableOpacity
-      onPress={() => {
-        if (!disabled) {
-          onClick();
-        }
-      }}
-    >
+    <TouchableOpacity onPress={handlePress} disabled={disabled}>
       <View
         style={
           disabled
@@ -70,4 +65,4 @@ const $container: ViewStyle = {
 
 const $disabled: ViewStyle = {
   backgroundColor: palette.blue700_10,
-}
+};
