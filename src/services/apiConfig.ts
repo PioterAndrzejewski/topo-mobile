@@ -9,6 +9,7 @@ export const apiConfig = {
   auth: {
     login: `${apiUrl}/api/auth/local/`,
     register: `${apiUrl}/api/auth/local/register/`,
+    resendVerification: `${apiUrl}/api/auth/send-email-confirmation/`,
     forgotPassword: `${apiUrl}/api/auth/forgot-password/`,
     refreshToken: `${apiUrl}/api/token/refresh/`,
     changePass: `${apiUrl}/api/auth/change-password`,

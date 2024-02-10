@@ -22,7 +22,7 @@ export const palette = {
   red: "rgb(210, 47, 39)",
 };
 
-const theme = createTheme({
+export const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
     backgroundSecondary: palette.blue100,

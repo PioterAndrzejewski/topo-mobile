@@ -24,7 +24,7 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
   return (
     <View
       width='100%'
-      paddingHorizontal='l'
+      paddingHorizontal='s'
       backgroundColor='backgroundScreen'
       justifyContent={centered ? "center" : undefined}
       alignItems={centered ? "center" : undefined}
@@ -40,7 +40,7 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
         </OverlayCardView>
       )}
       <View>
-        <Text variant='h1' color='secondary'>
+        <Text variant='h2' color='secondary'>
           {title}
         </Text>
       </View>

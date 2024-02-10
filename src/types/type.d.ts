@@ -7,6 +7,10 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   ResetPasswordSuccessScreen: { email: string };
   Register: undefined;
+  Registered: {
+    email: string;
+    password: string;
+  };
   HomeNavigator: undefined;
   Rock: {
     id: string;
@@ -26,9 +30,9 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   HomeNavigator,
   BottomTabParamList,
   Login,
-  "ResetPasswordSuccessScreen",
   ResetPasswordSuccessScreen,
   Register,
+  Registered,
   Rock,
   ChangePassword
 >;
