@@ -13,6 +13,7 @@ import Toast from "react-native-toast-message";
 import AppLoading from "src/components/common/AppLoading";
 import LastViewed from "src/components/common/LastViewed";
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
+import ContactModal from "src/components/modals/ContactModal";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
@@ -75,6 +76,7 @@ export default function App() {
                   <FavoritesContextProvider>
                     <RootNavigator />
                     <ConfirmActionModal />
+                    <ContactModal />
                   </FavoritesContextProvider>
                 </BottomSheetModalProvider>
               </ThemeProvider>
