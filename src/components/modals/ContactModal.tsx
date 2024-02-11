@@ -12,6 +12,7 @@ import View from "src/components/ui/View";
 
 import { ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 import { ConversationIcon } from "src/components/icons/Conversation";
 import { contactAtom } from "src/store/global";
 import { Theme } from "src/styles/theme";
@@ -40,7 +41,12 @@ const ContactModal = () => {
   };
 
   const handleCopy = async () => {
-    await Clipboard.setStringAsync(contactEmail);
+    Clipboard.setStringAsync(contactEmail).then(() =>
+      Toast.show({
+        type: "success",
+        text2: "Skopiowano adres e-mail do schowka",
+      }),
+    );
   };
 
   return (
@@ -84,6 +90,7 @@ const ContactModal = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Toast topOffset={60} />
     </Modal>
   );
 };
