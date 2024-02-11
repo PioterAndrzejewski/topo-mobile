@@ -11,12 +11,13 @@ import Statistics from "src/components/user/Statistics";
 import SubscriptionDetails from "src/components/user/SubscriptionDetails";
 
 import { logout } from "src/services/store";
-import { confirmActionAtom } from "src/store/global";
+import { confirmActionAtom, contactAtom } from "src/store/global";
 import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function UserScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const setContact = useSetAtom(contactAtom);
 
   const setConfirmAction = useSetAtom(confirmActionAtom);
   const handleLogout = async () => {
@@ -43,12 +44,12 @@ export default function UserScreen() {
       action: () => console.log("regulamin"),
     },
     {
-      label: "Inne",
-      action: () => console.log("inne"),
-    },
-    {
       label: "Informacje o aplikacji",
       action: () => console.log("o aplikacji"),
+    },
+    {
+      label: "Skontaktuj się z nami",
+      action: () => setContact({ topic: "widok uzytkownika(UserScreen)" }),
     },
   ];
 

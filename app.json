@@ -12,7 +12,10 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
-    "plugins": ["./src/plugins/android-manifest.plugin.js"],
+    "plugins": [
+      "./src/plugins/android-manifest.plugin.js",
+      "./src/plugins/with-android-queries.js"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -38,7 +41,9 @@
           "gett",
           "nmap",
           "dgis",
-          "lftgpas"
+          "lftgpas",
+          "mailto",
+          "tel"
         ]
       },
       "bundleIdentifier": "qweq"
@@ -49,7 +54,6 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["android.permission.INTERNET"],
-      "usesCleartextTraffic": "true",
       "package": "com.wspinapp"
     },
     "web": {
