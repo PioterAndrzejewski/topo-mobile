@@ -1,11 +1,10 @@
 import { useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { Platform, ViewStyle } from "react-native";
+import { ViewStyle } from "react-native";
 import MapView from "react-native-map-clustering";
 import {
   Marker,
   default as NativeMap,
-  PROVIDER_DEFAULT,
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
@@ -56,7 +55,7 @@ export default function Map() {
         maxZoomLevel={18}
         showsUserLocation
         showsBuildings={false}
-        provider={Platform.OS === "ios" ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
+        provider={PROVIDER_GOOGLE}
         style={$mapStyle}
         region={startRegion}
         onRegionChangeComplete={onRegionChangeComplete}

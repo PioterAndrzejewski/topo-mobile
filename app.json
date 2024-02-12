@@ -20,7 +20,8 @@
     "ios": {
       "supportsTablet": true,
       "config": {
-        "usesNonExemptEncryption": false
+        "usesNonExemptEncryption": false,
+        "googleMapsApiKey": "AIzaSyCRqqeDJKrGyvyn88GiWdpC-6MU52IwJL8"
       },
       "infoPlist": {
         "LSApplicationQueriesSchemes": [
@@ -54,11 +55,13 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDr21ZqwVKMLEES_968W9Ivbad8lHmcu3s"
+        }
+      },
       "permissions": ["android.permission.INTERNET"],
       "package": "com.wspinapp"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }

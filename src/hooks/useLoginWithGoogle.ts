@@ -24,7 +24,6 @@ export const useLoginWithGoogle = () => {
       });
     },
     onSuccess: async (data) => {
-      console.log(data);
       await saveJWT(data.jwt);
       await saveRefreshToken(data.refreshToken);
       await setUserToStorage(data.user);
