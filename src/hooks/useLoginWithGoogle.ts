@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
+import { useAtom } from "jotai";
+import { useCallback, useState } from "react";
 import Toast from "react-native-toast-message";
 
-import { useCallback, useState } from "react";
 import navigate from "src/navigators/navigationRef";
 import { loginGoogle } from "src/services/auth";
 import {
@@ -10,9 +11,10 @@ import {
   saveRefreshToken,
   setUserToStorage,
 } from "src/services/store";
+import { providerUsedAtom } from "src/store/global";
 
 export const useLoginWithGoogle = () => {
-  const [requestSent, setRequestSent] = useState(false);
+  const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
   const url = Linking.useURL();
   const { mutate: loginWithGoogle } = useMutation({
     mutationKey: ["loginGoogle", url],
@@ -36,11 +38,11 @@ export const useLoginWithGoogle = () => {
   const sendRequest = useCallback(async () => {
     if (!url) return;
     const param = url?.replace("wspinapp://?", "");
-    setRequestSent(true);
+    setProviderUsed(true);
     await loginWithGoogle(param);
   }, [url]);
 
-  if (!requestSent && url) {
+  if (!providerUsed && url) {
     sendRequest();
   }
 };

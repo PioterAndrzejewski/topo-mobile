@@ -127,7 +127,7 @@ type GetProductsResponse = {
 export const getProducts = async () => {
   const query = qs.stringify({
     pagination: {
-      pageSize: 200,
+      pageSize: 400,
     },
     populate: ["product", "product.uuid"],
   });

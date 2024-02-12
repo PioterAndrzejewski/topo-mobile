@@ -50,6 +50,7 @@ const RockInfoExpanded = () => {
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {
+    console.log(userProducts);
     if (hasSubscription) {
       return true;
     }

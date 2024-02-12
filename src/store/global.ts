@@ -11,5 +11,6 @@ type ContactAction = {
   topic: string;
 };
 
+export const providerUsedAtom = atom<boolean>(false);
 export const confirmActionAtom = atom<ConfirmAction | null>(null);
 export const contactAtom = atom<ContactAction | null>(null);
