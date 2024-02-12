@@ -133,9 +133,9 @@ export default function LoginPanel() {
                 )}
               />
             </View>
-            <View marginTop='m'>
+            <View marginTop='l'>
               <Button
-                label='Zaloguj'
+                label='Lecimy!'
                 onClick={handleSubmit(onSubmitHandler)}
                 isLoading={isLoading}
               />
@@ -160,7 +160,23 @@ export default function LoginPanel() {
                 </View>
               </View>
             </TouchableOpacity>
-
+            <View
+              marginTop='l'
+              justifyContent='center'
+              alignItems='center'
+              flexDirection='row'
+            >
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ResetPassword")}
+                hitSlop={20}
+              >
+                <View marginLeft='m'>
+                  <Text variant='body' color='textSecondary'>
+                    Nie pamiętasz hasła?
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
             <View
               marginTop='l'
               justifyContent='center'
@@ -176,24 +192,7 @@ export default function LoginPanel() {
               >
                 <View marginLeft='m'>
                   <Text variant='body' color='textSecondary'>
-                    Zarejestruj
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              marginTop='l'
-              justifyContent='center'
-              alignItems='center'
-              flexDirection='row'
-            >
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ResetPassword")}
-                hitSlop={20}
-              >
-                <View marginLeft='m'>
-                  <Text variant='body' color='textSecondary'>
-                    Nie pamiętasz hasła?
+                    Zarejestruj się
                   </Text>
                 </View>
               </TouchableOpacity>

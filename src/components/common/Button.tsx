@@ -60,7 +60,7 @@ const $container: ViewStyle = {
   backgroundColor: palette.green,
   justifyContent: "center",
   alignItems: "center",
-  borderRadius: 12,
+  borderRadius: 100,
 };
 
 const $disabled: ViewStyle = {
