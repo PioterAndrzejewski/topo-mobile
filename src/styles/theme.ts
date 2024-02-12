@@ -6,6 +6,8 @@ export const palette = {
 
   black: "rgba(14, 13, 18, 1)",
 
+  gray: "#49454F",
+
   blue100: "rgb(242, 241, 244)",
   blue100_25: "rgba(242, 241, 244, 0.25)",
   blue200: "rgba(183, 202, 192, 0.239)",
@@ -47,7 +49,7 @@ export const theme = createTheme({
     // text
     textBlack: palette.blue700,
     textSecondary: palette.green,
-    textGray: palette.blue500,
+    textGray: palette.gray,
     textLight: palette.blue300,
     textWhite: palette.blue100,
   },
@@ -71,12 +73,12 @@ export const theme = createTheme({
     },
 
     h2: {
-      fontFamily: "Outfit700",
-      fontSize: 22,
+      fontFamily: "Outfit500",
+      fontSize: 24,
     },
     h3: {
       fontFamily: "Outfit500",
-      fontSize: 15,
+      fontSize: 16,
     },
     h4: {
       fontFamily: "Outfiit500",

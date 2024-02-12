@@ -22,7 +22,9 @@ import {
   setUserToStorage,
 } from "src/services/store";
 import { providerUsedAtom } from "src/store/global";
+import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
+import { GoogleIcon } from "../icons/Google";
 
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -86,9 +88,11 @@ export default function LoginPanel() {
         backgroundColor='backgroundScreen'
         paddingHorizontal='m'
       >
-        <Text variant='h2' color='textGray'>
-          Topo na wyciągnięcie ręki
-        </Text>
+        <View alignItems='center'>
+          <Text variant='h3' color='textBlack'>
+            Zaloguj się i lecimy na wspin!
+          </Text>
+        </View>
         <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
           <View>
             <Controller
@@ -136,7 +140,27 @@ export default function LoginPanel() {
                 isLoading={isLoading}
               />
             </View>
-            <Button label='Zaloguj z google' onClick={handleGoogle} />
+            <TouchableOpacity onPress={handleGoogle}>
+              <View justifyContent='center' alignItems='center'>
+                <View
+                  p='s'
+                  {...styleGuide.cardShadow}
+                  borderColor='textSecondary'
+                  borderRadius={99}
+                  mt='l'
+                  flexDirection='row'
+                  justifyContent='center'
+                  alignItems='center'
+                  gap='m'
+                >
+                  <GoogleIcon size={60} />
+                  <View>
+                    <Text>Zaloguj kontem Google</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+
             <View
               marginTop='l'
               justifyContent='center'
@@ -163,16 +187,13 @@ export default function LoginPanel() {
               alignItems='center'
               flexDirection='row'
             >
-              <Text variant='body' color='textGray'>
-                Zapomniałeś hasła?
-              </Text>
               <TouchableOpacity
                 onPress={() => navigation.navigate("ResetPassword")}
                 hitSlop={20}
               >
                 <View marginLeft='m'>
                   <Text variant='body' color='textSecondary'>
-                    Resetuj hasło tutaj
+                    Nie pamiętasz hasła?
                   </Text>
                 </View>
               </TouchableOpacity>

@@ -8,7 +8,7 @@ import View from "../ui/View";
 
 import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
-import { Theme, palette, styleGuide } from "src/styles/theme";
+import { Theme, palette } from "src/styles/theme";
 
 export type AutoComplete = "email" | "username" | undefined;
 
@@ -50,7 +50,11 @@ export default function CustomTextInput({
   const showPassword = () => (
     <View position='absolute' right={10} top={15}>
       <TouchableOpacity onPress={handlePress} hitSlop={20}>
-        {hidden ? <VisionLowIcon /> : <VisionIcon />}
+        {hidden ? (
+          <VisionLowIcon color={palette.gray} />
+        ) : (
+          <VisionIcon color={palette.gray} />
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -95,7 +99,7 @@ export default function CustomTextInput({
             {...props}
           />
           {error?.message && (
-            <View position='absolute' right={10} top={15}>
+            <View position='absolute' right={10} bottom={-22}>
               <Text color='error'>{error.message}</Text>
             </View>
           )}
@@ -112,7 +116,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 47,
     paddingHorizontal: 20,
-    ...styleGuide.cardShadow,
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: palette.gray,
     backgroundColor: palette.white,
     shadowColor: palette.black,
   },

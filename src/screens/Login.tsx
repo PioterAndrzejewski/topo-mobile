@@ -4,9 +4,9 @@ import LoginPanel from "src/components/auth/LoginPanel";
 import ScreenTitle from "src/components/common/ScreenTitle";
 import View from "src/components/ui/View";
 
-import { LogoIcon } from "src/components/icons/Logo";
-import { palette, styleGuide } from "src/styles/theme";
-import {useLoginWithGoogle} from 'src/hooks/useLoginWithGoogle';
+import { LogoWText } from "src/components/icons/LogoWText";
+import { useLoginWithGoogle } from "src/hooks/useLoginWithGoogle";
+import { palette } from "src/styles/theme";
 
 export default function LoginScreen() {
   useLoginWithGoogle();
@@ -19,11 +19,9 @@ export default function LoginScreen() {
         elevation={999}
         marginVertical='l'
       >
-        <View padding='3xs' {...styleGuide.cardShadow} borderRadius={70}>
-          <LogoIcon size={120} />
-        </View>
+        <LogoWText size={120} />
       </View>
-      <ScreenTitle title='Lecimy na wspin?!' />
+      <ScreenTitle title='Topo na wyciągnięcie ręki' centered/>
       <LoginPanel />
     </SafeAreaView>
   );
