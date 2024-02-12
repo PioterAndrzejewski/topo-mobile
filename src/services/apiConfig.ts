@@ -8,6 +8,8 @@ export const apiUrl = "https://dev.wspinapp.pl";
 export const apiConfig = {
   auth: {
     login: `${apiUrl}/api/auth/local/`,
+    loginWGoogleIntent: `${apiUrl}/api/connect/google`,
+    loginGoogle: (params: string) => `${apiUrl}/api/connect/google/callback?${params}`,
     register: `${apiUrl}/api/auth/local/register/`,
     resendVerification: `${apiUrl}/api/auth/send-email-confirmation/`,
     forgotPassword: `${apiUrl}/api/auth/forgot-password/`,

@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>mobile_chat</string>
+    <string>WspinApp</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,6 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>wspinapp</string>
           <string>qweq</string>
         </array>
       </dict>
@@ -56,6 +57,8 @@
       <string>nmap</string>
       <string>dgis</string>
       <string>lftgpas</string>
+      <string>mailto</string>
+      <string>tel</string>
     </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>

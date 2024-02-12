@@ -1,9 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
+import * as Linking from "expo-linking";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-toast-message";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
@@ -12,7 +14,8 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { AxiosError } from "axios";
-import { login } from "src/services/auth";
+import { apiConfig } from "src/services/apiConfig";
+import { login, loginGoogle } from "src/services/auth";
 import {
   saveJWT,
   saveRefreshToken,
@@ -23,6 +26,7 @@ import { HomeScreenNavigationProp } from "src/types/type";
 export default function LoginPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { height } = useWindowDimensions();
+
   const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
@@ -60,6 +64,14 @@ export default function LoginPanel() {
 
   const onSubmitHandler = (data: LoginData) => {
     mutate(data);
+  };
+
+  const handleGoogle = () => {
+    Linking.openURL(encodeURI(apiConfig.auth.loginWGoogleIntent)).catch(
+      (error) => {
+        console.log(error);
+      },
+    );
   };
 
   return (
@@ -119,12 +131,7 @@ export default function LoginPanel() {
                 isLoading={isLoading}
               />
             </View>
-            {isError && (
-              <Button
-                label='Uzywaj w trybie offline'
-                onClick={() => navigation.navigate("Home")}
-              />
-            )}
+            <Button label='Zaloguj z google' onClick={handleGoogle} />
             <View
               marginTop='l'
               justifyContent='center'

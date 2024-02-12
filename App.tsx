@@ -17,7 +17,7 @@ import ContactModal from "src/components/modals/ContactModal";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Reactotron from "reactotron-react-native";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
@@ -25,7 +25,7 @@ import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
 
-Reactotron.configure({ host: "localhost", port: 9090 })
+Reactotron.configure({ host: "192.168.50.16", port: 9090 })
   .useReactNative()
   .connect();
 
@@ -45,18 +45,16 @@ export default function App() {
     PoppinsMedium: require("src/assets/fonts/PoppinsMedium.ttf"),
     PoppinsRegular: require("src/assets/fonts/PoppinsRegular.ttf"),
   });
-  const [initAppResult, setInitAppResult] = useState(false);
 
   useEffect(() => {
     const asyncInit = async () => {
-      const result = await initApp();
-      setInitAppResult(result);
+      await initApp();
     };
 
     asyncInit();
   });
 
-  if (!fontLoaded || !initAppResult) {
+  if (!fontLoaded) {
     return <AppLoading />;
   }
 

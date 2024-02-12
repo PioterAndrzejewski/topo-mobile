@@ -17,8 +17,6 @@ export const initApp = async () => {
       setUserToStorage(profile);
       navigate("HomeNavigator");
     }
-  } catch (e) {
-    console.log("No user found");
-  }
+  } catch (e) {}
   return true;
 };
