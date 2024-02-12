@@ -1,8 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from 'expo-secure-store';
-import navigate from 'src/navigators/navigationRef';
+import * as SecureStore from "expo-secure-store";
+import { QueryClientSingleton } from "src/helpers/QueryClient";
+import navigate from "src/navigators/navigationRef";
 
-import type { UserLoginData } from 'src/services/auth';
+import type { UserLoginData } from "src/services/auth";
+import { queryKeys } from "./queryKeys";
 
 export async function saveToSecureStorage(key: string, value: string) {
   await SecureStore.setItemAsync(key, value);
@@ -15,11 +17,11 @@ export async function getFromSecureStorage(key: string) {
 }
 
 export async function saveJWT(value: string) {
-  await SecureStore.setItemAsync('jwt', value)
+  await SecureStore.setItemAsync("jwt", value);
 }
 
 export async function saveRefreshToken(value: string) {
-  await SecureStore.setItemAsync('refreshToken', value)
+  await SecureStore.setItemAsync("refreshToken", value);
 }
 
 export const setUserToStorage = async (user: UserLoginData) => {
@@ -30,15 +32,22 @@ export const setUserToStorage = async (user: UserLoginData) => {
     return null;
   }
 };
- 
+
 export const logout = async () => {
+  const queryClient = QueryClientSingleton.getInstance();
   try {
-    await SecureStore.deleteItemAsync('refreshToken');
-    await SecureStore.deleteItemAsync('jwt');
-    await SecureStore.deleteItemAsync('userEmail');
-    await SecureStore.deleteItemAsync('userName');
-    await navigate('Login')
+    await SecureStore.deleteItemAsync("refreshToken");
+    await SecureStore.deleteItemAsync("jwt");
+    await SecureStore.deleteItemAsync("userEmail");
+    await SecureStore.deleteItemAsync("userName");
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.profile.me,
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.products,
+    });
+    await navigate("Login");
   } catch (err) {
-    console.log('something went wrong during logout')
+    console.log("something went wrong during logout");
   }
-}
+};

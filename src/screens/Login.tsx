@@ -6,8 +6,10 @@ import View from "src/components/ui/View";
 
 import { LogoIcon } from "src/components/icons/Logo";
 import { palette, styleGuide } from "src/styles/theme";
+import {useLoginWithGoogle} from 'src/hooks/useLoginWithGoogle';
 
 export default function LoginScreen() {
+  useLoginWithGoogle();
   return (
     <SafeAreaView style={{ backgroundColor: palette.white }}>
       <View

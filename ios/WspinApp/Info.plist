@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>mobile_chat</string>
+    <string>WspinApp</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,12 +27,15 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>wspinapp</string>
           <string>qweq</string>
         </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>GMSApiKey</key>
+    <string>AIzaSyCRqqeDJKrGyvyn88GiWdpC-6MU52IwJL8</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSApplicationQueriesSchemes</key>
@@ -56,6 +59,8 @@
       <string>nmap</string>
       <string>dgis</string>
       <string>lftgpas</string>
+      <string>mailto</string>
+      <string>tel</string>
     </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
