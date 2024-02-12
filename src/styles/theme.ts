@@ -16,7 +16,7 @@ export const palette = {
 
   yellow: "#cdbb48",
   yellow50: "rgba(205, 187, 72, 0.2)",
-  green: "#25AC57",
+  green: "#496520",
   green20: "rgba(37, 172, 87, 0.2)",
 
   red: "rgb(210, 47, 39)",
@@ -66,57 +66,57 @@ export const theme = createTheme({
   },
   textVariants: {
     h1: {
-      fontFamily: "PoppinsBold",
+      fontFamily: "Outfit700",
       fontSize: 32,
     },
 
     h2: {
-      fontFamily: "PoppinsBold",
+      fontFamily: "Outfit700",
       fontSize: 22,
     },
     h3: {
-      fontFamily: "PoppinsMedium",
+      fontFamily: "Outfit500",
       fontSize: 15,
     },
     h4: {
-      fontFamily: "PoppinsBold",
+      fontFamily: "Outfiit500",
       fontSize: 14,
     },
     button: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit400",
       fontSize: 16,
       letterSpacing: 1,
     },
     label: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit400",
       fontSize: 15,
     },
     title: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit400",
       fontSize: 15,
       lineHeight: 20,
     },
     caption: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit400",
       fontSize: 11,
       lineHeight: 20,
     },
     body: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit400",
       fontSize: 14,
     },
     special: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit300",
       fontSize: 12,
       lineHeight: 14,
     },
     input: {
-      fontFamily: "PoppinsRegular",
+      fontFamily: "Outfit300",
       fontSize: 15,
       letterSpacing: 2,
     },
     marker: {
-      fontFamily: "PoppinsBold",
+      fontFamily: "Outfit400",
       fontSize: 12,
     },
   },

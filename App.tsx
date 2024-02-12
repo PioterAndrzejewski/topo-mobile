@@ -44,6 +44,15 @@ export default function App() {
     PoppinsBold: require("src/assets/fonts/PoppinsBold.ttf"),
     PoppinsMedium: require("src/assets/fonts/PoppinsMedium.ttf"),
     PoppinsRegular: require("src/assets/fonts/PoppinsRegular.ttf"),
+    Outfit900: require("src/assets/fonts/Outfit-Black.ttf"),
+    Outfit800: require("src/assets/fonts/Outfit-ExtraBold.ttf"),
+    Outfit700: require("src/assets/fonts/Outfit-Bold.ttf"),
+    Outfit600: require("src/assets/fonts/Outfit-SemiBold.ttf"),
+    Outfit500: require("src/assets/fonts/Outfit-Medium.ttf"),
+    Outfit400: require("src/assets/fonts/Outfit-Regular.ttf"),
+    Outfit300: require("src/assets/fonts/Outfit-Thin.ttf"),
+    Outfit200: require("src/assets/fonts/Outfit-Light.ttf"),
+    Outfit100: require("src/assets/fonts/Outfit-ExtraLight.ttf"),
   });
 
   useEffect(() => {

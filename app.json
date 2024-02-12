@@ -15,7 +15,23 @@
     "assetBundlePatterns": ["**/*"],
     "plugins": [
       "./src/plugins/android-manifest.plugin.js",
-      "./src/plugins/with-android-queries.js"
+      "./src/plugins/with-android-queries.js",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./src/assets/fonts/Outfit-Black.ttf",
+            "./src/assets/fonts/Outfit-Bold.ttf",
+            "./src/assets/fonts/Outfit-ExtraBold.ttf",
+            "./src/assets/fonts/Outfit-ExtraLight.ttf",
+            "./src/assets/fonts/Outfit-Light.ttf",
+            "./src/assets/fonts/Outfit-Medium.ttf",
+            "./src/assets/fonts/Outfit-Regular.ttf",
+            "./src/assets/fonts/Outfit-SemiBold.ttf",
+            "./src/assets/fonts/Outfit-Thin.ttf"
+          ]
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true,
