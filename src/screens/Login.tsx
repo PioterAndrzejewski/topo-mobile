@@ -9,9 +9,9 @@ import { useLoginWithGoogle } from "src/hooks/useLoginWithGoogle";
 import { palette } from "src/styles/theme";
 
 export default function LoginScreen() {
-  useLoginWithGoogle();
+  const googleLoading = useLoginWithGoogle();
   return (
-    <SafeAreaView style={{ backgroundColor: palette.white }}>
+    <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
       <View
         justifyContent='center'
         alignItems='center'
@@ -21,8 +21,8 @@ export default function LoginScreen() {
       >
         <LogoWText size={120} />
       </View>
-      <ScreenTitle title='Topo na wyciągnięcie ręki' centered/>
-      <LoginPanel />
+      <ScreenTitle title='Topo na wyciągnięcie ręki' centered />
+      <LoginPanel googleIsLoading={googleLoading} />
     </SafeAreaView>
   );
 }

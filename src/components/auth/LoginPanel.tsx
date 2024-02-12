@@ -26,7 +26,11 @@ import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { GoogleIcon } from "../icons/Google";
 
-export default function LoginPanel() {
+export default function LoginPanel({
+  googleIsLoading,
+}: {
+  googleIsLoading: boolean;
+}) {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { height } = useWindowDimensions();
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
@@ -137,7 +141,7 @@ export default function LoginPanel() {
               <Button
                 label='Lecimy!'
                 onClick={handleSubmit(onSubmitHandler)}
-                isLoading={isLoading}
+                isLoading={isLoading || googleIsLoading}
               />
             </View>
             <TouchableOpacity onPress={handleGoogle}>
