@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "WspinApp",
+    "name": "WspinApp-dev",
     "slug": "WspinApp",
     "scheme": "wspinapp",
     "version": "1.0.0",
@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
       "./src/plugins/android-manifest.plugin.js",
       "./src/plugins/with-android-queries.js"
@@ -60,8 +62,15 @@
           "apiKey": "AIzaSyDr21ZqwVKMLEES_968W9Ivbad8lHmcu3s"
         }
       },
-      "permissions": ["android.permission.INTERNET"],
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "package": "com.wspinapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0fb9ea29-ebe1-4c3e-91a7-940fffffd008"
+      }
     }
   }
 }
