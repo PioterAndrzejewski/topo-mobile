@@ -34,13 +34,13 @@ const ButtonList = (props: ButtonListProps) => {
       {!!restButtons &&
         restButtons.length > 0 &&
         restButtons.map((el, index) => (
-          <TouchableOpacity onPress={el!.action}>
+          <TouchableOpacity onPress={el!.action} key={el.label}>
             <View
               flex={1}
               backgroundColor='backgroundLight'
               paddingHorizontal='m'
               paddingTop='m'
-              paddingBottom={index === restButtons.length - 1 ? 'l' : 'm'}
+              paddingBottom={index === restButtons.length - 1 ? "l" : "m"}
               borderTopWidth={1}
               borderColor='backgroundScreen'
               borderBottomLeftRadius={
