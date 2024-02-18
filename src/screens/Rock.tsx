@@ -27,7 +27,7 @@ type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 const Rock = ({ route }: Props) => {
   const [activeRoute, setActiveRoute] = useAtom(rockActiveRoute);
   const [activeImage, setActiveImage] = useState(0);
-  const { data, refetch } = useRock(route.params.id);
+  const { data, refetch } = useRock(route?.params?.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   refetch();
@@ -75,19 +75,21 @@ const Rock = ({ route }: Props) => {
         activeImage={activeImage}
       />
       {data &&
-        data.attributes &&
-        data.attributes.image &&
-        data.attributes.image.length > 0 ? (
-          <RockDrawing
-            imageUrl={
-              data.attributes.image[activeImage].image.data.attributes.url
-            }
-            routes={data.attributes.routes.data}
-            activeId={activeRoute}
-            activeImage={activeImage}
-            elementsScale={data.attributes.image[activeImage].elements_scale}
-          />
-        ) : <Text>Wystąpił błąd podczas wczytywania obrazów</Text>}
+      data.attributes &&
+      data.attributes.image &&
+      data.attributes.image.length > 0 ? (
+        <RockDrawing
+          imageUrl={
+            data.attributes?.image[activeImage]?.image?.data?.attributes?.url
+          }
+          routes={data.attributes.routes.data}
+          activeId={activeRoute}
+          activeImage={activeImage}
+          elementsScale={data?.attributes?.image[activeImage]?.elements_scale}
+        />
+      ) : (
+        <Text>Wystąpił błąd podczas wczytywania obrazów</Text>
+      )}
       <BottomSheet
         ref={bottomSheetRef}
         index={1}

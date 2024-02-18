@@ -82,7 +82,7 @@ export const theme = createTheme({
       fontSize: 16,
     },
     h4: {
-      fontFamily: "Outfiit500",
+      fontFamily: "Outfit500",
       fontSize: 14,
     },
     button: {
