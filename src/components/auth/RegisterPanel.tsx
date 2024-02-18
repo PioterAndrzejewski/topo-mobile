@@ -3,7 +3,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
@@ -75,93 +74,89 @@ export default function RegisterPanel() {
       field: "password",
       others: { secure: true },
     },
-    {
-      label: "Powtórz hasło",
-      field: "confirmPassword",
-      others: { secure: true },
-    },
   ];
 
   return (
     <KeyboardAwareScrollView>
-      <View height={height} paddingTop='2xl' paddingHorizontal='xl'>
-        <ScrollView>
-          <View justifyContent='space-between' flexGrow={1}>
-            {inputs.map((input) => (
-              <Controller
-                key={input.field}
-                control={control}
-                name={input.field as keyof RegisterData}
-                rules={{ required: true }}
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <CustomTextInput
-                    hookBlurHandler={onBlur}
-                    onChange={(value) => onChange(value)}
-                    value={value}
-                    label={input.label}
-                    error={error}
-                    {...input.others}
-                  />
-                )}
-              />
-            ))}
-            <Button
-              label='Zarejestruj'
-              onClick={handleSubmit(onSubmitHandler)}
-              disabled={isLoading}
-              isLoading={isLoading}
+      <View
+        paddingHorizontal='m'
+        backgroundColor='backgroundScreen'
+      >
+        <View gap='l'>
+          {inputs.map((input) => (
+            <Controller
+              key={input.field}
+              control={control}
+              name={input.field as keyof RegisterData}
+              rules={{ required: true }}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <CustomTextInput
+                  hookBlurHandler={onBlur}
+                  onChange={(value) => onChange(value)}
+                  value={value}
+                  label={input.label}
+                  error={error}
+                  {...input.others}
+                />
+              )}
             />
-          </View>
-          <View marginTop='m'>
-            <View justifyContent='center' alignItems='center'>
-              <Text color='textBlack' variant='caption'>
-                Rejestrując się akceptujesz
-              </Text>
-            </View>
-            <View justifyContent='center' alignItems='center'>
-              <TouchableOpacity
-                onPress={() => console.log("open terms")}
-                hitSlop={20}
-              >
-                <Text
-                  additionalStyles={{ textDecorationStyle: "solid" }}
-                  variant='caption'
-                >
-                  Regulamin
-                </Text>
-              </TouchableOpacity>
-
-              <Text variant='caption'> i </Text>
-              <TouchableOpacity
-                onPress={() => console.log("open privacy")}
-                hitSlop={20}
-              >
-                <Text
-                  additionalStyles={{ textDecorationStyle: "solid" }}
-                  variant='caption'
-                >
-                  Politykę Prywatności.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
-            <Text color='textBlack' variant='body'>
-              Masz już konto?
+          ))}
+          <Button
+            label='Zarejestruj'
+            onClick={handleSubmit(onSubmitHandler)}
+            disabled={isLoading}
+            isLoading={isLoading}
+          />
+        </View>
+        <View marginTop='m'>
+          <View justifyContent='center' alignItems='center'>
+            <Text color='textBlack' variant='caption'>
+              Rejestrując się akceptujesz
             </Text>
+          </View>
+          <View justifyContent='center' alignItems='center'>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => console.log("open terms")}
               hitSlop={20}
             >
-              <View marginLeft='s'>
-                <Text variant='body'>Zaloguj</Text>
-              </View>
+              <Text
+                additionalStyles={{ textDecorationStyle: "solid" }}
+                variant='caption'
+              >
+                Regulamin
+              </Text>
+            </TouchableOpacity>
+
+            <Text variant='caption'> i </Text>
+            <TouchableOpacity
+              onPress={() => console.log("open privacy")}
+              hitSlop={20}
+            >
+              <Text
+                additionalStyles={{ textDecorationStyle: "solid" }}
+                variant='caption'
+              >
+                Politykę Prywatności.
+              </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
+        <View>
+          <Text color='textBlack' variant='body'>
+            Masz już konto?
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Login")}
+            hitSlop={20}
+          >
+            <View marginLeft='s'>
+              <Text variant='body'>Zaloguj</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -182,9 +177,6 @@ const schema = yup.object().shape({
     .min(6, "Hasło powinno mieć co najmniej 6 znaków")
     .max(32, "Hasło jest zbyt długie")
     .required("Wpisz hasło"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
 });
 
 export type RegisterData = yup.InferType<typeof schema>;

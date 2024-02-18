@@ -8,12 +8,11 @@ import View from "src/components/ui/View";
 import { useImageFile } from "src/hooks/useImageFile";
 
 const RockImage = ({ item }: { item: any }) => {
-  const image = useImageFile(item.Photo.data.attributes.url);
-  console.log(item.Photo.data.attributes.url);
+  const image = useImageFile(item?.Photo?.data?.attributes?.url);
   useEffect(() => {
     console.log("image w useeffect", image);
   }, [image]);
-  if (!image) return <View />;
+  if (!image) return <View />; 
   return (
     <ImageBackground
       source={{

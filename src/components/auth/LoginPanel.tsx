@@ -22,7 +22,6 @@ import {
   setUserToStorage,
 } from "src/services/store";
 import { providerUsedAtom } from "src/store/global";
-import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { GoogleIcon } from "../icons/Google";
 
@@ -144,20 +143,23 @@ export default function LoginPanel({
                 isLoading={isLoading || googleIsLoading}
               />
             </View>
+            <View justifyContent='center' alignItems='center' my='l'>
+              <Text>lub</Text>
+            </View>
             <TouchableOpacity onPress={handleGoogle}>
               <View justifyContent='center' alignItems='center'>
                 <View
-                  p='s'
-                  {...styleGuide.cardShadow}
+                  py='s'
                   borderColor='textSecondary'
+                  borderWidth={1}
                   borderRadius={99}
-                  mt='l'
                   flexDirection='row'
                   justifyContent='center'
                   alignItems='center'
                   gap='m'
+                  width='100%'
                 >
-                  <GoogleIcon size={60} />
+                  <GoogleIcon size={26} />
                   <View>
                     <Text>Zaloguj kontem Google</Text>
                   </View>

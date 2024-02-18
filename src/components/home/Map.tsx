@@ -50,7 +50,6 @@ export default function Map() {
     <View flex={1}>
       <MapView
         ref={mapRef}
-        showsMyLocationButton
         showsCompass
         maxZoomLevel={18}
         showsUserLocation
@@ -59,6 +58,10 @@ export default function Map() {
         style={$mapStyle}
         region={startRegion}
         onRegionChangeComplete={onRegionChangeComplete}
+        userInterfaceStyle='light'
+        rotateEnabled={false}
+        pitchEnabled={false}
+        loadingEnabled={true}
       >
         {rocks &&
           rocks.length > 0 &&
@@ -102,7 +105,7 @@ export default function Map() {
 
 const $mapStyle: ViewStyle = {
   width: "100%",
-  height: "100%",
+  height: "88%",
 };
 
 const $markerContainer: ViewStyle = {

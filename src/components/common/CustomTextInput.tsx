@@ -9,6 +9,7 @@ import View from "../ui/View";
 import type { RegisterData } from "src/components/auth/RegisterPanel";
 import { VisionIcon, VisionLowIcon } from "src/components/common/SvgIcons";
 import { Theme, palette } from "src/styles/theme";
+import { ErrorIcon } from "../icons/Error";
 
 export type AutoComplete = "email" | "username" | undefined;
 
@@ -99,9 +100,16 @@ export default function CustomTextInput({
             {...props}
           />
           {error?.message && (
-            <View position='absolute' right={10} bottom={-22}>
-              <Text color='error'>{error.message}</Text>
-            </View>
+            <>
+              <View position='absolute' left={14} bottom={-20}>
+                <Text color='error' variant='caption'>
+                  {error.message}
+                </Text>
+              </View>
+              <View position='absolute' right={14} top={14}>
+                <ErrorIcon />
+              </View>
+            </>
           )}
           {secure && showPassword()}
           {icon && showIcon()}

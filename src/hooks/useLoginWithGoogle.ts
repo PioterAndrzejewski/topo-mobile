@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useAtom } from "jotai";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import Toast from "react-native-toast-message";
 
 import navigate from "src/navigators/navigationRef";
@@ -36,7 +36,10 @@ export const useLoginWithGoogle = () => {
   });
 
   const sendRequest = useCallback(async () => {
-    if (!url) return;
+    console.log(url);
+    if (!url || !url.includes("wspinapp://") || !url.includes("access_token")) {
+      return;
+    }
     const param = url?.replace("wspinapp://?", "");
     setProviderUsed(true);
     await loginWithGoogle(param);
