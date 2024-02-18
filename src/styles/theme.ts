@@ -35,6 +35,7 @@ export const theme = createTheme({
     backgroundTertiaryFaded: palette.yellow50,
     backgroundGreenFaded: palette.green20,
     backgroundLight: palette.blue200,
+    backgroundError: palette.red,
 
     secondary: palette.green,
     finished: palette.green,

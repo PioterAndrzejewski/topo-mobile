@@ -78,10 +78,12 @@ export default function RegisterPanel() {
 
   return (
     <KeyboardAwareScrollView>
-      <View
-        paddingHorizontal='m'
-        backgroundColor='backgroundScreen'
-      >
+      <View paddingHorizontal='m' backgroundColor='backgroundScreen'>
+        <View alignItems='center' mb='l'>
+          <Text variant='h3' color='textBlack'>
+            Zaloguj się i lecimy na wspin!
+          </Text>
+        </View>
         <View gap='l'>
           {inputs.map((input) => (
             <Controller
@@ -104,6 +106,12 @@ export default function RegisterPanel() {
               )}
             />
           ))}
+          <View mb='l'>
+            <Text variant='special' color='textBlack'>
+              Na Twój adres e-mail wyślemy wiadomość z linkiem, którym
+              potwierdzisz rejestrację. Zwykle trwa to do kilku minut.
+            </Text>
+          </View>
           <Button
             label='Zarejestruj'
             onClick={handleSubmit(onSubmitHandler)}
@@ -111,40 +119,12 @@ export default function RegisterPanel() {
             isLoading={isLoading}
           />
         </View>
-        <View marginTop='m'>
-          <View justifyContent='center' alignItems='center'>
-            <Text color='textBlack' variant='caption'>
-              Rejestrując się akceptujesz
-            </Text>
-          </View>
-          <View justifyContent='center' alignItems='center'>
-            <TouchableOpacity
-              onPress={() => console.log("open terms")}
-              hitSlop={20}
-            >
-              <Text
-                additionalStyles={{ textDecorationStyle: "solid" }}
-                variant='caption'
-              >
-                Regulamin
-              </Text>
-            </TouchableOpacity>
-
-            <Text variant='caption'> i </Text>
-            <TouchableOpacity
-              onPress={() => console.log("open privacy")}
-              hitSlop={20}
-            >
-              <Text
-                additionalStyles={{ textDecorationStyle: "solid" }}
-                variant='caption'
-              >
-                Politykę Prywatności.
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View>
+        <View
+          flexDirection='row'
+          alignItems='center'
+          justifyContent='center'
+          marginTop='l'
+        >
           <Text color='textBlack' variant='body'>
             Masz już konto?
           </Text>
@@ -153,9 +133,56 @@ export default function RegisterPanel() {
             hitSlop={20}
           >
             <View marginLeft='s'>
-              <Text variant='body'>Zaloguj</Text>
+              <Text
+                variant='body'
+                additionalStyles={{ fontFamily: "Outfit600" }}
+                color='textSecondary'
+              >
+                Wróć do logowania
+              </Text>
             </View>
           </TouchableOpacity>
+        </View>
+        <View marginTop='m'>
+          <View justifyContent='center' alignItems='center'>
+            <Text color='textBlack' variant='body'>
+              Rejestrując się akceptujesz
+            </Text>
+          </View>
+          <View justifyContent='center' alignItems='center' flexDirection='row'>
+            <TouchableOpacity
+              onPress={() => console.log("open terms")}
+              hitSlop={20}
+            >
+              <Text
+                additionalStyles={{
+                  textDecorationStyle: "solid",
+                  fontFamily: "Outfit600",
+                }}
+                variant='body'
+                color='textSecondary'
+              >
+                Regulamin
+              </Text>
+            </TouchableOpacity>
+
+            <Text variant='body'> i </Text>
+            <TouchableOpacity
+              onPress={() => console.log("open privacy")}
+              hitSlop={20}
+            >
+              <Text
+                additionalStyles={{
+                  textDecorationStyle: "solid",
+                  fontFamily: "Outfit600",
+                }}
+                variant='body'
+                color='textSecondary'
+              >
+                Politykę Prywatności.
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </KeyboardAwareScrollView>

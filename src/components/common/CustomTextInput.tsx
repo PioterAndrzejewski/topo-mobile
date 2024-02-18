@@ -49,7 +49,7 @@ export default function CustomTextInput({
   };
 
   const showPassword = () => (
-    <View position='absolute' right={10} top={15}>
+    <View position='absolute' right={18} top={15}>
       <TouchableOpacity onPress={handlePress} hitSlop={20}>
         {hidden ? (
           <VisionLowIcon color={palette.gray} />
@@ -69,6 +69,12 @@ export default function CustomTextInput({
   );
 
   const textInputStyles = () => {
+    if (error && inputFocused)
+      return {
+        ...styles.input,
+        ...styles.inputFocused,
+        ...styles.inputError,
+      };
     if (error)
       return {
         ...styles.input,
@@ -84,7 +90,7 @@ export default function CustomTextInput({
   };
 
   return (
-    <View width='100%' paddingHorizontal='s'>
+    <View width='100%'>
       <View gap='s'>
         {label && <Text variant='label'>{label}</Text>}
         <View>
@@ -106,7 +112,14 @@ export default function CustomTextInput({
                   {error.message}
                 </Text>
               </View>
-              <View position='absolute' right={14} top={14}>
+              <View
+                position='absolute'
+                right={14}
+                top={10}
+                backgroundColor='backgroundError'
+                p='xs'
+                borderRadius={99}
+              >
                 <ErrorIcon />
               </View>
             </>
@@ -132,12 +145,19 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderStyle: "solid",
-    borderWidth: 1,
     borderColor: palette.red,
+    shadowColor: palette.red,
   },
   inputFocused: {
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: palette.green,
+    shadowColor: palette.green,
+    shadowOpacity: 0.7,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
   },
 });
