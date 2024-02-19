@@ -40,7 +40,7 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
         </OverlayCardView>
       )}
       <View>
-        <Text variant='h2' color='secondary'>
+        <Text variant='h2' color='secondary' additionalStyles={{fontFamily: 'Outfit400'}}>
           {title}
         </Text>
       </View>

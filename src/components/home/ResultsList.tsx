@@ -1,4 +1,5 @@
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { LinearGradient } from "expo-linear-gradient";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -10,7 +11,6 @@ import {
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
-import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
@@ -42,6 +42,7 @@ export default function ResultsList() {
   const map = useAtomValue(mapAtom);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const locationRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     if (!region || !areas || !sectors || !regions || !rocks) return;
@@ -58,6 +59,12 @@ export default function ResultsList() {
     }
 
     setLocationArray(newLocationArray);
+
+    setTimeout(() => {
+      if (locationRef && locationRef.current) {
+        locationRef.current.scrollToEnd();
+      }
+    }, 400);
 
     if (rocks) {
       const sortedRocks = sortRocks(region, rocks);
@@ -118,21 +125,33 @@ export default function ResultsList() {
             paddingBottom='s'
           >
             <ScrollView
+              ref={locationRef}
               horizontal
               shouldCancelWhenOutside
               showsHorizontalScrollIndicator={false}
+              snapToEnd
             >
               <View
-                marginTop='m'
-                paddingHorizontal='m'
+                marginTop='s'
+                paddingLeft='l'
+                paddingRight='xl'
                 flexDirection='row'
                 gap='m'
                 paddingBottom='m'
               >
-                {locationArray.map((item, index) => (
-                  <View key={item?.attributes?.uuid}>
-                    <OverlayCardView
-                      key={item?.id + index + item?.attributes.uuid}
+                {locationArray.map((item, index) => {
+                  const isLast = index === locationArray.length - 1;
+                  return (
+                    <View
+                      key={item?.attributes?.uuid}
+                      borderWidth={isLast ? 0 : 1}
+                      borderRadius={99}
+                      paddingVertical='s'
+                      paddingHorizontal='l'
+                      backgroundColor={
+                        isLast ? "backgroundTertiary" : "backgroundScreen"
+                      }
+                      borderColor='backgroundTertiary'
                     >
                       <TouchableOpacity
                         style={{ flexDirection: "row" }}
@@ -141,15 +160,39 @@ export default function ResultsList() {
                         }
                         key={item?.attributes?.Name}
                       >
-                        <Text variant='h3' color='textSecondary'>
-                          {item?.attributes?.Name}
-                        </Text>
+                        <Text variant='body'>{item?.attributes?.Name}</Text>
                       </TouchableOpacity>
-                    </OverlayCardView>
-                  </View>
-                ))}
+                    </View>
+                  );
+                })}
               </View>
             </ScrollView>
+            <LinearGradient
+              colors={["rgb(255, 255, 255)", "rgba(255, 255, 255, 0)"]}
+              start={[0, 1]}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: 60,
+                zIndex: 40,
+                elevation: 40,
+              }}
+            />
+            <LinearGradient
+              colors={["rgba(255, 255, 255, 0)", "rgb(255, 255, 255)"]}
+              start={[0, 1]}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                right: 0,
+                width: 40,
+                zIndex: 40,
+                elevation: 40,
+              }}
+            />
           </View>
         )}
         <View marginHorizontal='m' marginTop='s' marginBottom='m'>
