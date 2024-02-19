@@ -107,17 +107,10 @@ export const confirmPayment = async (
 };
 
 type ProductObject = {
-  attributes: {
-    createdAt: Date;
-    updatedAt: Date;
-    product: {
-      data: {
-        id: number;
-        attributes: Product;
-      };
-    };
-  };
   id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  product: Product;
 };
 
 type GetProductsResponse = {
@@ -127,20 +120,19 @@ type GetProductsResponse = {
 export const getProducts = async () => {
   const query = qs.stringify({
     pagination: {
-      pageSize: 400,
+      pageSize: 999,
     },
-    populate: ["product", "product.uuid"],
+    populate: ["product", "product.uuid", "user", "user.id"],
   });
   const { data } = await authService.get<GetProductsResponse>(
     apiConfig.productTransaction.get(query),
   );
-  return data;
+  return data.data;
 };
 
 export const useUserProducts = () => {
   return useQuery({
     queryKey: queryKeys.products,
     queryFn: () => getProducts(),
-    select: (data) => data.data,
   });
 };

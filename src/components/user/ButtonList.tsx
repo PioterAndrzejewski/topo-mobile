@@ -27,7 +27,7 @@ const ButtonList = (props: ButtonListProps) => {
           paddingBottom={buttonList.length === 1 ? "l" : "m"}
         >
           <Text variant='body' color='textBlack'>
-            {buttonList[0].label}
+            {buttonList[0].label}2
           </Text>
         </View>
       </TouchableOpacity>

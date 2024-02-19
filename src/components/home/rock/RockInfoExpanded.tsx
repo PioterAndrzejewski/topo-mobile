@@ -50,7 +50,6 @@ const RockInfoExpanded = () => {
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {
-    console.log(userProducts);
     if (hasSubscription) {
       return true;
     }
@@ -59,8 +58,7 @@ const RockInfoExpanded = () => {
     }
     return !!userProducts?.find(
       (product) =>
-        product.attributes.product.data.attributes.uuid ===
-        rock?.attributes.product.data?.attributes.uuid,
+        product.product.uuid === rock?.attributes.product.data?.attributes.uuid,
     );
   }, [userProducts, rock, hasSubscription]);
 
