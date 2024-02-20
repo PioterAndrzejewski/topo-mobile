@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import Backdrop from "src/components/common/Backdrop";
-import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -117,8 +117,6 @@ export default function ResultsList() {
         </View>
         {locationArray && locationArray?.length > 0 && (
           <View
-            borderBottomWidth={1}
-            borderBottomColor='backgroundSecondary'
             paddingBottom='s'
           >
             <ScrollView
@@ -203,7 +201,7 @@ export default function ResultsList() {
             renderItem={({ item }) => {
               return (
                 <View marginHorizontal='m'>
-                  <ResultsItem
+                  <RockResultsItem
                     id={item.attributes.uuid}
                     name={item.attributes.Name}
                     item={item}

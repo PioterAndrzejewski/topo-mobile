@@ -29,7 +29,7 @@ export const palette = {
 export const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
-    backgroundSecondary: palette.blue100,
+    backgroundSecondary: palette.green,
     backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
@@ -68,6 +68,9 @@ export const theme = createTheme({
     xl: 40,
     "2xl": 48,
     "3xl": 60,
+    "4xl": 80,
+    "5xl": 110,
+    "6xl": 140,
   },
   textVariants: {
     h1: {

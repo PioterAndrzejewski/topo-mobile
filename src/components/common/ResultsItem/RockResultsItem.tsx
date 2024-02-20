@@ -17,7 +17,9 @@ import { mapAtom, selectedRockAtom } from "src/store/results";
 import { Theme, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
+import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
+import RouteStructure from "../RouteStructure";
 
 type ListResultProps = {
   id: string;
@@ -58,10 +60,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
     setSelectedRock(id);
   };
 
-  const routes = useMemo(() => {
-    if (!item) return;
-    return item.attributes.routes.data.length;
-  }, [id]);
+  const routes = useMemo(() => getRoutesFromRock(item), [item]);
 
   const handleHeartPress = () => {
     if (!isFavorite) {
@@ -75,84 +74,60 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
   if (!image) return;
   return (
-    <View
-      rowGap='l'
-      marginBottom='l'
-      {...styleGuide.cardShadow}
-      borderRadius={24}
-    >
-      <ImageBackground
-        source={{
-          uri: image || "",
-        }}
-        resizeMode='cover'
-        imageStyle={{ borderRadius: 24 }}
-      >
-        <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress}>
+      <View {...styleGuide.cardShadow} borderRadius={24}>
+        {image && (
+          <ImageBackground
+            source={{
+              uri: image || "",
+            }}
+            resizeMode='cover'
+            imageStyle={{
+              height: 200,
+              borderTopRightRadius: 24,
+              borderTopLeftRadius: 24,
+            }}
+          />
+        )}
+        <OverlayCardView
+          alignSelf='flex-end'
+          backgroundColor='backgroundLight'
+          top={130}
+          right={10}
+        >
+          <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
+        </OverlayCardView>
+        <View
+          marginTop='6xl'
+          paddingHorizontal='m'
+          paddingVertical='l'
+          gap='xs'
+          borderRadius={24}
+          backgroundColor='backgroundScreen'
+          zIndex={20}
+          elevation={20}
+        >
           <View
-            paddingHorizontal='m'
-            paddingVertical='xl'
-            gap='m'
-            borderRadius={24}
+            flexDirection='row'
+            justifyContent='space-between'
+            marginBottom='m'
           >
-            <View gap='2xs'>
-              <View flexDirection='row' justifyContent='space-between'>
-                <Text
-                  variant='h2'
-                  additionalStyles={{
-                    color: "white",
-                    textShadowColor: "rgba(0, 0, 0, 0.85)",
-                    textShadowOffset: { width: 2, height: 1 },
-                    textShadowRadius: 6,
-                    paddingRight: 8,
-                    paddingLeft: 4,
-                    marginLeft: -4,
-                  }}
-                >
-                  {name}
-                </Text>
-                <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
-                  <HeartIcon
-                    size={32}
-                    fill={
-                      isFavorite
-                        ? colors.favoriteRed
-                        : colors.backgroundSecondary
-                    }
-                  />
-                </TouchableOpacity>
-              </View>
-              <OverlayCardView
-                flexDirection='row'
-                gap='xs'
-                alignSelf='flex-start'
-                backgroundColor='backgroundSecondary'
-                alignItems='center'
-              >
-                <Text variant='h4' color='textSecondary'>
-                  {item.attributes.parent.data.attributes.Name}
-                </Text>
-              </OverlayCardView>
+            <View>
+              <Text variant='h4'>Skała</Text>
+              <Text variant='h2'>{name}</Text>
             </View>
 
-            <OverlayCardView
-              alignSelf='flex-start'
-              backgroundColor='backgroundSecondary'
-            >
-              <Text variant='caption'>{`Liczba dróg: ${
-                routes?.toString() || ""
-              }`}</Text>
-            </OverlayCardView>
-            <OverlayCardView
-              alignSelf='flex-start'
-              backgroundColor='backgroundSecondary'
-            >
-              <Text variant='caption'>{`zdj: ${item.attributes.cover[0].Author}`}</Text>
-            </OverlayCardView>
+            <TouchableOpacity hitSlop={12} onPress={handleHeartPress}>
+              <HeartIcon
+                size={32}
+                fill={isFavorite ? colors.favoriteRed : colors.backgroundScreen}
+              />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </ImageBackground>
-    </View>
+          {routes && <RouteStructure routes={routes} />}
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
