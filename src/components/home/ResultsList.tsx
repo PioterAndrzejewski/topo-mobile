@@ -1,12 +1,9 @@
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import Backdrop from "src/components/common/Backdrop";
 import ResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -75,7 +72,7 @@ export default function ResultsList() {
   useEffect(() => {
     const handleModals = async () => {
       if (selectedRock) {
-        await bottomSheetRef.current?.forceClose();
+        await bottomSheetRef.current?.snapToIndex(0);
         await bottomSheetModalRef.current?.present();
         return;
       }
@@ -199,7 +196,7 @@ export default function ResultsList() {
           <Text variant='h3'>Skały w poblizu:</Text>
         </View>
         <View flex={1}>
-          <FlatList
+          <FlashList
             data={listToRender.slice(0, 5)}
             nestedScrollEnabled
             showsVerticalScrollIndicator={false}

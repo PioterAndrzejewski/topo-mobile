@@ -52,9 +52,12 @@ export default function ResetPanel() {
         backgroundColor='backgroundScreen'
         paddingHorizontal='m'
       >
-        <Text variant='h2' color='textGray'>
+        <View alignItems='center'>
+
+        <Text variant='h3' color='textBlack'>
           Wpisz adres e-mail przypisany do konta
         </Text>
+        </View>
         <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
           <View>
             <Controller
@@ -83,7 +86,7 @@ export default function ResetPanel() {
               />
             </View>
             <View
-              marginTop='l'
+              marginTop='xl'
               justifyContent='center'
               alignItems='center'
               flexDirection='row'
@@ -95,7 +98,7 @@ export default function ResetPanel() {
                 onPress={() => navigation.navigate("Login")}
                 hitSlop={20}
               >
-                <View marginLeft='m'>
+                <View marginLeft='xs'>
                   <Text variant='body' color='textSecondary'>
                     logowania
                   </Text>

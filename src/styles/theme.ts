@@ -7,6 +7,7 @@ export const palette = {
   black: "rgba(14, 13, 18, 1)",
 
   gray: "#49454F",
+  gray700: "#F7F2FA",
 
   blue100: "rgb(242, 241, 244)",
   blue100_25: "rgba(242, 241, 244, 0.25)",
@@ -35,7 +36,7 @@ export const theme = createTheme({
     backgroundTertiary: palette.greenSecondary,
     backgroundTertiaryFaded: palette.yellow50,
     backgroundGreenFaded: palette.green20,
-    backgroundLight: palette.blue200,
+    backgroundLight: palette.gray700,
     backgroundError: palette.red,
 
     secondary: palette.green,
@@ -121,7 +122,7 @@ export const theme = createTheme({
     },
     marker: {
       fontFamily: "Outfit400",
-      fontSize: 12,
+      fontSize: 14,
     },
   },
 });

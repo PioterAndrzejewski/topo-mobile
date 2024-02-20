@@ -15,7 +15,6 @@ import { mapAtom, selectedRockAtom } from "src/store/results";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { LogoIcon } from "../icons/Logo";
 
 const LastViewed = () => {
   const [lastViewed, setLastViewed] = useState<RockData | null>(null);
@@ -76,16 +75,12 @@ const LastViewed = () => {
                 justifyContent='center'
                 alignItems='center'
                 gap='s'
-                flexDirection='row'
               >
-                <LogoIcon size={44} />
-                <View>
-                  <Text variant='body'>Ostatnio oglądane:</Text>
+                <Text variant='body'>Ostatnio oglądane:</Text>
 
-                  <Text variant='h4' color='textSecondary'>
-                    {lastViewed.attributes.Name}
-                  </Text>
-                </View>
+                <Text variant='h4' color='textSecondary'>
+                  {lastViewed.attributes.Name}
+                </Text>
               </View>
             </TouchableOpacity>
           </BlurView>

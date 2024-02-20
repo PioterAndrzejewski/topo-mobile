@@ -81,7 +81,7 @@ export default function RegisterPanel() {
       <View paddingHorizontal='m' backgroundColor='backgroundScreen'>
         <View alignItems='center' mb='l'>
           <Text variant='h3' color='textBlack'>
-            Zaloguj się i lecimy na wspin!
+            {"Chcesz do nas dołączć - no i fajnie :) "}
           </Text>
         </View>
         <View gap='l'>
@@ -106,8 +106,8 @@ export default function RegisterPanel() {
               )}
             />
           ))}
-          <View mb='l'>
-            <Text variant='special' color='textBlack'>
+          <View mb='s'>
+            <Text variant='body' color='textBlack'>
               Na Twój adres e-mail wyślemy wiadomość z linkiem, którym
               potwierdzisz rejestrację. Zwykle trwa to do kilku minut.
             </Text>

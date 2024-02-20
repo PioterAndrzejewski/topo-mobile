@@ -106,15 +106,13 @@ export const confirmPayment = async (
   return data;
 };
 
-type ProductObject = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  product: Product;
-};
-
 type GetProductsResponse = {
-  data: ProductObject[];
+  data: {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    product: ProductSanitized;
+  }[];
 };
 
 export const getProducts = async () => {

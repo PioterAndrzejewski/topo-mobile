@@ -3,8 +3,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ResetPanel from "src/components/auth/ResetPanel";
 import ScreenTitle from "src/components/common/ScreenTitle";
 import View from "src/components/ui/View";
+import { LogoWText } from 'src/components/icons/LogoWText';
 
-import { LogoIcon } from "src/components/icons/Logo";
 import { palette, styleGuide } from "src/styles/theme";
 
 export default function ResetPasswordScreen() {
@@ -17,11 +17,9 @@ export default function ResetPasswordScreen() {
         elevation={999}
         marginVertical='l'
       >
-        <View padding='3xs' {...styleGuide.cardShadow} borderRadius={70}>
-          <LogoIcon size={120} />
-        </View>
+        <LogoWText size={120} />
       </View>
-      <ScreenTitle title='Zapomniałeś hasło?' />
+      <ScreenTitle title='Zapomniałeś hasło?' centered/>
       <ResetPanel />
     </SafeAreaView>
   );
