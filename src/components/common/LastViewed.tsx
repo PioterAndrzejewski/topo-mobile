@@ -62,25 +62,24 @@ const LastViewed = () => {
       <Animated.View entering={BounceInUp}>
         <View justifyContent='center' width='100%' alignItems='center'>
           <BlurView
-            intensity={15}
+            intensity={25}
             blurReductionFactor={1}
             style={{ borderRadius: 24, overflow: "hidden" }}
           >
             <TouchableOpacity onPress={animateTo}>
               <View
-                paddingHorizontal='3xl'
                 paddingVertical='m'
+                width={320}
                 borderRadius={12}
-                backgroundColor='backgroundTertiaryFaded'
+                backgroundColor='backgroundLight'
                 justifyContent='center'
                 alignItems='center'
-                gap='s'
+                gap='xs'
+                opacity={0.6}
               >
-                <Text variant='body'>Ostatnio oglądane:</Text>
+                <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
 
-                <Text variant='h4' color='textSecondary'>
-                  {lastViewed.attributes.Name}
-                </Text>
+                <Text variant='h3'>{lastViewed.attributes.Name}</Text>
               </View>
             </TouchableOpacity>
           </BlurView>

@@ -12,6 +12,7 @@ import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAreas } from "src/hooks/useAreas";
 import { AreaData, RegionData, RockData } from "src/services/rocks";
 import {
@@ -178,49 +179,48 @@ export default function ResultsList() {
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
   const snapPoints = useMemo(() => ["15%", "50%", "86%"], []);
 
-  const renderItem = ({ item, index }: { item: unknown, index: number }) => {
+  const renderItem = ({ item, index }: { item: unknown; index: number }) => {
     const isLast = index === listToRender.length - 1;
     if (stage === 0) {
       const itemToRender = item as AreaData;
       return (
-        <View marginHorizontal='m' mb={isLast ? "s" : "l"}>
-          <AreaResultsItem
-            id={itemToRender.attributes.uuid}
-            name={itemToRender.attributes.Name}
-            item={itemToRender}
-          />
-        </View>
+        <Animated.View entering={FadeIn} exiting={FadeOut}>
+          <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
+            <AreaResultsItem
+              id={itemToRender.attributes.uuid}
+              name={itemToRender.attributes.Name}
+              item={itemToRender}
+            />
+          </View>
+        </Animated.View>
       );
     }
     if (stage === 1 || stage === 2) {
       const itemToRender = item as RegionData;
       return (
-        <View marginHorizontal='m'>
-          <AreaResultsItem
+        <Animated.View entering={FadeIn} exiting={FadeOut}>
+          <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
+            <AreaResultsItem
+              id={itemToRender.attributes.uuid}
+              name={itemToRender.attributes.Name}
+              item={itemToRender}
+            />
+          </View>
+        </Animated.View>
+      );
+    }
+    const itemToRender = item as RockData;
+    return (
+      <Animated.View entering={FadeIn} exiting={FadeOut}>
+        <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
+          <RockResultsItem
             id={itemToRender.attributes.uuid}
             name={itemToRender.attributes.Name}
             item={itemToRender}
           />
         </View>
-      );
-    }
-    const itemToRender = item as RockData;
-    return (
-      <View marginHorizontal='m'>
-        <RockResultsItem
-          id={itemToRender.attributes.uuid}
-          name={itemToRender.attributes.Name}
-          item={itemToRender}
-        />
-      </View>
+      </Animated.View>
     );
-  };
-
-  const renderStageName = () => {
-    if (stage === 0) return "Obszary w pobliżu: ";
-    if (stage === 1) return "Regiony w pobliżu: ";
-    if (stage === 2) return "Sektory w pobliżu: ";
-    if (stage === 3) return "Skały w pobliżu: ";
   };
 
   return (
@@ -235,7 +235,7 @@ export default function ResultsList() {
           <Text variant='h3'>Wybrana lokalizacja: </Text>
         </View>
         {locationArray && locationArray?.length > 0 ? (
-          <View paddingBottom='s'>
+          <View >
             <ScrollView
               ref={locationRef}
               horizontal
@@ -333,6 +333,10 @@ export default function ResultsList() {
             nestedScrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
+            estimatedItemSize={200}
+            contentContainerStyle={{
+              paddingBottom: 160
+            }}
           />
         </View>
         {Array.isArray(listToRender) && listToRender.length > 5 && (
