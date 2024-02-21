@@ -50,7 +50,7 @@ export const theme = createTheme({
     error: palette.red,
 
     // text
-    textBlack: palette.blue700,
+    textBlack: palette.black,
     textSecondary: palette.green,
     textGray: palette.gray,
     textLight: palette.blue300,
@@ -111,6 +111,10 @@ export const theme = createTheme({
     },
     body: {
       fontFamily: "Outfit400",
+      fontSize: 14,
+    },
+    bodyMedium: {
+      fontFamily: "Outfit300",
       fontSize: 14,
     },
     special: {

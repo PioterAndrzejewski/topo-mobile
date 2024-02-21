@@ -8,7 +8,7 @@ import {
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 import LastViewed from "../common/LastViewed";
 import Text from "../ui/Text";
@@ -66,6 +66,10 @@ export default function Map() {
         rotateEnabled={false}
         pitchEnabled={false}
         loadingEnabled={true}
+        clusterColor={palette.gray700}
+        clusterFontFamily='Outfit500'
+        clusterTextColor={palette.black}
+        layoutAnimationConf={undefined}
       >
         {rocks &&
           rocks.length > 0 &&
@@ -97,7 +101,11 @@ export default function Map() {
                 onPress={handleClick}
               >
                 <View padding='xs'>
-                  <Animated.View style={$markerContainer} entering={FadeIn}>
+                  <Animated.View
+                    style={$markerContainer}
+                    entering={FadeIn}
+                    exiting={FadeOut}
+                  >
                     {!userHas && !userHasSubscription && <CartIcon size={20} />}
                     <Text
                       variant='marker'

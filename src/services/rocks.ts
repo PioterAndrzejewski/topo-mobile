@@ -151,7 +151,7 @@ export type AreaData = {
     Cover: Cover;
     uuid: string;
     parent: {
-      data: AreaData;
+      data: AreaData | null;
     };
   };
 };
@@ -173,7 +173,7 @@ export type RegionData = {
     Cover: Cover;
     uuid: string;
     parent: {
-      data: AreaData;
+      data: AreaData | null;
     };
   };
 };

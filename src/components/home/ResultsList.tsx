@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Union } from "ts-toolbelt";
 
 import Backdrop from "src/components/common/Backdrop";
 import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -12,11 +13,10 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { useAreas } from "src/hooks/useAreas";
-import { AreaData } from "src/services/rocks";
+import { AreaData, RegionData, RockData } from "src/services/rocks";
 import {
   AreasList,
   bottomSheetRefAtom,
-  listToRenderAtom,
   mapAtom,
   regionAtom,
   selectedRockAtom,
@@ -27,12 +27,65 @@ import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
+import AreaResultsItem from "../common/ResultsItem/AreaResultsItem";
+
+type ListUnion = Union.Merge<RockData | AreaData | RegionData>;
+
+const polandRegion = {
+  id: 0,
+  attributes: {
+    Name: "Polska",
+    createdAt: "",
+    published_at: "",
+    updatedAt: "",
+    coordinates: {
+      id: 1,
+      latitude: 50.36305,
+      longitude: 19.83229,
+    },
+    uuid: "",
+    children: { data: [] },
+    parent: {
+      data: null,
+    },
+    Cover: {
+      Author: "",
+      Description: "",
+      id: 0,
+      Photo: {
+        data: {
+          id: 0,
+          attributes: {
+            alternativeText: "",
+            caption: "",
+            createdAt: "",
+            ext: "",
+            formats: "",
+            hash: "",
+            height: "",
+            mime: "",
+            name: "",
+            previewUrl: "",
+            provider: "",
+            provider_metadata: "",
+            size: "",
+            updatedAt: "",
+            url: "",
+            width: "",
+          },
+        },
+      },
+    },
+  },
+};
 
 export default function ResultsList() {
   const { areas, regions, sectors, rocks } = useAreas();
-  const [locationArray, setLocationArray] = useState<AreasList>([]);
+  const [locationArray, setLocationArray] = useState<Partial<AreasList>>([]);
+  const [listToRender, setListToRender] = useState<ListUnion[]>([]);
+  const [stage, setStage] = useState(0);
   const [selectedRock, setSelectedRock] = useAtom(selectedRockAtom);
-  const [listToRender, setListToRender] = useAtom(listToRenderAtom);
+
   const [bottomSheetGlobalRef, setBottomSheetGlobalRef] =
     useAtom(bottomSheetRefAtom);
   const region = useAtomValue(regionAtom);
@@ -45,9 +98,13 @@ export default function ResultsList() {
     if (!region || !areas || !sectors || !regions || !rocks) return;
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
+    setStage(stage);
+    console.log(stage);
     const newLocationArray: AreasList = [];
-
-    newLocationArray.push(sortAreas(region, areas)[0]);
+    if (stage >= 1) {
+      newLocationArray.push(polandRegion);
+      newLocationArray.push(sortAreas(region, areas)[0]);
+    }
     if (stage >= 2) {
       newLocationArray.push(sortAreas(region, regions)[0]);
     }
@@ -63,9 +120,27 @@ export default function ResultsList() {
       }
     }, 400);
 
+    if (stage === 0 && areas) {
+      const sortedAreas = sortAreas(region, areas);
+      setListToRender(sortedAreas.slice(0, 15));
+      return;
+    }
+
+    if (stage === 1 && regions) {
+      const sortedRegions = sortAreas(region, regions);
+      setListToRender(sortedRegions.slice(0, 15));
+      return;
+    }
+
+    if (stage === 2 && sectors) {
+      const sortedSectors = sortAreas(region, sectors);
+      setListToRender(sortedSectors.slice(0, 15));
+      return;
+    }
+
     if (rocks) {
       const sortedRocks = sortRocks(region, rocks);
-      setListToRender(sortedRocks);
+      setListToRender(sortedRocks.slice(0, 15));
     }
   }, [areas, region, regions, rocks, sectors]);
 
@@ -98,11 +173,55 @@ export default function ResultsList() {
     );
     if (map && map.current) map.current.animateToRegion(newRegion);
     await bottomSheetModalRef.current?.dismiss();
-    bottomSheetRef?.current?.collapse();
   };
 
   const bottomSheetSnapPoints = useMemo(() => ["80%"], []);
-  const snapPoints = useMemo(() => ["15%", "80%"], []);
+  const snapPoints = useMemo(() => ["15%", "50%", "86%"], []);
+
+  const renderItem = ({ item, index }: { item: unknown, index: number }) => {
+    const isLast = index === listToRender.length - 1;
+    if (stage === 0) {
+      const itemToRender = item as AreaData;
+      return (
+        <View marginHorizontal='m' mb={isLast ? "s" : "l"}>
+          <AreaResultsItem
+            id={itemToRender.attributes.uuid}
+            name={itemToRender.attributes.Name}
+            item={itemToRender}
+          />
+        </View>
+      );
+    }
+    if (stage === 1 || stage === 2) {
+      const itemToRender = item as RegionData;
+      return (
+        <View marginHorizontal='m'>
+          <AreaResultsItem
+            id={itemToRender.attributes.uuid}
+            name={itemToRender.attributes.Name}
+            item={itemToRender}
+          />
+        </View>
+      );
+    }
+    const itemToRender = item as RockData;
+    return (
+      <View marginHorizontal='m'>
+        <RockResultsItem
+          id={itemToRender.attributes.uuid}
+          name={itemToRender.attributes.Name}
+          item={itemToRender}
+        />
+      </View>
+    );
+  };
+
+  const renderStageName = () => {
+    if (stage === 0) return "Obszary w pobliżu: ";
+    if (stage === 1) return "Regiony w pobliżu: ";
+    if (stage === 2) return "Sektory w pobliżu: ";
+    if (stage === 3) return "Skały w pobliżu: ";
+  };
 
   return (
     <>
@@ -115,10 +234,8 @@ export default function ResultsList() {
         <View marginHorizontal='m'>
           <Text variant='h3'>Wybrana lokalizacja: </Text>
         </View>
-        {locationArray && locationArray?.length > 0 && (
-          <View
-            paddingBottom='s'
-          >
+        {locationArray && locationArray?.length > 0 ? (
+          <View paddingBottom='s'>
             <ScrollView
               ref={locationRef}
               horizontal
@@ -136,6 +253,10 @@ export default function ResultsList() {
               >
                 {locationArray.map((item, index) => {
                   const isLast = index === locationArray.length - 1;
+                  const animate = () => {
+                    if (!item) return;
+                    return animateTo(item, index);
+                  };
                   return (
                     <View
                       key={item?.attributes?.uuid}
@@ -150,9 +271,7 @@ export default function ResultsList() {
                     >
                       <TouchableOpacity
                         style={{ flexDirection: "row" }}
-                        onPress={() =>
-                          animateTo(item, index === 0 ? 0 : index + 1)
-                        }
+                        onPress={animate}
                         key={item?.attributes?.Name}
                       >
                         <Text variant='body'>{item?.attributes?.Name}</Text>
@@ -189,26 +308,31 @@ export default function ResultsList() {
               }}
             />
           </View>
+        ) : (
+          <View
+            marginTop='s'
+            paddingLeft='l'
+            paddingRight='xl'
+            flexDirection='row'
+            gap='m'
+            paddingBottom='m'
+          >
+            <View
+              borderRadius={99}
+              paddingVertical='s'
+              paddingHorizontal='l'
+              backgroundColor='backgroundTertiary'
+            >
+              <Text variant='body'>{"Przybliż coś gdzieś mapę ;) "}</Text>
+            </View>
+          </View>
         )}
-        <View marginHorizontal='m' marginTop='s' marginBottom='m'>
-          <Text variant='h3'>Skały w poblizu:</Text>
-        </View>
-        <View flex={1}>
+        <View flex={1} mt='xl'>
           <FlashList
             data={listToRender.slice(0, 5)}
             nestedScrollEnabled
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => {
-              return (
-                <View marginHorizontal='m'>
-                  <RockResultsItem
-                    id={item.attributes.uuid}
-                    name={item.attributes.Name}
-                    item={item}
-                  />
-                </View>
-              );
-            }}
+            renderItem={renderItem}
           />
         </View>
         {Array.isArray(listToRender) && listToRender.length > 5 && (
