@@ -101,11 +101,7 @@ export default function Map() {
                 onPress={handleClick}
               >
                 <View padding='xs'>
-                  <Animated.View
-                    style={$markerContainer}
-                    entering={FadeIn}
-                    exiting={FadeOut}
-                  >
+                  <Animated.View style={$markerContainer} entering={FadeIn} exiting={FadeOut}>
                     {!userHas && !userHasSubscription && <CartIcon size={20} />}
                     <Text
                       variant='marker'
@@ -136,6 +132,7 @@ const $markerContainer: ViewStyle = {
   alignItems: "center",
   paddingVertical: 8,
   paddingHorizontal: 24,
+  margin: 12,
   gap: 12,
   maxWidth: 140,
   ...styleGuide.cardShadow,

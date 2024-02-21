@@ -152,12 +152,12 @@ export const styleGuide = {
   },
   cardShadow: {
     shadowOffset: {
-      height: 0,
+      height: -2,
       width: 0,
     },
     backgroundColor: "backgroundScreen" as keyof (typeof theme)["colors"],
-    shadowRadius: 6,
-    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
     elevation: 5,
     zIndex: 99,
     shadowColor: "backgroundDark" as keyof (typeof theme)["colors"],

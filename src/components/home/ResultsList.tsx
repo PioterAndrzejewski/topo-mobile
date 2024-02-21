@@ -235,7 +235,7 @@ export default function ResultsList() {
           <Text variant='h3'>Wybrana lokalizacja: </Text>
         </View>
         {locationArray && locationArray?.length > 0 ? (
-          <View >
+          <View paddingBottom='s'>
             <ScrollView
               ref={locationRef}
               horizontal
@@ -258,25 +258,25 @@ export default function ResultsList() {
                     return animateTo(item, index);
                   };
                   return (
-                    <View
-                      key={item?.attributes?.uuid}
-                      borderWidth={isLast ? 0 : 1}
-                      borderRadius={99}
-                      paddingVertical='s'
-                      paddingHorizontal='l'
-                      backgroundColor={
-                        isLast ? "backgroundTertiary" : "backgroundScreen"
-                      }
-                      borderColor='backgroundTertiary'
+                    <TouchableOpacity
+                      style={{ flexDirection: "row" }}
+                      onPress={animate}
+                      key={item?.attributes?.Name}
                     >
-                      <TouchableOpacity
-                        style={{ flexDirection: "row" }}
-                        onPress={animate}
-                        key={item?.attributes?.Name}
+                      <View
+                        key={item?.attributes?.uuid}
+                        borderWidth={isLast ? 0 : 1}
+                        borderRadius={99}
+                        paddingVertical='s'
+                        paddingHorizontal='l'
+                        backgroundColor={
+                          isLast ? "backgroundTertiary" : "backgroundScreen"
+                        }
+                        borderColor='backgroundTertiary'
                       >
                         <Text variant='body'>{item?.attributes?.Name}</Text>
-                      </TouchableOpacity>
-                    </View>
+                      </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
@@ -315,7 +315,7 @@ export default function ResultsList() {
             paddingRight='xl'
             flexDirection='row'
             gap='m'
-            paddingBottom='m'
+            paddingBottom='s'
           >
             <View
               borderRadius={99}
@@ -327,7 +327,7 @@ export default function ResultsList() {
             </View>
           </View>
         )}
-        <View flex={1} mt='xl'>
+        <View flex={1} mt='xs'>
           <FlashList
             data={listToRender.slice(0, 5)}
             nestedScrollEnabled
@@ -335,16 +335,11 @@ export default function ResultsList() {
             renderItem={renderItem}
             estimatedItemSize={200}
             contentContainerStyle={{
-              paddingBottom: 160
+              paddingBottom: 140,
+              paddingTop: 16,
             }}
           />
         </View>
-        {Array.isArray(listToRender) && listToRender.length > 5 && (
-          <Text>
-            Lista wyświetla max. 5 wyników. Przesuń widok na mapie zeby wyszukać
-            w innym obszarze.
-          </Text>
-        )}
       </BottomSheet>
       <BottomSheetModal
         ref={bottomSheetModalRef}
