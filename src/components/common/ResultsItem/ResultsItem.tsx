@@ -1,7 +1,7 @@
+import { TouchableHighlight } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { useAtomValue, useSetAtom } from "jotai";
 import { FC } from "react";
-import { TouchableOpacity } from "react-native";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -12,7 +12,6 @@ import {
   mapAtom,
   selectedRockAtom,
 } from "src/store/results";
-import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
@@ -46,24 +45,18 @@ const ResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
 
   return (
-    <TouchableOpacity onPress={animateTo}>
-      <View
-        rowGap='2xl'
-        marginBottom='s'
-        padding='s'
-        {...styleGuide.cardShadow}
-        gap='s'
-      >
+    <TouchableHighlight onPress={animateTo} underlayColor={"#fff"}>
+      <View rowGap='2xl' marginBottom='s' padding='s' gap='s'>
         <Text variant='h2' color='textGray'>
           {name}
         </Text>
         <View>
           <Text variant='h3' color='textSecondary'>
-            {item.attributes.parent.data.attributes.Name}
+            {item?.attributes?.parent?.data?.attributes.Name}
           </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

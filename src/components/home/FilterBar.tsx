@@ -1,5 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import CustomTextInput from "src/components/common/CustomTextInput";
 import OverlayCardView from "src/components/ui/OverlayCardView";
@@ -7,7 +8,6 @@ import View from "src/components/ui/View";
 
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { SearchIcon } from "src/components/icons/Search";
 import { searchTextAtom } from "src/store/search";
 

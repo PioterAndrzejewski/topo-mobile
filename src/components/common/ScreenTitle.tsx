@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import type { FC } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";

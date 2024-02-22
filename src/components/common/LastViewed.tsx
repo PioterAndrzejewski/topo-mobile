@@ -4,11 +4,11 @@ import { useAtomValue, useSetAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import Animated, { BounceInUp } from "react-native-reanimated";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Text from "../ui/Text";
 import View from "../ui/View";
 
-import { TouchableOpacity } from "react-native";
 import { RockData } from "src/services/rocks";
 import { getLastSeenRock } from "src/services/storeAsync";
 import { mapAtom, selectedRockAtom } from "src/store/results";

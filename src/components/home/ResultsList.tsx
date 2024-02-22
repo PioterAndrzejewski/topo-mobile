@@ -1,10 +1,10 @@
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { FlashList } from "@shopify/flash-list";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Union } from "ts-toolbelt";
+import { FlatList } from 'react-native-gesture-handler';
 
 import Backdrop from "src/components/common/Backdrop";
 import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
@@ -185,13 +185,12 @@ export default function ResultsList() {
       const itemToRender = item as AreaData;
       return (
         <Animated.View entering={FadeIn} exiting={FadeOut}>
-          <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
             <AreaResultsItem
               id={itemToRender.attributes.uuid}
               name={itemToRender.attributes.Name}
               item={itemToRender}
+              isLast={isLast}
             />
-          </View>
         </Animated.View>
       );
     }
@@ -328,12 +327,11 @@ export default function ResultsList() {
           </View>
         )}
         <View flex={1} mt='xs'>
-          <FlashList
+          <FlatList
             data={listToRender.slice(0, 5)}
             nestedScrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
-            estimatedItemSize={200}
             contentContainerStyle={{
               paddingBottom: 140,
               paddingTop: 16,

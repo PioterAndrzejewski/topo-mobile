@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useState } from "react";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
@@ -10,7 +11,6 @@ import InformationRow from "src/components/rock/details/InformationRow";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useWindowDimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";

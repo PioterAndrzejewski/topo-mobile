@@ -1,4 +1,5 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import ChangeRouteButton from "src/components/rock/drawing/ChangeRouteButton";
 

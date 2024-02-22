@@ -1,8 +1,9 @@
+import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { useAtomValue } from "jotai";
 import { FC, useMemo } from "react";
-import { ImageBackground, TouchableOpacity } from "react-native";
+import { ImageBackground } from "react-native";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -21,9 +22,10 @@ type ListResultProps = {
   id: string;
   name: string;
   item: AreaData;
+  isLast?: boolean;
 };
 
-const AreaResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
+const AreaResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const image = useImageFile(
@@ -83,7 +85,7 @@ const AreaResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress} style={{ paddingHorizontal: 24, paddingVertical: 12 }}>
       <View {...styleGuide.cardShadow} borderRadius={24}>
         {image && (
           <>
@@ -116,7 +118,6 @@ const AreaResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
           borderRadius={24}
           backgroundColor='backgroundScreen'
           zIndex={20}
-          elevation={20}
         >
           <View marginBottom='m'>
             <Text variant='bodyMedium'>Obszar</Text>

@@ -5,13 +5,13 @@ import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import Modal from "react-native-modal";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Button from "src/components/common/Button";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { ViewStyle } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { ConversationIcon } from "src/components/icons/Conversation";
 import { contactAtom } from "src/store/global";
