@@ -1,10 +1,11 @@
 import { useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 import MapView from "react-native-map-clustering";
 import {
   Marker,
   default as NativeMap,
+  PROVIDER_DEFAULT,
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
@@ -58,7 +59,9 @@ export default function Map() {
         maxZoomLevel={18}
         showsUserLocation
         showsBuildings={false}
-        provider={PROVIDER_GOOGLE}
+        provider={
+          Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
+        }
         style={$mapStyle}
         region={startRegion}
         onRegionChangeComplete={onRegionChangeComplete}
@@ -101,7 +104,11 @@ export default function Map() {
                 onPress={handleClick}
               >
                 <View padding='xs'>
-                  <Animated.View style={$markerContainer} entering={FadeIn} exiting={FadeOut}>
+                  <Animated.View
+                    style={$markerContainer}
+                    entering={FadeIn}
+                    exiting={FadeOut}
+                  >
                     {!userHas && !userHasSubscription && <CartIcon size={20} />}
                     <Text
                       variant='marker'

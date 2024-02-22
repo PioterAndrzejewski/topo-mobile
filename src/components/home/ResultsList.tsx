@@ -11,11 +11,12 @@ import { Union } from "ts-toolbelt";
 
 import Backdrop from "src/components/common/Backdrop";
 import AreaResultsItem from "src/components/common/ResultsItem/AreaResultsItem";
+import RegionResultsItem from "src/components/common/ResultsItem/RegionResultsItem";
+import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import SectorResultsItem from "src/components/common/ResultsItem/SectorResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
-import RegionResultsItem from 'src/components/common/ResultsItem/RegionResultsItem';
 
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAreas } from "src/hooks/useAreas";
@@ -211,19 +212,19 @@ export default function ResultsList() {
         </Animated.View>
       );
     }
-    // if (stage === 2) {
-    //   const itemToRender = item as RegionData;
-    //   return (
-    //     <Animated.View entering={FadeIn} exiting={FadeOut}>
-    //       <RegionResultsItem
-    //         id={itemToRender.attributes.uuid}
-    //         name={itemToRender.attributes.Name}
-    //         item={itemToRender}
-    //         isLast={isLast}
-    //       />
-    //     </Animated.View>
-    //   );
-    // }
+    if (stage === 2) {
+      const itemToRender = item as RegionData;
+      return (
+        <Animated.View entering={FadeIn} exiting={FadeOut}>
+          <SectorResultsItem
+            id={itemToRender.attributes.uuid}
+            name={itemToRender.attributes.Name}
+            item={itemToRender}
+            isLast={isLast}
+          />
+        </Animated.View>
+      );
+    }
     const itemToRender = item as RockData;
     return (
       <Animated.View entering={FadeIn} exiting={FadeOut}>
@@ -341,6 +342,10 @@ export default function ResultsList() {
             </View>
           </View>
         )}
+        <View marginHorizontal='l' marginBottom='xs'>
+          <Text>Najbliżej Twojej lokalizacji:</Text>
+        </View>
+
         <View flex={1} mt='xs'>
           <FlatList
             data={listToRender.slice(0, 5)}

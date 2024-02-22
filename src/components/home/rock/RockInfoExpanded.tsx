@@ -78,8 +78,6 @@ const RockInfoExpanded = () => {
       <View>
         <View
           paddingHorizontal='m'
-          borderBottomWidth={1}
-          borderBottomColor='backgroundSecondary'
           paddingBottom='m'
           flexDirection='row'
           paddingTop='s'
@@ -125,7 +123,7 @@ const RockInfoExpanded = () => {
             <View marginBottom='m'>
               {rock && <InformationRow rock={rock} />}
             </View>
-            {routes && <RouteStructure routes={routes} />}
+            {routes && <RouteStructure routes={routes} inCard={false}/>}
             {rock?.attributes && rock?.attributes.cover.length > 0 && (
               <>
                 <RockGallery images={rock?.attributes.cover} />

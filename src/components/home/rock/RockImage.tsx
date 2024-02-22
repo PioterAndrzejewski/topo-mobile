@@ -12,7 +12,7 @@ const RockImage = ({ item }: { item: any }) => {
   useEffect(() => {
     console.log("image w useeffect", image);
   }, [image]);
-  if (!image) return <View />; 
+  if (!image) return <View />;
   return (
     <ImageBackground
       source={{
@@ -22,16 +22,12 @@ const RockImage = ({ item }: { item: any }) => {
       imageStyle={{ borderRadius: 24, marginTop: 12 }}
       key={item.id}
     >
-      <View
-        height={200}
-        gap='m'
-        borderRadius={12}
-        justifyContent='flex-end'
-        padding='m'
-      >
+      <View height={200} gap='m' borderRadius={12} justifyContent='flex-end'>
         <OverlayCardView
-          alignSelf='flex-start'
-          backgroundColor='backgroundSecondary'
+          backgroundColor='backgroundLight'
+          position='absolute'
+          bottom={20}
+          right={20}
         >
           <Text variant='caption'>{`Autor: ${item.Author}`}</Text>
         </OverlayCardView>

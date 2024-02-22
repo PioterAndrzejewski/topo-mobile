@@ -64,6 +64,7 @@ export const theme = createTheme({
     m: 16,
     "-m": -16,
     l: 24,
+    none: 0,
     "-l": -32,
     xl: 40,
     "2xl": 48,

@@ -1,4 +1,3 @@
-import { TouchableHighlight } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -6,6 +5,7 @@ import { FC, useMemo } from "react";
 import { ImageBackground } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import RouteStructure from "src/components/common/RouteStructure";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -16,20 +16,20 @@ import { useImageFile } from "src/hooks/useImageFile";
 import { RockData } from "src/services/rocks";
 import { confirmActionAtom } from "src/store/global";
 import { mapAtom, selectedRockAtom } from "src/store/results";
-import { Theme } from "src/styles/theme";
+import { Theme, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getRoutesFromRock } from "src/utils/getRoutesFromRock";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import RouteStructure from "../RouteStructure";
 
 type ListResultProps = {
   id: string;
   name: string;
   item: RockData;
+  isLast?: boolean;
 };
 
-const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
+const RockResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
@@ -76,8 +76,16 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
   };
   if (!image) return;
   return (
-    <TouchableHighlight onPress={handlePress}>
-      <View borderRadius={24}>
+    <TouchableOpacity
+      onPress={handlePress}
+      style={{
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        paddingBottom: isLast ? 160 : 24,
+        overflow: "hidden",
+      }}
+    >
+      <View {...styleGuide.cardShadow} borderRadius={24}>
         {image && (
           <ImageBackground
             source={{
@@ -129,7 +137,7 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item }) => {
           {routes && <RouteStructure routes={routes} />}
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 

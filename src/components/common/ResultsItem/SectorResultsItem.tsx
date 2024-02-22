@@ -24,28 +24,20 @@ type ListResultProps = {
   isLast?: boolean;
 };
 
-const RegionResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
+const SectorResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const image = useImageFile(
     item?.attributes?.Cover?.Photo?.data?.attributes.url || "",
   );
-  const { regions, sectors, rocks } = useAreas();
-
-  const sectorsThatBelong = useMemo(() => {
-    const theSectors = sectors?.filter(
-      (sector) => sector.attributes.parent.data?.id === item.id,
-    );
-    return theSectors;
-  }, [sectors, item]);
+  const { rocks } = useAreas();
 
   const rocksThatBelong = useMemo(() => {
-    const sectorsList = sectorsThatBelong?.map((sector) => sector.id);
-    return rocks?.filter((rock) => {
-      if (!rock.attributes.parent.data?.id) return false;
-      return sectorsList?.includes(rock.attributes.parent.data?.id);
-    });
-  }, [regions, item, sectors]);
+    const theRocks = rocks?.filter(
+      (rock) => rock.attributes.parent.data?.id === item.id,
+    );
+    return theRocks;
+  }, [rocks, item]);
 
   const lastUpdated = useMemo(
     () =>
@@ -73,7 +65,7 @@ const RegionResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   };
 
   const handlePress = () => {
-    animateTo(item, 2);
+    animateTo(item, 3);
   };
 
   return (
@@ -125,14 +117,6 @@ const RegionResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
           </View>
           <View flexDirection='row' justifyContent='space-between'>
             <Text variant='bodyMedium' color='textSecondary'>
-              Liczba dostępnych sektorów
-            </Text>
-            <Text variant='body' color='textBlack'>
-              {sectorsThatBelong?.length}
-            </Text>
-          </View>
-          <View flexDirection='row' justifyContent='space-between'>
-            <Text variant='bodyMedium' color='textSecondary'>
               Liczba dostępnych skał
             </Text>
             <Text variant='body' color='textBlack'>
@@ -157,4 +141,4 @@ const RegionResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   );
 };
 
-export default RegionResultsItem;
+export default SectorResultsItem;
