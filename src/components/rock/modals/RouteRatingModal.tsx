@@ -3,7 +3,7 @@ import { useTheme } from "@shopify/restyle";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Toast from "react-native-toast-message";
 
 import Button from "src/components/common/Button";

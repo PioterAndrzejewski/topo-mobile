@@ -2,7 +2,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Toast from "react-native-toast-message";
 import * as yup from "yup";
@@ -52,9 +53,11 @@ export default function ResetPanel() {
         backgroundColor='backgroundScreen'
         paddingHorizontal='m'
       >
-        <Text variant='h2' color='textGray'>
-          Wpisz adres e-mail przypisany do konta
-        </Text>
+        <View alignItems='center'>
+          <Text variant='h3' color='textBlack'>
+            Wpisz adres e-mail przypisany do konta
+          </Text>
+        </View>
         <View marginTop='xl' justifyContent='space-between' flexGrow={1}>
           <View>
             <Controller
@@ -83,7 +86,7 @@ export default function ResetPanel() {
               />
             </View>
             <View
-              marginTop='l'
+              marginTop='xl'
               justifyContent='center'
               alignItems='center'
               flexDirection='row'
@@ -95,7 +98,7 @@ export default function ResetPanel() {
                 onPress={() => navigation.navigate("Login")}
                 hitSlop={20}
               >
-                <View marginLeft='m'>
+                <View marginLeft='xs'>
                   <Text variant='body' color='textSecondary'>
                     logowania
                   </Text>

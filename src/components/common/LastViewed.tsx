@@ -2,26 +2,37 @@ import { useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import { useAtomValue, useSetAtom } from "jotai";
 import React, { useEffect, useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import Animated, { BounceInUp } from "react-native-reanimated";
+import Animated, {
+  BounceInUp,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 
 import Text from "../ui/Text";
 import View from "../ui/View";
 
-import { TouchableOpacity } from "react-native";
 import { RockData } from "src/services/rocks";
 import { getLastSeenRock } from "src/services/storeAsync";
 import { mapAtom, selectedRockAtom } from "src/store/results";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { LogoIcon } from "../icons/Logo";
+import { HandIcon } from "../icons/Hand";
 
 const LastViewed = () => {
   const [lastViewed, setLastViewed] = useState<RockData | null>(null);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
   const map = useAtomValue(mapAtom);
+  const positionX = useSharedValue(0);
+  const rotation = useSharedValue(-10);
 
   useEffect(() => {
     const checkLastViewed = async () => {
@@ -48,6 +59,33 @@ const LastViewed = () => {
     }, 100);
   };
 
+  React.useEffect(() => {
+    positionX.value = withRepeat(
+      withSequence(
+        withTiming(30, { duration: 400, easing: Easing.cubic }),
+        withDelay(0, withTiming(0, { duration: 400, easing: Easing.linear })),
+      ),
+      -1, // -1 means infinite loop
+    );
+
+    rotation.value = withRepeat(
+      withSequence(
+        withTiming(30, { duration: 400, easing: Easing.linear }),
+        withDelay(0, withTiming(0, { duration: 400, easing: Easing.linear })),
+      ),
+      -1,
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: positionX.value },
+        { rotate: `${rotation.value}deg` },
+      ],
+    };
+  });
+
   if (!lastViewed) return;
   return (
     <Swipeable
@@ -63,28 +101,28 @@ const LastViewed = () => {
       <Animated.View entering={BounceInUp}>
         <View justifyContent='center' width='100%' alignItems='center'>
           <BlurView
-            intensity={15}
+            intensity={25}
             blurReductionFactor={1}
             style={{ borderRadius: 24, overflow: "hidden" }}
           >
             <TouchableOpacity onPress={animateTo}>
               <View
-                paddingHorizontal='3xl'
                 paddingVertical='m'
+                width={320}
                 borderRadius={12}
-                backgroundColor='backgroundTertiaryFaded'
+                backgroundColor='backgroundLight'
                 justifyContent='center'
                 alignItems='center'
-                gap='s'
-                flexDirection='row'
+                gap='xs'
+                opacity={0.6}
               >
-                <LogoIcon size={44} />
-                <View>
-                  <Text variant='body'>Ostatnio oglądane:</Text>
+                <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
 
-                  <Text variant='h4' color='textSecondary'>
-                    {lastViewed.attributes.Name}
-                  </Text>
+                <Text variant='h3'>{lastViewed.attributes.Name}</Text>
+                <View position='absolute' right={30}>
+                  <Animated.View style={animatedStyle}>
+                    <HandIcon size={32} />
+                  </Animated.View>
                 </View>
               </View>
             </TouchableOpacity>

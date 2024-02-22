@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import {
   SafeAreaView,
@@ -14,7 +15,6 @@ import ScreenTitle from "src/components/common/ScreenTitle";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "src/components/common/Button";
 import { ConfirmMailIcon } from "src/components/icons/ConfirmMail";
 import { login, resetVerificationEmail } from "src/services/auth";

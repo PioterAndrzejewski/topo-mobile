@@ -5,7 +5,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useMemo, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScrollView } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import Toast from "react-native-toast-message";

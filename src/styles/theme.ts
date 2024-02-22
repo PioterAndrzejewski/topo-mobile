@@ -7,6 +7,7 @@ export const palette = {
   black: "rgba(14, 13, 18, 1)",
 
   gray: "#49454F",
+  gray700: "#F7F2FA",
 
   blue100: "rgb(242, 241, 244)",
   blue100_25: "rgba(242, 241, 244, 0.25)",
@@ -20,6 +21,7 @@ export const palette = {
   yellow50: "rgba(205, 187, 72, 0.2)",
   green: "#496520",
   green20: "rgba(37, 172, 87, 0.2)",
+  greenSecondary: "#C6E49A",
 
   red: "rgb(210, 47, 39)",
 };
@@ -27,14 +29,14 @@ export const palette = {
 export const theme = createTheme({
   colors: {
     backgroundScreen: palette.white,
-    backgroundSecondary: palette.blue100,
+    backgroundSecondary: palette.green,
     backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.blue700,
-    backgroundTertiary: palette.yellow,
+    backgroundTertiary: palette.greenSecondary,
     backgroundTertiaryFaded: palette.yellow50,
     backgroundGreenFaded: palette.green20,
-    backgroundLight: palette.blue200,
+    backgroundLight: palette.gray700,
     backgroundError: palette.red,
 
     secondary: palette.green,
@@ -48,7 +50,7 @@ export const theme = createTheme({
     error: palette.red,
 
     // text
-    textBlack: palette.blue700,
+    textBlack: palette.black,
     textSecondary: palette.green,
     textGray: palette.gray,
     textLight: palette.blue300,
@@ -62,10 +64,14 @@ export const theme = createTheme({
     m: 16,
     "-m": -16,
     l: 24,
+    none: 0,
     "-l": -32,
     xl: 40,
     "2xl": 48,
     "3xl": 60,
+    "4xl": 80,
+    "5xl": 110,
+    "6xl": 140,
   },
   textVariants: {
     h1: {
@@ -108,6 +114,10 @@ export const theme = createTheme({
       fontFamily: "Outfit400",
       fontSize: 14,
     },
+    bodyMedium: {
+      fontFamily: "Outfit300",
+      fontSize: 14,
+    },
     special: {
       fontFamily: "Outfit300",
       fontSize: 12,
@@ -120,7 +130,7 @@ export const theme = createTheme({
     },
     marker: {
       fontFamily: "Outfit400",
-      fontSize: 12,
+      fontSize: 14,
     },
   },
 });
@@ -143,12 +153,12 @@ export const styleGuide = {
   },
   cardShadow: {
     shadowOffset: {
-      height: 0,
+      height: -2,
       width: 0,
     },
     backgroundColor: "backgroundScreen" as keyof (typeof theme)["colors"],
-    shadowRadius: 6,
-    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
     elevation: 5,
     zIndex: 99,
     shadowColor: "backgroundDark" as keyof (typeof theme)["colors"],

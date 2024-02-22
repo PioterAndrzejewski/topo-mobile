@@ -1,5 +1,6 @@
 import { useTheme } from "@shopify/restyle";
-import { TouchableOpacity, ViewStyle } from "react-native";
+import { ViewStyle } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Text from "../ui/Text";
 import View from "../ui/View";

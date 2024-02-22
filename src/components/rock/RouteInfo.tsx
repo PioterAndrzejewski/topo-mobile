@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useAtom, useSetAtom } from "jotai";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Animated from "react-native-reanimated";
 
 import Accordion from "src/components/common/Accordion";

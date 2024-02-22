@@ -1,7 +1,8 @@
 import { useTheme } from "@shopify/restyle";
 import { ReactNode, useState } from "react";
 import type { FieldError } from "react-hook-form";
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Text from "../ui/Text";
 import View from "../ui/View";

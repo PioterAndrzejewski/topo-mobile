@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import type { FC } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -40,7 +40,7 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
         </OverlayCardView>
       )}
       <View>
-        <Text variant='h2' color='secondary'>
+        <Text variant='h2' color='secondary' additionalStyles={{fontFamily: 'Outfit400'}}>
           {title}
         </Text>
       </View>

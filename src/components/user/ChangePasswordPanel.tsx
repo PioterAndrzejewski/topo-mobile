@@ -2,19 +2,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Toast from "react-native-toast-message";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
 import CustomTextInput from "src/components/common/CustomTextInput";
-import OverlayCardView from "src/components/ui/OverlayCardView";
 import View from "src/components/ui/View";
 
 import { changePass } from "src/services/auth";
-import { palette } from "src/styles/theme";
-import { ArrowLeft } from "../icons/ArrowLeft";
 
 export default function ChangePasswordPanel() {
   const navigation = useNavigation();
