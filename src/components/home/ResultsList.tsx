@@ -2,15 +2,20 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import { Union } from "ts-toolbelt";
-import { FlatList } from 'react-native-gesture-handler';
 
 import Backdrop from "src/components/common/Backdrop";
-import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import AreaResultsItem from "src/components/common/ResultsItem/AreaResultsItem";
 import RockInfoExpanded from "src/components/home/rock/RockInfoExpanded";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+import RockResultsItem from "src/components/common/ResultsItem/RockResultsItem";
+import RegionResultsItem from 'src/components/common/ResultsItem/RegionResultsItem';
 
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useAreas } from "src/hooks/useAreas";
@@ -28,7 +33,6 @@ import { getZoomFromRegion } from "src/utils/getZoomFromRegion";
 import { getStageFromZoom, getZoomFromStage } from "src/utils/getZoomFromStage";
 import { sortAreas } from "src/utils/sortAreas";
 import { sortRocks } from "src/utils/sortRocks";
-import AreaResultsItem from "../common/ResultsItem/AreaResultsItem";
 
 type ListUnion = Union.Merge<RockData | AreaData | RegionData>;
 
@@ -185,39 +189,50 @@ export default function ResultsList() {
       const itemToRender = item as AreaData;
       return (
         <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <AreaResultsItem
-              id={itemToRender.attributes.uuid}
-              name={itemToRender.attributes.Name}
-              item={itemToRender}
-              isLast={isLast}
-            />
-        </Animated.View>
-      );
-    }
-    if (stage === 1 || stage === 2) {
-      const itemToRender = item as RegionData;
-      return (
-        <Animated.View entering={FadeIn} exiting={FadeOut}>
-          <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
-            <AreaResultsItem
-              id={itemToRender.attributes.uuid}
-              name={itemToRender.attributes.Name}
-              item={itemToRender}
-            />
-          </View>
-        </Animated.View>
-      );
-    }
-    const itemToRender = item as RockData;
-    return (
-      <Animated.View entering={FadeIn} exiting={FadeOut}>
-        <View marginHorizontal='m' mb={isLast ? "6xl" : "l"}>
-          <RockResultsItem
+          <AreaResultsItem
             id={itemToRender.attributes.uuid}
             name={itemToRender.attributes.Name}
             item={itemToRender}
+            isLast={isLast}
           />
-        </View>
+        </Animated.View>
+      );
+    }
+    if (stage === 1) {
+      const itemToRender = item as RegionData;
+      return (
+        <Animated.View entering={FadeIn} exiting={FadeOut}>
+          <RegionResultsItem
+            id={itemToRender.attributes.uuid}
+            name={itemToRender.attributes.Name}
+            item={itemToRender}
+            isLast={isLast}
+          />
+        </Animated.View>
+      );
+    }
+    // if (stage === 2) {
+    //   const itemToRender = item as RegionData;
+    //   return (
+    //     <Animated.View entering={FadeIn} exiting={FadeOut}>
+    //       <RegionResultsItem
+    //         id={itemToRender.attributes.uuid}
+    //         name={itemToRender.attributes.Name}
+    //         item={itemToRender}
+    //         isLast={isLast}
+    //       />
+    //     </Animated.View>
+    //   );
+    // }
+    const itemToRender = item as RockData;
+    return (
+      <Animated.View entering={FadeIn} exiting={FadeOut}>
+        <RockResultsItem
+          id={itemToRender.attributes.uuid}
+          name={itemToRender.attributes.Name}
+          item={itemToRender}
+          isLast={isLast}
+        />
       </Animated.View>
     );
   };

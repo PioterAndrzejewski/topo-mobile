@@ -10,7 +10,7 @@ import View from "src/components/ui/View";
 
 import { useAreas } from "src/hooks/useAreas";
 import { useImageFile } from "src/hooks/useImageFile";
-import { AreaData } from "src/services/rocks";
+import { AreaData, RegionData } from "src/services/rocks";
 import { mapAtom } from "src/store/results";
 import { styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
@@ -20,11 +20,11 @@ import { getZoomFromStage } from "src/utils/getZoomFromStage";
 type ListResultProps = {
   id: string;
   name: string;
-  item: AreaData;
+  item: RegionData;
   isLast?: boolean;
 };
 
-const AreaResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
+const RegionResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const image = useImageFile(
@@ -32,27 +32,20 @@ const AreaResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   );
   const { regions, sectors, rocks } = useAreas();
 
-  const regionsThatBelong = useMemo(() => {
-    const theRegions = regions?.filter(
-      (region) => region.attributes.parent.data?.id === item.id,
-    );
-    return theRegions;
-  }, [regions, item]);
-
   const sectorsThatBelong = useMemo(() => {
-    const regionList = regionsThatBelong?.map((region) => region.id);
-    return sectors?.filter((sector) => {
-      if (!sector.attributes.parent.data?.id) return false;
-      return regionList?.includes(sector.attributes.parent.data?.id);
-    });
-  }, [regions, item, sectors]);
+    const theSectors = sectors?.filter(
+      (sector) => sector.attributes.parent.data?.id === item.id,
+    );
+    return theSectors;
+  }, [sectors, item]);
 
   const rocksThatBelong = useMemo(() => {
-    const sectorList = sectorsThatBelong?.map((sector) => sector.id);
+    const sectorsList = sectorsThatBelong?.map((sector) => sector.id);
     return rocks?.filter((rock) => {
-      return sectorList?.includes(rock.attributes.parent.data.id);
+      if (!rock.attributes.parent.data?.id) return false;
+      return sectorsList?.includes(rock.attributes.parent.data?.id);
     });
-  }, [regions, item, sectors, rocks]);
+  }, [regions, item, sectors]);
 
   const lastUpdated = useMemo(
     () =>
@@ -127,16 +120,8 @@ const AreaResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
           zIndex={20}
         >
           <View marginBottom='m'>
-            <Text variant='bodyMedium'>Obszar</Text>
+            <Text variant='bodyMedium'>Region</Text>
             <Text variant='h2'>{name}</Text>
-          </View>
-          <View flexDirection='row' justifyContent='space-between'>
-            <Text variant='bodyMedium' color='textSecondary'>
-              Liczba dostępnych regionów:
-            </Text>
-            <Text variant='body' color='textBlack'>
-              {regionsThatBelong?.length}
-            </Text>
           </View>
           <View flexDirection='row' justifyContent='space-between'>
             <Text variant='bodyMedium' color='textSecondary'>
@@ -172,4 +157,4 @@ const AreaResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
   );
 };
 
-export default AreaResultsItem;
+export default RegionResultsItem;
