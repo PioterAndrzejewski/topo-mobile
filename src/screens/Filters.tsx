@@ -5,12 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import ScreenTitle from "src/components/common/ScreenTitle";
 import AvailableOnly from "src/components/filters/AvailableOnly";
+import Exposition from "src/components/filters/Exposition";
 import FormationsSelected from "src/components/filters/FormationsSelected";
 import InterestingRoutes from "src/components/filters/InterestingRoutes";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import View from "src/components/ui/View";
-import { useUserSubscription } from "src/hooks/useUserSubscription";
 
+import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { onlyAvailableAtom } from "src/store/filters";
 import { palette } from "src/styles/theme";
 
@@ -32,7 +33,10 @@ const FiltersScreen = () => {
   }, []);
   return (
     <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ paddingBottom: 120 }}
+      >
         <ScreenTitle title='Filtry' centered hasCloseButton />
         <AvailableOnly />
         {divider}
@@ -41,6 +45,8 @@ const FiltersScreen = () => {
         <FormationsSelected />
         {divider}
         <SelectedHeight />
+        {divider}
+        <Exposition />
       </ScrollView>
     </SafeAreaView>
   );
