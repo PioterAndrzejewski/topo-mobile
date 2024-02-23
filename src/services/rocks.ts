@@ -34,6 +34,7 @@ export const grades = {
 };
 
 export type gradeOptions = keyof typeof grades;
+
 const possibleItemsTypes = ["areas", "regions", "sectors", "rocks", "routes"];
 
 export type ItemsTypes = {

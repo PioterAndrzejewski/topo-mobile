@@ -9,7 +9,7 @@ import { palette } from "src/styles/theme";
 export default function MapScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.white }}>
-      <ScreenTitle centered title='Mapa' />
+      <ScreenTitle centered title='Mapa' hasFilters/>
       <Map />
       <ResultsList />
     </SafeAreaView>
