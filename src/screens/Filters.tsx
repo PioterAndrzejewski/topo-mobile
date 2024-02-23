@@ -1,11 +1,13 @@
 import { useAtom } from "jotai";
 import { useMemo } from "react";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import ScreenTitle from "src/components/common/ScreenTitle";
 import AvailableOnly from "src/components/filters/AvailableOnly";
 import FormationsSelected from "src/components/filters/FormationsSelected";
 import InterestingRoutes from "src/components/filters/InterestingRoutes";
+import SelectedHeight from "src/components/filters/SelectedHeight";
 import View from "src/components/ui/View";
 import { useUserSubscription } from "src/hooks/useUserSubscription";
 
@@ -30,13 +32,16 @@ const FiltersScreen = () => {
   }, []);
   return (
     <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
-      <ScreenTitle title='Filtry' centered hasCloseButton />
-      <AvailableOnly />
-      {divider}
-      <InterestingRoutes />
-      {divider}
-      <FormationsSelected />
-      {divider}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ScreenTitle title='Filtry' centered hasCloseButton />
+        <AvailableOnly />
+        {divider}
+        <InterestingRoutes />
+        {divider}
+        <FormationsSelected />
+        {divider}
+        <SelectedHeight />
+      </ScrollView>
     </SafeAreaView>
   );
 };
