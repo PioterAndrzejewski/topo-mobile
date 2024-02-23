@@ -7,7 +7,7 @@ import View from "src/components/ui/View";
 
 import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { onlyAvailableAtom } from "src/store/filters";
-import { palette } from 'src/styles/theme';
+import { palette } from "src/styles/theme";
 
 const SelectedHeight = () => {
   const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
@@ -16,16 +16,16 @@ const SelectedHeight = () => {
 
   const handleOnlyAvailableChange = () => setOnlyAvailable((prev) => !prev);
   return (
-    <View marginHorizontal='l' justifyContent='space-between'>
+    <View marginHorizontal='l' justifyContent='space-between' gap='m'>
       <Text variant='body'>Wybierz zakres wysokości skały</Text>
-      <View mt="l">
+      <View mt='l'>
         <Slider
           animateTransitions
           maximumTrackTintColor='#d3d3d3'
           maximumValue={70}
           minimumTrackTintColor={palette.green}
           minimumValue={0}
-          step={2}
+          step={1}
           thumbTintColor={palette.green}
           value={values}
           onValueChange={(values) => setValues(values)}

@@ -29,7 +29,7 @@ const FormationsSelected = () => {
   };
 
   return (
-    <View marginHorizontal='l'>
+    <View marginHorizontal='l'  gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
         <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
       </View>

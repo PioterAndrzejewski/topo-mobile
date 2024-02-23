@@ -20,6 +20,7 @@ const AvailableOnly = () => {
         mt='xl'
         flexDirection='row'
         justifyContent='space-between'
+        gap='m'
       >
         <Text variant='body'>Pokaz tylko te skały, do których mam dostęp</Text>
         <Checkbox

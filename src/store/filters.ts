@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Exhibition, Formations } from "src/services/rocks";
+import { Exhibition, Formations, Shading } from "src/services/rocks";
 
 export type GradeInterestedSection = {
   label: string;
@@ -143,6 +143,26 @@ const expositionSelected: ExpositionSelected[] = [
   },
 ];
 
+export type ShadingSelected = {
+  type: Shading;
+  selected: boolean;
+};
+
+const shadingSelected: ShadingSelected[] = [
+  {
+    type: "shadow",
+    selected: false,
+  },
+  {
+    type: "half-shadow",
+    selected: false,
+  },
+  {
+    type: "sunny",
+    selected: false,
+  },
+];
+
 export const onlyAvailableAtom = atom<boolean>(false);
 export const routesInterestedAtom =
   atom<GradeInterestedSection[]>(gradesSections);
@@ -150,3 +170,5 @@ export const formationsSelectedAtom =
   atom<FormationSelected[]>(formationsSelected);
 export const exhibitionSelectedAtom =
   atom<ExpositionSelected[]>(expositionSelected);
+export const onlyFamilyFriendlyAtom = atom<boolean>(false);
+export const shadingSelectedAtom = atom<ShadingSelected[]>(shadingSelected);

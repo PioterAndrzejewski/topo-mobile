@@ -31,7 +31,7 @@ const InterestingRoutes = () => {
   };
 
   return (
-    <View marginHorizontal='l'>
+    <View marginHorizontal='l'  gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
         <Text variant='body'>
           Pokaż skały, które zawierają drogi o trudności:

@@ -10,6 +10,19 @@ type ShadingProps = {
   shading: Shading;
 };
 
+export const renderShadingText = (shading: Shading) => {
+  switch (shading) {
+    case "shadow":
+      return "Gęsty las";
+    case "half-shadow":
+      return "Trochę drzew";
+    case "sunny":
+      return "Brak drzew";
+    default:
+      return "Brak danych";
+  }
+};
+
 const ShadingInfo = (props: ShadingProps) => {
   const renderIcon = () => {
     switch (props.shading) {
@@ -23,22 +36,11 @@ const ShadingInfo = (props: ShadingProps) => {
         return <HalfShadowIcon size={32} />;
     }
   };
-  const renderText = () => {
-    switch (props.shading) {
-      case "shadow":
-        return "Gęsty las";
-      case "half-shadow":
-        return "Trochę drzew";
-      case "sunny":
-        return "Brak drzew";
-      default:
-        return "Brak danych";
-    }
-  };
+
   return (
     <DetailsWrapper>
       {renderIcon()}
-      <Text variant='body'>{renderText()}</Text>
+      <Text variant='body'>{renderShadingText(props.shading)}</Text>
     </DetailsWrapper>
   );
 };

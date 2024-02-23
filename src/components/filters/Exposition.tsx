@@ -13,7 +13,6 @@ const Exposition = () => {
   );
 
   const handleSelect = (item: ExpositionSelected) => {
-    console.log(item);
     const changedSelected = expositionsSelected.map((exposition) => {
       if (exposition.type === item.type) {
         return {
@@ -27,7 +26,7 @@ const Exposition = () => {
   };
 
   return (
-    <View marginHorizontal='l'>
+    <View marginHorizontal='l'  gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
         <Text variant='body'>Pokaż skały, które mają wystawkę:</Text>
       </View>
