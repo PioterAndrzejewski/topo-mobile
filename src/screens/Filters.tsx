@@ -16,6 +16,7 @@ import Exposition from "src/components/filters/Exposition";
 import FamilyFriendly from "src/components/filters/FamilyFriendly";
 import FormationsSelected from "src/components/filters/FormationsSelected";
 import InterestingRoutes from "src/components/filters/InterestingRoutes";
+import RouteTypeSelected from "src/components/filters/RouteTypeSelected";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
 import AnimatedFlashList from "src/components/ui/AnimatedFlashList";
@@ -28,6 +29,7 @@ import {
   formationsSelectedAtom,
   onlyAvailableAtom,
   onlyFamilyFriendlyAtom,
+  routeTypeSelectedAtom,
   routesInterestedAtom,
   selectedHeightAtom,
   shadingSelectedAtom,
@@ -47,6 +49,9 @@ const FiltersScreen = () => {
     exhibitionSelectedAtom,
   );
   const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
+  const [routeTypeSelected, setRouteTypeSelected] = useAtom(
+    routeTypeSelectedAtom,
+  );
   const navigation = useNavigation();
 
   const [localChanges, setLocalChanges] = useState({
@@ -57,6 +62,7 @@ const FiltersScreen = () => {
     familyFriendly,
     selectedExposition,
     shadingSelected,
+    routeTypeSelected,
   });
 
   const { resetFilters } = useFilters();
@@ -86,6 +92,7 @@ const FiltersScreen = () => {
     setFamilyFriendly(localChanges.familyFriendly);
     setSelectedExposition(localChanges.selectedExposition);
     setShadingSelected(localChanges.shadingSelected);
+    setRouteTypeSelected(localChanges.routeTypeSelected);
     navigation.goBack();
   };
 
@@ -176,6 +183,16 @@ const FiltersScreen = () => {
           setLocalChanges((prevState) => ({
             ...prevState,
             shadingSelected: newValue,
+          }))
+        }
+      />
+      {divider}
+      <RouteTypeSelected
+        value={localChanges.routeTypeSelected}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            routeTypeSelected: newValue,
           }))
         }
       />

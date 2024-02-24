@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useUserProductsId } from "src/services/payments";
 import {
-  FormationData,
   RockData,
   getAreas,
   getRegions,
@@ -29,6 +28,7 @@ export const useAreas = () => {
     familyFriendly,
     selectedExposition,
     shadingSelected,
+    routeTypeSelected,
   } = useFilters();
 
   const { data: areas, isLoading: areasLoading } = useQuery({
@@ -89,35 +89,77 @@ export const useAreas = () => {
         return false;
       }
 
-      const formations = formationsSelected
+      const selectedFormations = formationsSelected
         .filter((formation) => formation.selected)
-        .map((formation) => formation.type) as unknown as FormationData[];
-      const rockFormations = rock.attributes.formation.map(
-        (formation) => formation.formation,
-      ) as unknown as FormationData[];
+        .map((formation) => formation.type);
 
-      if (
-        formations.length > 0 &&
-        !formations.some((element) => {
-          return rockFormations.includes(element);
-        })
-      ) {
-        return false;
+      if (selectedFormations.length > 0) {
+        const rockFormations = rock.attributes.formation.map(
+          (formation) => formation.formation,
+        );
+        const found = selectedFormations.some((element) =>
+          rockFormations.includes(element),
+        );
+
+        if (!found) {
+          return false;
+        }
       }
 
-      const expositions = selectedExposition
+      const selectedExpositions = selectedExposition
         .filter((exposition) => exposition.selected)
         .map((exposition) => exposition.type);
-      const rockExpositions = rock.attributes.exhibition.map(
-        (exposition) => exposition.exhibition,
-      );
-      if (
-        expositions.length > 0 &&
-        !expositions.some((element) => {
-          return rockExpositions.includes(element);
-        })
-      ) {
-        return false;
+
+      if (selectedExpositions.length > 0) {
+        const rockExpositions = rock.attributes.exhibition.map(
+          (exposition) => exposition.exhibition,
+        );
+
+        if (
+          !selectedExpositions.some((element) =>
+            rockExpositions.includes(element),
+          )
+        ) {
+          return false;
+        }
+      }
+
+      const selectedRouteTypes = routeTypeSelected
+        .filter((routeType) => routeType.selected)
+        .map((routeType) => routeType.type);
+
+      if (selectedRouteTypes.length > 0) {
+        const rockRouteTypes = rock.attributes.routes.data.map(
+          (route) => route.attributes.Type,
+        );
+        if (
+          !selectedRouteTypes.some((element) =>
+            rockRouteTypes.includes(element),
+          )
+        ) {
+          return false;
+        }
+      }
+
+      const selectedRouteGrades = routesInterestedSections
+        .filter((section) => section.selected)
+        .map((section) => ({ max: section.gradeMax, min: section.gradeMin }));
+
+      if (selectedRouteGrades.length > 0) {
+        const rockRouteGrades = rock.attributes.routes.data.map(
+          (route) => route.attributes.grade,
+        );
+        if (
+          !selectedRouteGrades.some((selectedGrade) => {
+            return !!rockRouteGrades.find(
+              (rockRouteGrade) =>
+                selectedGrade.min <= rockRouteGrade &&
+                selectedGrade.max >= rockRouteGrade,
+            );
+          })
+        ) {
+          return false;
+        }
       }
 
       return true;
@@ -132,6 +174,7 @@ export const useAreas = () => {
     shadingSelected,
     formationsSelected,
     selectedExposition,
+    routeTypeSelected,
     routesInterestedSections,
     rocks,
   ]);

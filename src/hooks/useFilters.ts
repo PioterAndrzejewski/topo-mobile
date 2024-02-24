@@ -10,6 +10,8 @@ import {
   heightValues,
   onlyAvailableAtom,
   onlyFamilyFriendlyAtom,
+  routeTypeSelectedAtom,
+  routeTypeSelectedClean,
   routesInterestedAtom,
   selectedHeightAtom,
   shadingSelectedAtom,
@@ -31,6 +33,9 @@ export const useFilters = () => {
     exhibitionSelectedAtom,
   );
   const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
+  const [routeTypeSelected, setRouteTypeSelected] = useAtom(
+    routeTypeSelectedAtom,
+  );
 
   const resetFilters = () => {
     setOnlyAvailable(false);
@@ -40,6 +45,7 @@ export const useFilters = () => {
     setFamilyFriendly(false);
     setSelectedExposition(expositionSelectedClean);
     setShadingSelected(shadingSelectedClean);
+    setRouteTypeSelected(routeTypeSelectedClean);
   };
 
   const countActiveFilters = () => {
@@ -86,6 +92,11 @@ export const useFilters = () => {
       activeNumber++;
     }
 
+    const routeTypes = routeTypeSelected.map((routeType) => routeType.selected);
+    if (routeTypes.includes(true)) {
+      activeNumber++;
+    }
+
     setActiveFiltersCount(activeNumber);
   };
 
@@ -99,6 +110,7 @@ export const useFilters = () => {
     familyFriendly,
     selectedExposition,
     shadingSelected,
+    routeTypeSelected,
   ]);
 
   return {
@@ -110,6 +122,7 @@ export const useFilters = () => {
     heightSelected,
     familyFriendly,
     selectedExposition,
-    shadingSelected
+    shadingSelected,
+    routeTypeSelected,
   };
 };
