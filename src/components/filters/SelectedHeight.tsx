@@ -1,20 +1,17 @@
 import { Slider } from "@miblanchard/react-native-slider";
-import { useAtom } from "jotai";
-import { useState } from "react";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { useUserSubscription } from "src/hooks/useUserSubscription";
-import { onlyAvailableAtom } from "src/store/filters";
+import { heightValues } from "src/store/filters";
 import { palette } from "src/styles/theme";
 
-const SelectedHeight = () => {
-  const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
-  const hasSubscription = useUserSubscription();
-  const [values, setValues] = useState([0, 70]);
+type Props = {
+  value: number[];
+  onChange: (newValue: number[]) => void;
+};
 
-  const handleOnlyAvailableChange = () => setOnlyAvailable((prev) => !prev);
+const SelectedHeight = ({ value, onChange }: Props) => {
   return (
     <View marginHorizontal='l' justifyContent='space-between' gap='m'>
       <Text variant='body'>Wybierz zakres wysokości skały</Text>
@@ -22,16 +19,16 @@ const SelectedHeight = () => {
         <Slider
           animateTransitions
           maximumTrackTintColor='#d3d3d3'
-          maximumValue={70}
+          maximumValue={heightValues[1]}
           minimumTrackTintColor={palette.green}
-          minimumValue={0}
+          minimumValue={heightValues[0]}
           step={1}
           thumbTintColor={palette.green}
-          value={values}
-          onValueChange={(values) => setValues(values)}
+          value={value}
+          onValueChange={(values) => onChange(values)}
           renderAboveThumbComponent={(thumb) => (
             <View position='absolute' top={-10} left={-10}>
-              <Text>{values[thumb]}m</Text>
+              <Text>{value[thumb]}m</Text>
             </View>
           )}
         />

@@ -8,15 +8,17 @@ import {
   renderFormationIcon,
   renderFormationText,
 } from "src/components/rock/details/Formation";
-import { FormationSelected, formationsSelectedAtom } from "src/store/filters";
+import { FormationSelected } from 'src/store/filters';
 
-const FormationsSelected = () => {
-  const [formationsSelected, setFormationsSelected] = useAtom(
-    formationsSelectedAtom,
-  );
+type Props = {
+  value:FormationSelected[];
+  onChange: (newValue: FormationSelected[]) => void;
+};
+
+const FormationsSelected = ({value, onChange}: Props) => {
 
   const handleSelect = (item: FormationSelected) => {
-    const changedSelected = formationsSelected.map((formation) => {
+    const changedSelected = value.map((formation) => {
       if (formation.type === item.type) {
         return {
           ...item,
@@ -25,7 +27,7 @@ const FormationsSelected = () => {
       }
       return formation;
     });
-    setFormationsSelected(changedSelected);
+    onChange(changedSelected);
   };
 
   return (
@@ -34,7 +36,7 @@ const FormationsSelected = () => {
         <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {formationsSelected.map((formation) => {
+        {value.map((formation) => {
           return (
             <TouchableOpacity onPress={() => handleSelect(formation)}>
               <View

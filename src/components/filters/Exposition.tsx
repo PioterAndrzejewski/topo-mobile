@@ -7,13 +7,15 @@ import View from "src/components/ui/View";
 import { ExpositionSelected, exhibitionSelectedAtom } from "src/store/filters";
 import { getMeaningfulExposition } from "../rock/details/Exposition";
 
-const Exposition = () => {
-  const [expositionsSelected, setExpositionsSelected] = useAtom(
-    exhibitionSelectedAtom,
-  );
+type Props = {
+  value: ExpositionSelected[];
+  onChange: (newValue: ExpositionSelected[]) => void;
+};
+
+const Exposition = ({value, onChange}: Props) => {
 
   const handleSelect = (item: ExpositionSelected) => {
-    const changedSelected = expositionsSelected.map((exposition) => {
+    const changedSelected = value.map((exposition) => {
       if (exposition.type === item.type) {
         return {
           ...item,
@@ -22,7 +24,7 @@ const Exposition = () => {
       }
       return exposition;
     });
-    setExpositionsSelected(changedSelected);
+    onChange(changedSelected);
   };
 
   return (
@@ -31,7 +33,7 @@ const Exposition = () => {
         <Text variant='body'>Pokaż skały, które mają wystawkę:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {expositionsSelected.map((exposition) => {
+        {value.map((exposition) => {
           return (
             <TouchableOpacity
               onPress={() => handleSelect(exposition)}

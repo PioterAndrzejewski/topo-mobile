@@ -17,6 +17,7 @@ type ScreenTitleProps = {
   hasBackButton?: boolean;
   hasFilters?: boolean;
   hasCloseButton?: boolean;
+  onClose?: () => void;
 };
 
 const ScreenTitle: FC<ScreenTitleProps> = ({
@@ -25,8 +26,14 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
   hasBackButton,
   hasFilters,
   hasCloseButton,
+  onClose,
 }) => {
   const navigation = useNavigation();
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    navigation.goBack();
+  };
   return (
     <View
       width='100%'
@@ -47,14 +54,14 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
           left={20}
           bottom={10}
         >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={handleClose}>
             <ArrowLeft size={24} color={palette.green} />
           </TouchableOpacity>
         </OverlayCardView>
       )}
       {hasCloseButton && (
         <View position='absolute' right={16} bottom={14}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={handleClose}>
             <CrossIcon size={34} />
           </TouchableOpacity>
         </View>

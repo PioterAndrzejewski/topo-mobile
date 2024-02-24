@@ -8,7 +8,7 @@ export type GradeInterestedSection = {
   selected: boolean;
 };
 
-const gradesSections: GradeInterestedSection[] = [
+export const gradesSectionsClean: GradeInterestedSection[] = [
   {
     label: "I - III+",
     gradeMin: 0,
@@ -88,7 +88,7 @@ export type FormationSelected = {
   selected: boolean;
 };
 
-const formationsSelected: FormationSelected[] = [
+export const formationsSelectedClean: FormationSelected[] = [
   {
     type: "slab",
     selected: false,
@@ -124,7 +124,7 @@ export type ExpositionSelected = {
   selected: boolean;
 };
 
-const expositionSelected: ExpositionSelected[] = [
+export const expositionSelectedClean: ExpositionSelected[] = [
   {
     type: "north",
     selected: false,
@@ -148,7 +148,7 @@ export type ShadingSelected = {
   selected: boolean;
 };
 
-const shadingSelected: ShadingSelected[] = [
+export const shadingSelectedClean: ShadingSelected[] = [
   {
     type: "shadow",
     selected: false,
@@ -163,12 +163,21 @@ const shadingSelected: ShadingSelected[] = [
   },
 ];
 
+export const heightValues = [0, 70];
+
 export const onlyAvailableAtom = atom<boolean>(false);
 export const routesInterestedAtom =
-  atom<GradeInterestedSection[]>(gradesSections);
-export const formationsSelectedAtom =
-  atom<FormationSelected[]>(formationsSelected);
-export const exhibitionSelectedAtom =
-  atom<ExpositionSelected[]>(expositionSelected);
+  atom<GradeInterestedSection[]>(gradesSectionsClean);
+export const formationsSelectedAtom = atom<FormationSelected[]>(
+  formationsSelectedClean,
+);
+export const exhibitionSelectedAtom = atom<ExpositionSelected[]>(
+  expositionSelectedClean,
+);
+export const selectedHeightAtom = atom<number[]>([
+  heightValues[0],
+  heightValues[1],
+]);
 export const onlyFamilyFriendlyAtom = atom<boolean>(false);
-export const shadingSelectedAtom = atom<ShadingSelected[]>(shadingSelected);
+export const shadingSelectedAtom =
+  atom<ShadingSelected[]>(shadingSelectedClean);

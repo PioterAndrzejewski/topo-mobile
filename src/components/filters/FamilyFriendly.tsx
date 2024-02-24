@@ -1,21 +1,18 @@
 import Checkbox from "expo-checkbox";
-import { useAtom } from "jotai";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { onlyFamilyFriendlyAtom } from "src/store/filters";
 import { palette } from "src/styles/theme";
+type Props = {
+  value: boolean;
+  onChange: (newValue: boolean) => void;
+};
 
-const FamilyFriendly = () => {
-  const [onlyFamilyFriendly, setonlyFamilyFriendly] = useAtom(
-    onlyFamilyFriendlyAtom,
-  );
-
-  const handleOnlyAvailableChange = () =>
-    setonlyFamilyFriendly((prev) => !prev);
+const FamilyFriendly = ({ value, onChange }: Props) => {
+  const handleChange = () => onChange(!value);
   return (
-    <View  gap='m'>
+    <View gap='m'>
       <View
         marginHorizontal='l'
         flexDirection='row'
@@ -23,8 +20,8 @@ const FamilyFriendly = () => {
       >
         <Text variant='body'>Tylko przyjazne dla rodzin / piknikowe</Text>
         <Checkbox
-          value={onlyFamilyFriendly}
-          onValueChange={handleOnlyAvailableChange}
+          value={value}
+          onValueChange={handleChange}
           color={palette.green}
         />
       </View>

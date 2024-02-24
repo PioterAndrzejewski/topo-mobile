@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,16 +13,44 @@ import InterestingRoutes from "src/components/filters/InterestingRoutes";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
 import View from "src/components/ui/View";
+import { useFilters } from "src/hooks/useFilters";
 
-import { useUserSubscription } from "src/hooks/useUserSubscription";
-import { onlyAvailableAtom } from "src/store/filters";
+import {
+  exhibitionSelectedAtom,
+  formationsSelectedAtom,
+  onlyAvailableAtom,
+  onlyFamilyFriendlyAtom,
+  routesInterestedAtom,
+  selectedHeightAtom,
+  shadingSelectedAtom,
+} from "src/store/filters";
 import { palette } from "src/styles/theme";
 
 const FiltersScreen = () => {
   const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
-  const hasSubscription = useUserSubscription();
+  const [routesInterestedSections, setRoutesInterestedSections] =
+    useAtom(routesInterestedAtom);
+  const [formationsSelected, setFormationsSelected] = useAtom(
+    formationsSelectedAtom,
+  );
+  const [heightSelected, setHeightSelected] = useAtom(selectedHeightAtom);
+  const [familyFriendly, setFamilyFriendly] = useAtom(onlyFamilyFriendlyAtom);
+  const [selectedExposition, setSelectedExposition] = useAtom(
+    exhibitionSelectedAtom,
+  );
+  const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
 
-  const handleOnlyAvailableChange = () => setOnlyAvailable((prev) => !prev);
+  const [localChanges, setLocalChanges] = useState({
+    onlyAvailable,
+    routesInterestedSections,
+    formationsSelected,
+    heightSelected,
+    familyFriendly,
+    selectedExposition,
+    shadingSelected,
+  });
+
+  const { resetFilters } = useFilters();
 
   const divider = useMemo(() => {
     return (
@@ -34,23 +62,95 @@ const FiltersScreen = () => {
       />
     );
   }, []);
+
+  const saveLocalChangesToGlobalState = () => {
+    setOnlyAvailable(localChanges.onlyAvailable);
+    setRoutesInterestedSections(localChanges.routesInterestedSections);
+    setFormationsSelected(localChanges.formationsSelected);
+    setHeightSelected(localChanges.heightSelected);
+    setFamilyFriendly(localChanges.familyFriendly);
+    setSelectedExposition(localChanges.selectedExposition);
+    setShadingSelected(localChanges.shadingSelected);
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ScreenTitle title='Filtry' centered hasCloseButton />
-        <AvailableOnly />
+        <ScreenTitle
+          title='Filtry'
+          centered
+          hasCloseButton
+          onClose={saveLocalChangesToGlobalState}
+        />
+        <AvailableOnly
+          value={localChanges.onlyAvailable}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              onlyAvailable: newValue,
+            }))
+          }
+        />
         {divider}
-        <InterestingRoutes />
+        <InterestingRoutes
+          value={localChanges.routesInterestedSections}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              routesInterestedSections: newValue,
+            }))
+          }
+        />
         {divider}
-        <FormationsSelected />
+        <FormationsSelected
+          value={localChanges.formationsSelected}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              formationsSelected: newValue,
+            }))
+          }
+        />
         {divider}
-        <SelectedHeight />
+        <SelectedHeight
+          value={localChanges.heightSelected}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              heightSelected: newValue,
+            }))
+          }
+        />
         {divider}
-        <FamilyFriendly />
+        <FamilyFriendly
+          value={localChanges.familyFriendly}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              familyFriendly: newValue,
+            }))
+          }
+        />
         {divider}
-        <Exposition />
+        <Exposition
+          value={localChanges.selectedExposition}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              selectedExposition: newValue,
+            }))
+          }
+        />
         {divider}
-        <ShadingSelectedComponent />
+        <ShadingSelectedComponent
+          value={localChanges.shadingSelected}
+          onChange={(newValue) =>
+            setLocalChanges((prevState) => ({
+              ...prevState,
+              shadingSelected: newValue,
+            }))
+          }
+        />
         <View
           marginHorizontal='l'
           flexDirection='row'
@@ -58,10 +158,10 @@ const FiltersScreen = () => {
           marginTop='l'
         >
           <View flexBasis='45%'>
-            <Button label='Wyczyść' variant='outline' />
+            <Button label='Wyczyść' variant='outline' onClick={resetFilters} />
           </View>
           <View flexBasis='45%'>
-            <Button label='Zastosuj' />
+            <Button label='Zastosuj' onClick={saveLocalChangesToGlobalState} />
           </View>
         </View>
         <View mb='3xl' />

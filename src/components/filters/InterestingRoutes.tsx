@@ -1,44 +1,39 @@
-import { useAtom } from "jotai";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import {
-  GradeInterestedSection,
-  routesInterestedAtom,
-} from "src/store/filters";
-import { SlabIcon } from "../icons/Slab";
+import { GradeInterestedSection } from "src/store/filters";
 
-const InterestingRoutes = () => {
-  const [routesInterestedSections, setRoutesInterestedSections] =
-    useAtom(routesInterestedAtom);
+type Props = {
+  value: GradeInterestedSection[];
+  onChange: (newValue: GradeInterestedSection[]) => void;
+};
 
+const InterestingRoutes = ({ value, onChange }: Props) => {
   const handleSelect = (item: GradeInterestedSection) => {
-    const changedSections = routesInterestedSections.map(
-      (routeInterestedSection) => {
-        if (routeInterestedSection.label === item.label) {
-          return {
-            ...item,
-            selected: !item.selected,
-          };
-        }
-        return routeInterestedSection;
-      },
-    );
+    const changedSections = value.map((routeInterestedSection) => {
+      if (routeInterestedSection.label === item.label) {
+        return {
+          ...item,
+          selected: !item.selected,
+        };
+      }
+      return routeInterestedSection;
+    });
 
-    setRoutesInterestedSections(changedSections);
+    onChange(changedSections);
   };
 
   return (
-    <View marginHorizontal='l'  gap='m'>
+    <View marginHorizontal='l' gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
         <Text variant='body'>
           Pokaż skały, które zawierają drogi o trudności:
         </Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {routesInterestedSections.map((gradeSection) => {
+        {value.map((gradeSection) => {
           return (
             <TouchableOpacity onPress={() => handleSelect(gradeSection)}>
               <View
