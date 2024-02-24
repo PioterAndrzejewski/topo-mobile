@@ -18,6 +18,7 @@ import {
 
 export const useFilters = () => {
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+
   const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
   const [routesInterestedSections, setRoutesInterestedSections] =
     useAtom(routesInterestedAtom);
@@ -100,5 +101,15 @@ export const useFilters = () => {
     shadingSelected,
   ]);
 
-  return { resetFilters, activeFiltersCount };
+  return {
+    resetFilters,
+    activeFiltersCount,
+    onlyAvailable,
+    routesInterestedSections,
+    formationsSelected,
+    heightSelected,
+    familyFriendly,
+    selectedExposition,
+    shadingSelected
+  };
 };

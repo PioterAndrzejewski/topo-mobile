@@ -8,30 +8,35 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { useUserProfile } from "src/hooks/useUserProfile";
+import { useUserSubscription } from "src/hooks/useUserSubscription";
 
 const SubscriptionDetails = () => {
   const user = useUserProfile();
   const [paymentModalOpened, setPaymentModalOpened] = useState(false);
+  const hasSubscription = useUserSubscription();
 
   const currentDate = dayjs();
   const subscriptionDate = dayjs(Number(user.data?.subscriptionTo));
   const subscriptionDays = subscriptionDate.diff(currentDate, "day");
 
-  const renderBuySubscription = () => (
-    <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
-      <View
-        alignItems='center'
-        paddingHorizontal='l'
-        backgroundColor='backgroundLight'
-        paddingVertical='s'
-        borderRadius={24}
-      >
-        <Text variant='body' color='textBlack'>
-          Wykup subskrypcję
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderBuySubscription = () => {
+    if (hasSubscription) return null;
+    return (
+      <TouchableOpacity onPress={() => setPaymentModalOpened(true)}>
+        <View
+          alignItems='center'
+          paddingHorizontal='l'
+          backgroundColor='backgroundLight'
+          paddingVertical='s'
+          borderRadius={24}
+        >
+          <Text variant='body' color='textBlack'>
+            Wykup subskrypcję
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const renderSubscriptionData = () => (
     <View gap='m'>

@@ -134,3 +134,9 @@ export const useUserProducts = () => {
     queryFn: () => getProducts(),
   });
 };
+
+export const useUserProductsId = () => {
+  const { data } = useUserProducts();
+
+  return data?.map((product) => product.product.uuid);
+};
