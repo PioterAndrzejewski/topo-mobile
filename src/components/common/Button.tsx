@@ -36,7 +36,6 @@ export default function Button({
   };
 
   const getLabelColor = useMemo(() => {
-    console.log("sprawdzam kolor");
     if (labelColor) return labelColor;
     if (variant === "outline") return colors.textBlack as keyof Theme["colors"];
     return "textWhite";

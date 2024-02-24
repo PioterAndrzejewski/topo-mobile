@@ -1,7 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 import Button from "src/components/common/Button";
 import ScreenTitle from "src/components/common/ScreenTitle";
@@ -39,6 +41,7 @@ const FiltersScreen = () => {
     exhibitionSelectedAtom,
   );
   const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
+  const navigation = useNavigation();
 
   const [localChanges, setLocalChanges] = useState({
     onlyAvailable,
@@ -71,6 +74,20 @@ const FiltersScreen = () => {
     setFamilyFriendly(localChanges.familyFriendly);
     setSelectedExposition(localChanges.selectedExposition);
     setShadingSelected(localChanges.shadingSelected);
+    navigation.goBack();
+  };
+
+  const handleReset = () => {
+    resetFilters();
+    navigation.goBack();
+  };
+
+  const handleCancel = () => {
+    Toast.show({
+      type: 'info',
+      text1: "Nie zapisano zmian",
+      text2: "Jeżeli chcesz zapisać zmiany, użyj przycisku pod filtrami",
+    });
   };
 
   return (
@@ -80,7 +97,7 @@ const FiltersScreen = () => {
           title='Filtry'
           centered
           hasCloseButton
-          onClose={saveLocalChangesToGlobalState}
+          onClose={handleCancel}
         />
         <AvailableOnly
           value={localChanges.onlyAvailable}
@@ -156,12 +173,17 @@ const FiltersScreen = () => {
           flexDirection='row'
           justifyContent='space-between'
           marginTop='l'
+          gap='m'
         >
-          <View flexBasis='45%'>
-            <Button label='Wyczyść' variant='outline' onClick={resetFilters} />
+          <View flexGrow={1}>
+            <Button
+              label='Wyczyść i zamknij'
+              variant='outline'
+              onClick={handleReset}
+            />
           </View>
-          <View flexBasis='45%'>
-            <Button label='Zastosuj' onClick={saveLocalChangesToGlobalState} />
+          <View flexGrow={1}>
+            <Button label='Zapisz' onClick={saveLocalChangesToGlobalState} />
           </View>
         </View>
         <View mb='3xl' />

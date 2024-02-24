@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   exhibitionSelectedAtom,
@@ -87,6 +87,18 @@ export const useFilters = () => {
 
     setActiveFiltersCount(activeNumber);
   };
+
+  useEffect(() => {
+    countActiveFilters();
+  }, [
+    onlyAvailable,
+    routesInterestedSections,
+    formationsSelected,
+    heightSelected,
+    familyFriendly,
+    selectedExposition,
+    shadingSelected,
+  ]);
 
   return { resetFilters, activeFiltersCount };
 };

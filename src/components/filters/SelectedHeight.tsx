@@ -1,4 +1,5 @@
 import { Slider } from "@miblanchard/react-native-slider";
+import { useState } from "react";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -12,6 +13,7 @@ type Props = {
 };
 
 const SelectedHeight = ({ value, onChange }: Props) => {
+  const [localValue, setLocalValue] = useState<number[]>(heightValues);
   return (
     <View marginHorizontal='l' justifyContent='space-between' gap='m'>
       <Text variant='body'>Wybierz zakres wysokości skały</Text>
@@ -24,11 +26,12 @@ const SelectedHeight = ({ value, onChange }: Props) => {
           minimumValue={heightValues[0]}
           step={1}
           thumbTintColor={palette.green}
-          value={value}
-          onValueChange={(values) => onChange(values)}
+          value={localValue}
+          onValueChange={(newValue) => setLocalValue(newValue)}
+          onSlidingComplete={(values) => onChange(values)}
           renderAboveThumbComponent={(thumb) => (
             <View position='absolute' top={-10} left={-10}>
-              <Text>{value[thumb]}m</Text>
+              <Text>{localValue[thumb]}m</Text>
             </View>
           )}
         />

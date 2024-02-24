@@ -73,6 +73,7 @@ export default function Map() {
         clusterFontFamily='Outfit500'
         clusterTextColor={palette.black}
         layoutAnimationConf={undefined}
+        toolbarEnabled={false}
       >
         {rocks &&
           rocks.length > 0 &&

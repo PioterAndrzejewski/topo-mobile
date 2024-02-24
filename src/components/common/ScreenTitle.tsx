@@ -5,11 +5,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+import FiltersButton from "./FiltersButton";
 
 import { ArrowLeft } from "src/components/icons/ArrowLeft";
 import { palette } from "src/styles/theme";
-import { CrossIcon } from "../icons/Cross";
-import FiltersButton from "./FiltersButton";
+import { CrossIcon } from "src/components/icons/Cross";
+import { isAndroid } from 'src/helpers/isAndroid';
 
 type ScreenTitleProps = {
   title: string;
@@ -44,6 +45,8 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
       paddingBottom='m'
       flexDirection='row'
       gap='m'
+      paddingTop={isAndroid ? "m" : undefined}
+      overflow='visible'
     >
       {hasBackButton && (
         <OverlayCardView

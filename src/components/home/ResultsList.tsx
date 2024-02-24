@@ -342,7 +342,7 @@ export default function ResultsList() {
             </View>
           </View>
         )}
-        <View marginHorizontal='l' marginBottom='xs'>
+        <View marginHorizontal='l' marginBottom='xs' marginTop='m'>
           <Text>Najbliżej Twojej lokalizacji:</Text>
         </View>
 
