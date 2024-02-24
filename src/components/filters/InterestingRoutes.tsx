@@ -35,7 +35,7 @@ const InterestingRoutes = ({ value, onChange }: Props) => {
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
         {value.map((gradeSection) => {
           return (
-            <TouchableOpacity onPress={() => handleSelect(gradeSection)}>
+            <TouchableOpacity onPress={() => handleSelect(gradeSection)} key={gradeSection.label}>
               <View
                 backgroundColor={
                   gradeSection.selected

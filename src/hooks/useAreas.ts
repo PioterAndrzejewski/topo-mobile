@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useUserProductsId } from "src/services/payments";
 import {
+  FormationData,
   RockData,
   getAreas,
   getRegions,
@@ -84,8 +85,38 @@ export const useAreas = () => {
           if (shading.selected) return true;
         })
         .map((shading) => shading.type);
-      console.log(shadings);
       if (shadings.length > 0 && !shadings.includes(rock.attributes.shading)) {
+        return false;
+      }
+
+      const formations = formationsSelected
+        .filter((formation) => formation.selected)
+        .map((formation) => formation.type) as unknown as FormationData[];
+      const rockFormations = rock.attributes.formation.map(
+        (formation) => formation.formation,
+      ) as unknown as FormationData[];
+
+      if (
+        formations.length > 0 &&
+        !formations.some((element) => {
+          return rockFormations.includes(element);
+        })
+      ) {
+        return false;
+      }
+
+      const expositions = selectedExposition
+        .filter((exposition) => exposition.selected)
+        .map((exposition) => exposition.type);
+      const rockExpositions = rock.attributes.exhibition.map(
+        (exposition) => exposition.exhibition,
+      );
+      if (
+        expositions.length > 0 &&
+        !expositions.some((element) => {
+          return rockExpositions.includes(element);
+        })
+      ) {
         return false;
       }
 
@@ -99,9 +130,9 @@ export const useAreas = () => {
     familyFriendly,
     heightSelected,
     shadingSelected,
-    routesInterestedSections,
     formationsSelected,
     selectedExposition,
+    routesInterestedSections,
     rocks,
   ]);
 

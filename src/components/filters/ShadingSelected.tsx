@@ -33,7 +33,7 @@ const ShadingSelectedComponent = ({ value, onChange }: Props) => {
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
         {value.map((shading) => {
           return (
-            <TouchableOpacity onPress={() => handleSelect(shading)}>
+            <TouchableOpacity onPress={() => handleSelect(shading)} key={shading.type}>
               <View
                 backgroundColor={
                   shading.selected ? "backgroundTertiary" : "backgroundScreen"

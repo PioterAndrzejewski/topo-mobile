@@ -38,7 +38,7 @@ const FormationsSelected = ({value, onChange}: Props) => {
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
         {value.map((formation) => {
           return (
-            <TouchableOpacity onPress={() => handleSelect(formation)}>
+            <TouchableOpacity onPress={() => handleSelect(formation)} key={formation.type}>
               <View
                 backgroundColor={
                   formation.selected ? "backgroundTertiary" : "backgroundScreen"

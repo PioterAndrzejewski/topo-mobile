@@ -105,7 +105,6 @@ export default function ResultsList() {
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
     setStage(stage);
-    console.log(stage);
     const newLocationArray: AreasList = [];
     if (stage >= 1) {
       newLocationArray.push(polandRegion);
