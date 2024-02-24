@@ -1,7 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { useWindowDimensions } from "react-native";
+import {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -14,9 +18,11 @@ import FormationsSelected from "src/components/filters/FormationsSelected";
 import InterestingRoutes from "src/components/filters/InterestingRoutes";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
+import AnimatedFlashList from "src/components/ui/AnimatedFlashList";
 import View from "src/components/ui/View";
-import { useFilters } from "src/hooks/useFilters";
 
+import { StickyContainer } from "src/components/ui/StickyContainer";
+import { useFilters } from "src/hooks/useFilters";
 import {
   exhibitionSelectedAtom,
   formationsSelectedAtom,
@@ -55,6 +61,12 @@ const FiltersScreen = () => {
 
   const { resetFilters } = useFilters();
 
+  const { height, width } = useWindowDimensions();
+  const scrollY = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
   const divider = useMemo(() => {
     return (
       <View
@@ -84,110 +96,122 @@ const FiltersScreen = () => {
 
   const handleCancel = () => {
     Toast.show({
-      type: 'info',
+      type: "info",
       text1: "Nie zapisano zmian",
       text2: "Jeżeli chcesz zapisać zmiany, użyj przycisku pod filtrami",
     });
   };
 
-  return (
-    <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <ScreenTitle
-          title='Filtry'
-          centered
-          hasCloseButton
-          onClose={handleCancel}
-        />
-        <AvailableOnly
-          value={localChanges.onlyAvailable}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              onlyAvailable: newValue,
-            }))
-          }
-        />
-        {divider}
-        <InterestingRoutes
-          value={localChanges.routesInterestedSections}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              routesInterestedSections: newValue,
-            }))
-          }
-        />
-        {divider}
-        <FormationsSelected
-          value={localChanges.formationsSelected}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              formationsSelected: newValue,
-            }))
-          }
-        />
-        {divider}
-        <SelectedHeight
-          value={localChanges.heightSelected}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              heightSelected: newValue,
-            }))
-          }
-        />
-        {divider}
-        <FamilyFriendly
-          value={localChanges.familyFriendly}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              familyFriendly: newValue,
-            }))
-          }
-        />
-        {divider}
-        <Exposition
-          value={localChanges.selectedExposition}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              selectedExposition: newValue,
-            }))
-          }
-        />
-        {divider}
-        <ShadingSelectedComponent
-          value={localChanges.shadingSelected}
-          onChange={(newValue) =>
-            setLocalChanges((prevState) => ({
-              ...prevState,
-              shadingSelected: newValue,
-            }))
-          }
-        />
+  const renderItems = () => (
+    <>
+      <ScreenTitle
+        title='Filtry'
+        centered
+        hasCloseButton
+        onClose={handleCancel}
+      />
+      <AvailableOnly
+        value={localChanges.onlyAvailable}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            onlyAvailable: newValue,
+          }))
+        }
+      />
+      {divider}
+      <InterestingRoutes
+        value={localChanges.routesInterestedSections}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            routesInterestedSections: newValue,
+          }))
+        }
+      />
+      {divider}
+      <FormationsSelected
+        value={localChanges.formationsSelected}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            formationsSelected: newValue,
+          }))
+        }
+      />
+      {divider}
+      <SelectedHeight
+        value={localChanges.heightSelected}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            heightSelected: newValue,
+          }))
+        }
+      />
+      {divider}
+      <FamilyFriendly
+        value={localChanges.familyFriendly}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            familyFriendly: newValue,
+          }))
+        }
+      />
+      {divider}
+      <Exposition
+        value={localChanges.selectedExposition}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            selectedExposition: newValue,
+          }))
+        }
+      />
+      {divider}
+      <ShadingSelectedComponent
+        value={localChanges.shadingSelected}
+        onChange={(newValue) =>
+          setLocalChanges((prevState) => ({
+            ...prevState,
+            shadingSelected: newValue,
+          }))
+        }
+      />
+      <StickyContainer scrollY={scrollY}>
         <View
-          marginHorizontal='l'
           flexDirection='row'
+          paddingHorizontal='l'
           justifyContent='space-between'
-          marginTop='l'
-          gap='m'
+          flex={1}
+          gap={"m"}
+          mt='xl'
         >
-          <View flexGrow={1}>
+          <View flex={2}>
             <Button
               label='Wyczyść i zamknij'
               variant='outline'
               onClick={handleReset}
             />
           </View>
-          <View flexGrow={1}>
+          <View flex={1}>
             <Button label='Zapisz' onClick={saveLocalChangesToGlobalState} />
           </View>
         </View>
-        <View mb='3xl' />
-      </ScrollView>
+      </StickyContainer>
+    </>
+  );
+
+  return (
+    <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
+      <AnimatedFlashList
+        data={[1]}
+        onScroll={onScroll}
+        renderItem={renderItems}
+        estimatedListSize={{ height, width }}
+        estimatedItemSize={height}
+      />
     </SafeAreaView>
   );
 };

@@ -68,7 +68,6 @@ export default function Button({
 const $container: (variant: "standard" | "outline") => ViewStyle = (
   variant,
 ) => ({
-  marginTop: 12,
   padding: 14,
   backgroundColor: variant === "standard" ? palette.green : palette.white,
   borderWidth: variant === "standard" ? 0 : 1,
