@@ -15,8 +15,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import Text from "../ui/Text";
-import View from "../ui/View";
+import Text from "../../ui/Text";
+import View from "../../ui/View";
 
 import { RockData } from "src/services/rocks";
 import { getLastSeenRock } from "src/services/storeAsync";
@@ -24,7 +24,7 @@ import { mapAtom, selectedRockAtom } from "src/store/results";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { HandIcon } from "../icons/Hand";
+import { HandIcon } from "../../icons/Hand";
 
 const LastViewed = () => {
   const [lastViewed, setLastViewed] = useState<RockData | null>(null);

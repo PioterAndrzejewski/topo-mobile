@@ -9,9 +9,10 @@ import { useFonts } from "expo-font";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
+import { BaseToastProps } from "react-native-toast-message/lib/src/types";
 
 import AppLoading from "src/components/common/AppLoading";
-import LastViewed from "src/components/common/LastViewed";
+import LastViewed from "src/components/common/toast/LastViewed";
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import ContactModal from "src/components/modals/ContactModal";
 import RootNavigator from "src/navigators/RootNavigator";
@@ -20,6 +21,9 @@ import theme from "src/styles/theme";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Reactotron from "reactotron-react-native";
+import { CustomErrorToast } from "src/components/common/toast/ErrorToast";
+import { CustomInfoToast } from "src/components/common/toast/InfoToast";
+import { CustomSuccessToast } from "src/components/common/toast/SuccessToast";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
@@ -37,6 +41,9 @@ const asyncStoragePersister = createAsyncStoragePersister({
 
 const toastConfig = {
   lastViewed: () => <LastViewed />,
+  info: (props: BaseToastProps) => <CustomInfoToast {...props} />,
+  error: (props: BaseToastProps) => <CustomErrorToast {...props} />,
+  success: (props: BaseToastProps) => <CustomSuccessToast {...props} />,
 };
 
 export default function App() {
