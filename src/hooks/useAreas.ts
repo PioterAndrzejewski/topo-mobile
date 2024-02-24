@@ -72,6 +72,23 @@ export const useAreas = () => {
         return false;
       }
 
+      if (
+        heightSelected[0] > rock.attributes.height ||
+        heightSelected[1] < rock.attributes.height
+      ) {
+        return false;
+      }
+
+      const shadings = shadingSelected
+        .filter((shading) => {
+          if (shading.selected) return true;
+        })
+        .map((shading) => shading.type);
+      console.log(shadings);
+      if (shadings.length > 0 && !shadings.includes(rock.attributes.shading)) {
+        return false;
+      }
+
       return true;
     });
 
@@ -81,10 +98,10 @@ export const useAreas = () => {
     onlyAvailable,
     familyFriendly,
     heightSelected,
+    shadingSelected,
     routesInterestedSections,
     formationsSelected,
     selectedExposition,
-    shadingSelected,
     rocks,
   ]);
 

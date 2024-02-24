@@ -13,7 +13,7 @@ type Props = {
 };
 
 const SelectedHeight = ({ value, onChange }: Props) => {
-  const [localValue, setLocalValue] = useState<number[]>(heightValues);
+  const [localValue, setLocalValue] = useState<number[]>(value);
   return (
     <View marginHorizontal='l' justifyContent='space-between' gap='m'>
       <Text variant='body'>Wybierz zakres wysokości skały</Text>
