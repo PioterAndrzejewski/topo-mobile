@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
+
 import { useUserProductsId } from "src/services/payments";
 import {
   RockData,
@@ -166,6 +168,14 @@ export const useAreas = () => {
     });
 
     setFilteredRocks(rocksToFilter);
+
+    if (rocksToFilter?.length === 0) {
+      Toast.show({
+        type: "info",
+        text1: "Brak skał do wyświetlenia",
+        text2: "Zmień filtry żeby coś znaleźć ;)",
+      });
+    }
   }, [
     activeFiltersCount,
     onlyAvailable,
