@@ -45,7 +45,7 @@ const RockDrawing: FC<RockDrawingProps> = ({
   const image = useImageFile(imageUrl);
   const skImage = useImage(image);
   const font = useFont(
-    require("../../../assets/fonts/PoppinsBold.ttf"),
+    require("src/assets/fonts/Outfit-Medium.ttf"),
     60 * elementsScale,
   );
 

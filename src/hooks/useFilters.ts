@@ -2,67 +2,34 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 import {
-  exhibitionSelectedAtom,
-  expositionSelectedClean,
-  formationsSelectedAtom,
-  formationsSelectedClean,
-  gradesSectionsClean,
+  cleanFilterValues,
+  filtersAtom,
   heightValues,
-  onlyAvailableAtom,
-  onlyFamilyFriendlyAtom,
-  routeTypeSelectedAtom,
-  routeTypeSelectedClean,
-  routesInterestedAtom,
-  selectedHeightAtom,
-  shadingSelectedAtom,
-  shadingSelectedClean,
 } from "src/store/filters";
 
 export const useFilters = () => {
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
-
-  const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
-  const [routesInterestedSections, setRoutesInterestedSections] =
-    useAtom(routesInterestedAtom);
-  const [formationsSelected, setFormationsSelected] = useAtom(
-    formationsSelectedAtom,
-  );
-  const [heightSelected, setHeightSelected] = useAtom(selectedHeightAtom);
-  const [familyFriendly, setFamilyFriendly] = useAtom(onlyFamilyFriendlyAtom);
-  const [selectedExposition, setSelectedExposition] = useAtom(
-    exhibitionSelectedAtom,
-  );
-  const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
-  const [routeTypeSelected, setRouteTypeSelected] = useAtom(
-    routeTypeSelectedAtom,
-  );
+  const [filters, setFilters] = useAtom(filtersAtom);
 
   const resetFilters = () => {
-    setOnlyAvailable(false);
-    setRoutesInterestedSections(gradesSectionsClean);
-    setFormationsSelected(formationsSelectedClean);
-    setHeightSelected(heightValues);
-    setFamilyFriendly(false);
-    setSelectedExposition(expositionSelectedClean);
-    setShadingSelected(shadingSelectedClean);
-    setRouteTypeSelected(routeTypeSelectedClean);
+    setFilters(cleanFilterValues);
   };
 
   const countActiveFilters = () => {
     let activeNumber = 0;
 
-    const routesSections = routesInterestedSections.map(
+    const routesSections = filters.routesInterestedSections.map(
       (section) => section.selected,
     );
     if (routesSections.includes(true)) {
       activeNumber++;
     }
 
-    if (onlyAvailable) {
+    if (filters.onlyAvailable) {
       activeNumber++;
     }
 
-    const formations = formationsSelected.map(
+    const formations = filters.formationsSelected.map(
       (formation) => formation.selected,
     );
     if (formations.includes(true)) {
@@ -70,29 +37,31 @@ export const useFilters = () => {
     }
 
     if (
-      heightSelected[0] !== heightValues[0] ||
-      heightSelected[1] !== heightValues[1]
+      filters.heightSelected[0] !== heightValues[0] ||
+      filters.heightSelected[1] !== heightValues[1]
     ) {
       activeNumber++;
     }
 
-    if (familyFriendly) {
+    if (filters.familyFriendly) {
       activeNumber++;
     }
 
-    const expositions = selectedExposition.map(
+    const expositions = filters.selectedExposition.map(
       (exposition) => exposition.selected,
     );
     if (expositions.includes(true)) {
       activeNumber++;
     }
 
-    const shadings = shadingSelected.map((shading) => shading.selected);
+    const shadings = filters.shadingSelected.map((shading) => shading.selected);
     if (shadings.includes(true)) {
       activeNumber++;
     }
 
-    const routeTypes = routeTypeSelected.map((routeType) => routeType.selected);
+    const routeTypes = filters.routeTypeSelected.map(
+      (routeType) => routeType.selected,
+    );
     if (routeTypes.includes(true)) {
       activeNumber++;
     }
@@ -121,27 +90,11 @@ export const useFilters = () => {
 
   useEffect(() => {
     countActiveFilters();
-  }, [
-    onlyAvailable,
-    routesInterestedSections,
-    formationsSelected,
-    heightSelected,
-    familyFriendly,
-    selectedExposition,
-    shadingSelected,
-    routeTypeSelected,
-  ]);
+  }, [filters]);
 
   return {
     resetFilters,
     activeFiltersCount,
-    onlyAvailable,
-    routesInterestedSections,
-    formationsSelected,
-    heightSelected,
-    familyFriendly,
-    selectedExposition,
-    shadingSelected,
-    routeTypeSelected,
+    filters,
   };
 };

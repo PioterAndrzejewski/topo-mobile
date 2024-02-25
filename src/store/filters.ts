@@ -196,22 +196,4 @@ export const cleanFilterValues = {
   routeTypeSelected: routeTypeSelectedClean,
 };
 
-export const onlyAvailableAtom = atom<boolean>(false);
-export const routesInterestedAtom =
-  atom<GradeInterestedSection[]>(gradesSectionsClean);
-export const formationsSelectedAtom = atom<FormationSelected[]>(
-  formationsSelectedClean,
-);
-export const exhibitionSelectedAtom = atom<ExpositionSelected[]>(
-  expositionSelectedClean,
-);
-export const selectedHeightAtom = atom<number[]>([
-  heightValues[0],
-  heightValues[1],
-]);
-export const onlyFamilyFriendlyAtom = atom<boolean>(false);
-export const shadingSelectedAtom =
-  atom<ShadingSelected[]>(shadingSelectedClean);
-export const routeTypeSelectedAtom = atom<RouteTypeSelected[]>(
-  routeTypeSelectedClean,
-);
+export const filtersAtom = atom<typeof cleanFilterValues>(cleanFilterValues)

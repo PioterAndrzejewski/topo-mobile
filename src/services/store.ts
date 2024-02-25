@@ -43,8 +43,8 @@ export const logout = async () => {
     queryClient.invalidateQueries({
       queryKey: queryKeys.profile.me,
     });
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.products,
+    queryClient.removeQueries({
+      queryKey: queryKeys.profile.me,
     });
     await navigate("Login");
   } catch (err) {

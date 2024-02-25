@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -14,6 +14,7 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { AxiosError } from "axios";
+import navigate from "src/navigators/navigationRef";
 import { apiConfig } from "src/services/apiConfig";
 import { login } from "src/services/auth";
 import {
@@ -21,7 +22,7 @@ import {
   saveRefreshToken,
   setUserToStorage,
 } from "src/services/store";
-import { providerUsedAtom } from "src/store/global";
+import { providerUsedAtom, wantsToUseNotLoggedAtom } from "src/store/global";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { GoogleIcon } from "../icons/Google";
 
@@ -33,6 +34,7 @@ export default function LoginPanel({
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { height } = useWindowDimensions();
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
+  const setWantsToUseNotLogged = useSetAtom(wantsToUseNotLoggedAtom);
 
   const { mutate, isLoading, isError } = useMutation({
     mutationKey: ["login"],
@@ -82,6 +84,11 @@ export default function LoginPanel({
         console.log(error);
       },
     );
+  };
+
+  const handleSkipLogin = () => {
+    setWantsToUseNotLogged(true);
+    navigate("HomeNavigator");
   };
 
   return (
@@ -143,7 +150,7 @@ export default function LoginPanel({
                 isLoading={isLoading || googleIsLoading}
               />
             </View>
-            <View justifyContent='center' alignItems='center' my='l'>
+            <View justifyContent='center' alignItems='center' my='s'>
               <Text>lub</Text>
             </View>
             <TouchableOpacity onPress={handleGoogle}>
@@ -166,6 +173,21 @@ export default function LoginPanel({
                 </View>
               </View>
             </TouchableOpacity>
+            <View
+              marginTop='l'
+              justifyContent='center'
+              alignItems='center'
+              flexDirection='row'
+            >
+              <TouchableOpacity onPress={handleSkipLogin} hitSlop={20}>
+                <View marginLeft='m'>
+                  <Text variant='body' color='textSecondary'>
+                    Kontynuuj bez logowania
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
             <View
               marginTop='l'
               justifyContent='center'

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 import {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -10,7 +10,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "src/components/common/Button";
-import ScreenTitle from "src/components/common/ScreenTitle";
 import AvailableOnly from "src/components/filters/AvailableOnly";
 import Exposition from "src/components/filters/Exposition";
 import FamilyFriendly from "src/components/filters/FamilyFriendly";
@@ -20,50 +19,22 @@ import RouteTypeSelected from "src/components/filters/RouteTypeSelected";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
 import AnimatedFlashList from "src/components/ui/AnimatedFlashList";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import { CrossIcon } from "src/components/icons/Cross";
 import { StickyContainer } from "src/components/ui/StickyContainer";
+import { isAndroid } from "src/helpers/isAndroid";
 import { useFilters } from "src/hooks/useFilters";
-import {
-  exhibitionSelectedAtom,
-  formationsSelectedAtom,
-  onlyAvailableAtom,
-  onlyFamilyFriendlyAtom,
-  routeTypeSelectedAtom,
-  routesInterestedAtom,
-  selectedHeightAtom,
-  shadingSelectedAtom,
-} from "src/store/filters";
+import { filtersAtom } from "src/store/filters";
 import { palette } from "src/styles/theme";
+import { HomeScreenNavigationProp } from "src/types/type";
 
 const FiltersScreen = () => {
-  const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
-  const [routesInterestedSections, setRoutesInterestedSections] =
-    useAtom(routesInterestedAtom);
-  const [formationsSelected, setFormationsSelected] = useAtom(
-    formationsSelectedAtom,
-  );
-  const [heightSelected, setHeightSelected] = useAtom(selectedHeightAtom);
-  const [familyFriendly, setFamilyFriendly] = useAtom(onlyFamilyFriendlyAtom);
-  const [selectedExposition, setSelectedExposition] = useAtom(
-    exhibitionSelectedAtom,
-  );
-  const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
-  const [routeTypeSelected, setRouteTypeSelected] = useAtom(
-    routeTypeSelectedAtom,
-  );
-  const navigation = useNavigation();
+  const [filters, setFilters] = useAtom(filtersAtom);
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const [localChanges, setLocalChanges] = useState({
-    onlyAvailable,
-    routesInterestedSections,
-    formationsSelected,
-    heightSelected,
-    familyFriendly,
-    selectedExposition,
-    shadingSelected,
-    routeTypeSelected,
-  });
+  const [localChanges, setLocalChanges] = useState(filters);
 
   const { resetFilters } = useFilters();
 
@@ -85,14 +56,7 @@ const FiltersScreen = () => {
   }, []);
 
   const saveLocalChangesToGlobalState = () => {
-    setOnlyAvailable(localChanges.onlyAvailable);
-    setRoutesInterestedSections(localChanges.routesInterestedSections);
-    setFormationsSelected(localChanges.formationsSelected);
-    setHeightSelected(localChanges.heightSelected);
-    setFamilyFriendly(localChanges.familyFriendly);
-    setSelectedExposition(localChanges.selectedExposition);
-    setShadingSelected(localChanges.shadingSelected);
-    setRouteTypeSelected(localChanges.routeTypeSelected);
+    setFilters(localChanges);
     navigation.goBack();
   };
 
@@ -107,16 +71,38 @@ const FiltersScreen = () => {
       text1: "Nie zapisano zmian",
       text2: "Jeżeli chcesz zapisać zmiany, użyj przycisku pod filtrami",
     });
+    navigation.navigate("HomeNavigator");
   };
 
   const renderItems = () => (
     <>
-      <ScreenTitle
-        title='Filtry'
-        centered
-        hasCloseButton
-        onClose={handleCancel}
-      />
+      <View
+        width='100%'
+        paddingHorizontal='s'
+        backgroundColor='backgroundScreen'
+        justifyContent={"center"}
+        alignItems={"center"}
+        paddingBottom='m'
+        flexDirection='row'
+        gap='m'
+        paddingTop={isAndroid ? "m" : undefined}
+        overflow='visible'
+      >
+        <View position='absolute' right={16} bottom={14}>
+          <TouchableOpacity onPress={handleCancel}>
+            <CrossIcon size={34} />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <Text
+            variant='h2'
+            color='secondary'
+            additionalStyles={{ fontFamily: "Outfit400" }}
+          >
+            Filtry
+          </Text>
+        </View>
+      </View>
       <AvailableOnly
         value={localChanges.onlyAvailable}
         onChange={(newValue) =>

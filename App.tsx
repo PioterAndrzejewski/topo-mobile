@@ -18,7 +18,6 @@ import ContactModal from "src/components/modals/ContactModal";
 import RootNavigator from "src/navigators/RootNavigator";
 import theme from "src/styles/theme";
 
-import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Reactotron from "reactotron-react-native";
 import { CustomErrorToast } from "src/components/common/toast/ErrorToast";
@@ -27,7 +26,6 @@ import { CustomSuccessToast } from "src/components/common/toast/SuccessToast";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
-import { useFilters } from "src/hooks/useFilters";
 import { navigationRef } from "src/navigators/navigationRef";
 
 Reactotron.configure({ host: "192.168.50.16", port: 9090 })
@@ -49,9 +47,6 @@ const toastConfig = {
 
 export default function App() {
   const [fontLoaded] = useFonts({
-    PoppinsBold: require("src/assets/fonts/PoppinsBold.ttf"),
-    PoppinsMedium: require("src/assets/fonts/PoppinsMedium.ttf"),
-    PoppinsRegular: require("src/assets/fonts/PoppinsRegular.ttf"),
     Outfit900: require("src/assets/fonts/Outfit-Black.ttf"),
     Outfit800: require("src/assets/fonts/Outfit-ExtraBold.ttf"),
     Outfit700: require("src/assets/fonts/Outfit-Bold.ttf"),
@@ -63,13 +58,7 @@ export default function App() {
     Outfit100: require("src/assets/fonts/Outfit-ExtraLight.ttf"),
   });
 
-  useEffect(() => {
-    const asyncInit = async () => {
-      await initApp();
-    };
-
-    asyncInit();
-  });
+  initApp();
 
   if (!fontLoaded) {
     return <AppLoading />;

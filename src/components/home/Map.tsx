@@ -1,5 +1,5 @@
-import { useSetAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Platform, ViewStyle } from "react-native";
 import MapView from "react-native-map-clustering";
 import {
@@ -15,11 +15,14 @@ import LastViewed from "../common/toast/LastViewed";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useAreas } from "src/hooks/useAreas";
 import { useDebounce } from "src/hooks/useDebounce";
+import { useLogout } from "src/hooks/useLogout";
 import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
+import { wantsToUseNotLoggedAtom } from "src/store/global";
 import {
   mapAtom,
   regionAtom,
@@ -30,6 +33,7 @@ import { palette, styleGuide } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { CartIcon } from "../icons/Cart";
+import { ErrorIcon } from "../icons/Error";
 import { GiftIcon } from "../icons/Gift";
 
 export default function Map() {
@@ -39,8 +43,10 @@ export default function Map() {
   useDebounce(() => setGlobalRegionState(region), 200, [region]);
   const { data: userProducts } = useUserProducts();
   const userHasSubscription = useUserSubscription();
+  const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
+  const logout = useLogout();
 
-  const { rocks } = useAreas();
+  const { rocks, rocksIsEmpty, isLoading } = useAreas();
   const mapRef = useRef<NativeMap>(null);
   const setMap = useSetAtom(mapAtom);
 
@@ -52,86 +58,133 @@ export default function Map() {
     setRegion(newRegion);
   };
 
-  return (
-    <View flex={1}>
-      <MapView
-        ref={mapRef}
-        showsCompass
-        maxZoomLevel={18}
-        showsUserLocation
-        showsBuildings={false}
-        provider={
-          Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
-        }
-        style={$mapStyle}
-        region={startRegion}
-        onRegionChangeComplete={onRegionChangeComplete}
-        userInterfaceStyle='light'
-        rotateEnabled={false}
-        pitchEnabled={false}
-        loadingEnabled={true}
-        clusterColor={palette.gray700}
-        clusterFontFamily='Outfit500'
-        clusterTextColor={palette.black}
-        layoutAnimationConf={undefined}
-        toolbarEnabled={false}
-      >
-        {rocks &&
-          rocks.length > 0 &&
-          rocks.map((item: RockData) => {
-            const rockHasProduct = !!item.attributes.product.data;
-            const userHas = userProducts?.find(
-              (product) =>
-                product.product.uuid ===
-                item.attributes.product.data?.attributes.uuid,
-            );
+  const noDataToShow = useMemo(() => {
+    if (!wantsToUseNotLogged) {
+      return false;
+    }
+    if (rocksIsEmpty) {
+      return true;
+    }
+    return false;
+  }, [isLoading, wantsToUseNotLogged, rocks]);
 
-            const handleClick = () => {
-              setSelectedRock(item.attributes.uuid);
-              const newRegion = getRegionForZoom(
-                item.attributes.coordinates.latitude,
-                item.attributes.coordinates.longitude,
-                getZoomFromStage(3),
-              );
-              if (mapRef && mapRef.current) {
-                mapRef.current.animateToRegion(newRegion);
-              }
-            };
-            return (
-              <Marker
-                key={item.id}
-                coordinate={{
-                  latitude: item.attributes.coordinates.latitude,
-                  longitude: item.attributes.coordinates.longitude,
-                }}
-                onPress={handleClick}
+  return (
+    <>
+      {noDataToShow && (
+        <View p='m'>
+          <View
+            backgroundColor='backgroundWarning'
+            flexDirection='row'
+            borderRadius={24}
+          >
+            <View alignItems='center' justifyContent='center' marginLeft='m'>
+              <View
+                padding='xs'
+                borderRadius={40}
+                borderWidth={1}
+                borderColor='backgroundScreen'
               >
-                <View padding='xs'>
-                  <Animated.View
-                    style={$markerContainer}
-                    entering={FadeIn}
-                    exiting={FadeOut}
-                  >
-                    {!userHas && !userHasSubscription && rockHasProduct && (
-                      <CartIcon size={20} />
-                    )}
-                    {!rockHasProduct && (
-                      <GiftIcon size={20} color={palette.green} />
-                    )}
-                    <Text
-                      variant='marker'
-                      additionalStyles={{ textAlign: "center" }}
+                <ErrorIcon />
+              </View>
+            </View>
+            <View
+              flexWrap='wrap'
+              flex={1}
+              justifyContent='center'
+              alignItems='center'
+              p='m'
+              gap='m'
+            >
+              <Text>Na Twoim urządzeniu nie ma zapisanych danych.</Text>
+              <TouchableOpacity onPress={logout}>
+                <Text color='textSecondary' variant='h3'>
+                  Zaloguj się by je pobrać
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
+      <View flex={1}>
+        <MapView
+          ref={mapRef}
+          showsCompass
+          maxZoomLevel={18}
+          showsUserLocation
+          showsBuildings={false}
+          provider={
+            Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
+          }
+          style={$mapStyle}
+          region={startRegion}
+          onRegionChangeComplete={onRegionChangeComplete}
+          userInterfaceStyle='light'
+          rotateEnabled={false}
+          pitchEnabled={false}
+          loadingEnabled={true}
+          clusterColor={palette.gray700}
+          clusterFontFamily='Outfit500'
+          clusterTextColor={palette.black}
+          layoutAnimationConf={undefined}
+          toolbarEnabled={false}
+        >
+          {rocks &&
+            rocks.length > 0 &&
+            rocks.map((item: RockData) => {
+              const rockHasProduct = !!item.attributes.product.data;
+              const userHas = userProducts?.find(
+                (product) =>
+                  product.product.uuid ===
+                  item.attributes.product.data?.attributes.uuid,
+              );
+
+              const handleClick = () => {
+                setSelectedRock(item.attributes.uuid);
+                const newRegion = getRegionForZoom(
+                  item.attributes.coordinates.latitude,
+                  item.attributes.coordinates.longitude,
+                  getZoomFromStage(3),
+                );
+                if (mapRef && mapRef.current) {
+                  mapRef.current.animateToRegion(newRegion);
+                }
+              };
+              return (
+                <Marker
+                  key={item.id}
+                  coordinate={{
+                    latitude: item.attributes.coordinates.latitude,
+                    longitude: item.attributes.coordinates.longitude,
+                  }}
+                  onPress={handleClick}
+                >
+                  <View padding='xs'>
+                    <Animated.View
+                      style={$markerContainer}
+                      entering={FadeIn}
+                      exiting={FadeOut}
                     >
-                      {item.attributes.Name}
-                    </Text>
-                  </Animated.View>
-                </View>
-              </Marker>
-            );
-          })}
-      </MapView>
-      <LastViewed />
-    </View>
+                      {!userHas && !userHasSubscription && rockHasProduct && (
+                        <CartIcon size={20} />
+                      )}
+                      {!rockHasProduct && (
+                        <GiftIcon size={20} color={palette.green} />
+                      )}
+                      <Text
+                        variant='marker'
+                        additionalStyles={{ textAlign: "center" }}
+                      >
+                        {item.attributes.Name}
+                      </Text>
+                    </Animated.View>
+                  </View>
+                </Marker>
+              );
+            })}
+        </MapView>
+        <LastViewed />
+      </View>
+    </>
   );
 }
 

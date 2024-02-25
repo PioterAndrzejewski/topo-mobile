@@ -22,6 +22,7 @@ type HeaderProps = {
   numberOfImages?: number;
   activeImage: number;
   onCirclePress: (index: number) => void;
+  refetch: () => void;
 };
 
 const Header = (props: HeaderProps) => {

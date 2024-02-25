@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 
+import { useAtomValue } from "jotai";
 import { useUserProductsId } from "src/services/payments";
 import {
   RockData,
@@ -10,6 +11,7 @@ import {
   getRocks,
   getSectors,
 } from "src/services/rocks";
+import { wantsToUseNotLoggedAtom } from "src/store/global";
 import { useFilters } from "./useFilters";
 import { useUserSubscription } from "./useUserSubscription";
 
@@ -20,34 +22,42 @@ export const useAreas = () => {
   >(null);
   const hasSubscription = useUserSubscription();
   const userProductsIds = useUserProductsId();
+  const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
 
-  const {
-    activeFiltersCount,
-    onlyAvailable,
-    routesInterestedSections,
-    formationsSelected,
-    heightSelected,
-    familyFriendly,
-    selectedExposition,
-    shadingSelected,
-    routeTypeSelected,
-  } = useFilters();
+  const { activeFiltersCount, filters } = useFilters();
 
   const { data: areas, isLoading: areasLoading } = useQuery({
     queryFn: () => getAreas(),
     queryKey: ["areas"],
+    cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    enabled: !wantsToUseNotLogged,
   });
   const { data: regions, isLoading: regionsLoading } = useQuery({
     queryFn: () => getRegions(),
     queryKey: ["regions"],
+    cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    enabled: !wantsToUseNotLogged,
   });
   const { data: sectors, isLoading: sectorsLoading } = useQuery({
     queryFn: () => getSectors(),
     queryKey: ["sectors"],
+    cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    enabled: !wantsToUseNotLogged,
   });
-  const { data: rocks, isLoading: rocksLoading } = useQuery({
+  const {
+    data: rocks,
+    isLoading: rocksLoading,
+    isInitialLoading,
+    isFetching,
+  } = useQuery({
     queryFn: () => getRocks(),
     queryKey: ["rocks"],
+    cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    enabled: !wantsToUseNotLogged,
   });
 
   useEffect(() => {
@@ -61,7 +71,7 @@ export const useAreas = () => {
 
     const rocksToFilter = rocks?.filter((rock) => {
       if (
-        onlyAvailable &&
+        filters.onlyAvailable &&
         !hasSubscription &&
         rock.attributes.product.data?.attributes.uuid &&
         !userProductsIds?.includes(
@@ -71,18 +81,18 @@ export const useAreas = () => {
         return false;
       }
 
-      if (familyFriendly && !rock.attributes.family_friendly) {
+      if (filters.familyFriendly && !rock.attributes.family_friendly) {
         return false;
       }
 
       if (
-        heightSelected[0] > rock.attributes.height ||
-        heightSelected[1] < rock.attributes.height
+        filters.heightSelected[0] > rock.attributes.height ||
+        filters.heightSelected[1] < rock.attributes.height
       ) {
         return false;
       }
 
-      const shadings = shadingSelected
+      const shadings = filters.shadingSelected
         .filter((shading) => {
           if (shading.selected) return true;
         })
@@ -91,7 +101,7 @@ export const useAreas = () => {
         return false;
       }
 
-      const selectedFormations = formationsSelected
+      const selectedFormations = filters.formationsSelected
         .filter((formation) => formation.selected)
         .map((formation) => formation.type);
 
@@ -108,7 +118,7 @@ export const useAreas = () => {
         }
       }
 
-      const selectedExpositions = selectedExposition
+      const selectedExpositions = filters.selectedExposition
         .filter((exposition) => exposition.selected)
         .map((exposition) => exposition.type);
 
@@ -126,7 +136,7 @@ export const useAreas = () => {
         }
       }
 
-      const selectedRouteTypes = routeTypeSelected
+      const selectedRouteTypes = filters.routeTypeSelected
         .filter((routeType) => routeType.selected)
         .map((routeType) => routeType.type);
 
@@ -143,7 +153,7 @@ export const useAreas = () => {
         }
       }
 
-      const selectedRouteGrades = routesInterestedSections
+      const selectedRouteGrades = filters.routesInterestedSections
         .filter((section) => section.selected)
         .map((section) => ({ max: section.gradeMax, min: section.gradeMin }));
 
@@ -176,18 +186,14 @@ export const useAreas = () => {
         text2: "Zmień filtry żeby coś znaleźć ;)",
       });
     }
-  }, [
-    activeFiltersCount,
-    onlyAvailable,
-    familyFriendly,
-    heightSelected,
-    shadingSelected,
-    formationsSelected,
-    selectedExposition,
-    routeTypeSelected,
-    routesInterestedSections,
-    rocks,
-  ]);
+  }, [activeFiltersCount, filters, rocks]);
 
-  return { areas, regions, sectors, rocks: filteredRocks, isLoading };
+  return {
+    areas,
+    regions,
+    sectors,
+    rocks: filteredRocks,
+    isLoading,
+    rocksIsEmpty: !rocks || rocks.length < 1,
+  };
 };

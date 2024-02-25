@@ -3,6 +3,8 @@ import authService from "src/services/auth";
 import { EphemeralKey, PaymentIntent } from "src/types/stripe";
 
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { wantsToUseNotLoggedAtom } from "src/store/global";
 import { apiConfig } from "./apiConfig";
 import { queryKeys } from "./queryKeys";
 import { ProductSanitized, RockData } from "./rocks";
@@ -129,9 +131,13 @@ export const getProducts = async () => {
 };
 
 export const useUserProducts = () => {
+  const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
   return useQuery({
     queryKey: queryKeys.products,
     queryFn: () => getProducts(),
+    cacheTime: Infinity,
+    staleTime: 1000 * 60 * 60 * 24 * 30,
+    enabled: !wantsToUseNotLogged,
   });
 };
 
