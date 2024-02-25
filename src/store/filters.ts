@@ -5,7 +5,6 @@ export type GradeInterestedSection = {
   label: string;
   gradeMin: number;
   gradeMax: number;
-  selected: boolean;
 };
 
 export const gradesSectionsClean: GradeInterestedSection[] = [
@@ -13,73 +12,61 @@ export const gradesSectionsClean: GradeInterestedSection[] = [
     label: "I - III+",
     gradeMin: 0,
     gradeMax: 3,
-    selected: false,
   },
   {
     label: "IV - IV+",
     gradeMin: 4,
     gradeMax: 5,
-    selected: false,
   },
   {
     label: "V- - V+",
     gradeMin: 6,
     gradeMax: 8,
-    selected: false,
   },
   {
     label: "VI- - VI+",
     gradeMin: 9,
     gradeMax: 11,
-    selected: false,
   },
   {
     label: "VI.1 - VI.1+",
     gradeMin: 12,
     gradeMax: 13,
-    selected: false,
   },
   {
     label: "VI.2 - VI.2+",
     gradeMin: 14,
     gradeMax: 15,
-    selected: false,
   },
   {
     label: "VI.3 - VI.3+",
     gradeMin: 16,
     gradeMax: 17,
-    selected: false,
   },
   {
     label: "VI.4 - VI.4+",
     gradeMin: 18,
     gradeMax: 19,
-    selected: false,
   },
   {
     label: "VI.5 - VI.5+",
     gradeMin: 20,
     gradeMax: 21,
-    selected: false,
   },
   {
     label: "VI.6 - VI.6+",
     gradeMin: 22,
     gradeMax: 23,
-    selected: false,
   },
   {
     label: "VI.7 - VI.7+",
     gradeMin: 24,
     gradeMax: 25,
-    selected: false,
   },
   {
     label: "VI.8 - VI.8+",
     gradeMin: 24,
     gradeMax: 30,
-    selected: false,
   },
 ];
 
@@ -88,112 +75,43 @@ export type FormationSelected = {
   selected: boolean;
 };
 
-export const formationsSelectedClean: FormationSelected[] = [
-  {
-    type: "slab",
-    selected: false,
-  },
-  {
-    type: "vertical",
-    selected: false,
-  },
-  {
-    type: "overhang",
-    selected: false,
-  },
-  {
-    type: "roof",
-    selected: false,
-  },
-  {
-    type: "chimney",
-    selected: false,
-  },
-  {
-    type: "crack",
-    selected: false,
-  },
-  {
-    type: "pillar",
-    selected: false,
-  },
+export const formationsSelectedClean: Formations[] = [
+  "slab",
+  "vertical",
+  "overhang",
+  "roof",
+  "chimney",
+  "crack",
+  "pillar",
 ];
 
-export type ExpositionSelected = {
-  type: Exhibition;
-  selected: boolean;
-};
-
-export const expositionSelectedClean: ExpositionSelected[] = [
-  {
-    type: "north",
-    selected: false,
-  },
-  {
-    type: "east",
-    selected: false,
-  },
-  {
-    type: "south",
-    selected: false,
-  },
-  {
-    type: "west",
-    selected: false,
-  },
+export const expositionSelectedClean: Exhibition[] = [
+  "north",
+  "south",
+  "east",
+  "west",
 ];
 
-export type ShadingSelected = {
-  type: Shading;
-  selected: boolean;
-};
-
-export const shadingSelectedClean: ShadingSelected[] = [
-  {
-    type: "shadow",
-    selected: false,
-  },
-  {
-    type: "half-shadow",
-    selected: false,
-  },
-  {
-    type: "sunny",
-    selected: false,
-  },
+export const shadingSelectedClean: Shading[] = [
+  "shadow",
+  "half-shadow",
+  "sunny",
 ];
 
 export const heightValues = [0, 70];
 
-export type RouteTypeSelected = {
-  type: RouteType;
-  selected: boolean;
-};
-
-export const routeTypeSelectedClean: RouteTypeSelected[] = [
-  {
-    type: "sport",
-    selected: false,
-  },
-  {
-    type: "trad",
-    selected: false,
-  },
-  {
-    type: "boulder",
-    selected: false,
-  },
-];
+export const routeTypeSelectedClean: RouteType[] = ["sport", "trad", "boulder"];
 
 export const cleanFilterValues = {
   onlyAvailable: false,
-  routesInterestedSections: gradesSectionsClean,
-  formationsSelected: formationsSelectedClean,
-  heightSelected: heightValues,
   familyFriendly: false,
-  selectedExposition: expositionSelectedClean,
-  shadingSelected: shadingSelectedClean,
-  routeTypeSelected: routeTypeSelectedClean,
+  heightSelected: heightValues,
+  routesInterestedSections: [] as string[],
+  formationsSelected: [] as Formations[],
+  selectedExposition: [] as Exhibition[],
+  shadingSelected: [] as Shading[],
+  routeTypeSelected: [] as RouteType[],
 };
 
-export const filtersAtom = atom<typeof cleanFilterValues>(cleanFilterValues)
+export const filtersAtom = atom<typeof cleanFilterValues>(cleanFilterValues);
+export const filtersCountAtom = atom(0);

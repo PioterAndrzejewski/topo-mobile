@@ -8,14 +8,14 @@ import { HomeScreenNavigationProp } from "src/types/type";
 
 const FiltersButton = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  // const { activeFiltersCount } = useFilters();
+  // const filtersCount = useAtomValue(filtersCountAtom);
 
   const handleNavigation = () => navigation.navigate("Filters");
   return (
-    <View position='absolute' right={20} bottom={15} overflow='visible'>
+    <View position='absolute' right={20} top={20} overflow='visible'>
       <TouchableOpacity onPress={handleNavigation}>
         <FiltersIcon size={28} />
-        {/* {activeFiltersCount > 0 && (
+        {/* {filtersCount > 0 && (
           <View
             height={17}
             width={16}
@@ -31,7 +31,7 @@ const FiltersButton = () => {
             pointerEvents='none'
           >
             <Text variant='filter' color='textWhite'>
-              {activeFiltersCount}
+              {filtersCount}
             </Text>
           </View>
         )} */}

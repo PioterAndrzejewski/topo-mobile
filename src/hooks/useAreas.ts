@@ -11,6 +11,7 @@ import {
   getRocks,
   getSectors,
 } from "src/services/rocks";
+import { filtersCountAtom, gradesSectionsClean } from "src/store/filters";
 import { wantsToUseNotLoggedAtom } from "src/store/global";
 import { useFilters } from "./useFilters";
 import { useUserSubscription } from "./useUserSubscription";
@@ -23,8 +24,9 @@ export const useAreas = () => {
   const hasSubscription = useUserSubscription();
   const userProductsIds = useUserProductsId();
   const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
+  const activeFiltersCount = useAtomValue(filtersCountAtom);
 
-  const { activeFiltersCount, filters } = useFilters();
+  const { filters } = useFilters();
 
   const { data: areas, isLoading: areasLoading } = useQuery({
     queryFn: () => getAreas(),
@@ -92,24 +94,18 @@ export const useAreas = () => {
         return false;
       }
 
-      const shadings = filters.shadingSelected
-        .filter((shading) => {
-          if (shading.selected) return true;
-        })
-        .map((shading) => shading.type);
-      if (shadings.length > 0 && !shadings.includes(rock.attributes.shading)) {
+      if (
+        filters.shadingSelected.length > 0 &&
+        !filters.shadingSelected.includes(rock.attributes.shading)
+      ) {
         return false;
       }
 
-      const selectedFormations = filters.formationsSelected
-        .filter((formation) => formation.selected)
-        .map((formation) => formation.type);
-
-      if (selectedFormations.length > 0) {
+      if (filters.formationsSelected.length > 0) {
         const rockFormations = rock.attributes.formation.map(
           (formation) => formation.formation,
         );
-        const found = selectedFormations.some((element) =>
+        const found = filters.formationsSelected.some((element) =>
           rockFormations.includes(element),
         );
 
@@ -118,17 +114,13 @@ export const useAreas = () => {
         }
       }
 
-      const selectedExpositions = filters.selectedExposition
-        .filter((exposition) => exposition.selected)
-        .map((exposition) => exposition.type);
-
-      if (selectedExpositions.length > 0) {
+      if (filters.selectedExposition.length > 0) {
         const rockExpositions = rock.attributes.exhibition.map(
           (exposition) => exposition.exhibition,
         );
 
         if (
-          !selectedExpositions.some((element) =>
+          !filters.selectedExposition.some((element) =>
             rockExpositions.includes(element),
           )
         ) {
@@ -136,16 +128,12 @@ export const useAreas = () => {
         }
       }
 
-      const selectedRouteTypes = filters.routeTypeSelected
-        .filter((routeType) => routeType.selected)
-        .map((routeType) => routeType.type);
-
-      if (selectedRouteTypes.length > 0) {
+      if (filters.routeTypeSelected.length > 0) {
         const rockRouteTypes = rock.attributes.routes.data.map(
           (route) => route.attributes.Type,
         );
         if (
-          !selectedRouteTypes.some((element) =>
+          !filters.routeTypeSelected.some((element) =>
             rockRouteTypes.includes(element),
           )
         ) {
@@ -153,20 +141,19 @@ export const useAreas = () => {
         }
       }
 
-      const selectedRouteGrades = filters.routesInterestedSections
-        .filter((section) => section.selected)
-        .map((section) => ({ max: section.gradeMax, min: section.gradeMin }));
-
-      if (selectedRouteGrades.length > 0) {
+      if (filters.routesInterestedSections.length > 0) {
         const rockRouteGrades = rock.attributes.routes.data.map(
           (route) => route.attributes.grade,
+        );
+        const selectedRouteGrades = gradesSectionsClean.filter((section) =>
+          filters.routesInterestedSections.includes(section.label),
         );
         if (
           !selectedRouteGrades.some((selectedGrade) => {
             return !!rockRouteGrades.find(
               (rockRouteGrade) =>
-                selectedGrade.min <= rockRouteGrade &&
-                selectedGrade.max >= rockRouteGrade,
+                selectedGrade.gradeMin <= rockRouteGrade &&
+                selectedGrade.gradeMax >= rockRouteGrade,
             );
           })
         ) {

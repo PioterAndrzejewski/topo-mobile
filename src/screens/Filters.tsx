@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -19,19 +19,19 @@ import RouteTypeSelected from "src/components/filters/RouteTypeSelected";
 import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
 import AnimatedFlashList from "src/components/ui/AnimatedFlashList";
-import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+import Divider from 'src/components/filters/Divider';
 
-import { CrossIcon } from "src/components/icons/Cross";
+import ScreenTitle from "src/components/common/ScreenTitle";
 import { StickyContainer } from "src/components/ui/StickyContainer";
-import { isAndroid } from "src/helpers/isAndroid";
 import { useFilters } from "src/hooks/useFilters";
-import { filtersAtom } from "src/store/filters";
+import { filtersAtom, filtersCountAtom, heightValues } from "src/store/filters";
 import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 const FiltersScreen = () => {
   const [filters, setFilters] = useAtom(filtersAtom);
+  const [filtersCount, setFiltersCount] = useAtom(filtersCountAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [localChanges, setLocalChanges] = useState(filters);
@@ -44,19 +44,38 @@ const FiltersScreen = () => {
     scrollY.value = event.contentOffset.y;
   });
 
-  const divider = useMemo(() => {
-    return (
-      <View
-        height={1}
-        backgroundColor='backgroundSecondary'
-        marginHorizontal='l'
-        marginVertical='l'
-      />
-    );
-  }, []);
 
   const saveLocalChangesToGlobalState = () => {
     setFilters(localChanges);
+    let activeNumber = 0;
+    if (localChanges.routesInterestedSections.length > 0) {
+      activeNumber++;
+    }
+    if (localChanges.onlyAvailable) {
+      activeNumber++;
+    }
+    if (localChanges.formationsSelected.length > 0) {
+      activeNumber++;
+    }
+    if (
+      filters.heightSelected[0] !== heightValues[0] ||
+      filters.heightSelected[1] !== heightValues[1]
+    ) {
+      activeNumber++;
+    }
+    if (localChanges.familyFriendly) {
+      activeNumber++;
+    }
+    if (localChanges.selectedExposition.length > 0) {
+      activeNumber++;
+    }
+    if (localChanges.shadingSelected.length > 0) {
+      activeNumber++;
+    }
+    if (localChanges.routeTypeSelected.length > 0) {
+      activeNumber++;
+    }
+    setFiltersCount(activeNumber);
     navigation.goBack();
   };
 
@@ -71,38 +90,12 @@ const FiltersScreen = () => {
       text1: "Nie zapisano zmian",
       text2: "Jeżeli chcesz zapisać zmiany, użyj przycisku pod filtrami",
     });
-    navigation.navigate("HomeNavigator");
+    navigation.goBack();
   };
 
   const renderItems = () => (
     <>
-      <View
-        width='100%'
-        paddingHorizontal='s'
-        backgroundColor='backgroundScreen'
-        justifyContent={"center"}
-        alignItems={"center"}
-        paddingBottom='m'
-        flexDirection='row'
-        gap='m'
-        paddingTop={isAndroid ? "m" : undefined}
-        overflow='visible'
-      >
-        <View position='absolute' right={16} bottom={14}>
-          <TouchableOpacity onPress={handleCancel}>
-            <CrossIcon size={34} />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text
-            variant='h2'
-            color='secondary'
-            additionalStyles={{ fontFamily: "Outfit400" }}
-          >
-            Filtry
-          </Text>
-        </View>
-      </View>
+      <ScreenTitle centered title='Filtry' />
       <AvailableOnly
         value={localChanges.onlyAvailable}
         onChange={(newValue) =>
@@ -112,7 +105,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <InterestingRoutes
         value={localChanges.routesInterestedSections}
         onChange={(newValue) =>
@@ -122,7 +115,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <FormationsSelected
         value={localChanges.formationsSelected}
         onChange={(newValue) =>
@@ -132,7 +125,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <SelectedHeight
         value={localChanges.heightSelected}
         onChange={(newValue) =>
@@ -142,7 +135,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <FamilyFriendly
         value={localChanges.familyFriendly}
         onChange={(newValue) =>
@@ -152,7 +145,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <Exposition
         value={localChanges.selectedExposition}
         onChange={(newValue) =>
@@ -162,7 +155,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <ShadingSelectedComponent
         value={localChanges.shadingSelected}
         onChange={(newValue) =>
@@ -172,7 +165,7 @@ const FiltersScreen = () => {
           }))
         }
       />
-      {divider}
+      <Divider />
       <RouteTypeSelected
         value={localChanges.routeTypeSelected}
         onChange={(newValue) =>

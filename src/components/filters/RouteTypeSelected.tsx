@@ -2,22 +2,23 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-
-import { RouteTypeSelected } from "src/store/filters";
+import { RouteType } from "src/services/rocks";
 
 type Props = {
-  value: RouteTypeSelected[];
-  onChange: (newValue: RouteTypeSelected[]) => void;
+  value: RouteType[];
+  onChange: (newValue: RouteType[]) => void;
 };
 
 const RouteTypeSelectedComponent = ({ value, onChange }: Props) => {
-  const handleSelect = (item: RouteTypeSelected) => {
+  const handleSelect = (item: RouteType, operation: "add" | "remove") => {
     const newRouteTypes = value.map((routeType) => {
-      if (routeType.type === item.type) {
-        return {
-          ...item,
-          selected: !item.selected,
-        };
+      let newRouteTypes = [...value];
+
+      if (operation === "add") {
+        newRouteTypes.push(item);
+      }
+      if (operation === "remove") {
+        newRouteTypes = newRouteTypes.filter((routeType) => routeType !== item);
       }
       return routeType;
     });
@@ -31,17 +32,20 @@ const RouteTypeSelectedComponent = ({ value, onChange }: Props) => {
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
         {value.map((routeType) => {
+          const isSelected = value.includes(routeType);
           return (
             <TouchableOpacity
-              onPress={() => handleSelect(routeType)}
-              key={routeType.type}
+              onPress={() =>
+                handleSelect(routeType, isSelected ? "remove" : "add")
+              }
+              key={routeType}
             >
               <View
                 backgroundColor={
-                  routeType.selected ? "backgroundTertiary" : "backgroundScreen"
+                  isSelected ? "backgroundTertiary" : "backgroundScreen"
                 }
                 borderColor={
-                  routeType.selected ? "backgroundTertiary" : "backgroundDark"
+                  isSelected ? "backgroundTertiary" : "backgroundDark"
                 }
                 borderWidth={1}
                 paddingHorizontal='m'
@@ -50,7 +54,7 @@ const RouteTypeSelectedComponent = ({ value, onChange }: Props) => {
                 flexDirection='row'
                 gap='m'
               >
-                <Text variant='body'>{routeType.type}</Text>
+                <Text variant='body'>{routeType}</Text>
               </View>
             </TouchableOpacity>
           );
