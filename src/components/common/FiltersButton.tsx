@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 
 import Text from "src/components//ui/Text";
 import View from "src/components/ui/View";
 
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { FiltersIcon } from "src/components/icons/Filters";
 import { useFilters } from "src/hooks/useFilters";
 import { HomeScreenNavigationProp } from "src/types/type";

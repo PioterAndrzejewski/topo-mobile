@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import type { FC } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
@@ -8,9 +8,9 @@ import View from "src/components/ui/View";
 import FiltersButton from "./FiltersButton";
 
 import { ArrowLeft } from "src/components/icons/ArrowLeft";
-import { palette } from "src/styles/theme";
 import { CrossIcon } from "src/components/icons/Cross";
-import { isAndroid } from 'src/helpers/isAndroid';
+import { isAndroid } from "src/helpers/isAndroid";
+import { palette } from "src/styles/theme";
 
 type ScreenTitleProps = {
   title: string;

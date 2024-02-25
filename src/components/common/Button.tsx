@@ -1,7 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { useMemo } from "react";
-import { ActivityIndicator, ViewStyle } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";

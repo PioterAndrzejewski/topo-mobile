@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 
 import PaymentModal from "src/components/home/rock/PaymentModal";
 import Card from "src/components/ui/Card";
