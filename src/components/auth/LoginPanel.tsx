@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
-import { useWindowDimensions, TouchableOpacity } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 
@@ -62,8 +62,8 @@ export default function LoginPanel({
 
   const { control, handleSubmit, getValues } = useForm({
     defaultValues: {
-      email: "mikel@gg.pl",
-      password: "mikel1",
+      email: __DEV__ ? "mikel@gg.pl" : "",
+      password: __DEV__ ? "mikel1" : "",
     },
     mode: "onChange",
     resolver: yupResolver(schema),
