@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 
 import Text from "src/components/ui/Text";
+import View from "src/components/ui/View";
 import FavouritesScreen from "src/screens/FavouritesScreen";
 import MapScreen from "src/screens/MapScreen";
 import SearchScreen from "src/screens/SearchScreen";
@@ -48,7 +49,16 @@ const renderIcon = ({
     ? TAB_ICONS[route.name].active
     : TAB_ICONS[route.name].inactive;
 
-  return <Icon size={size} color={focused ? palette.green : palette.blue700} />;
+  return (
+    <View
+      backgroundColor={focused ? "backgroundTertiary" : "backgroundScreen"}
+      borderRadius={14}
+      padding='3xs'
+      marginTop='xs'
+    >
+      <Icon size={size} color={focused ? palette.black : palette.black} />
+    </View>
+  );
 };
 
 const getName = (name: string) => {
