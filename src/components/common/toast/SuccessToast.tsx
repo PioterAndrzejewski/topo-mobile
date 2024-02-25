@@ -23,7 +23,7 @@ export const CustomSuccessToast = ({
     <Touchable
       onPress={onPress}
       activeOpacity={activeOpacity}
-      style={[styles.base, style]}
+      style={[styles.base, style, { borderRadius: 16, height: 85 }]}
       {...touchableContainerProps}
     >
       <View
@@ -35,7 +35,20 @@ export const CustomSuccessToast = ({
           paddingHorizontal: 24,
         }}
       >
-        <View>
+        <View
+          style={{
+            shadowColor: "#000000",
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            },
+            backgroundColor: "#fff",
+            shadowOpacity: 0.1,
+            shadowRadius: 4.0,
+            borderRadius: 50,
+            padding: 8,
+          }}
+        >
           <TickIcon color={palette.green} />
         </View>
         <View

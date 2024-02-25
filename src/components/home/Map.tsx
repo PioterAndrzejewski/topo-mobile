@@ -30,6 +30,7 @@ import { palette, styleGuide } from "src/styles/theme";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
 import { CartIcon } from "../icons/Cart";
+import { GiftIcon } from "../icons/Gift";
 
 export default function Map() {
   const [region, setRegion] = useState<Region>(startRegion);
@@ -78,6 +79,7 @@ export default function Map() {
         {rocks &&
           rocks.length > 0 &&
           rocks.map((item: RockData) => {
+            const rockHasProduct = !!item.attributes.product.data;
             const userHas = userProducts?.find(
               (product) =>
                 product.product.uuid ===
@@ -110,7 +112,12 @@ export default function Map() {
                     entering={FadeIn}
                     exiting={FadeOut}
                   >
-                    {!userHas && !userHasSubscription && <CartIcon size={20} />}
+                    {!userHas && !userHasSubscription && rockHasProduct && (
+                      <CartIcon size={20} />
+                    )}
+                    {!rockHasProduct && (
+                      <GiftIcon size={20} color={palette.green} />
+                    )}
                     <Text
                       variant='marker'
                       additionalStyles={{ textAlign: "center" }}

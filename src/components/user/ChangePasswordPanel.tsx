@@ -26,6 +26,11 @@ export default function ChangePasswordPanel() {
       });
     },
     onSuccess: async () => {
+      Toast.show({
+        type: "success",
+        text1: "Zmieniono hasło",
+        text2: "Przy następnym logowaniu użyj nowego hasła",
+      });
       navigation.goBack();
     },
   });
@@ -61,6 +66,7 @@ export default function ChangePasswordPanel() {
                   value={value}
                   label='Stare hasło'
                   error={error}
+                  secure
                 />
               )}
             />
@@ -78,23 +84,6 @@ export default function ChangePasswordPanel() {
                     onChange={(value) => onChange(value)}
                     value={value}
                     label='Nowe hasło'
-                    error={error}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name='confirmPassword'
-                rules={{ required: true }}
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <CustomTextInput
-                    hookBlurHandler={onBlur}
-                    onChange={(value) => onChange(value)}
-                    value={value}
-                    label='Potwierdź hasło'
                     error={error}
                     secure
                   />
@@ -118,7 +107,6 @@ export default function ChangePasswordPanel() {
 const schema = yup.object().shape({
   oldPassword: yup.string().required("Wpisz stare hasło"),
   newPassword: yup.string().required("Wpisz stare hasło"),
-  confirmPassword: yup.string().required("Wpisz stare hasło"),
 });
 
 export type ChangePasswordData = yup.InferType<typeof schema>;

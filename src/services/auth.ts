@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+
 import { ChangePasswordData } from "src/components/user/ChangePasswordPanel";
 import { apiConfig } from "src/services/apiConfig";
 import {
@@ -158,11 +159,14 @@ export const resetPass = async (email: string) => {
 };
 
 export const changePass = async (mutationData: ChangePasswordData) => {
-  const { data } = await axios.post<LoggedUserData>(apiConfig.auth.changePass, {
-    password: mutationData.newPassword,
-    passwordConfirmation: mutationData.confirmPassword,
-    currentPassword: mutationData.oldPassword,
-  });
+  const { data } = await instance.post<LoggedUserData>(
+    apiConfig.auth.changePass,
+    {
+      password: mutationData.newPassword,
+      passwordConfirmation: mutationData.newPassword,
+      currentPassword: mutationData.oldPassword,
+    },
+  );
   return data;
 };
 

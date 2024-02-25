@@ -1,20 +1,24 @@
 import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useState } from "react";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
 import PaymentModal from "src/components/home/rock/PaymentModal";
 import RockGallery from "src/components/home/rock/RockGallery";
 import InformationRow from "src/components/rock/details/InformationRow";
+import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { useWindowDimensions } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import { CartIcon } from "src/components/icons/Cart";
-import OverlayCardView from "src/components/ui/OverlayCardView";
+import { GiftIcon } from "src/components/icons/Gift";
 import { useAreas } from "src/hooks/useAreas";
 import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { useUserProducts } from "src/services/payments";
@@ -34,12 +38,16 @@ const RockInfoExpanded = () => {
   const { data: userProducts } = useUserProducts();
   const hasSubscription = useUserSubscription();
 
+  const scrollY = useSharedValue(0);
+
   const rock = useMemo(() => {
     if (!rocks) return null;
-    return rocks?.find(
+    const foundRock = rocks?.find(
       (rock: RockData) => rock.attributes.uuid === selectedRock,
     );
-  }, [selectedRock]);
+    console.log(foundRock);
+    return foundRock;
+  }, [selectedRock, rocks]);
 
   useEffect(() => {
     if (selectedRock && rock) {
@@ -50,7 +58,7 @@ const RockInfoExpanded = () => {
   const routes = useMemo(() => rock && getRoutesFromRock(rock), [rock]);
 
   const userHasBoughtThisProduct = useMemo(() => {
-    if (hasSubscription) {
+    if (hasSubscription || !rock?.attributes.product.data) {
       return true;
     }
     if (!userProducts || !userProducts.length || userProducts.length < 1) {
@@ -69,8 +77,16 @@ const RockInfoExpanded = () => {
     setSelectedRock(null);
   };
 
-  if (!rock || !rock.attributes) {
-    return null;
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
+  if (!rock) {
+    return (
+      <View>
+        <Text>No cgyba nic nie mam</Text>
+      </View>
+    );
   }
 
   return (
@@ -117,13 +133,28 @@ const RockInfoExpanded = () => {
       </View>
       <FlatList
         data={[0]}
-        keyExtractor={(item) => item.toString()}
         renderItem={() => (
           <View>
+            {!rock?.attributes.product.data && (
+              <View
+                marginHorizontal='m'
+                flexDirection='row'
+                alignItems='center'
+                gap='m'
+                marginVertical='s'
+                backgroundColor='backgroundTertiary'
+                justifyContent='center'
+                paddingVertical='s'
+                borderRadius={24}
+              >
+                <GiftIcon size={28} color={palette.green} />
+                <Text>{"Tę skałę udostępniamy za darmo :)"}</Text>
+              </View>
+            )}
             <View marginBottom='m'>
               {rock && <InformationRow rock={rock} />}
             </View>
-            {routes && <RouteStructure routes={routes} inCard={false}/>}
+            {routes && <RouteStructure routes={routes} inCard={false} />}
             {rock?.attributes && rock?.attributes.cover.length > 0 && (
               <>
                 <RockGallery images={rock?.attributes.cover} />
@@ -132,7 +163,7 @@ const RockInfoExpanded = () => {
           </View>
         )}
       />
-      <View marginBottom='l' marginHorizontal='m'>
+      <View marginBottom='l' marginHorizontal='m' paddingTop='m'>
         <Button
           label={
             !!rock?.attributes.product.data && !userHasBoughtThisProduct

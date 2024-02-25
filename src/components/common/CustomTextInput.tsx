@@ -114,7 +114,7 @@ export default function CustomTextInput({
               </View>
               <View
                 position='absolute'
-                right={14}
+                right={secure ? 44 : 14}
                 top={10}
                 backgroundColor='backgroundError'
                 p='xs'

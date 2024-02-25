@@ -8,7 +8,7 @@ import { palette } from "src/styles/theme";
 export default function ChangePasswordScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: palette.white }}>
-      <ScreenTitle title='Chcesz zmienić hasło?' hasBackButton />
+      <ScreenTitle title='Chcesz zmienić hasło?' hasBackButton centered />
       <ChangePasswordPanel />
     </SafeAreaView>
   );
