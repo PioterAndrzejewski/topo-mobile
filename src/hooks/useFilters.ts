@@ -1,0 +1,147 @@
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+
+import {
+  exhibitionSelectedAtom,
+  expositionSelectedClean,
+  formationsSelectedAtom,
+  formationsSelectedClean,
+  gradesSectionsClean,
+  heightValues,
+  onlyAvailableAtom,
+  onlyFamilyFriendlyAtom,
+  routeTypeSelectedAtom,
+  routeTypeSelectedClean,
+  routesInterestedAtom,
+  selectedHeightAtom,
+  shadingSelectedAtom,
+  shadingSelectedClean,
+} from "src/store/filters";
+
+export const useFilters = () => {
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+
+  const [onlyAvailable, setOnlyAvailable] = useAtom(onlyAvailableAtom);
+  const [routesInterestedSections, setRoutesInterestedSections] =
+    useAtom(routesInterestedAtom);
+  const [formationsSelected, setFormationsSelected] = useAtom(
+    formationsSelectedAtom,
+  );
+  const [heightSelected, setHeightSelected] = useAtom(selectedHeightAtom);
+  const [familyFriendly, setFamilyFriendly] = useAtom(onlyFamilyFriendlyAtom);
+  const [selectedExposition, setSelectedExposition] = useAtom(
+    exhibitionSelectedAtom,
+  );
+  const [shadingSelected, setShadingSelected] = useAtom(shadingSelectedAtom);
+  const [routeTypeSelected, setRouteTypeSelected] = useAtom(
+    routeTypeSelectedAtom,
+  );
+
+  const resetFilters = () => {
+    setOnlyAvailable(false);
+    setRoutesInterestedSections(gradesSectionsClean);
+    setFormationsSelected(formationsSelectedClean);
+    setHeightSelected(heightValues);
+    setFamilyFriendly(false);
+    setSelectedExposition(expositionSelectedClean);
+    setShadingSelected(shadingSelectedClean);
+    setRouteTypeSelected(routeTypeSelectedClean);
+  };
+
+  const countActiveFilters = () => {
+    let activeNumber = 0;
+
+    const routesSections = routesInterestedSections.map(
+      (section) => section.selected,
+    );
+    if (routesSections.includes(true)) {
+      activeNumber++;
+    }
+
+    if (onlyAvailable) {
+      activeNumber++;
+    }
+
+    const formations = formationsSelected.map(
+      (formation) => formation.selected,
+    );
+    if (formations.includes(true)) {
+      activeNumber++;
+    }
+
+    if (
+      heightSelected[0] !== heightValues[0] ||
+      heightSelected[1] !== heightValues[1]
+    ) {
+      activeNumber++;
+    }
+
+    if (familyFriendly) {
+      activeNumber++;
+    }
+
+    const expositions = selectedExposition.map(
+      (exposition) => exposition.selected,
+    );
+    if (expositions.includes(true)) {
+      activeNumber++;
+    }
+
+    const shadings = shadingSelected.map((shading) => shading.selected);
+    if (shadings.includes(true)) {
+      activeNumber++;
+    }
+
+    const routeTypes = routeTypeSelected.map((routeType) => routeType.selected);
+    if (routeTypes.includes(true)) {
+      activeNumber++;
+    }
+
+    setActiveFiltersCount(activeNumber);
+  };
+
+  // const setInitValues = async () => {
+  //   if (initialized) return;
+  //   setInitiialized(true);
+  //   const valuesString = await AsyncStorage.getItem(storage.filters);
+  //   if (valuesString) {
+  //     const storageValues = (await JSON.parse(
+  //       valuesString,
+  //     )) as typeof cleanFilterValues;
+  //     setOnlyAvailable(storageValues.onlyAvailable);
+  //     setRoutesInterestedSections(storageValues.routesInterestedSections);
+  //     setFormationsSelected(storageValues.formationsSelected);
+  //     setHeightSelected(storageValues.heightSelected);
+  //     setFamilyFriendly(storageValues.familyFriendly);
+  //     setSelectedExposition(storageValues.selectedExposition);
+  //     setShadingSelected(storageValues.shadingSelected);
+  //     setRouteTypeSelected(storageValues.routeTypeSelected);
+  //   }
+  // };
+
+  useEffect(() => {
+    countActiveFilters();
+  }, [
+    onlyAvailable,
+    routesInterestedSections,
+    formationsSelected,
+    heightSelected,
+    familyFriendly,
+    selectedExposition,
+    shadingSelected,
+    routeTypeSelected,
+  ]);
+
+  return {
+    resetFilters,
+    activeFiltersCount,
+    onlyAvailable,
+    routesInterestedSections,
+    formationsSelected,
+    heightSelected,
+    familyFriendly,
+    selectedExposition,
+    shadingSelected,
+    routeTypeSelected,
+  };
+};

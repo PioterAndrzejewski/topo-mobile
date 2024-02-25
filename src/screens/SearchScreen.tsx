@@ -70,7 +70,7 @@ export default function SearchScreen() {
       style={{ flex: 1, backgroundColor: palette.white }}
       edges={["top"]}
     >
-      <ScreenTitle title='Wyszukiwarka' centered />
+      <ScreenTitle title='Wyszukiwarka' centered hasFilters/>
       <FilterBar />
       {searchText.length > 0 && (
         <View marginHorizontal='m' marginTop='m'>

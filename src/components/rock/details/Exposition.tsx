@@ -9,7 +9,7 @@ type ExpositionProps = {
   exposition: ExhibitionData[];
 };
 
-const getMeaningfulExposition = (exposition: Exhibition) => {
+export const getMeaningfulExposition = (exposition: Exhibition) => {
   switch (exposition) {
     case "north":
       return "północna";
@@ -18,7 +18,7 @@ const getMeaningfulExposition = (exposition: Exhibition) => {
     case "south":
       return "południowa";
     case "west":
-      "zachodnia";
+      return "zachodnia";
   }
 };
 

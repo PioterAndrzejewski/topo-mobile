@@ -36,7 +36,6 @@ export const useLoginWithGoogle = () => {
   });
 
   const sendRequest = useCallback(async () => {
-    console.log(url);
     if (!url || !url.includes("wspinapp://") || !url.includes("access_token")) {
       return;
     }

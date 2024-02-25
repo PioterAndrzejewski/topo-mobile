@@ -146,8 +146,6 @@ const FavoritesContextProvider = ({ children }: { children: ReactNode }) => {
   const getStats = () => {
     let routesNumber = 0;
     for (const routes in favoriteRoutes) {
-      console.log(favoriteRoutes);
-      console.log(routes);
       const key = routes as keyof typeof favoriteRoutes;
       routesNumber += favoriteRoutes[key].length;
     }

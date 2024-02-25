@@ -105,7 +105,6 @@ export default function ResultsList() {
     const zoom = getZoomFromRegion(region);
     const stage = getStageFromZoom(zoom);
     setStage(stage);
-    console.log(stage);
     const newLocationArray: AreasList = [];
     if (stage >= 1) {
       newLocationArray.push(polandRegion);
@@ -342,7 +341,7 @@ export default function ResultsList() {
             </View>
           </View>
         )}
-        <View marginHorizontal='l' marginBottom='xs'>
+        <View marginHorizontal='l' marginBottom='xs' marginTop='m'>
           <Text>Najbliżej Twojej lokalizacji:</Text>
         </View>
 

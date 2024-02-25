@@ -11,7 +11,7 @@ import {
 } from "react-native-maps";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
-import LastViewed from "../common/LastViewed";
+import LastViewed from "../common/toast/LastViewed";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
@@ -73,6 +73,7 @@ export default function Map() {
         clusterFontFamily='Outfit500'
         clusterTextColor={palette.black}
         layoutAnimationConf={undefined}
+        toolbarEnabled={false}
       >
         {rocks &&
           rocks.length > 0 &&

@@ -6,7 +6,7 @@ export const palette = {
 
   black: "rgba(14, 13, 18, 1)",
 
-  gray: "#49454F",
+  gray: "#79747E",
   gray700: "#F7F2FA",
 
   blue100: "rgb(242, 241, 244)",
@@ -32,7 +32,8 @@ export const theme = createTheme({
     backgroundSecondary: palette.green,
     backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
-    backgroundDark: palette.blue700,
+    backgroundDark: palette.gray,
+    backgroundBlack: palette.black,
     backgroundTertiary: palette.greenSecondary,
     backgroundTertiaryFaded: palette.yellow50,
     backgroundGreenFaded: palette.green20,
@@ -131,6 +132,10 @@ export const theme = createTheme({
     marker: {
       fontFamily: "Outfit400",
       fontSize: 14,
+    },
+    filter: {
+      fontFamily: "Outfit600",
+      fontSize: 12,
     },
   },
 });

@@ -4,8 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
-import { useWindowDimensions } from "react-native";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useWindowDimensions, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 

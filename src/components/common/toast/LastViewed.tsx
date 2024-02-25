@@ -15,8 +15,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import Text from "../ui/Text";
-import View from "../ui/View";
+import Text from "../../ui/Text";
+import View from "../../ui/View";
 
 import { RockData } from "src/services/rocks";
 import { getLastSeenRock } from "src/services/storeAsync";
@@ -24,7 +24,7 @@ import { mapAtom, selectedRockAtom } from "src/store/results";
 import { HomeScreenNavigationProp } from "src/types/type";
 import { getRegionForZoom } from "src/utils/getRegionForZoom";
 import { getZoomFromStage } from "src/utils/getZoomFromStage";
-import { HandIcon } from "../icons/Hand";
+import { HandIcon } from "../../icons/Hand";
 
 const LastViewed = () => {
   const [lastViewed, setLastViewed] = useState<RockData | null>(null);
@@ -105,27 +105,33 @@ const LastViewed = () => {
             blurReductionFactor={1}
             style={{ borderRadius: 24, overflow: "hidden" }}
           >
-            <TouchableOpacity onPress={animateTo}>
-              <View
-                paddingVertical='m'
-                width={320}
-                borderRadius={12}
-                backgroundColor='backgroundLight'
-                justifyContent='center'
-                alignItems='center'
-                gap='xs'
-                opacity={0.6}
-              >
-                <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
-
-                <Text variant='h3'>{lastViewed.attributes.Name}</Text>
-                <View position='absolute' right={30}>
-                  <Animated.View style={animatedStyle}>
-                    <HandIcon size={32} />
-                  </Animated.View>
+            <View
+              paddingVertical='m'
+              width={320}
+              borderRadius={12}
+              backgroundColor='backgroundLight'
+              justifyContent='center'
+              alignItems='center'
+              gap='xs'
+              opacity={0.6}
+            >
+              <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
+              <TouchableOpacity onPress={animateTo}>
+                <View
+                  bg='backgroundTertiary'
+                  paddingVertical='s'
+                  paddingHorizontal='2xl'
+                  borderRadius={12}
+                >
+                  <Text variant='h3'>{lastViewed.attributes.Name}</Text>
                 </View>
+              </TouchableOpacity>
+              <View position='absolute' right={30}>
+                <Animated.View style={animatedStyle}>
+                  <HandIcon size={32} />
+                </Animated.View>
               </View>
-            </TouchableOpacity>
+            </View>
           </BlurView>
         </View>
       </Animated.View>

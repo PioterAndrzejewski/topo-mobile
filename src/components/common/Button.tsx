@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
-import { ActivityIndicator, ViewStyle } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useMemo } from "react";
+import { ActivityIndicator, TouchableOpacity, ViewStyle } from "react-native";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -14,6 +14,7 @@ export type ButtonProps = {
   isLoading?: boolean;
   containerStyles?: ViewStyle;
   labelColor?: keyof Theme["colors"];
+  variant?: "standard" | "outline";
 };
 
 export default function Button({
@@ -23,6 +24,7 @@ export default function Button({
   isLoading,
   containerStyles,
   labelColor,
+  variant = "standard",
 }: ButtonProps) {
   const { colors } = useTheme<Theme>();
   const handlePress = () => {
@@ -31,6 +33,13 @@ export default function Button({
     }
     onClick();
   };
+
+  const getLabelColor = useMemo(() => {
+    if (labelColor) return labelColor;
+    if (variant === "outline") return colors.textBlack as keyof Theme["colors"];
+    return "textWhite";
+  }, [labelColor, variant]);
+
   return (
     <TouchableOpacity onPress={handlePress} disabled={disabled}>
       <View
@@ -40,13 +49,13 @@ export default function Button({
                 ...$container,
                 ...$disabled,
               }
-            : { ...$container, ...containerStyles }
+            : { ...$container(variant), ...containerStyles }
         }
       >
         {isLoading ? (
           <ActivityIndicator size='small' />
         ) : (
-          <Text variant='button' color={labelColor || "textWhite"}>
+          <Text variant='button' color={getLabelColor}>
             {label}
           </Text>
         )}
@@ -55,14 +64,17 @@ export default function Button({
   );
 }
 
-const $container: ViewStyle = {
-  marginTop: 12,
+const $container: (variant: "standard" | "outline") => ViewStyle = (
+  variant,
+) => ({
   padding: 14,
-  backgroundColor: palette.green,
+  backgroundColor: variant === "standard" ? palette.green : palette.white,
+  borderWidth: variant === "standard" ? 0 : 1,
+  borderColor: variant === "outline" ? palette.green : palette.white,
   justifyContent: "center",
   alignItems: "center",
   borderRadius: 100,
-};
+});
 
 const $disabled: ViewStyle = {
   backgroundColor: palette.blue700_10,

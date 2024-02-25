@@ -1,4 +1,4 @@
-import { Circle, Path, Svg } from "react-native-svg";
+import { Path, Svg } from "react-native-svg";
 
 type Props = {
   size?: number;
@@ -7,13 +7,24 @@ type Props = {
 };
 
 export const CrossIcon = ({ size = 20, color, fill }: Props): JSX.Element => {
-  const colorToUse = color || "#000";
+  const colorToUse = color || "#496520";
 
   return (
-    <Svg width={size} height={size} viewBox='0 0 24 24' fill='none'>
-      <Circle cx='12' cy='12' r='9' stroke={colorToUse} />
-      <Path d='M9.00009 14.9997L15.0001 8.99966' stroke={colorToUse} />
-      <Path d='M15 15L9 9' stroke={colorToUse} />
+    <Svg width={size} height={size} viewBox='0 0 24 24 ' fill='none'>
+      <Path
+        d='M19 5L5 19'
+        stroke='#496520'
+        stroke-width='1.5'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+      />
+      <Path
+        d='M5 5L19 19'
+        stroke='#496520'
+        stroke-width='1.5'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+      />
     </Svg>
   );
 };

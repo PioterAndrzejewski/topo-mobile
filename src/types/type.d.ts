@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Rock: {
     id: string;
   };
+  Filters: undefined;
   ChangePassword: undefined;
 };
 
@@ -34,5 +35,6 @@ export type HomeScreenNavigationProp = NativeStackScreenProps<
   Register,
   Registered,
   Rock,
-  ChangePassword
+  ChangePassword,
+  Filters
 >;
