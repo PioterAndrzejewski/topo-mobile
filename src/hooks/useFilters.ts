@@ -100,6 +100,25 @@ export const useFilters = () => {
     setActiveFiltersCount(activeNumber);
   };
 
+  // const setInitValues = async () => {
+  //   if (initialized) return;
+  //   setInitiialized(true);
+  //   const valuesString = await AsyncStorage.getItem(storage.filters);
+  //   if (valuesString) {
+  //     const storageValues = (await JSON.parse(
+  //       valuesString,
+  //     )) as typeof cleanFilterValues;
+  //     setOnlyAvailable(storageValues.onlyAvailable);
+  //     setRoutesInterestedSections(storageValues.routesInterestedSections);
+  //     setFormationsSelected(storageValues.formationsSelected);
+  //     setHeightSelected(storageValues.heightSelected);
+  //     setFamilyFriendly(storageValues.familyFriendly);
+  //     setSelectedExposition(storageValues.selectedExposition);
+  //     setShadingSelected(storageValues.shadingSelected);
+  //     setRouteTypeSelected(storageValues.routeTypeSelected);
+  //   }
+  // };
+
   useEffect(() => {
     countActiveFilters();
   }, [

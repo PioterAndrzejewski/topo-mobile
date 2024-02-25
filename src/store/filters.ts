@@ -185,6 +185,17 @@ export const routeTypeSelectedClean: RouteTypeSelected[] = [
   },
 ];
 
+export const cleanFilterValues = {
+  onlyAvailable: false,
+  routesInterestedSections: gradesSectionsClean,
+  formationsSelected: formationsSelectedClean,
+  heightSelected: heightValues,
+  familyFriendly: false,
+  selectedExposition: expositionSelectedClean,
+  shadingSelected: shadingSelectedClean,
+  routeTypeSelected: routeTypeSelectedClean,
+};
+
 export const onlyAvailableAtom = atom<boolean>(false);
 export const routesInterestedAtom =
   atom<GradeInterestedSection[]>(gradesSectionsClean);
@@ -201,5 +212,6 @@ export const selectedHeightAtom = atom<number[]>([
 export const onlyFamilyFriendlyAtom = atom<boolean>(false);
 export const shadingSelectedAtom =
   atom<ShadingSelected[]>(shadingSelectedClean);
-export const routeTypeSelectedAtom =
-  atom<RouteTypeSelected[]>(routeTypeSelectedClean);
+export const routeTypeSelectedAtom = atom<RouteTypeSelected[]>(
+  routeTypeSelectedClean,
+);

@@ -27,6 +27,7 @@ import { CustomSuccessToast } from "src/components/common/toast/SuccessToast";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
+import { useFilters } from "src/hooks/useFilters";
 import { navigationRef } from "src/navigators/navigationRef";
 
 Reactotron.configure({ host: "192.168.50.16", port: 9090 })
