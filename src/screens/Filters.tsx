@@ -53,8 +53,8 @@ const FiltersScreen = () => {
       activeNumber++;
     }
     if (
-      filters.heightSelected[0] !== heightValues[0] ||
-      filters.heightSelected[1] !== heightValues[1]
+      localChanges.heightSelected[0] !== heightValues[0] ||
+      localChanges.heightSelected[1] !== heightValues[1]
     ) {
       activeNumber++;
     }
