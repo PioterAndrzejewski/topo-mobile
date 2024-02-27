@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { gradesSectionsClean } from "src/store/filters";
+import { gradesSectionsClean } from 'src/context/FilteredRocksContext';
 
 type Props = {
   value: string[];

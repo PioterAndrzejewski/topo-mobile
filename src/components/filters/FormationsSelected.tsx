@@ -7,8 +7,8 @@ import {
   renderFormationIcon,
   renderFormationText,
 } from "src/components/rock/details/Formation";
-import { formationsSelectedClean } from "src/store/filters";
-import { Formations } from 'src/services/rocks';
+import { formationsSelectedClean } from "src/context/FilteredRocksContext";
+import { Formations } from "src/services/rocks";
 
 type Props = {
   value: Formations[];
@@ -60,9 +60,7 @@ const FormationsSelected = ({ value, onChange }: Props) => {
                 gap='m'
               >
                 {renderFormationIcon(formation, 20)}
-                <Text variant='body'>
-                  {renderFormationText(formation)}
-                </Text>
+                <Text variant='body'>{renderFormationText(formation)}</Text>
               </View>
             </TouchableOpacity>
           );

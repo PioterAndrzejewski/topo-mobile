@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useAtom } from "jotai";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useWindowDimensions } from "react-native";
 import {
   useAnimatedScrollHandler,
@@ -10,7 +9,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 import Button from "src/components/common/Button";
+import ScreenTitle from "src/components/common/ScreenTitle";
 import AvailableOnly from "src/components/filters/AvailableOnly";
+import Divider from "src/components/filters/Divider";
 import Exposition from "src/components/filters/Exposition";
 import FamilyFriendly from "src/components/filters/FamilyFriendly";
 import FormationsSelected from "src/components/filters/FormationsSelected";
@@ -20,30 +21,24 @@ import SelectedHeight from "src/components/filters/SelectedHeight";
 import ShadingSelectedComponent from "src/components/filters/ShadingSelected";
 import AnimatedFlashList from "src/components/ui/AnimatedFlashList";
 import View from "src/components/ui/View";
-import Divider from 'src/components/filters/Divider';
 
-import ScreenTitle from "src/components/common/ScreenTitle";
 import { StickyContainer } from "src/components/ui/StickyContainer";
-import { useFilters } from "src/hooks/useFilters";
-import { filtersAtom, filtersCountAtom, heightValues } from "src/store/filters";
+import { heightValues, useFilters } from "src/context/FilteredRocksContext";
 import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 const FiltersScreen = () => {
-  const [filters, setFilters] = useAtom(filtersAtom);
-  const [filtersCount, setFiltersCount] = useAtom(filtersCountAtom);
+  const { filters, setFilters, resetFilters, setActiveFiltersCount } =
+    useFilters();
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [localChanges, setLocalChanges] = useState(filters);
-
-  const { resetFilters } = useFilters();
 
   const { height, width } = useWindowDimensions();
   const scrollY = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
   });
-
 
   const saveLocalChangesToGlobalState = () => {
     setFilters(localChanges);
@@ -75,13 +70,13 @@ const FiltersScreen = () => {
     if (localChanges.routeTypeSelected.length > 0) {
       activeNumber++;
     }
-    setFiltersCount(activeNumber);
-    navigation.goBack();
+    setActiveFiltersCount(activeNumber);
+    navigation.navigate("HomeNavigator", { screen: "Map" });
   };
 
   const handleReset = () => {
     resetFilters();
-    navigation.goBack();
+    navigation.navigate("HomeNavigator", { screen: "Map" });
   };
 
   const handleCancel = () => {
@@ -90,12 +85,17 @@ const FiltersScreen = () => {
       text1: "Nie zapisano zmian",
       text2: "Jeżeli chcesz zapisać zmiany, użyj przycisku pod filtrami",
     });
-    navigation.goBack();
+    navigation.navigate("HomeNavigator", { screen: "Map" });
   };
 
   const renderItems = () => (
     <>
-      <ScreenTitle centered title='Filtry' />
+      <ScreenTitle
+        centered
+        title='Filtry'
+        hasCloseButton
+        onClose={handleCancel}
+      />
       <AvailableOnly
         value={localChanges.onlyAvailable}
         onChange={(newValue) =>

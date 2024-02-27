@@ -8,7 +8,6 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { useFonts } from "expo-font";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
 import { BaseToastProps } from "react-native-toast-message/lib/src/types";
 
 import AppLoading from "src/components/common/AppLoading";
@@ -24,6 +23,7 @@ import { CustomErrorToast } from "src/components/common/toast/ErrorToast";
 import { CustomInfoToast } from "src/components/common/toast/InfoToast";
 import { CustomSuccessToast } from "src/components/common/toast/SuccessToast";
 import { FavoritesContextProvider } from "src/context/FavoritesContext";
+import { FiltersContextProvider } from "src/context/FilteredRocksContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
@@ -65,31 +65,33 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={styles.container}>
-        <StripeProvider
-          publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
+    <GestureHandlerRootView style={styles.container}>
+      <StripeProvider
+        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
+      >
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
         >
-          <PersistQueryClientProvider
-            client={queryClient}
-            persistOptions={{ persister: asyncStoragePersister }}
-          >
-            <NavigationContainer ref={navigationRef}>
+          <NavigationContainer ref={navigationRef}>
+            <SafeAreaProvider>
               <ThemeProvider theme={theme}>
                 <BottomSheetModalProvider>
                   <FavoritesContextProvider>
-                    <RootNavigator />
-                    <ConfirmActionModal />
-                    <ContactModal />
+                    <FiltersContextProvider>
+                      <RootNavigator />
+                      <ConfirmActionModal />
+                      <ContactModal />
+                    </FiltersContextProvider>
                   </FavoritesContextProvider>
                 </BottomSheetModalProvider>
               </ThemeProvider>
-            </NavigationContainer>
-          </PersistQueryClientProvider>
-        </StripeProvider>
-      </GestureHandlerRootView>
-      <Toast topOffset={60} config={toastConfig} />
-    </SafeAreaProvider>
+            </SafeAreaProvider>
+          </NavigationContainer>
+        </PersistQueryClientProvider>
+      </StripeProvider>
+      {/* <Toast topOffset={60} config={toastConfig} /> */}
+    </GestureHandlerRootView>
   );
 }
 

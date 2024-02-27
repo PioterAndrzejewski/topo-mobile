@@ -4,6 +4,7 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { renderShadingText } from "src/components/rock/details/Shading";
+import { shadingSelectedClean } from "src/context/FilteredRocksContext";
 import { Shading } from "src/services/rocks";
 
 type Props = {
@@ -27,10 +28,10 @@ const ShadingSelectedComponent = ({ value, onChange }: Props) => {
   return (
     <View marginHorizontal='l' gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
-        <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
+        <Text variant='body'>Pokaż skały, które są zacienione:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((shading) => {
+        {shadingSelectedClean.map((shading) => {
           const isSelected = value.includes(shading);
           return (
             <TouchableOpacity

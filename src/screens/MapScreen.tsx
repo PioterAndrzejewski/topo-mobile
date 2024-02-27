@@ -12,8 +12,7 @@ export default function MapScreen() {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: palette.white, position: "relative" }}
     >
-      <ScreenTitle title='Mapa' centered />
-      <FiltersButton />
+      <ScreenTitle title='Mapa' centered hasFilters/>
       <Map />
       <ResultsList />
     </SafeAreaView>

@@ -32,7 +32,9 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
   const navigation = useNavigation();
 
   const handleClose = () => {
-    if (onClose) onClose();
+    if (onClose) {
+      return onClose();
+    }
     navigation.goBack();
   };
   return (
@@ -41,7 +43,6 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
       paddingHorizontal='s'
       backgroundColor='backgroundScreen'
       justifyContent={centered ? "center" : undefined}
-      alignItems={centered ? "center" : undefined}
       paddingBottom='m'
       flexDirection='row'
       gap='m'

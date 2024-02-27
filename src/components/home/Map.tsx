@@ -16,6 +16,7 @@ import Text from "../ui/Text";
 import View from "../ui/View";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useFilters } from "src/context/FilteredRocksContext";
 import { useAreas } from "src/hooks/useAreas";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useLogout } from "src/hooks/useLogout";
@@ -46,7 +47,8 @@ export default function Map() {
   const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
   const logout = useLogout();
 
-  const { rocks, rocksIsEmpty, isLoading } = useAreas();
+  const { rocksIsEmpty, isLoading } = useAreas();
+  const { filteredRocks } = useFilters();
   const mapRef = useRef<NativeMap>(null);
   const setMap = useSetAtom(mapAtom);
 
@@ -66,7 +68,7 @@ export default function Map() {
       return true;
     }
     return false;
-  }, [isLoading, wantsToUseNotLogged, rocks]);
+  }, [isLoading, wantsToUseNotLogged, filteredRocks]);
 
   return (
     <>
@@ -128,9 +130,9 @@ export default function Map() {
           layoutAnimationConf={undefined}
           toolbarEnabled={false}
         >
-          {rocks &&
-            rocks.length > 0 &&
-            rocks.map((item: RockData) => {
+          {filteredRocks &&
+            filteredRocks.length > 0 &&
+            filteredRocks.map((item: RockData) => {
               const rockHasProduct = !!item.attributes.product.data;
               const userHas = userProducts?.find(
                 (product) =>

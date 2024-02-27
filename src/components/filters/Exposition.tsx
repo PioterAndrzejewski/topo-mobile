@@ -3,6 +3,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
+import { expositionSelectedClean } from "src/context/FilteredRocksContext";
 import { Exhibition } from "src/services/rocks";
 import { getMeaningfulExposition } from "../rock/details/Exposition";
 
@@ -32,7 +33,8 @@ const Exposition = ({ value, onChange }: Props) => {
         <Text variant='body'>Pokaż skały, które mają wystawkę:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((exposition) => {
+        {expositionSelectedClean.map((exposition) => {
+          console.log(exposition);
           const isSelected = value.includes(exposition);
           return (
             <TouchableOpacity

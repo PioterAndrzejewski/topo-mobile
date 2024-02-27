@@ -2,6 +2,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
+
+import { routeTypeSelectedClean } from "src/context/FilteredRocksContext";
 import { RouteType } from "src/services/rocks";
 
 type Props = {
@@ -28,10 +30,10 @@ const RouteTypeSelectedComponent = ({ value, onChange }: Props) => {
   return (
     <View marginHorizontal='l' gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
-        <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
+        <Text variant='body'>Pokaż skały, które mają drogi:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((routeType) => {
+        {routeTypeSelectedClean.map((routeType) => {
           const isSelected = value.includes(routeType);
           return (
             <TouchableOpacity
