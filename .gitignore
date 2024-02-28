@@ -11,7 +11,8 @@ android/
 ios/
 android
 ios
-
+android/*
+ios/*
 
 # Native
 *.orig.*

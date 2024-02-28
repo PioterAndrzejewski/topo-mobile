@@ -17,7 +17,9 @@
     ],
     "plugins": [
       "./src/plugins/android-manifest.plugin.js",
-      "./src/plugins/with-android-queries.js"
+      "./src/plugins/with-android-queries.js",
+      "expo-font",
+      "expo-secure-store"
     ],
     "ios": {
       "supportsTablet": true,
