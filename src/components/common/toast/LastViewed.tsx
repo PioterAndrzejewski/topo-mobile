@@ -64,7 +64,7 @@ const LastViewed = () => {
         withTiming(30, { duration: 400, easing: Easing.cubic }),
         withDelay(0, withTiming(0, { duration: 400, easing: Easing.linear })),
       ),
-      -1, // -1 means infinite loop
+      -1, 
     );
 
     rotation.value = withRepeat(
