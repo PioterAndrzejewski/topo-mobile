@@ -2,17 +2,14 @@
 
 # dependencies
 node_modules/
+android/*
+ios/*
 
 # Expo
 .expo/
 dist/
 web-build/
-android/
-ios/
-android
-ios
-android/*
-ios/*
+
 
 # Native
 *.orig.*
