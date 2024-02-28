@@ -4,7 +4,7 @@ import { useState } from "react";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { heightValues } from "src/store/filters";
+import { heightValues } from "src/context/FilteredRocksContext";
 import { palette } from "src/styles/theme";
 
 type Props = {

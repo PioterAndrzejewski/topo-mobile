@@ -22,6 +22,10 @@ const TAB_ICONS = {
     active: MapIcon,
     inactive: MapIcon,
   },
+  Filters: {
+    active: SettingsIcon,
+    inactive: SettingsIcon,
+  },
   Search: {
     active: SearchIcon,
     inactive: SearchIcon,
@@ -65,6 +69,8 @@ const getName = (name: string) => {
   switch (name) {
     case "Map":
       return "Mapa";
+    case "Filters":
+      return "Filtry";
     case "Search":
       return "Szukaj";
     case "Favourites":

@@ -28,6 +28,7 @@ export const downloadAndSaveFile = async (dir: string, fileName: string, fileUrl
         },
       );
     }
+    
     await FileSystem.downloadAsync(
       fileUrl,
       FileSystem.documentDirectory! + dir + "/" + fileName,

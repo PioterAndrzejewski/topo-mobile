@@ -28,8 +28,9 @@ const RootNavigator = () => (
     />
     <Stack.Screen name='Register' component={RegisterScreen} />
     <Stack.Screen name='Registered' component={RegisteredScreen} />
-    <Stack.Screen name='HomeNavigator' component={HomeBottomTabNavigator} />
     <Stack.Screen name='Filters' component={FiltersScreen} />
+    <Stack.Screen name='HomeNavigator' component={HomeBottomTabNavigator} />
+
     <Stack.Screen
       name='Rock'
       component={RockScreen}

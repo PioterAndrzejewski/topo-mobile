@@ -5,19 +5,19 @@ import { TouchableOpacity } from "react-native";
 import OverlayCardView from "src/components/ui/OverlayCardView";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
-import FiltersButton from "./FiltersButton";
 
 import { ArrowLeft } from "src/components/icons/ArrowLeft";
 import { CrossIcon } from "src/components/icons/Cross";
 import { isAndroid } from "src/helpers/isAndroid";
 import { palette } from "src/styles/theme";
+import FiltersButton from "./FiltersButton";
 
 type ScreenTitleProps = {
   title: string;
   centered?: boolean;
   hasBackButton?: boolean;
-  hasFilters?: boolean;
   hasCloseButton?: boolean;
+  hasFilters?: boolean;
   onClose?: () => void;
 };
 
@@ -25,14 +25,16 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
   title,
   centered,
   hasBackButton,
-  hasFilters,
   hasCloseButton,
   onClose,
+  hasFilters,
 }) => {
   const navigation = useNavigation();
 
   const handleClose = () => {
-    if (onClose) onClose();
+    if (onClose) {
+      return onClose();
+    }
     navigation.goBack();
   };
   return (
@@ -41,7 +43,6 @@ const ScreenTitle: FC<ScreenTitleProps> = ({
       paddingHorizontal='s'
       backgroundColor='backgroundScreen'
       justifyContent={centered ? "center" : undefined}
-      alignItems={centered ? "center" : undefined}
       paddingBottom='m'
       flexDirection='row'
       gap='m'

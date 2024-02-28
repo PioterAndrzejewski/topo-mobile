@@ -30,8 +30,6 @@ const Rock = ({ route }: Props) => {
   const { data, refetch } = useRock(route?.params?.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  refetch();
-
   const selectedRoute = useMemo(() => {
     if (!activeRoute) return null;
     return data?.attributes.routes.data.find(
@@ -73,6 +71,7 @@ const Rock = ({ route }: Props) => {
         numberOfImages={data?.attributes?.image.length}
         onCirclePress={setActiveImage}
         activeImage={activeImage}
+        refetch={refetch}
       />
       {data &&
       data.attributes &&

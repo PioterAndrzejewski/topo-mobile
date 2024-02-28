@@ -14,3 +14,4 @@ type ContactAction = {
 export const providerUsedAtom = atom<boolean>(false);
 export const confirmActionAtom = atom<ConfirmAction | null>(null);
 export const contactAtom = atom<ContactAction | null>(null);
+export const wantsToUseNotLoggedAtom = atom<boolean>(false);

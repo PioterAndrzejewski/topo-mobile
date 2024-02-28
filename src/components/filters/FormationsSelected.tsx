@@ -1,4 +1,3 @@
-import { useAtom } from "jotai";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Text from "src/components/ui/Text";
@@ -8,43 +7,50 @@ import {
   renderFormationIcon,
   renderFormationText,
 } from "src/components/rock/details/Formation";
-import { FormationSelected } from 'src/store/filters';
+import { formationsSelectedClean } from "src/context/FilteredRocksContext";
+import { Formations } from "src/services/rocks";
 
 type Props = {
-  value:FormationSelected[];
-  onChange: (newValue: FormationSelected[]) => void;
+  value: Formations[];
+  onChange: (newValue: Formations[]) => void;
 };
 
-const FormationsSelected = ({value, onChange}: Props) => {
+const FormationsSelected = ({ value, onChange }: Props) => {
+  const handleSelect = (item: Formations, operation: "add" | "remove") => {
+    let changesSelected = [...value];
 
-  const handleSelect = (item: FormationSelected) => {
-    const changedSelected = value.map((formation) => {
-      if (formation.type === item.type) {
-        return {
-          ...item,
-          selected: !item.selected,
-        };
-      }
-      return formation;
-    });
-    onChange(changedSelected);
+    if (operation === "add") {
+      changesSelected.push(item);
+    }
+    if (operation === "remove") {
+      changesSelected = changesSelected.filter(
+        (formation) => formation !== item,
+      );
+    }
+    onChange(changesSelected);
   };
 
   return (
-    <View marginHorizontal='l'  gap='m'>
+    <View marginHorizontal='l' gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
         <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((formation) => {
+        {formationsSelectedClean.map((formation) => {
+          const isSelected = value.includes(formation);
           return (
-            <TouchableOpacity onPress={() => handleSelect(formation)} key={formation.type}>
+            <TouchableOpacity
+              onPress={() =>
+                handleSelect(formation, isSelected ? "remove" : "add")
+              }
+              key={formation}
+            >
               <View
                 backgroundColor={
-                  formation.selected ? "backgroundTertiary" : "backgroundScreen"
+                  isSelected ? "backgroundTertiary" : "backgroundScreen"
                 }
                 borderColor={
-                  formation.selected ? "backgroundTertiary" : "backgroundDark"
+                  isSelected ? "backgroundTertiary" : "backgroundDark"
                 }
                 borderWidth={1}
                 paddingHorizontal='m'
@@ -53,10 +59,8 @@ const FormationsSelected = ({value, onChange}: Props) => {
                 flexDirection='row'
                 gap='m'
               >
-                {renderFormationIcon(formation.type, 20)}
-                <Text variant='body'>
-                  {renderFormationText(formation.type)}
-                </Text>
+                {renderFormationIcon(formation, 20)}
+                <Text variant='body'>{renderFormationText(formation)}</Text>
               </View>
             </TouchableOpacity>
           );

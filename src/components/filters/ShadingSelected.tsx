@@ -4,42 +4,48 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { renderShadingText } from "src/components/rock/details/Shading";
-import { ShadingSelected } from "src/store/filters";
+import { shadingSelectedClean } from "src/context/FilteredRocksContext";
+import { Shading } from "src/services/rocks";
 
 type Props = {
-  value: ShadingSelected[];
-  onChange: (newValue: ShadingSelected[]) => void;
+  value: Shading[];
+  onChange: (newValue: Shading[]) => void;
 };
 
 const ShadingSelectedComponent = ({ value, onChange }: Props) => {
-  const handleSelect = (item: ShadingSelected) => {
-    const newShading = value.map((shading) => {
-      if (shading.type === item.type) {
-        return {
-          ...item,
-          selected: !item.selected,
-        };
-      }
-      return shading;
-    });
+  const handleSelect = (item: Shading, operation: "add" | "remove") => {
+    let newShading = [...value];
+
+    if (operation === "add") {
+      newShading.push(item);
+    }
+    if (operation === "remove") {
+      newShading = newShading.filter((shading) => shading !== item);
+    }
     onChange(newShading);
   };
 
   return (
     <View marginHorizontal='l' gap='m'>
       <View flexDirection='row' justifyContent='space-between'>
-        <Text variant='body'>Pokaż skały, które zawierają formacje:</Text>
+        <Text variant='body'>Pokaż skały, które są zacienione:</Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((shading) => {
+        {shadingSelectedClean.map((shading) => {
+          const isSelected = value.includes(shading);
           return (
-            <TouchableOpacity onPress={() => handleSelect(shading)} key={shading.type}>
+            <TouchableOpacity
+              onPress={() =>
+                handleSelect(shading, isSelected ? "remove" : "add")
+              }
+              key={shading}
+            >
               <View
                 backgroundColor={
-                  shading.selected ? "backgroundTertiary" : "backgroundScreen"
+                  isSelected ? "backgroundTertiary" : "backgroundScreen"
                 }
                 borderColor={
-                  shading.selected ? "backgroundTertiary" : "backgroundDark"
+                  isSelected ? "backgroundTertiary" : "backgroundDark"
                 }
                 borderWidth={1}
                 paddingHorizontal='m'
@@ -48,7 +54,7 @@ const ShadingSelectedComponent = ({ value, onChange }: Props) => {
                 flexDirection='row'
                 gap='m'
               >
-                <Text variant='body'>{renderShadingText(shading.type)}</Text>
+                <Text variant='body'>{renderShadingText(shading)}</Text>
               </View>
             </TouchableOpacity>
           );

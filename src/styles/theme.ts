@@ -24,6 +24,7 @@ export const palette = {
   greenSecondary: "#C6E49A",
 
   red: "rgb(210, 47, 39)",
+  orange: "rgb(241, 179, 91)",
 };
 
 export const theme = createTheme({
@@ -39,6 +40,7 @@ export const theme = createTheme({
     backgroundGreenFaded: palette.green20,
     backgroundLight: palette.gray700,
     backgroundError: palette.red,
+    backgroundWarning: palette.orange,
 
     secondary: palette.green,
     finished: palette.green,

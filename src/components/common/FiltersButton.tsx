@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 
-import Text from "src/components//ui/Text";
+import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { FiltersIcon } from "src/components/icons/Filters";
-import { useFilters } from "src/hooks/useFilters";
+import { useFilters } from "src/context/FilteredRocksContext";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 const FiltersButton = () => {
@@ -14,7 +14,7 @@ const FiltersButton = () => {
 
   const handleNavigation = () => navigation.navigate("Filters");
   return (
-    <View position='absolute' right={20} bottom={15} overflow='visible'>
+    <View position='absolute' right={20} top={5} overflow='visible'>
       <TouchableOpacity onPress={handleNavigation}>
         <FiltersIcon size={28} />
         {activeFiltersCount > 0 && (

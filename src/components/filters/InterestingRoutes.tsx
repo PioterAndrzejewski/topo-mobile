@@ -3,24 +3,22 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { GradeInterestedSection } from "src/store/filters";
+import { gradesSectionsClean } from 'src/context/FilteredRocksContext';
 
 type Props = {
-  value: GradeInterestedSection[];
-  onChange: (newValue: GradeInterestedSection[]) => void;
+  value: string[];
+  onChange: (newValue: string[]) => void;
 };
 
 const InterestingRoutes = ({ value, onChange }: Props) => {
-  const handleSelect = (item: GradeInterestedSection) => {
-    const changedSections = value.map((routeInterestedSection) => {
-      if (routeInterestedSection.label === item.label) {
-        return {
-          ...item,
-          selected: !item.selected,
-        };
-      }
-      return routeInterestedSection;
-    });
+  const handleSelect = (item: string, operation: "add" | "remove") => {
+    let changedSections: string[] = [...value];
+    if (operation === "add") {
+      changedSections.push(item);
+    }
+    if (operation === "remove") {
+      changedSections = changedSections.filter((section) => section !== item);
+    }
 
     onChange(changedSections);
   };
@@ -33,19 +31,21 @@ const InterestingRoutes = ({ value, onChange }: Props) => {
         </Text>
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
-        {value.map((gradeSection) => {
+        {gradesSectionsClean.map((gradeSection) => {
+          const isSelected = value.includes(gradeSection.label);
           return (
-            <TouchableOpacity onPress={() => handleSelect(gradeSection)} key={gradeSection.label}>
+            <TouchableOpacity
+              onPress={() =>
+                handleSelect(gradeSection.label, isSelected ? "remove" : "add")
+              }
+              key={gradeSection.label}
+            >
               <View
                 backgroundColor={
-                  gradeSection.selected
-                    ? "backgroundTertiary"
-                    : "backgroundScreen"
+                  isSelected ? "backgroundTertiary" : "backgroundScreen"
                 }
                 borderColor={
-                  gradeSection.selected
-                    ? "backgroundTertiary"
-                    : "backgroundDark"
+                  isSelected ? "backgroundTertiary" : "backgroundDark"
                 }
                 borderWidth={1}
                 paddingHorizontal='m'

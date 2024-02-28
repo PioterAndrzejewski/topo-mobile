@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { BlurView } from "expo-blur";
 import { useAtomValue, useSetAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -65,7 +64,7 @@ const LastViewed = () => {
         withTiming(30, { duration: 400, easing: Easing.cubic }),
         withDelay(0, withTiming(0, { duration: 400, easing: Easing.linear })),
       ),
-      -1, // -1 means infinite loop
+      -1, 
     );
 
     rotation.value = withRepeat(
@@ -100,39 +99,33 @@ const LastViewed = () => {
     >
       <Animated.View entering={BounceInUp}>
         <View justifyContent='center' width='100%' alignItems='center'>
-          <BlurView
-            intensity={25}
-            blurReductionFactor={1}
-            style={{ borderRadius: 24, overflow: "hidden" }}
+          <View
+            paddingVertical='m'
+            width={320}
+            borderRadius={12}
+            backgroundColor='backgroundLight'
+            justifyContent='center'
+            alignItems='center'
+            gap='xs'
+            opacity={0.6}
           >
-            <View
-              paddingVertical='m'
-              width={320}
-              borderRadius={12}
-              backgroundColor='backgroundLight'
-              justifyContent='center'
-              alignItems='center'
-              gap='xs'
-              opacity={0.6}
-            >
-              <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
-              <TouchableOpacity onPress={animateTo}>
-                <View
-                  bg='backgroundTertiary'
-                  paddingVertical='s'
-                  paddingHorizontal='2xl'
-                  borderRadius={12}
-                >
-                  <Text variant='h3'>{lastViewed.attributes.Name}</Text>
-                </View>
-              </TouchableOpacity>
-              <View position='absolute' right={30}>
-                <Animated.View style={animatedStyle}>
-                  <HandIcon size={32} />
-                </Animated.View>
+            <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
+            <TouchableOpacity onPress={animateTo}>
+              <View
+                bg='backgroundTertiary'
+                paddingVertical='s'
+                paddingHorizontal='2xl'
+                borderRadius={12}
+              >
+                <Text variant='h3'>{lastViewed.attributes.Name}</Text>
               </View>
+            </TouchableOpacity>
+            <View position='absolute' right={30}>
+              <Animated.View style={animatedStyle}>
+                <HandIcon size={32} />
+              </Animated.View>
             </View>
-          </BlurView>
+          </View>
         </View>
       </Animated.View>
     </Swipeable>
