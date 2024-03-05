@@ -5,8 +5,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useMemo, useState } from "react";
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import Toast from "react-native-toast-message";
 
@@ -62,8 +61,8 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     retryDelay: 5000,
     retry: true,
     onSuccess: () => {
-      queryClient.refetchQueries(queryKeys.products);
-      queryClient.refetchQueries(queryKeys.profile.me);
+      queryClient.refetchQueries({ queryKey: queryKeys.products });
+      queryClient.refetchQueries({ queryKey: queryKeys.profile.me });
     },
   });
 
@@ -123,7 +122,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
         visibilityTime: 3000,
       });
     }
-    queryClient.invalidateQueries(["user-profile"]);
+    queryClient.invalidateQueries({ queryKey: ["user-profile"] });
     onClose();
     Toast.show({
       type: "success",

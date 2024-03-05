@@ -292,6 +292,7 @@ export type RockData = {
         attributes: ProductSanitized;
       } | null;
     };
+    forModerators: boolean;
   };
 };
 
@@ -373,6 +374,7 @@ export const getRock = async (id: string) => {
       "product.uuid",
       "product.price",
       "product.description",
+      "forModerators",
     ],
     filters: {
       uuid: {

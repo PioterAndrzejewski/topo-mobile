@@ -18,6 +18,7 @@ export type UserLoginData = {
   updatedAt: string;
   username: string;
   subscriptionTo: string;
+  isModerator: boolean;
 };
 
 export type LoggedUserData = {
