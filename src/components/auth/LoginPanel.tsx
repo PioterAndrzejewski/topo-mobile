@@ -93,11 +93,7 @@ export default function LoginPanel({
 
   return (
     <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-      <View
-        height={height}
-        backgroundColor='backgroundScreen'
-        paddingHorizontal='m'
-      >
+      <View backgroundColor='backgroundScreen' paddingHorizontal='m'>
         <View alignItems='center'>
           <Text variant='h3' color='textBlack'>
             Zaloguj się i lecimy na wspin!
