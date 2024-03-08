@@ -13,6 +13,7 @@ import View from "src/components/ui/View";
 import { HeartIcon } from "src/components/icons/Heart";
 import { useFavoriteContext } from "src/context/FavoritesContext";
 import { useImageFile } from "src/hooks/useImageFile";
+import { useUserProfile } from "src/hooks/useUserProfile";
 import { RockData } from "src/services/rocks";
 import { confirmActionAtom } from "src/store/global";
 import { mapAtom, selectedRockAtom } from "src/store/results";
@@ -30,6 +31,7 @@ type ListResultProps = {
 };
 
 const RockResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
+  const { data: userData } = useUserProfile();
   const map = useAtomValue(mapAtom);
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setSelectedRock = useSetAtom(selectedRockAtom);
@@ -84,8 +86,9 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
         paddingBottom: isLast ? 160 : 24,
         overflow: "hidden",
       }}
+      disabled={item.attributes.forModerators && !userData?.isModerator}
     >
-      <View {...styleGuide.cardShadow} borderRadius={24}>
+      <View {...styleGuide.cardShadow} borderRadius={24} position='relative'>
         {image && (
           <ImageBackground
             source={{
@@ -136,6 +139,34 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
           </View>
           {routes && <RouteStructure routes={routes} />}
         </View>
+        {item.attributes.forModerators && (
+          <View
+            position='absolute'
+            width='100%'
+            height='100%'
+            backgroundColor='backgroundDarkFaded'
+            borderRadius={24}
+            zIndex={999}
+            elevation={999}
+            alignItems='center'
+          >
+            <View
+              height={5}
+              width={"200%"}
+              backgroundColor='backgroundScreen'
+            />
+            <View
+              mt='4xl'
+              bg='backgroundScreen'
+              paddingVertical='s'
+              paddingHorizontal='xl'
+              {...styleGuide.cardShadow}
+              borderRadius={12}
+            >
+              <Text>Wkrótce dostępne</Text>
+            </View>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );

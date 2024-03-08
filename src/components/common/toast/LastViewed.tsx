@@ -107,7 +107,7 @@ const LastViewed = () => {
             justifyContent='center'
             alignItems='center'
             gap='xs'
-            opacity={0.6}
+            opacity={0.8}
           >
             <Text variant='h4'>Przejdź do ostatnio oglądanej:</Text>
             <TouchableOpacity onPress={animateTo}>

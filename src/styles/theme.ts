@@ -5,6 +5,7 @@ export const palette = {
   white75: "#ffffffbf",
 
   black: "rgba(14, 13, 18, 1)",
+  black50: "rgba(14, 13, 18, 0.5)",
 
   gray: "#79747E",
   gray700: "#F7F2FA",
@@ -34,6 +35,7 @@ export const theme = createTheme({
     backgroundSecondaryFaded: palette.blue100_25,
     backgroundFaded: palette.white75,
     backgroundDark: palette.gray,
+    backgroundDarkFaded: palette.black50,
     backgroundBlack: palette.black,
     backgroundTertiary: palette.greenSecondary,
     backgroundTertiaryFaded: palette.yellow50,
