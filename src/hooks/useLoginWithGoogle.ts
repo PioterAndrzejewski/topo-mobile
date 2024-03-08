@@ -16,7 +16,7 @@ import { providerUsedAtom } from "src/store/global";
 export const useLoginWithGoogle = () => {
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
   const url = Linking.useURL();
-  const { mutate: loginWithGoogle, isLoading } = useMutation({
+  const { mutate: loginWithGoogle, isPending } = useMutation({
     mutationKey: ["loginGoogle", url],
     mutationFn: (params: string) => loginGoogle(params),
     onError: async (data) => {
@@ -47,5 +47,5 @@ export const useLoginWithGoogle = () => {
   if (!providerUsed && url) {
     sendRequest();
   }
-  return isLoading;
+  return isPending;
 };

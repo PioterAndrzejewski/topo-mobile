@@ -16,7 +16,7 @@ import { changePass } from "src/services/auth";
 export default function ChangePasswordPanel() {
   const navigation = useNavigation();
   const { height } = useWindowDimensions();
-  const { mutate: changePasswordMutation, isLoading } = useMutation({
+  const { mutate: changePasswordMutation, isPending: isLoading } = useMutation({
     mutationKey: ["changePass"],
     mutationFn: (data: ChangePasswordData) => changePass(data),
     onError: () => {

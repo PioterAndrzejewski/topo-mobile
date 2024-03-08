@@ -18,7 +18,7 @@ import { HomeScreenNavigationProp } from "src/types/type";
 export default function ResetPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { height } = useWindowDimensions();
-  const { mutate: resetPasswordMutation, isLoading } = useMutation({
+  const { mutate: resetPasswordMutation, isPending: isLoading } = useMutation({
     mutationKey: ["resetPass"],
     mutationFn: (data: { email: string }) => resetPass(data.email),
     onError: () => {

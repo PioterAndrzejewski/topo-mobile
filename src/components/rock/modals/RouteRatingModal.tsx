@@ -41,7 +41,7 @@ const RouteRatingModal = ({ rockRefetch }: RouteRatingModalProps) => {
     setSelectedRouteToRate(null);
   };
 
-  const { mutate: sendRouteRatingMutation, isLoading: sendRatingIsLoading } =
+  const { mutate: sendRouteRatingMutation, isPending: sendRatingIsLoading } =
     useMutation({
       mutationFn: () =>
         createRating(selectedRouteToRate!.id, rating, userData?.id),

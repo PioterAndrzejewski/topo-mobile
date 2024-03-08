@@ -3,13 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
-import { viewerUrl } from "src/services/apiConfig";
-import { getFromSecureStorage } from "src/services/store";  
+import { getFromSecureStorage } from "src/services/store";
 import { rockActiveRoute } from "src/store/rock";
+
+// DISCLAIMER
+// This component is not used now in the app, but I will come back to it later
+// it uses separate web app that is web 
 
 type ModelViewProps = {
   id: string;
 };
+
+const viewerUrl = "some_dummy_string";
 
 const ModelView = (props: ModelViewProps) => {
   const webViewRef = useRef<WebView>(null);

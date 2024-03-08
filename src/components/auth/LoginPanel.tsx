@@ -36,7 +36,7 @@ export default function LoginPanel({
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
   const setWantsToUseNotLogged = useSetAtom(wantsToUseNotLoggedAtom);
 
-  const { mutate, isLoading, isError } = useMutation({
+  const { mutate, isPending: isLoading, isError } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
     onError: async (data) => {

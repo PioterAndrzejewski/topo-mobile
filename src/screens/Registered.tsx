@@ -64,7 +64,7 @@ const RegisteredScreen = (props: ResetSuccessScreenProps) => {
     };
   }, [loginCountdown]);
 
-  const { mutate: loginAgain, isLoading } = useMutation({
+  const { mutate: loginAgain, isPending: isLoading } = useMutation({
     mutationKey: ["login"],
     mutationFn: () => login(email, password),
     onError: async (data) => {

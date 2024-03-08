@@ -23,7 +23,7 @@ export default function RegisterPanel() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { height } = useWindowDimensions();
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending: isLoading } = useMutation({
     mutationKey: ["register"],
     mutationFn: (data: RegisterData) =>
       register(data.username, data.email, data.password),
