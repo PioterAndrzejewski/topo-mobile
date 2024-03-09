@@ -4,7 +4,7 @@ import { TouchableOpacity, ViewStyle, useWindowDimensions } from "react-native";
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
-import { palette, styleGuide } from "src/styles/theme";
+import { palette } from "src/styles/theme";
 
 export type SwitcherOption<T> = {
   label: string;
@@ -33,11 +33,7 @@ const Switcher = <T extends string>({
       width='100%'
       flexDirection='row'
       justifyContent='space-between'
-      borderRadius={40}
       backgroundColor='backgroundSecondaryFaded'
-      borderWidth={1}
-      borderColor='backgroundSecondary'
-      paddingVertical='s'
       paddingHorizontal='m'
     >
       {options.map((option) => {
@@ -72,19 +68,14 @@ const $option = (width: number): ViewStyle => ({
   paddingHorizontal: 6,
   paddingTop: 8,
   paddingBottom: 4,
-  elevation: 0,
   zIndex: 5,
   width,
   borderRadius: 40,
 });
 
 const $activeOption = (color: string | undefined): ViewStyle => ({
-  borderColor: color,
-  borderWidth: color ? 1 : 0,
-  ...styleGuide.cardShadow,
   backgroundColor: palette.white,
   shadowColor: palette.blue300,
-  borderRadius: 40,
   elevation: 4,
 });
 

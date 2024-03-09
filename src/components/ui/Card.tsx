@@ -2,7 +2,7 @@ import { BoxProps } from "@shopify/restyle";
 import { ReactNode } from "react";
 import { Object } from "ts-toolbelt";
 
-import { Theme, styleGuide } from "src/styles/theme";
+import { Theme } from "src/styles/theme";
 
 import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
@@ -20,11 +20,11 @@ const Card = (props: AllCardProps) => {
   return (
     <View
       borderRadius={24}
-      backgroundColor={isOutline ? 'backgroundScreen' : "backgroundLight"}
+      backgroundColor={isOutline ? "backgroundScreen" : "backgroundLight"}
       borderWidth={isOutline ? 1 : 0}
       borderColor='backgroundLight'
       padding='m'
-      shadowOffset= {{
+      shadowOffset={{
         height: 0,
         width: 0,
       }}
@@ -32,22 +32,12 @@ const Card = (props: AllCardProps) => {
       shadowOpacity={0.15}
       elevation={5}
       zIndex={99}
-      shadowColor="backgroundDark"
+      shadowColor='backgroundDark'
       {...rest}
     >
       {title && (
-        <View
-          width='100%'
-          alignItems='center'
-          borderBottomWidth={1}
-          borderBottomColor='backgroundTertiaryFaded'
-          paddingTop='m'
-          paddingBottom='l'
-          marginBottom='m'
-        >
-          <Text variant='h3' color='textGray'>
-            {title}
-          </Text>
+        <View width='100%' paddingTop='m' paddingBottom='l'>
+          <Text variant='h3'>{title}</Text>
         </View>
       )}
       {children}

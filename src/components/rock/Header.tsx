@@ -14,6 +14,7 @@ import {
   routeToFavoritesAtom,
 } from "src/store/rock";
 import { Theme, palette } from "src/styles/theme";
+import Switcher from "../common/Switcher";
 import { ArrowLeft } from "../icons/ArrowLeft";
 import OverlayCardView from "../ui/OverlayCardView";
 
@@ -23,6 +24,8 @@ type HeaderProps = {
   activeImage: number;
   onCirclePress: (index: number) => void;
   refetch: () => void;
+  viewer: "2d" | "3d";
+  setViewer: (viewerType: "2d" | "3d") => void;
 };
 
 const Header = (props: HeaderProps) => {
@@ -49,46 +52,57 @@ const Header = (props: HeaderProps) => {
   };
 
   return (
-    <View
-      paddingTop='3xl'
-      flexDirection='row'
-      alignItems='center'
-      marginHorizontal='m'
-      paddingBottom='m'
-      gap='3xl'
-    >
-      <OverlayCardView>
-        <TouchableOpacity onPress={handleBackArrowPress}>
-          <ArrowLeft size={24} color={palette.green} />
-        </TouchableOpacity>
-      </OverlayCardView>
-      <View flexDirection='row' gap='s'>
-        <View alignSelf='center'>
-          <Text variant='h4' color='textSecondary'>
-            Skałoplan:
-          </Text>
-        </View>
-
-        <ScrollView
-          contentContainerStyle={{
-            gap: spacing.m,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          horizontal
-        >
-          {imagesArray?.map((_, i) => (
-            <ImageCircle
-              active={i === props.activeImage}
-              index={i}
-              onPress={props.onCirclePress}
-              key={i}
-            />
-          ))}
-        </ScrollView>
+    <>
+      <View paddingBottom='l'>
+        <Switcher
+          options={[
+            { label: "2d", value: "2d" },
+            { label: "3d", value: "3d" },
+          ]}
+          active={props.viewer}
+          onPress={props.setViewer}
+        />
       </View>
-    </View>
+      <View
+        flexDirection='row'
+        alignItems='center'
+        marginHorizontal='m'
+        gap='3xl'
+        paddingBottom='m'
+      >
+        <OverlayCardView>
+          <TouchableOpacity onPress={handleBackArrowPress}>
+            <ArrowLeft size={24} color={palette.green} />
+          </TouchableOpacity>
+        </OverlayCardView>
+        <View flexDirection='row' gap='s'>
+          <View alignSelf='center'>
+            <Text variant='h4' color='textSecondary'>
+              Skałoplan:
+            </Text>
+          </View>
+
+          <ScrollView
+            contentContainerStyle={{
+              gap: spacing.m,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            horizontal
+          >
+            {imagesArray?.map((_, i) => (
+              <ImageCircle
+                active={i === props.activeImage}
+                index={i}
+                onPress={props.onCirclePress}
+                key={i}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      </View>
+    </>
   );
 };
 

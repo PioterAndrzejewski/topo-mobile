@@ -8,7 +8,6 @@ import { rockActiveRoute } from "src/store/rock";
 
 // DISCLAIMER
 // This component is not used now in the app, but I will come back to it later
-// it uses separate web app that is web 
 
 type ModelViewProps = {
   id: string;

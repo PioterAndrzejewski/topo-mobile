@@ -16,6 +16,7 @@ import Text from "src/components/ui/Text";
 import View from "src/components/ui/View";
 
 import { RoutesParent } from "src/components/common/ResultsItem/ResultsItemRoute";
+import ModelView from "src/components/rock/ModelView";
 import { useRock } from "src/hooks/useRock";
 import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
@@ -29,6 +30,7 @@ const Rock = ({ route }: Props) => {
   const [activeImage, setActiveImage] = useState(0);
   const { data, refetch } = useRock(route?.params?.id);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [viewer, setViewer] = useState<"2d" | "3d">("2d");
 
   const selectedRoute = useMemo(() => {
     if (!activeRoute) return null;
@@ -62,6 +64,32 @@ const Rock = ({ route }: Props) => {
     };
   }, [data]);
 
+  const renderViewer = () => {
+    if (!data || !data.attributes) {
+      return <Text>Wystąpił błąd podczas wczytywania obrazów</Text>;
+    }
+    if (
+      data.attributes.image &&
+      data.attributes.image.length > 0 &&
+      viewer === "2d"
+    ) {
+      return (
+        <RockDrawing
+          imageUrl={
+            data.attributes?.image[activeImage]?.image?.data?.attributes?.url
+          }
+          routes={data.attributes.routes.data}
+          activeId={activeRoute}
+          activeImage={activeImage}
+          elementsScale={data?.attributes?.image[activeImage]?.elements_scale}
+        />
+      );
+    }
+    if (viewer === "3d") {
+      return <ModelView id={data.attributes.uuid} />;
+    }
+  };
+
   const snapPoints = useMemo(() => ["16%", "50%", "80%"], []);
 
   return (
@@ -72,23 +100,10 @@ const Rock = ({ route }: Props) => {
         onCirclePress={setActiveImage}
         activeImage={activeImage}
         refetch={refetch}
+        viewer={viewer}
+        setViewer={setViewer}
       />
-      {data &&
-      data.attributes &&
-      data.attributes.image &&
-      data.attributes.image.length > 0 ? (
-        <RockDrawing
-          imageUrl={
-            data.attributes?.image[activeImage]?.image?.data?.attributes?.url
-          }
-          routes={data.attributes.routes.data}
-          activeId={activeRoute}
-          activeImage={activeImage}
-          elementsScale={data?.attributes?.image[activeImage]?.elements_scale}
-        />
-      ) : (
-        <Text>Wystąpił błąd podczas wczytywania obrazów</Text>
-      )}
+      {renderViewer()}
       <BottomSheet
         ref={bottomSheetRef}
         index={1}

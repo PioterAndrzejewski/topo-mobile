@@ -2,10 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAtom } from "jotai";
 import { useEffect, useMemo, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from "react-native-reanimated";
+import { useSharedValue } from "react-native-reanimated";
 
 import Button from "src/components/common/Button";
 import RouteStructure from "src/components/common/RouteStructure";
@@ -45,7 +42,6 @@ const RockInfoExpanded = () => {
     const foundRock = rocks?.find(
       (rock: RockData) => rock.attributes.uuid === selectedRock,
     );
-    console.log(foundRock);
     return foundRock;
   }, [selectedRock, rocks]);
 
@@ -77,14 +73,10 @@ const RockInfoExpanded = () => {
     setSelectedRock(null);
   };
 
-  const onScroll = useAnimatedScrollHandler((event) => {
-    scrollY.value = event.contentOffset.y;
-  });
-
   if (!rock) {
     return (
       <View>
-        <Text>No cgyba nic nie mam</Text>
+        <Text>Coś poszło nie tak</Text>
       </View>
     );
   }

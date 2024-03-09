@@ -64,9 +64,7 @@ export default function App() {
     return <AppLoading />;
   }
 
-  // queryClient.invalidateQueries({
-  //   queryKey: ["rocks"],
-  // });
+
 
   return (
     <GestureHandlerRootView style={styles.container}>
