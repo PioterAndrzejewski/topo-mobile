@@ -15,11 +15,13 @@ import LastViewed from "../common/toast/LastViewed";
 import Text from "../ui/Text";
 import View from "../ui/View";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFilters } from "src/context/FilteredRocksContext";
 import { useAreas } from "src/hooks/useAreas";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useLogout } from "src/hooks/useLogout";
+import { useUserProfile } from "src/hooks/useUserProfile";
 import { useUserSubscription } from "src/hooks/useUserSubscription";
 import { useUserProducts } from "src/services/payments";
 import { RockData } from "src/services/rocks";
@@ -46,7 +48,9 @@ export default function Map() {
   const userHasSubscription = useUserSubscription();
   const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
   const logout = useLogout();
+  const user = useUserProfile();
 
+  const queryClient = useQueryClient();
   const { rocksIsEmpty, isLoading } = useAreas();
   const { filteredRocks } = useFilters();
   const mapRef = useRef<NativeMap>(null);
@@ -59,6 +63,16 @@ export default function Map() {
   const onRegionChangeComplete = (newRegion: Region) => {
     setRegion(newRegion);
   };
+
+  // queryClient.invalidateQueries({
+  //   queryKey: ["rocks"],
+  // });
+  // queryClient.invalidateQueries({
+  //   queryKey: ["product"],
+  // });
+  // queryClient.invalidateQueries({
+  //   queryKey: ["products"],
+  // });
 
   const noDataToShow = useMemo(() => {
     if (!wantsToUseNotLogged) {
@@ -139,6 +153,10 @@ export default function Map() {
                   product.product.uuid ===
                   item.attributes.product.data?.attributes.uuid,
               );
+
+              if (!user.data?.isModerator && item.attributes.forModerators) {
+                return null;
+              }
 
               const handleClick = () => {
                 setSelectedRock(item.attributes.uuid);

@@ -135,9 +135,9 @@ export const useUserProducts = () => {
   return useQuery({
     queryKey: queryKeys.products,
     queryFn: () => getProducts(),
-    cacheTime: Infinity,
     staleTime: 1000 * 60 * 60 * 24 * 30,
     enabled: !wantsToUseNotLogged,
+    gcTime: Infinity,
   });
 };
 

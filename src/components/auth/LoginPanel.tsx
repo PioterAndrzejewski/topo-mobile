@@ -6,6 +6,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-toast-message";
 import * as yup from "yup";
 
 import Button from "src/components/common/Button";
@@ -36,7 +37,11 @@ export default function LoginPanel({
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
   const setWantsToUseNotLogged = useSetAtom(wantsToUseNotLoggedAtom);
 
-  const { mutate, isLoading, isError } = useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    isError,
+  } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => login(data.email, data.password),
     onError: async (data) => {
@@ -52,6 +57,26 @@ export default function LoginPanel({
             password: formValues.password,
           });
         }
+
+        if (
+          typeof message === "string" &&
+          message.toLowerCase().includes("invalid identifier or password")
+        ) {
+
+          Toast.show({
+            type: "error",
+            text2: "Ten adres e-mail jest juz zajęty",
+          });
+          setError(
+            "password",
+            {
+              message: "Adres e-mail lub hasło są niepoprawne",
+            },
+            {
+              shouldFocus: true,
+            },
+          );
+        }
       }
     },
     onSuccess: async (data) => {
@@ -62,7 +87,7 @@ export default function LoginPanel({
     },
   });
 
-  const { control, handleSubmit, getValues } = useForm({
+  const { control, handleSubmit, getValues, setError } = useForm({
     defaultValues: {
       email: __DEV__ ? "mikel@gg.pl" : "",
       password: __DEV__ ? "mikel1" : "",
