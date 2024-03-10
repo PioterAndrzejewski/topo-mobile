@@ -13,7 +13,7 @@ type ModelViewProps = {
   id: string;
 };
 
-const viewerUrl = "some_dummy_string";
+const viewerUrl = "https://3d.wspinapp.pl";
 
 const ModelView = (props: ModelViewProps) => {
   const webViewRef = useRef<WebView>(null);
@@ -35,18 +35,6 @@ const ModelView = (props: ModelViewProps) => {
   const receiveMessage = (e: WebViewMessageEvent) => {
     setActiveRoute(e.nativeEvent.data === "null" ? null : e.nativeEvent.data);
   };
-
-  const debugging = `
-     console = new Object();
-     console.log = function(log) {
-       window.webViewBridge.send("console", log);
-     };
-     console.debug = console.log;
-     console.info = console.log;
-     console.warn = console.log;
-     console.error = console.log;
-     `;
-
   return (
     token && (
       <WebView
@@ -65,7 +53,6 @@ const ModelView = (props: ModelViewProps) => {
       `}
         injectedJavaScriptBeforeContentLoadedForMainFrameOnly={false}
         injectedJavaScriptForMainFrameOnly={false}
-        injectedJavaScript={debugging}
         onMessage={receiveMessage}
       />
     )
