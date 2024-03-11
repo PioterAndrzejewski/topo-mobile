@@ -75,32 +75,34 @@ const Header = (props: HeaderProps) => {
             <ArrowLeft size={24} color={palette.green} />
           </TouchableOpacity>
         </OverlayCardView>
-        <View flexDirection='row' gap='s'>
-          <View alignSelf='center'>
-            <Text variant='h4' color='textSecondary'>
-              Skałoplan:
-            </Text>
-          </View>
+        {props.viewer === "2d" && (
+          <View flexDirection='row' gap='s'>
+            <View alignSelf='center'>
+              <Text variant='h4' color='textSecondary'>
+                Skałoplan:
+              </Text>
+            </View>
 
-          <ScrollView
-            contentContainerStyle={{
-              gap: spacing.m,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            horizontal
-          >
-            {imagesArray?.map((_, i) => (
-              <ImageCircle
-                active={i === props.activeImage}
-                index={i}
-                onPress={props.onCirclePress}
-                key={i}
-              />
-            ))}
-          </ScrollView>
-        </View>
+            <ScrollView
+              contentContainerStyle={{
+                gap: spacing.m,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              horizontal
+            >
+              {imagesArray?.map((_, i) => (
+                <ImageCircle
+                  active={i === props.activeImage}
+                  index={i}
+                  onPress={props.onCirclePress}
+                  key={i}
+                />
+              ))}
+            </ScrollView>
+          </View>
+        )}
       </View>
     </>
   );

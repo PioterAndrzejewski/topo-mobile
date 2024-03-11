@@ -22,6 +22,7 @@ import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
 import { palette, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
+import ModelViewInternal from 'src/components/rock/model/ModelViewInternal';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -86,7 +87,7 @@ const Rock = ({ route }: Props) => {
       );
     }
     if (viewer === "3d") {
-      return <ModelView id={data.attributes.uuid} />;
+      return <ModelViewInternal id={data.attributes.uuid} rock={data}/>;
     }
   };
 
