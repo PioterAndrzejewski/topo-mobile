@@ -8,6 +8,7 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { useFonts } from "expo-font";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 import { BaseToastProps } from "react-native-toast-message/lib/src/types";
 
 import AppLoading from "src/components/common/AppLoading";
@@ -64,8 +65,6 @@ export default function App() {
     return <AppLoading />;
   }
 
-
-
   return (
     <GestureHandlerRootView style={styles.container}>
       <StripeProvider
@@ -84,6 +83,7 @@ export default function App() {
                       <RootNavigator />
                       <ConfirmActionModal />
                       <ContactModal />
+                      <Toast topOffset={60} config={toastConfig} />
                     </FiltersContextProvider>
                   </FavoritesContextProvider>
                 </BottomSheetModalProvider>
@@ -92,7 +92,6 @@ export default function App() {
           </NavigationContainer>
         </PersistQueryClientProvider>
       </StripeProvider>
-      {/* <Toast topOffset={60} config={toastConfig} /> */}
     </GestureHandlerRootView>
   );
 }

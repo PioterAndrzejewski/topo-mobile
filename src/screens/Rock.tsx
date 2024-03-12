@@ -22,7 +22,6 @@ import { Route } from "src/services/rocks";
 import { rockActiveRoute } from "src/store/rock";
 import { palette, styleGuide } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
-import ModelViewInternal from 'src/components/rock/model/ModelViewInternal';
 
 type Props = NativeStackScreenProps<HomeScreenNavigationProp, "Rock">;
 
@@ -67,7 +66,7 @@ const Rock = ({ route }: Props) => {
 
   const renderViewer = () => {
     if (!data || !data.attributes) {
-      return <Text>Wystąpił błąd podczas wczytywania obrazów</Text>;
+      return <Text>Wystąpił błąd podczas wczytywania danych skały</Text>;
     }
     if (
       data.attributes.image &&
@@ -87,7 +86,7 @@ const Rock = ({ route }: Props) => {
       );
     }
     if (viewer === "3d") {
-      return <ModelViewInternal id={data.attributes.uuid} rock={data}/>;
+      return <ModelView id={data.attributes.uuid} />;
     }
   };
 

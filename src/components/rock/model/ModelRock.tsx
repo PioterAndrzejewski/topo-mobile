@@ -33,15 +33,11 @@ const ModelRock: FC<RockProps> = ({ modelUrl, materialUrl }) => {
 
   useEffect(() => {
     const loadTexture = async () => {
-      console.log("no texture");
       if (!materialFileUri) return;
-      console.log("mam uri");
-      console.log(materialFileUri);
       const parsedTexture = await FileSystem.readAsStringAsync(
         materialFileUri,
         { encoding: FileSystem?.EncodingType?.Base64 },
       );
-      console.log("no przeczytałem");
       setTextureBuffer(parsedTexture);
     };
     loadTexture();

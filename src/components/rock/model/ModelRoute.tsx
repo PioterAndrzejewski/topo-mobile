@@ -10,7 +10,7 @@ type RockProps = {
 };
 
 const ModelRoute: FC<RockProps> = ({ route }) => {
-  const modelFileUri = useImageFile(route.attributes.model);
+  const modelFileUri = useImageFile(modelUrl);
   const [modelBuffer, setModelBuffer] = useState<string>();
   const materialFileUri = useImageFile(materialUrl);
   const [textureBuffer, setTextureBuffer] = useState<string>();
@@ -33,15 +33,11 @@ const ModelRoute: FC<RockProps> = ({ route }) => {
 
   useEffect(() => {
     const loadTexture = async () => {
-      console.log("no texture");
       if (!materialFileUri) return;
-      console.log("mam uri");
-      console.log(materialFileUri);
       const parsedTexture = await FileSystem.readAsStringAsync(
         materialFileUri,
         { encoding: FileSystem?.EncodingType?.Base64 },
       );
-      console.log("no przeczytałem");
       setTextureBuffer(parsedTexture);
     };
     loadTexture();

@@ -4,19 +4,30 @@ import React from "react";
 import { View } from "react-native";
 
 import ModelRock from "./ModelRock";
-import ModelRoute from "./ModelRoute";
 
 import { RockData } from "src/services/rocks";
 
 type ModelViewProps = {
-  id?: string;
   rock?: RockData;
 };
-const ModelViewInternal = (props: ModelViewProps) => {
+const ModelViewerInternal = (props: ModelViewProps) => {
+  const { rock } = props;
   const [OrbitControls, events] = useControls();
   return (
     <View {...events} style={{ flex: 1 }}>
-      <Canvas>
+      <Canvas
+        onCreated={(state) => {
+          const _gl = state.gl.getContext();
+          const pixelStorei = _gl.pixelStorei.bind(_gl);
+          _gl.pixelStorei = function (...args: any[]) {
+            const [parameter] = args;
+            switch (parameter) {
+              case _gl.UNPACK_FLIP_Y_WEBGL:
+                return pixelStorei(...args);
+            }
+          };
+        }}
+      >
         <OrbitControls
           enabled
           enableZoom
@@ -27,25 +38,18 @@ const ModelViewInternal = (props: ModelViewProps) => {
         />
         <ModelRock
           modelUrl={
-            props.rock?.attributes.model_rock?.data.attributes.model_main?.data
+            rock?.attributes.model_rock?.data.attributes.model_main?.data
               .attributes.url
           }
           materialUrl={
-            props.rock?.attributes.model_rock?.data.attributes.model_txt?.data
+            rock?.attributes.model_rock?.data.attributes.model_txt?.data
               .attributes.url
           }
         />
-        {props.rock?.attributes.routes.data.map((route) => (
-          <ModelRoute route={route} />
-        ))}
         <ambientLight />
       </Canvas>
     </View>
   );
 };
 
-export default ModelViewInternal;
-
-type BoxProps = {
-  position: [number, number, number];
-};
+export default ModelViewerInternal;
