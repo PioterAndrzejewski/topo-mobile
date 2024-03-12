@@ -1,6 +1,6 @@
 import { useTheme } from "@shopify/restyle";
 import { ReactNode } from "react";
-import { Text as TextBase, TextStyle } from "react-native";
+import { Text as TextComponent, TextStyle } from "react-native";
 import { Theme } from "src/styles/theme";
 
 type TextProps = {
@@ -18,7 +18,7 @@ const Text = ({
 }: TextProps) => {
   const { textVariants, colors } = useTheme<Theme>();
   return (
-    <TextBase
+    <TextComponent
       style={[
         { color: color ? colors[color] : colors["textBlack"] },
         textVariants[`${variant}`],
@@ -26,7 +26,7 @@ const Text = ({
       ]}
     >
       {children}
-    </TextBase>
+    </TextComponent>
   );
 };
 
