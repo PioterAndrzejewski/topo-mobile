@@ -234,6 +234,13 @@ export type RouteInner = {
   rings_coords: DrawingCoords[];
   anchor_coords: DrawingCoords;
   number_coords: DrawingCoords;
+  model_route: {
+    data: {
+      attributes: {
+        route_model: MediaData;
+      };
+    };
+  };
 };
 
 export type Route = {
@@ -255,6 +262,42 @@ export type ProductSanitized = {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
+};
+
+type MediaData = {
+  attributes: {
+    alternativeText: any;
+    caption: any;
+    createdAt: string | any;
+    ext: string | any;
+    formats: ImageFormats | any;
+    hash: string | any;
+    height: number | any;
+    mime: string | any;
+    name: string | any;
+    previewUrl: any;
+    provider: string | any;
+    provider_metadata: any;
+    size: number | any;
+    updatedAt: string | any;
+    url: string | any;
+    width: any;
+  };
+  id: number;
+};
+
+type ModelRockData = {
+  attributes: {
+    created_at: string;
+    published_at: string;
+    rock: {
+      data: RockData;
+    };
+    uuid: string;
+    model_main: { data: MediaData };
+    model_txt: { data: MediaData };
+  };
+  id: number;
 };
 
 export type RockData = {
@@ -293,6 +336,9 @@ export type RockData = {
       } | null;
     };
     forModerators: boolean;
+    model_rock: {
+      data: ModelRockData;
+    };
   };
 };
 
@@ -359,6 +405,10 @@ export const getRock = async (id: string) => {
       "routes.rings_coords",
       "routes.anchor_coords",
       "routes.number_coords",
+      "routes.model_route",
+      "routes.model_route.route_model",
+      "routes.model_route.rings_model",
+      "routes.model_route.outline_model",
       "parent",
       "coordinates",
       "parking_coordinates",
@@ -375,6 +425,9 @@ export const getRock = async (id: string) => {
       "product.price",
       "product.description",
       "forModerators",
+      "model_rock",
+      "model_rock.model_main",
+      "model_rock.model_txt",
     ],
     filters: {
       uuid: {

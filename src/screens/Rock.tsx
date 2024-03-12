@@ -66,7 +66,7 @@ const Rock = ({ route }: Props) => {
 
   const renderViewer = () => {
     if (!data || !data.attributes) {
-      return <Text>Wystąpił błąd podczas wczytywania obrazów</Text>;
+      return <Text>Wystąpił błąd podczas wczytywania danych skały</Text>;
     }
     if (
       data.attributes.image &&

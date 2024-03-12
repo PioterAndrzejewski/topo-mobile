@@ -68,6 +68,9 @@ export default function Map() {
   //   queryKey: ["rocks"],
   // });
   // queryClient.invalidateQueries({
+  //   queryKey: ["rock"],
+  // });
+  // queryClient.invalidateQueries({
   //   queryKey: ["product"],
   // });
   // queryClient.invalidateQueries({
