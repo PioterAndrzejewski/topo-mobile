@@ -62,7 +62,6 @@ export default function LoginPanel({
           typeof message === "string" &&
           message.toLowerCase().includes("invalid identifier or password")
         ) {
-
           Toast.show({
             type: "error",
             text2: "Ten adres e-mail jest juz zajęty",

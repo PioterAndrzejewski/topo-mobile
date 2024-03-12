@@ -34,7 +34,6 @@ const Exposition = ({ value, onChange }: Props) => {
       </View>
       <View flexDirection='row' flexWrap='wrap' rowGap='s' columnGap='m'>
         {expositionSelectedClean.map((exposition) => {
-          console.log(exposition);
           const isSelected = value.includes(exposition);
           return (
             <TouchableOpacity
