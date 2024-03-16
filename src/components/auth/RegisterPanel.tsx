@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
+import * as Linking from "expo-linking";
 import { Controller, useForm } from "react-hook-form";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -75,6 +76,12 @@ export default function RegisterPanel() {
       others: { secure: true },
     },
   ];
+
+  const handleOpenPrivacy = () => {
+    Linking.openURL("https://wspinapp.pl/policy").catch((error) => {
+      console.log(error);
+    });
+  };
 
   return (
     <KeyboardAwareScrollView>

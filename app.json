@@ -23,9 +23,11 @@
       "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false,
-        "googleMapsApiKey": "AIzaSyCRqqeDJKrGyvyn88GiWdpC-6MU52IwJL8"
+        "googleMapsApiKey": ""
       },
       "infoPlist": {
+        "NSCameraUsageDescription": "Allow WspinApp to access your camera",
+        "NSLocationWhenInUseUsageDescription": "Allow WspinApp to access your location",
         "LSApplicationQueriesSchemes": [
           "comgooglemaps",
           "citymapper",
@@ -50,7 +52,8 @@
           "tel"
         ]
       },
-      "bundleIdentifier": "qweq"
+      "bundleIdentifier": "wspinapp",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
@@ -59,12 +62,12 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "Here was some already disabled secret :) "
+          "apiKey": ""
         }
       },
       "permissions": ["android.permission.INTERNET"],
       "package": "com.wspinapp",
-      "versionCode": 2
+      "versionCode": 3
     },
     "extra": {
       "eas": {
