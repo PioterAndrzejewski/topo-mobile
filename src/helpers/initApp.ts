@@ -12,6 +12,7 @@ export const initApp = async () => {
     const profile = await qc.fetchQuery({
       queryKey: queryKeys.profile.me,
       queryFn: () => getUserProfile(),
+      retry: 1,
     });
     if (profile.id) {
       setUserToStorage(profile);

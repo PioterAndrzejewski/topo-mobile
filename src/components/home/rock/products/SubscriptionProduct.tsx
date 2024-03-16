@@ -14,13 +14,17 @@ const SubscriptionProduct = ({ isLoading }: { isLoading: boolean }) => {
 
   if (!subscription) return <AppLoading />;
   return (
-    <View padding='m' borderRadius={12} backgroundColor='backgroundSecondary'>
+    <View
+      padding='m'
+      borderRadius={12}
+      backgroundColor='backgroundTertiaryFaded'
+    >
       <View
         flexDirection='row'
         alignItems='center'
         gap='s'
         borderBottomWidth={1}
-        borderColor='backgroundScreen'
+        borderColor='backgroundSecondary'
         paddingBottom='m'
         marginBottom='m'
       >

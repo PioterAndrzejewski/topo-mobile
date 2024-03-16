@@ -4,6 +4,7 @@ import { EphemeralKey, PaymentIntent } from "src/types/stripe";
 
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
+import { useUserProfile } from "src/hooks/useUserProfile";
 import { wantsToUseNotLoggedAtom } from "src/store/global";
 import { apiConfig } from "./apiConfig";
 import { queryKeys } from "./queryKeys";
@@ -64,6 +65,7 @@ export const useSubscriptionProduct = () => {
     queryKey: queryKeys.product("year_subscription"),
     queryFn: getSubscription,
     select: (data) => data.data.attributes,
+    staleTime: 1000 * 60 * 60 * 24,
   });
 };
 
@@ -132,11 +134,12 @@ export const getProducts = async () => {
 
 export const useUserProducts = () => {
   const wantsToUseNotLogged = useAtomValue(wantsToUseNotLoggedAtom);
+  const { data: customer } = useUserProfile();
   return useQuery({
     queryKey: queryKeys.products,
     queryFn: () => getProducts(),
     staleTime: 1000 * 60 * 60 * 24 * 30,
-    enabled: !wantsToUseNotLogged,
+    enabled: !wantsToUseNotLogged && !!customer?.id,
     gcTime: Infinity,
   });
 };

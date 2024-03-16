@@ -1,10 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useAtom, useSetAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Toast from "react-native-toast-message";
 import * as yup from "yup";
@@ -23,8 +23,10 @@ import {
   saveRefreshToken,
   setUserToStorage,
 } from "src/services/store";
+import { saveLastSeenRock } from "src/services/storeAsync";
 import { providerUsedAtom, wantsToUseNotLoggedAtom } from "src/store/global";
 import { HomeScreenNavigationProp } from "src/types/type";
+import { removeFiles } from "src/utils/fileSystem";
 import { GoogleIcon } from "../icons/Google";
 
 export default function LoginPanel({
@@ -33,9 +35,9 @@ export default function LoginPanel({
   googleIsLoading: boolean;
 }) {
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const { height } = useWindowDimensions();
   const [providerUsed, setProviderUsed] = useAtom(providerUsedAtom);
   const setWantsToUseNotLogged = useSetAtom(wantsToUseNotLoggedAtom);
+  const queryClient = useQueryClient();
 
   const {
     mutate,
@@ -88,8 +90,8 @@ export default function LoginPanel({
 
   const { control, handleSubmit, getValues, setError } = useForm({
     defaultValues: {
-      email: __DEV__ ? "mikel@gg.pl" : "",
-      password: __DEV__ ? "mikel1" : "",
+      email: __DEV__ ? "test-user@test.com" : "",
+      password: __DEV__ ? "Some-Password1" : "",
     },
     mode: "onChange",
     resolver: yupResolver(schema),
@@ -113,6 +115,16 @@ export default function LoginPanel({
   const handleSkipLogin = () => {
     setWantsToUseNotLogged(true);
     navigate("HomeNavigator");
+  };
+
+  const handleCacheWipeout = () => {
+    queryClient.clear();
+    queryClient.cancelQueries();
+    saveLastSeenRock(null);
+  };
+
+  const handleRemoveFiles = () => {
+    removeFiles();
   };
 
   return (
@@ -245,6 +257,29 @@ export default function LoginPanel({
                 </View>
               </TouchableOpacity>
             </View>
+            {__DEV__ && (
+              <View
+                borderColor='backgroundDark'
+                borderRadius={24}
+                borderWidth={1}
+                marginTop='l'
+                padding='m'
+              >
+                <Text variant='h4' color='textSecondary'>
+                  Dev only:
+                </Text>
+                <TouchableOpacity onPress={handleCacheWipeout}>
+                  <Text variant='body' color='textSecondary'>
+                    - Wipe out query cache
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleRemoveFiles}>
+                  <Text variant='body' color='textSecondary'>
+                    - Wipe out all stored saved image files
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
       </View>

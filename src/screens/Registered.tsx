@@ -138,19 +138,21 @@ const RegisteredScreen = (props: ResetSuccessScreenProps) => {
             </TouchableOpacity>
           </Text>
         </View>
-        <Button
-          label={`Spróbuj ponownie ${
-            loginCountdown > 0 ? `(za: ${loginCountdown}s)` : ""
-          }`}
-          onClick={() => loginAgain()}
-          isLoading={isLoading}
-          disabled={loginCountdown > 0}
-          labelColor={loginCountdown > 0 ? "textGray" : "textWhite"}
-        />
-        <Button
-          label='Wróć do logowania'
-          onClick={() => navigation.navigate("Login")}
-        />
+        <View gap='m'>
+          <Button
+            label={`Spróbuj się zalogować ponownie ${
+              loginCountdown > 0 ? `(za: ${loginCountdown}s)` : ""
+            }`}
+            onClick={() => loginAgain()}
+            isLoading={isLoading}
+            disabled={loginCountdown > 0}
+            labelColor={loginCountdown > 0 ? "textGray" : "textWhite"}
+          />
+          <Button
+            label='Wróć do logowania'
+            onClick={() => navigation.navigate("Login")}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

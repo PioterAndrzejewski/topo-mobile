@@ -142,8 +142,10 @@ const RockResultsItem: FC<ListResultProps> = ({ id, name, item, isLast }) => {
         {item.attributes.forModerators && (
           <View
             position='absolute'
-            width='100%'
-            height='100%'
+            left={0}
+            right={0}
+            top={0}
+            bottom={0}
             backgroundColor='backgroundDarkFaded'
             borderRadius={24}
             zIndex={999}

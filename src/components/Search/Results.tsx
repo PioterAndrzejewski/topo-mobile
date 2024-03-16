@@ -54,10 +54,7 @@ const Results = ({
             estimatedItemSize={200}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
-              <View
-                paddingHorizontal='m'
-                paddingTop={index === 0 ? "m" : undefined}
-              >
+              <View paddingTop={index === 0 ? "m" : undefined}>
                 <RockResultsItem
                   name={item.attributes.Name}
                   item={item}

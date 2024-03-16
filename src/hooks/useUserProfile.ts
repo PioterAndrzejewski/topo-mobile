@@ -10,5 +10,6 @@ export const useUserProfile = () => {
     queryFn: getUserProfile,
     queryKey: queryKeys.profile.me,
     enabled: !wantsToUseNotLogged,
+    staleTime: 1000 * 60 * 10,
   });
 };

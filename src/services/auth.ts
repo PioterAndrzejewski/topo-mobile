@@ -67,6 +67,9 @@ export const refreshToken = async (): Promise<
 instance.interceptors.request.use(
   async (config) => {
     const jwt = await getFromSecureStorage("jwt");
+    if (!jwt) {
+      throw new Error("No JWT in storage found");
+    }
     config.headers["Authorization"] = `Bearer ${jwt}`;
     return config;
   },

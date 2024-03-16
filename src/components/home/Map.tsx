@@ -64,19 +64,6 @@ export default function Map() {
     setRegion(newRegion);
   };
 
-  // queryClient.invalidateQueries({
-  //   queryKey: ["rocks"],
-  // });
-  // queryClient.invalidateQueries({
-  //   queryKey: ["rock"],
-  // });
-  // queryClient.invalidateQueries({
-  //   queryKey: ["product"],
-  // });
-  // queryClient.invalidateQueries({
-  //   queryKey: ["products"],
-  // });
-
   const noDataToShow = useMemo(() => {
     if (!wantsToUseNotLogged) {
       return false;
@@ -150,7 +137,7 @@ export default function Map() {
           {filteredRocks &&
             filteredRocks.length > 0 &&
             filteredRocks.map((item: RockData) => {
-              const rockHasProduct = !!item.attributes.product.data;
+              const rockHasProduct = !!item.attributes.product.data?.id;
               const userHas = userProducts?.find(
                 (product) =>
                   product.product.uuid ===

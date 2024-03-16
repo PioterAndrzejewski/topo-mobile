@@ -179,7 +179,7 @@ export const getAllFavoriteRocks = async (): Promise<RockData[]> => {
   return [];
 };
 
-export const saveLastSeenRock = async (rock: RockData) => {
+export const saveLastSeenRock = async (rock: RockData | null) => {
   try {
     await AsyncStorage.setItem(storage.lastSeen.rock, JSON.stringify(rock));
   } catch (e) {
@@ -195,5 +195,13 @@ export const getLastSeenRock = async () => {
     return null;
   } catch (e) {
     console.log(e);
+  }
+};
+
+export const removeLastSeenRock = async () => {
+  try {
+    await AsyncStorage.removeItem(storage.lastSeen.rock);
+  } catch (_) {
+    return;
   }
 };
