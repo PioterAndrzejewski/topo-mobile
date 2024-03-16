@@ -62,7 +62,7 @@ export default function UserScreen() {
   const termsButtons = [
     {
       label: "Regulamin korzystania z aplikacji",
-      action: () => console.log("regulamin"),
+      action: handleOpenTerms,
     },
     {
       label: "Polityka prywatności",
@@ -70,7 +70,7 @@ export default function UserScreen() {
     },
     {
       label: "Skontaktuj się z nami",
-      action: handleOpenTerms,
+      action: () => setContact({ topic: "widok uzytkownika(UserScreen)" }),
     },
   ];
 
