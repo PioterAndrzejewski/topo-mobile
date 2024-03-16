@@ -11,7 +11,9 @@
   </div>
 </div>
 
+
 ## Getting started
+
 
 After cloning the repository and installing dependencies run the app using npm start command. 
 
@@ -27,6 +29,8 @@ In case of android - scan the QR code in your terminal via "scan qr code" in you
 <p align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/expo-go.gif" width="200" />
 </p>
+
+
 ### Built With
 
 Mobile app:
@@ -78,7 +82,9 @@ Website available [here](https://wspinapp.pl/) was built with:
 - tailwind
 - react-query
 
+
 ## About The Project
+
 
 Mobile App that is a climbing guide
 Allows to search and filter rocks, purchase products and subscription, displaying rock data and displaying images of rocks with drawn paths of climbing routes
@@ -88,16 +94,38 @@ Strapi/Node.js back-end with custom controllers and overwritten auth logic to im
 
 ## UI
 
+
 The appearance of the application was based on prepared Firma mockups.
 <p align="center">
   <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/13dfb59a-2b6d-4293-8a23-c54ae32fef69" width="600" />
 </p>
 
- ## Features
- 
-The mobile app consists of several screens:
 
- ### login screen
+ ## Features
+
+ 
+The mobile app consists of several modules:
+
+
+  ### Rock Screen - The most important :)
+
+
+<p float="left" align="center">
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/rock.gif" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/3d.gif" width="200" />
+</p>
+
+Rock screen allows to view map and routes.
+
+Routes list allows to view details, highlight selected route on 2d/3d viewer, save, comment and rate routes. 
+
+2d rock view is rendered with Skia on fully scallable view, which allows to zoom and view details in the photo. 
+
+3d rock view is rendered via web-view - you can see it separated [here](https://3d.wspinapp.pl/95fad41d-e6be-4aa4-81c2-686b084ca8a8). The model view is communicating with RN App via messages events. 
+
+
+ ### Auth module - login, register etc
+
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/16dd71ed-1c44-4941-aeba-2c6cc23d4a7d" width="200" />
@@ -120,7 +148,9 @@ Confirming account and resseting password requires using your email box, and ema
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/9fe7cbbc-159b-4b71-b38e-0747b94db395" width="500" />
 </p>
 
+
   ### Map Screen
+
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/mapscreen.gif" width="200" />
@@ -133,7 +163,9 @@ Allows to search through regions and sectors on map and objects list.
 Selecting a rock triggers bottom sheet modal to present informations about the rock, from where you are able to open rock details.
 Filters allow to filter for rocks when user has specific requirements for the rock he or she wants to climb on.
 
+
   ### Transaction handling
+
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/transaction.gif" width="200" />
@@ -143,6 +175,7 @@ Allows users to buy 1-year access to app or single products which contains sever
 Transactions are handled by strapi backend and stripe. 
 
   ### Search, Favorites and UserScreen
+
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/f17f4cf3-b545-42bd-a3d9-2fb31f944199" width="200" />
@@ -154,8 +187,6 @@ Transactions are handled by strapi backend and stripe.
 
 Allows to search through all rocks and routes, and saved assets.
 User screen allows to browse through bought product, save assets and get access to important parts of app like Privacy Policy
-
-![image](
 
 
 ## Room for improvement
