@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 import { useSetAtom } from "jotai";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,18 +39,30 @@ export default function UserScreen() {
     },
   ];
 
+  const handleOpenPrivacy = () => {
+    Linking.openURL("https://wspinapp.pl/policy").catch((error) => {
+      console.log(error);
+    });
+  };
+
+  const handleOpenTerms = () => {
+    Linking.openURL("https://wspinapp.pl/termsandconditions").catch((error) => {
+      console.log(error);
+    });
+  };
+
   const termsButtons = [
     {
       label: "Regulamin korzystania z aplikacji",
       action: () => console.log("regulamin"),
     },
     {
-      label: "Informacje o aplikacji",
-      action: () => console.log("o aplikacji"),
+      label: "Polityka prywatności",
+      action: handleOpenPrivacy,
     },
     {
       label: "Skontaktuj się z nami",
-      action: () => setContact({ topic: "widok uzytkownika(UserScreen)" }),
+      action: handleOpenTerms,
     },
   ];
 

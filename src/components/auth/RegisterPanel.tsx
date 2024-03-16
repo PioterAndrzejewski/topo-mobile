@@ -174,10 +174,7 @@ export default function RegisterPanel() {
             </TouchableOpacity>
 
             <Text variant='body'> i </Text>
-            <TouchableOpacity
-              onPress={() => console.log("open privacy")}
-              hitSlop={20}
-            >
+            <TouchableOpacity onPress={handleOpenPrivacy} hitSlop={20}>
               <Text
                 additionalStyles={{
                   textDecorationStyle: "solid",
