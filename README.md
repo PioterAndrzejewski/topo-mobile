@@ -2,9 +2,6 @@
 
 
   <div align="center">
-    <h2>
-      WspinApp
-    </h2>
     <br />
     <img src="https://github.com/PioterAndrzejewski/mobile_chat/assets/109315248/a223db65-131e-4460-941b-68c91d7315d7" alt="project image" />
 
