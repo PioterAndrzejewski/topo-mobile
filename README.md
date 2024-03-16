@@ -142,6 +142,23 @@ Filters allow to filter for rocks when user has specific requirements for the ro
 Allows users to buy 1-year access to app or single products which contains several rocks.
 Transactions are handled by strapi backend and stripe. 
 
+  ### Search, Favorites and UserScreen
+
+<p float="left" align="center">
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/f17f4cf3-b545-42bd-a3d9-2fb31f944199" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/9557ade9-9e2f-470e-8da1-a7b5babf4188" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/13ab4f02-d90e-4110-bae4-2956d382e9b1" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/df5dec91-5b0c-451e-9228-5cd09d744b12" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/0021add6-bf82-43d2-88fc-c4e0db258aa9" width="200" />
+</p>
+
+
+Allows to search through all rocks and routes, and saved assets.
+User screen allows to browse through bought product, save assets and get access to important parts of app like Privacy Policy
+
+![image](
+
+
 ## Room for improvement
 
 The main development opportunities are:
