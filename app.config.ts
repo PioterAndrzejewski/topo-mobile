@@ -14,6 +14,34 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     config: {
       googleMapsApiKey: process.env.MAPS_KEY,
     },
+    infoPlist: {
+      NSCameraUsageDescription: "Allow WspinApp to access your camera",
+      NSLocationWhenInUseUsageDescription:
+        "Allow WspinApp to access your location",
+      LSApplicationQueriesSchemes: [
+        "comgooglemaps",
+        "citymapper",
+        "uber",
+        "lyft",
+        "transit",
+        "truckmap",
+        "waze",
+        "yandexnavi",
+        "moovit",
+        "yandextaxi",
+        "yandexmaps",
+        "kakaomap",
+        "szn-mapy",
+        "mapsme",
+        "osmandmaps",
+        "gett",
+        "nmap",
+        "dgis",
+        "lftgpas",
+        "mailto",
+        "tel",
+      ],
+    },
   },
   android: {
     adaptiveIcon: {

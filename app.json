@@ -3,7 +3,7 @@
     "name": "WspinApp-dev",
     "slug": "WspinApp",
     "scheme": "wspinapp",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "plugins": [
       "./src/plugins/android-manifest.plugin.js",
       "./src/plugins/with-android-queries.js",
@@ -67,9 +65,7 @@
           "apiKey": ""
         }
       },
-      "permissions": [
-        "android.permission.INTERNET"
-      ],
+      "permissions": ["android.permission.INTERNET"],
       "package": "com.wspinapp",
       "versionCode": 3
     },
