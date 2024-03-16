@@ -12,18 +12,26 @@ import Statistics from "src/components/user/Statistics";
 import SubscriptionDetails from "src/components/user/SubscriptionDetails";
 
 import { logout } from "src/services/store";
-import { confirmActionAtom, contactAtom } from "src/store/global";
+import {
+  confirmActionAtom,
+  contactAtom,
+  wantsToUseNotLoggedAtom,
+} from "src/store/global";
 import { palette } from "src/styles/theme";
 import { HomeScreenNavigationProp } from "src/types/type";
 
 export default function UserScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const setContact = useSetAtom(contactAtom);
+  const setUserWantsToUseNotLogged = useSetAtom(wantsToUseNotLoggedAtom);
 
   const setConfirmAction = useSetAtom(confirmActionAtom);
   const handleLogout = async () => {
     setConfirmAction({
-      confirmFn: logout,
+      confirmFn: () => {
+        setUserWantsToUseNotLogged(false);
+        logout();
+      },
       message: "Czy na pewno chcesz się wylogować?",
     });
   };
