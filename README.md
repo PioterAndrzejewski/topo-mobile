@@ -154,9 +154,8 @@ Confirming account and resseting password requires using your email box, and ema
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/mapscreen.gif" width="200" />
-    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/15b74be4-40ce-4827-8ddd-98ddb791587c" width="200" />
+    <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/d0f60700-26b3-4e73-808c-7ccbed3e4ea3" width="200" />
 </p>
-
 
 
 Allows to search through regions and sectors on map and objects list. 
@@ -194,5 +193,6 @@ User screen allows to browse through bought product, save assets and get access 
 The main development opportunities are:
 
 - tests,
+- implement i18n to support different languages,
 - creating logbook,
 - creating in-app model viewer which will allow to use assets saved in memory (now the model viewer works online only),
