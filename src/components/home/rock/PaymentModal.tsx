@@ -88,6 +88,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     if (initPaymentError) {
       onClose();
       setIsProcessing(false);
+      console.log(initPaymentError);
       return Toast.show({
         type: "error",
         text2: "Coś poszło nie tak podczas przygotowywania płatności",
@@ -97,6 +98,8 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
     const { error } = await presentPaymentSheet();
 
     if (error) {
+      console.log("tutaj mamy error w error");
+      console.log(error);
       onClose();
       setIsProcessing(false);
       return Toast.show({
@@ -115,6 +118,7 @@ const PaymentModal = ({ opened, onClose }: PaymentModalProps) => {
       });
     } catch (e) {
       onClose();
+      console.log(e);
       Toast.show({
         type: "error",
         text2:

@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
 
 export const getFileFromStorage = async (dir: string, fileName: string) => {
   try {
@@ -12,23 +12,35 @@ export const getFileFromStorage = async (dir: string, fileName: string) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
-export const downloadAndSaveFile = async (dir: string, fileName: string, fileUrl: string) => {
+export const removeFiles = async () => {
+  try {
+    if (!FileSystem.documentDirectory) return;
+    await FileSystem.deleteAsync(FileSystem.documentDirectory + "images", {
+      idempotent: true,
+    });
+  } catch (_) {
+    return;
+  }
+};
+
+export const downloadAndSaveFile = async (
+  dir: string,
+  fileName: string,
+  fileUrl: string,
+) => {
   try {
     const directoryInfo = await FileSystem.getInfoAsync(
       FileSystem.documentDirectory! + dir,
     );
 
     if (!directoryInfo.exists) {
-      await FileSystem.makeDirectoryAsync(
-        FileSystem.documentDirectory! + dir,
-        {
-          intermediates: true,
-        },
-      );
+      await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory! + dir, {
+        intermediates: true,
+      });
     }
-    
+
     await FileSystem.downloadAsync(
       fileUrl,
       FileSystem.documentDirectory! + dir + "/" + fileName,
@@ -40,4 +52,4 @@ export const downloadAndSaveFile = async (dir: string, fileName: string, fileUrl
   } catch (e) {
     console.log(e);
   }
-}
+};

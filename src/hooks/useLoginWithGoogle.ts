@@ -31,7 +31,7 @@ export const useLoginWithGoogle = () => {
       await setUserToStorage(data.user);
       navigate("HomeNavigator");
     },
-    retryDelay: 5000,
+    retryDelay: 2000,
     retry: 3,
   });
 
@@ -41,7 +41,7 @@ export const useLoginWithGoogle = () => {
     }
     const param = url?.replace("wspinapp://?", "");
     setProviderUsed(true);
-    await loginWithGoogle(param);
+    loginWithGoogle(param);
   }, [url]);
 
   if (!providerUsed && url) {

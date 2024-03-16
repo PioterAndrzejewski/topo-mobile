@@ -78,4 +78,6 @@ const $container: (variant: "standard" | "outline") => ViewStyle = (
 
 const $disabled: ViewStyle = {
   backgroundColor: palette.blue700_10,
+  padding: 14,
+  borderRadius: 100,
 };

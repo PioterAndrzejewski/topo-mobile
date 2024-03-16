@@ -10,16 +10,15 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { BaseToastProps } from "react-native-toast-message/lib/src/types";
+import Reactotron from "reactotron-react-native";
 
 import AppLoading from "src/components/common/AppLoading";
 import LastViewed from "src/components/common/toast/LastViewed";
 import ConfirmActionModal from "src/components/modals/ConfirmActionModal";
 import ContactModal from "src/components/modals/ContactModal";
 import RootNavigator from "src/navigators/RootNavigator";
-import theme from "src/styles/theme";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Reactotron from "reactotron-react-native";
 import { CustomErrorToast } from "src/components/common/toast/ErrorToast";
 import { CustomInfoToast } from "src/components/common/toast/InfoToast";
 import { CustomSuccessToast } from "src/components/common/toast/SuccessToast";
@@ -28,6 +27,7 @@ import { FiltersContextProvider } from "src/context/FilteredRocksContext";
 import { QueryClientSingleton } from "src/helpers/QueryClient";
 import { initApp } from "src/helpers/initApp";
 import { navigationRef } from "src/navigators/navigationRef";
+import theme from "src/styles/theme";
 
 Reactotron.configure({ host: "192.168.50.16", port: 9090 })
   .useReactNative()

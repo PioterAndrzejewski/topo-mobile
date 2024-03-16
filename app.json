@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
       "./src/plugins/android-manifest.plugin.js",
       "./src/plugins/with-android-queries.js",
@@ -62,8 +64,11 @@
           "apiKey": "Here was some already disabled secret :) "
         }
       },
-      "permissions": ["android.permission.INTERNET"],
-      "package": "com.wspinapp"
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
+      "package": "com.wspinapp",
+      "versionCode": 2
     },
     "extra": {
       "eas": {
