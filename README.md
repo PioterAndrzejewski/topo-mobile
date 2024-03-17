@@ -26,7 +26,8 @@ To run the app, you'll need to have the Expo Go app installed on your device, wh
 <p align="center">
   <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/blob/master/readme-files/expo-go.gif" width="200" />
 </p>
-Built With:
+
+## Built With:
 
 Mobile app:
 
