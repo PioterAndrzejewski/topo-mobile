@@ -118,7 +118,7 @@ Routes list allows to view details, highlight selected route on 2d/3d viewer, sa
 
 2d rock view is rendered with Skia on fully scallable view, which allows to zoom and view details in the photo. 
 
-3d rock view is rendered via web-view - you can see it separated [here](https://3d.wspinapp.pl/95fad41d-e6be-4aa4-81c2-686b084ca8a8). The model view is communicating with RN App via messages events. 
+3d rock view is rendered via web-view - you can see it separated [here](https://3d.wspinapp.pl/95fad41d-e6be-4aa4-81c2-686b084ca8a8) (just give the backend a minute to wake up to serve you the model file). The model view is communicating with RN App via messages events. 
 
 
  ### Auth module - login, register etc
