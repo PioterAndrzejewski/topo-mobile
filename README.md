@@ -138,7 +138,7 @@ Login screen that allows to:
 - register new account
 
 Everything is handled in cooperation with strapi backend and React web app. 
-Confirming account and resseting password requires using your email box, and email are send by strapi using Sendgrid - emails are custom styled as well.
+Confirming account and resseting password requires using your email box, and email are sent by strapi using Sendgrid - emails are custom styled as well.
 
 <p float="left" align="center">
     <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/7ad04ab4-b9ae-476b-bb1c-66e15f99d289" width="500" />
