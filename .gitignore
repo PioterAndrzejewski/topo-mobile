@@ -9,6 +9,11 @@ ios/*
 .expo/
 dist/
 web-build/
+.idea/
+.idea
+idea/
+idea/*
+.idea/*
 
 
 # Native

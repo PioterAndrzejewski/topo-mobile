@@ -71,7 +71,7 @@
         "android.permission.INTERNET"
       ],
       "package": "com.wspinapp",
-      "versionCode": 3
+      "versionCode": 2
     },
     "extra": {
       "eas": {
