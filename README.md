@@ -91,7 +91,7 @@ Website (available [here](http://wspinapp.pl/)) was built with:
 Mobile App that is a climbing guide. It allows users to search and filter rocks, purchase products and subscriptions, display rock data, and show images of rocks with drawn paths of climbing routes. It's integrated with a created web 3D model viewer built with React and Three.js. The Strapi/Node.js backend has custom controllers and overwritten auth logic to implement refresh tokens.
 
 ## UI
-The appearance of the application was based on prepared Figma mockups.
+The appearance of the application was based on Figma mockups prepared by Paweł Pacak.
 
 <p align="center">
   <img src="https://github.com/PioterAndrzejewski/wspinapp-mobile/assets/109315248/13dfb59a-2b6d-4293-8a23-c54ae32fef69" width="600" />
